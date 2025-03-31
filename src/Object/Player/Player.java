@@ -1,7 +1,10 @@
-package Object;
+package Object.Player;
+
+import Object.Inventory;
 
 public class Player {
     public String name;
+    public int x, y; // Player position
     int health, thirst, hunger, exp, level; // Player stats
     public Inventory inventory;
 
