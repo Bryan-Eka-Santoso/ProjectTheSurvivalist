@@ -46,7 +46,7 @@ public class CharacterMovement extends JPanel implements ActionListener, KeyList
         // Load semua gambar sprite
         loadSprites();
         
-        timer = new Timer(16, this); // Sekitar 60 FPS
+        timer = new Timer(16, this); 
         timer.start();
     }
     
