@@ -1,14 +1,8 @@
 package Object;
 import Object.Player.CraftingTable;
 import Object.Player.Player;
-import Object.Items.UnconsumableItem.Unstackable;
-import Object.Items.ConsumableItem.Stackable;
-// import Object.Player.Crafting;
-// import java.awt.event.*;
-// import java.util.ArrayList;
-// import java.util.List;
-// import javax.swing.*;
-// import java.awt.*;
+import Object.Items.StackableItem.Stackable;
+import Object.Items.Unstackable.Unstackable;
 
 public class Game {
     

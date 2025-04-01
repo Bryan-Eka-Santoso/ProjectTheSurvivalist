@@ -2,14 +2,12 @@ package Object.Player;
 import Object.Items.Item;
 import Object.Items.ConsumableItem.Stackable;
 import Object.Items.UnconsumableItem.Unstackable;
-
 import java.util.*;
 
 public class CraftingTable {
     HashMap<List<Item>, Item> recipes = new HashMap<>();
 
     public CraftingTable() {
-        // Example recipes
         List<Item> recipe1 = Arrays.asList(new Stackable("Wood", 2), new Stackable("Stick", 1));
         recipes.put(recipe1, new Unstackable ("Wooden Sword", 1));
     }
@@ -65,7 +63,7 @@ public class CraftingTable {
                 if (temp[i] == null) {
                     temp[i] = item.clone();
                     break;
-                } 
+                }
                 if (temp[i].name.equals(item.name)) { // No need to check null again
                     temp[i].currentStack += item.currentStack;
                     break;
