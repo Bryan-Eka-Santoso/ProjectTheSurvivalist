@@ -1,6 +1,6 @@
 package Object.Player;
 import Object.Items.Item;
-import Object.Items.ConsumableItem.*;
+import Object.Items.StackableItem.*;
 
 public class Inventory {
     public Item slots[];

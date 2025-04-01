@@ -1,7 +1,7 @@
-package Object.Items.ConsumableItem;
+package Object.Items.StackableItem;
 import Object.Items.Item;
 
-public class Stackable extends Item {
+public abstract class Stackable extends Item {
     public Stackable(String name, int maxStack, int currentStack) {
         super(name, maxStack, currentStack);
     }

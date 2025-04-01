@@ -1,23 +1,19 @@
 package Object;
 import Object.Player.CraftingTable;
 import Object.Player.Player;
-import Object.Items.StackableItem.Stackable;
-import Object.Items.Unstackable.Unstackable;
+import Object.Items.StackableItem.*;
+import Object.Items.Unstackable.*;
 
 public class Game {
     
     public void Run() {
         Player player = new Player("Player1");
-        player.inventory.addItems(new Stackable("Wood", 10, 13));
-        player.inventory.addItems(new Stackable("Wood", 10, 13));
-        // player.inventory.addItems(new Stackable("Apple", 10, 18));
-        // player.inventory.addItems(new Stackable("Wood", 10, 18));
-        player.inventory.addItems(new Unstackable("Sword"));
-        // player.inventory.addItems(new Stackable("Stick", 10, 1));
-        // player.inventory.showInventory();
+        player.inventory.addItems(new Material("Wood", 10, 13));
+        player.inventory.addItems(new Material("Wood", 10, 13));
+        player.inventory.addItems(new Material("Stick", 10, 13));
+        player.inventory.addItems(new Sword("Sword"));
         CraftingTable craftingTable = new CraftingTable();
         craftingTable.showRecipes();
-        // craftingTable.craft(player, "Wooden Sword");
         craftingTable.craft(player, "Wooden Sword");
         player.inventory.showInventory();
     }

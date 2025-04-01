@@ -1,4 +1,4 @@
-package Object.Items.ConsumableItem;
+package Object.Items.StackableItem;
 
 public class Food extends Stackable {
     

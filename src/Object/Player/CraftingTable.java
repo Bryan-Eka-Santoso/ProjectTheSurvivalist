@@ -1,15 +1,15 @@
 package Object.Player;
 import Object.Items.Item;
-import Object.Items.ConsumableItem.Stackable;
-import Object.Items.UnconsumableItem.Unstackable;
+import Object.Items.StackableItem.*;
+import Object.Items.Unstackable.*;
 import java.util.*;
 
 public class CraftingTable {
     HashMap<List<Item>, Item> recipes = new HashMap<>();
 
     public CraftingTable() {
-        List<Item> recipe1 = Arrays.asList(new Stackable("Wood", 2), new Stackable("Stick", 1));
-        recipes.put(recipe1, new Unstackable ("Wooden Sword", 1));
+        List<Item> recipe1 = Arrays.asList(new Material("Wood", 2), new Material("Stick", 1));
+        recipes.put(recipe1, new Sword("Wooden Sword"));
     }
 
     public void showRecipes() {
