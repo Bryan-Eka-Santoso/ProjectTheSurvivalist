@@ -1,7 +1,5 @@
 package Object.Player;
 
-import Object.Inventory;
-
 public class Player {
     public String name;
     public int x, y; // Player position
@@ -10,6 +8,8 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
+        this.x = 200;
+        this.y = 200;
         this.health = 100;
         this.thirst = 100;
         this.hunger = 100;
