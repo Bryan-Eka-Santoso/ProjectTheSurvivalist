@@ -9,36 +9,6 @@ public class Inventory {
         this.slots = new Item[n];
     }
 
-    public void addItem(Item newItem) {
-        for (int i = 0; i < slots.length; i++) {
-            if(slots[i] != null && newItem.name.equals(slots[i].name)) {
-                if(slots[i].currentStack < newItem.maxStack && newItem instanceof Stackable) {
-                    slots[i].currentStack++;
-                    
-                    System.out.println("Added " + newItem.name + " to inventory.");
-                    break;
-                } 
-                
-                if (i < slots.length - 1) {
-                    continue;
-                } else {
-                    System.out.println("Inventory full.");
-                }
-            }
-            
-            if(slots[i] == null) {
-                slots[i] = newItem.clone();    
-                slots[i].currentStack++;
-                System.out.println("Added " + newItem.name + " to inventory.");
-                break;    
-            } 
-            
-            if(i == slots.length - 1) {
-                System.out.println("Inventory full.");
-            }
-        }
-    }
-
     public void addItems(Item newItem) {
         int temp = newItem.currentStack;
         for (int i = 0; i < slots.length; i++) {
