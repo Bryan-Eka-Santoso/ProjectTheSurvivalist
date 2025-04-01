@@ -17,5 +17,4 @@ public class Game {
         craftingTable.craft(player, "Wooden Sword");
         player.inventory.showInventory();
     }
-
 }
