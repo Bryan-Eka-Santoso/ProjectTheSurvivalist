@@ -10,5 +10,4 @@ public class Unstackable extends Item {
     public Unstackable(String name, int maxStack) {
         super(name, 1, 0);
     }
-
 }

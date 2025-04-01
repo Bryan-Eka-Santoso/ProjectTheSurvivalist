@@ -13,10 +13,10 @@ public class CraftingTable {
         recipes.put(recipe1, new Unstackable ("Wooden Sword", 1));
         
         List<String> recipe2 = Arrays.asList("Stone", "Stone", "Stone");
-        recipes.put(recipe2, new Item ("Stone Sword", 1, 0));
+        recipes.put(recipe2, new Unstackable ("Stone Sword", 1));
         
         List<String> recipe3 = Arrays.asList("Stick", "Iron", "Iron");
-        recipes.put(recipe3, new Item ("Iron Sword", 1, 0));
+        recipes.put(recipe3, new Unstackable ("Iron Sword", 1));
     }
 
     public void showRecipes() {

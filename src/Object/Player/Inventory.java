@@ -27,7 +27,7 @@ public class Inventory {
             }
             
             if(slots[i] == null) {
-                slots[i] = new Item(newItem.name, newItem.maxStack, newItem.currentStack);    
+                slots[i] = newItem.clone();    
                 slots[i].currentStack++;
                 System.out.println("Added " + newItem.name + " to inventory.");
                 break;    
@@ -57,10 +57,11 @@ public class Inventory {
             
             if(slots[i] == null && newItem.currentStack > 0) {
                 if (newItem.currentStack > newItem.maxStack) {
-                    slots[i] = new Item(newItem.name, newItem.maxStack, newItem.maxStack);    
                     newItem.currentStack -= newItem.maxStack;
+                    slots[i] = newItem.clone();
+                    slots[i].currentStack = newItem.maxStack;    
                 } else {
-                    slots[i] = new Item(newItem.name, newItem.maxStack, newItem.currentStack); 
+                    slots[i] = newItem.clone(); 
                     newItem.currentStack = 0;   
                 }
                 continue;  

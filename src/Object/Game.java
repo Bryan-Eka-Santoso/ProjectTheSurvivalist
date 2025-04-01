@@ -1,5 +1,4 @@
 package Object;
-import Object.Items.*;
 import Object.Player.CraftingTable;
 import Object.Player.Player;
 import Object.Items.UnconsumableItem.Unstackable;
@@ -15,7 +14,8 @@ public class Game {
     
     public void Run() {
         Player player = new Player("Player1");
-        player.inventory.addItems(new Stackable("Wood", 10, 2));
+        player.inventory.addItems(new Stackable("Wood", 10, 13));
+        player.inventory.addItems(new Stackable("Wood", 10, 13));
         // player.inventory.addItems(new Stackable("Apple", 10, 18));
         // player.inventory.addItems(new Stackable("Wood", 10, 18));
         player.inventory.addItems(new Unstackable("Sword"));

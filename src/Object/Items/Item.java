@@ -1,6 +1,6 @@
 package Object.Items;
 
-public class Item implements Cloneable {
+public abstract class Item implements Cloneable {
     public String name;
     public int currentStack;
     public int maxStack;
@@ -10,6 +10,15 @@ public class Item implements Cloneable {
         this.maxStack = maxStack;
         this.currentStack = currentStack;
     }
+
+    public Item clone() {
+        try {
+            return (Item) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError(); // Seharusnya tidak terjadi
+        }
+    }
+
 }
 
 
