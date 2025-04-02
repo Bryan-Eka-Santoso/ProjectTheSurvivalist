@@ -1,5 +1,4 @@
 package Object.Items.StackableItem;
-import Object.Player.Player;
 
 public class Bread extends Food {
     final int HP_INCREASE = 5; // Health points increase
