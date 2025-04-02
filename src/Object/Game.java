@@ -1,13 +1,19 @@
 package Object;
 import Object.Player.CraftingTable;
+import Object.Player.Island;
 import Object.Player.Player;
 import Object.Items.StackableItem.*;
 import Object.Items.Unstackable.*;
+import java.util.*;
 
 public class Game {
+
+    public static Scanner getString = new Scanner(System.in);
+    public static Scanner getInt = new Scanner(System.in);
     
     public void Run() {
-        Player player = new Player("Player1");
+        Island island = new Island();
+        Player player = new Player("Player1", island);
         player.inventory.addItems(new Material("Wood", 10, 13));
         player.inventory.addItems(new Material("Wood", 10, 13));
         player.inventory.addItems(new Material("Stick", 10, 13));
@@ -16,5 +22,35 @@ public class Game {
         craftingTable.showRecipes();
         craftingTable.craft(player, "Wooden Sword");
         player.inventory.showInventory();
+        boolean isRunning = true;
+        while (isRunning) {
+            player.displayStats(player);
+            player.island.showWorld();
+            System.out.println("Use WASD to move, Q to quit.");
+            String input = getString.nextLine().toLowerCase();
+            switch (input) {
+                case "w":
+                    player.move(0, -1);
+                    break;
+                case "s":
+                    player.move(0, 1);
+                    break;
+                case "a":
+                    player.move(-1, 0);
+                    break;
+                case "d":
+                    player.move(1, 0);
+                    break;
+                case "q":
+                    isRunning = false;
+                    break;
+                case "i":
+                    player.inventory.showInventory();
+                    break;
+                default:
+                    System.out.println("Invalid input! Use WASD to move or Q to quit.");
+            }
+        }
+
     }
 }
