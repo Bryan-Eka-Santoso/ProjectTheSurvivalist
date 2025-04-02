@@ -28,7 +28,7 @@ public class CraftingTable {
     public void craft(Player player, String itemName) {
         for (Map.Entry<List<Item>, Item> entry : recipes.entrySet()) {
             List<Item> ingredients = entry.getKey();
-            Item result = entry.getValue();
+            Item result = entry.getValue().clone();
             if (result.name.equals(itemName)) {
                 if (canCraft(player, ingredients)) {
                     for (Item ingredient : ingredients) {
@@ -43,7 +43,6 @@ public class CraftingTable {
                         }
                     }
                     player.inventory.addItems(result);
-                    System.out.println("Crafted " + result.name);
                 } else {
                     System.out.println("Not enough ingredients to craft " + itemName);
                 }

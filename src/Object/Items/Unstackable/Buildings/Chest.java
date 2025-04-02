@@ -8,5 +8,10 @@ public class Chest extends Buildings {
     public Chest(int x, int y) {
         super("Chest", x, y);
         inventory = new Inventory(maxSize);
+    }   
+
+    public void showInventory() {
+        System.out.println("Chest Inventory:");
+        inventory.showInventory();
     }
 }

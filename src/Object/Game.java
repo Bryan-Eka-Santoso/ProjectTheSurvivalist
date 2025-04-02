@@ -18,8 +18,10 @@ public class Game {
         player.inventory.addItems(new Material("Wood", 10, 13));
         player.inventory.addItems(new Material("Stick", 10, 13));
         player.inventory.addItems(new Sword("Sword"));
+        player.inventory.addItems(new Bread());
         CraftingTable craftingTable = new CraftingTable();
         craftingTable.showRecipes();
+        craftingTable.craft(player, "Wooden Sword");
         craftingTable.craft(player, "Wooden Sword");
         player.inventory.showInventory();
         boolean isRunning = true;
@@ -47,6 +49,19 @@ public class Game {
                 case "i":
                     player.inventory.showInventory();
                     break;
+                case "c":
+                    craftingTable.showRecipes();
+                    System.out.println("Enter the item name to craft: ");
+                    String itemName = getString.nextLine();
+                    craftingTable.craft(player, itemName);
+                    break;
+                case "e":
+                    player.useItem();
+                    break;
+                case "h":
+                    System.out.println("Enter the index of the item to use: ");
+                    int index = getInt.nextInt();
+                    player.selectItem(index - 1);
                 default:
                     System.out.println("Invalid input! Use WASD to move or Q to quit.");
             }

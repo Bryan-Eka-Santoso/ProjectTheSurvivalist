@@ -79,7 +79,8 @@ public class Inventory {
                 if (slots[i].currentStack > 1) {
                     slots[i].currentStack--;
                     System.out.println("Removed one " + itemName + " from inventory.");
-                } else {
+                } 
+                if (slots[i].currentStack == 1) {
                     slots[i] = null;
                     System.out.println("Removed " + itemName + " from inventory.");
                 }
