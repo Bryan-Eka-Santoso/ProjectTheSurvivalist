@@ -21,8 +21,6 @@ public class Game {
         player.inventory.addItems(new Bread());
         CraftingTable craftingTable = new CraftingTable();
         craftingTable.showRecipes();
-        craftingTable.craft(player, "Wooden Sword");
-        craftingTable.craft(player, "Wooden Sword");
         player.inventory.showInventory();
         boolean isRunning = true;
         while (isRunning) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Island {
     char[][] world;
-    ArrayList<Buildings> buildings = new ArrayList<>(); // List of buildings on the island
+    ArrayList<Buildings> buildings; // List of buildings on the island
     char[][] island1 = 
     {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'},
