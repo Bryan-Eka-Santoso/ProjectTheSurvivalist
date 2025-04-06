@@ -2,11 +2,11 @@ package Object.Entity;
 import Object.Player.*;
 
 public class Tiger extends Animal {
-    private String name;
+    // private String name;
     public int x, y, radius;
 
     public Tiger(String name, int x, int y) {
-        this.name = name;
+        // this.name = name;
         this.x = x;
         this.y = y;
         radius = 5; // Default radius for tiger
