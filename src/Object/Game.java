@@ -2,6 +2,7 @@ package Object;
 import Object.Player.CraftingTable;
 import Object.Player.Island;
 import Object.Player.Player;
+import Object.Entity.Tiger;
 import Object.Items.StackableItem.*;
 import Object.Items.Unstackable.*;
 import java.util.*;
@@ -14,6 +15,8 @@ public class Game {
     public void Run() {
         Island island = new Island();
         Player player = new Player("Player1", island);
+        Tiger tiger = new Tiger("Tiger", 10, 7);
+        player.island.world[tiger.y][tiger.x] = 'T'; // Display tiger on the island
         player.inventory.addItems(new Material("Wood", 10, 13));
         player.inventory.addItems(new Material("Wood", 10, 13));
         player.inventory.addItems(new Material("Stick", 10, 13));
@@ -25,7 +28,7 @@ public class Game {
         boolean isRunning = true;
         while (isRunning) {
             player.displayStats(player);
-            player.island.showWorld();
+            player.island.showWorld(player, tiger);
             System.out.println("Use WASD to move, Q to quit.");
             String input = getString.nextLine().toLowerCase();
             switch (input) {
@@ -62,7 +65,9 @@ public class Game {
                     player.selectItem(index - 1);
                 default:
                     System.out.println("Invalid input! Use WASD to move or Q to quit.");
+                    break;
             }
+            tiger.chasePrey(player); // Tiger chases the player if nearby
         }
 
     }

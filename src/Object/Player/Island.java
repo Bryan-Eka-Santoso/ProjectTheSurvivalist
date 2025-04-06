@@ -1,9 +1,10 @@
 package Object.Player;
+import Object.Entity.Tiger;
 import Object.Items.Unstackable.Buildings.Buildings;
 import java.util.ArrayList;
 
 public class Island {
-    char[][] world;
+    public char[][] world;
     ArrayList<Buildings> buildings; // List of buildings on the island
     char[][] island1 = 
     {
@@ -54,11 +55,17 @@ public class Island {
         }
     }
 
-    public void showWorld() {
+    public void showWorld(Player player, Tiger tiger) {
         // Display the world
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {
                 System.out.print(world[i][j]);
+                // System.out.print(" " + world[i][j] + " ");
+                // if (Math.pow((j - tiger.x), 2) + Math.pow((i - tiger.y), 2) <= Math.pow(tiger.radius, 2)) {
+                //     System.out.print(" X ");
+                // } else {
+                //     System.out.print(" " + world[i][j] + " ");
+                // }
             }
             System.out.println();
         }

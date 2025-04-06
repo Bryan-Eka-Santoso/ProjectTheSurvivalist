@@ -28,7 +28,7 @@ public class Player {
     }
 
     public void move(int dx, int dy) {
-        if (island.world[y + dy][x + dx] != '#') { 
+        if (island.world[y + dy][x + dx] == ' ') { 
             island.world[y][x] = ' '; 
             x += dx; 
             y += dy; 
