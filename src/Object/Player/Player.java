@@ -65,13 +65,13 @@ public class Player {
         }
     }
 
-    public void displayStats(Player player) {
-        System.out.println("========Player stats======");
-        System.out.println("Player name: " + player.name);
-        System.out.println("Health: " + player.health);
-        System.out.println("Thirst: " + player.thirst);
-        System.out.println("Hunger: " + player.hunger);
-        System.out.println("Experience: " + player.exp);
-        System.out.println("Level: " + player.level);
+    public String displayStats(Player player) {
+        return  "<html> ======Player stats====== <br>" +
+                "Player name: " + player.name + "<br>" +
+                "Health: " + player.health + "<br>" +
+                "Thirst: " + player.thirst + "<br>" +
+                "Hunger: " + player.hunger + "<br>" +
+                "Experience: " + player.exp + "<br>" +
+                "Level: " + player.level + "</html>";
     }
 }
