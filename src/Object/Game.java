@@ -10,13 +10,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Game implements KeyListener { 
+public class Game extends JPanel implements KeyListener { 
 
     public static Scanner getString = new Scanner(System.in);
     public static Scanner getInt = new Scanner(System.in);
 
     char key = ' ';
-    
+    final int HEIGHT = 1080;
+    final int WIDTH = 2160;
+    final int SPEED = 50;
+    int posX = 0;
+    int posY = 0;
+
     public Game() {
         
         Island island = new Island();
@@ -35,7 +40,7 @@ public class Game implements KeyListener {
         JPanel inventoryPanel = new JPanel();
         inventoryPanel.setBackground(Color.LIGHT_GRAY);
         inventoryPanel.setBounds(125, 550, 800, 100);
-        
+
         JPanel statusBar = new JPanel();
         statusBar.setBackground(Color.LIGHT_GRAY);
         statusBar.setBounds(10, 10, 200, 150);
@@ -46,11 +51,21 @@ public class Game implements KeyListener {
         inventory.setBounds(0, 0, 1080, 720);
         inventory.setLayout(null);
         
+        DrawingPanel gamePanel = new DrawingPanel();
+        gamePanel.setBackground(Color.BLUE);
+        gamePanel.setBounds(posX, posY, WIDTH, HEIGHT);
+        gamePanel.setLayout(null);
+
+        Rectangle playerRect = new Rectangle(500, 310, 50, 50);
+        Rectangle enemyRect = new Rectangle(550, 510, 50, 50);
+        gamePanel.addRectangle(playerRect);
+        gamePanel.addRectangle(enemyRect);
+
         JPanel maiPanel = new JPanel();
         maiPanel.setBackground(Color.BLUE);
         maiPanel.setBounds(0, 0, 1080, 720);
         maiPanel.setLayout(null);
-        
+
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1080, 720);
@@ -59,28 +74,56 @@ public class Game implements KeyListener {
         frame.setLayout(null);
         frame.setResizable(false);
         
-        
         boolean isInvOpen = false;
         maiPanel.add(statusBar);
         maiPanel.add(inventoryPanel);
+        maiPanel.add(gamePanel);
+
         while (true) {
             if (key == 'i') {
                 isInvOpen = !isInvOpen;
                 System.out.println("Inventory Opened: " + isInvOpen);
                 key = ' ';
+            } 
+            if (key == 'w' && posY - SPEED >= 0) {
+                // playerRect.setBounds(posX, posY - SPEED, 50, 50);
+                gamePanel.setBounds(posX, posY - SPEED, WIDTH, HEIGHT);
+                System.out.println("Player moved up");
+                key = ' ';
+            } 
+            if (key == 's' && posY + SPEED <= HEIGHT) {
+                // playerRect.setBounds(posX, posY + SPEED, 50, 50);
+                gamePanel.setBounds(posX, posY + SPEED, WIDTH, HEIGHT);
+                System.out.println("Player moved down");
+                key = ' ';
+            } 
+            if (key == 'a' && posX - SPEED >= 0) {
+                // playerRect.setBounds(posX - SPEED, posY, 50, 50);
+                gamePanel.setBounds(posX - SPEED, posY, WIDTH, HEIGHT);
+                System.out.println("Player moved left");
+                key = ' ';
+            } 
+            if (key == 'd' && posX + SPEED <= WIDTH) {
+                // playerRect.setBounds(posX + SPEED, posY, 50, 50);
+                gamePanel.setBounds(posX + SPEED, posY, WIDTH, HEIGHT);
+                System.out.println("Player moved right");
+                key = ' ';
             }
             if (isInvOpen) {
                 inventoryPanel.setVisible(false);
                 inventory.setVisible(true);
+                gamePanel.setVisible(false);
                 maiPanel.setVisible(false);
                 frame.add(inventory);
                 frame.remove(maiPanel);
             } else {
+                gamePanel.setVisible(true);
                 inventoryPanel.setVisible(true);
                 inventory.setVisible(false);
                 maiPanel.setVisible(true);
                 frame.remove(inventory);
             }
+
             frame.addKeyListener(this);
             frame.add(maiPanel);
         }
@@ -115,7 +158,6 @@ public class Game implements KeyListener {
                 break;
         }
     }
-
 
     public void Run() {
         Island island = new Island();
