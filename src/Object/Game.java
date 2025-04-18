@@ -12,59 +12,112 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Game { 
+public class Game implements KeyListener { 
 
     public static Scanner getString = new Scanner(System.in);
     public static Scanner getInt = new Scanner(System.in);
+
+    char key = ' ';
     
-    // public Game() {
+    public Game() {
+        
+        Island island = new Island();
+        Player player = new Player("Player1", island);
+        
+        JLabel label = new JLabel("Status Bar");
+        label.setBounds(10, 10, 100, 30);
+        label.setForeground(Color.BLACK);
+        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        label.setVerticalAlignment(SwingConstants.CENTER);
+        label.setBackground(Color.LIGHT_GRAY);
+        label.setOpaque(true);
+        label.setText(player.displayStats(player));
+        
+        JPanel inventoryPanel = new JPanel();
+        inventoryPanel.setBackground(Color.LIGHT_GRAY);
+        inventoryPanel.setBounds(125, 550, 800, 100);
+        
+        JPanel statusBar = new JPanel();
+        statusBar.setBackground(Color.LIGHT_GRAY);
+        statusBar.setBounds(10, 10, 200, 150);
+        statusBar.add(label);
+        
+        JPanel inventory = new JPanel();
+        inventory.setBackground(Color.YELLOW);
+        inventory.setBounds(0, 0, 1080, 720);
+        inventory.setLayout(null);
+        
+        JPanel maiPanel = new JPanel();
+        maiPanel.setBackground(Color.BLUE);
+        maiPanel.setBounds(0, 0, 1080, 720);
+        maiPanel.setLayout(null);
+        
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1080, 720);
+        frame.setTitle("The Survivalist Game");
+        frame.setVisible(true);
+        frame.setLayout(null);
+        frame.setResizable(false);
+        
+        
+        boolean isInvOpen = false;
+        maiPanel.add(statusBar);
+        maiPanel.add(inventoryPanel);
+        while (true) {
+            if (key == 'i') {
+                isInvOpen = !isInvOpen;
+                System.out.println("Inventory Opened: " + isInvOpen);
+                key = ' ';
+            }
+            if (isInvOpen) {
+                inventoryPanel.setVisible(false);
+                inventory.setVisible(true);
+                maiPanel.setVisible(false);
+                frame.add(inventory);
+                frame.remove(maiPanel);
+            } else {
+                inventoryPanel.setVisible(true);
+                inventory.setVisible(false);
+                maiPanel.setVisible(true);
+                frame.remove(inventory);
+            }
+            frame.addKeyListener(this);
+            frame.add(maiPanel);
+        }
+    }
 
-    //     Island island = new Island();
-    //     Player player = new Player("Player1", island);
+    // Method dipanggil saat tombol ditekan
+    public void keyPressed(KeyEvent e) {
+    }
 
-    //     JLabel label = new JLabel("Status Bar");
-    //     label.setBounds(10, 10, 100, 30);
-    //     label.setForeground(Color.BLACK);
-    //     label.setFont(new Font("Arial", Font.BOLD, 16));
-    //     label.setHorizontalAlignment(SwingConstants.CENTER);
-    //     label.setVerticalAlignment(SwingConstants.CENTER);
-    //     label.setBackground(Color.LIGHT_GRAY);
-    //     label.setOpaque(true);
-    //     label.setText(player.displayStats(player));
+    // Method dipanggil saat tombol dilepas
+    public void keyReleased(KeyEvent e) {
+        // Bisa ditambahkan aksi lain
+    }
 
-    //     JPanel inventoryPanel = new JPanel();
-    //     inventoryPanel.setBackground(Color.LIGHT_GRAY);
-    //     inventoryPanel.setBounds(125, 550, 800, 100);
+    // Method dipanggil saat tombol diketik (pressed + released)
+    public void keyTyped(KeyEvent e) {
+        switch (e.getKeyChar()) {
+            case 'w':
+                key = 'w';
+                break;
+            case 's':
+                key = 's';
+                break;
+            case 'a':
+                key = 'a';
+                break;
+            case 'd':
+                key = 'd';
+                break;
+            case 'i':
+                key = 'i';
+                break;
+        }
+    }
 
-    //     JPanel statusBar = new JPanel();
-    //     statusBar.setBackground(Color.LIGHT_GRAY);
-    //     statusBar.setBounds(10, 10, 200, 150);
-    //     statusBar.add(label);
-
-    //     JPanel map = new JPanel();
-    //     map.setBackground(Color.MAGENTA);
-    //     map.setBounds(10, 170, 200, 370);
-
-    //     JPanel maiPanel = new JPanel();
-    //     maiPanel.setBackground(Color.BLUE);
-    //     maiPanel.setBounds(0, 0, 1080, 720);
-    //     maiPanel.setLayout(null);
-    //     maiPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 5));
-
-    //     JFrame frame = new JFrame();
-    //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //     frame.setSize(1080, 720);
-    //     frame.setTitle("The Survivalist Game");
-    //     frame.setVisible(true);
-    //     frame.setLayout(null);
-    //     frame.setResizable(false);
-
-    //     maiPanel.add(statusBar);
-    //     maiPanel.add(map);
-    //     maiPanel.add(inventoryPanel);
-    //     frame.add(maiPanel);
-
-    // }
 
     public void Run() {
         Island island = new Island();
@@ -80,15 +133,7 @@ public class Game {
         craftingTable.showRecipes();
         player.inventory.showInventory();
         boolean isRunning = true;
-
-        //buat test doang
-        KandangAyam kandang = new KandangAyam("Chicken Coop", 7, 7);
-        island.buildings.add(kandang);
-        island.world[7][7] = '='; 
-        //======================================
-
         while (isRunning) {
-            // player.displayStats(player);
             player.displayStats(player);
             player.island.showWorld(player, tiger);
             System.out.println("Use WASD to move, Q to quit.");
@@ -119,31 +164,18 @@ public class Game {
                     craftingTable.craft(player, itemName);
                     break;
                 case "e":
-                    handleInteraction(player);//useitem jadi satu di procedure ini
+                    player.useItem();
                     break;
                 case "h":
                     System.out.println("Enter the index of the item to use: ");
                     int index = getInt.nextInt();
                     player.selectItem(index - 1);
-                case "g":
-                    player.handleGrabAction();
-                    break;
-                
                 default:
                     System.out.println("Invalid input! Use WASD to move or Q to quit.");
                     break;
             }
-            // tiger.chasePrey(player); // Tiger chases the player if nearby
+            tiger.chasePrey(player); // Tiger chases the player if nearby
         }
 
-    }
-    public void handleInteraction(Player player) {
-        KandangAyam nearbyKandang = player.findNearbyKandang();
-        if (nearbyKandang != null) {
-            
-            nearbyKandang.interact(player, player.island);
-        } else {
-            player.useItem();
-        }
     }
 }
