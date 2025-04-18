@@ -7,8 +7,7 @@ public class Tiger extends Animal {
 
     public Tiger(String name, int x, int y) {
         // this.name = name;
-        this.x = x;
-        this.y = y;
+       super(name, x, y);
         radius = 5; // Default radius for tiger
     }
 

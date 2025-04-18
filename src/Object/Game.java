@@ -5,6 +5,8 @@ import Object.Player.Player;
 import Object.Entity.Tiger;
 import Object.Items.StackableItem.*;
 import Object.Items.Unstackable.*;
+import Object.Items.Unstackable.Buildings.KandangAyam;
+
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
