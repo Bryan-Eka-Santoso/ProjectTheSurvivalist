@@ -1,4 +1,4 @@
-package Object.Entity;
+package Object.Animal;
 
 public class Plant {
     

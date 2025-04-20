@@ -1,4 +1,4 @@
-package Object.Entity;
+package Object.Animal;
 import Object.Player.Player;
 
 import Object.Items.StackableItem.Egg;
@@ -7,7 +7,7 @@ public class Chicken extends Animal {
    
    
     public Chicken(String name, int x, int y) {
-        super(name, x, y);
+        super(name, x, y, "down");
         readyBreeding = true;
        
     }

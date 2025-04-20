@@ -5,44 +5,179 @@ import Object.Items.StackableItem.Material;
 import Object.Items.Item;
 import Object.Items.Unstackable.Buildings.Kandang;
 import Object.Items.Unstackable.Buildings.KandangAyam;
-
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
-import Object.Entity.Animal;
-import Object.Entity.Chicken;
+import java.io.*; 
+import javax.imageio.ImageIO;
+import Object.GamePanel;
+import Object.KeyHandler;
+import Object.Animal.Animal;
+import Object.Animal.Chicken;
 
 public class Player {
     public String name;
-    public int x, y; // Player position
     public int health, thirst, hunger, exp, level; // Player stats
     public Inventory inventory;
     public Island island;
     public int itemIndex; // Index of the selected item in the inventory
     Item selectedItem; // Currently selected item
+    public int worldX, worldY, speed;
+    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public String direction;
+    public int spriteCounter = 0;
+    public int spriteNum = 1;
     public String lastMove;
     public Animal grabbedAnimal;
     ArrayList<Kandang> kandang= new ArrayList<>(); // List of cages owned by the player
 
+    public Rectangle solidArea;
+    public boolean collisionOn = false;
+    public final int SCREEN_Y;
+    public final int SCREEN_X;
 
+    GamePanel gp; 
+    KeyHandler keyH;
 
-    public Player(String name, Island island) {
-        this.island = island;
+    // public Player(String name, int x, int y) {
+    //     this.name = name;
+    //     this.worldX = x;
+    //     this.worldY = y;
+    //     this.health = 100;
+    //     this.thirst = 100;
+    //     this.hunger = 100;
+    //     this.exp = 0;
+    //     this.level = 1;
+    //     this.speed = 5;
+    //     this.inventory = new Inventory(10);
+    //     solidArea = new Rectangle();
+    //     solidArea.x = 8;
+    //     solidArea.y = 16;
+    //     solidArea.width = 32;
+    //     solidArea.height = 32;
+
+    //     this.grabbedAnimal= null; 
+    //     this.kandang = new ArrayList<>(); 
+    // }
+    
+    public Player(String name, GamePanel gp, KeyHandler keyH) {
         this.name = name;
-        this.x = 5;
-        this.y = 5;
+        this.worldX = gp.TILE_SIZE * 40;
+        this.worldY = gp.TILE_SIZE * 35;
         this.health = 100;
         this.thirst = 100;
         this.hunger = 100;
         this.exp = 0;
         this.level = 1;
+        this.speed = 5;
         this.inventory = new Inventory(10);
-        this.island.world[this.x][this.y] = 'P'; 
+        this.gp = gp;
+        this.keyH = keyH;
         this.grabbedAnimal= null; 
         this.kandang = new ArrayList<>(); 
+        this.direction = "down";
+        this.solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 8;
+        solidArea.width = 32;
+        solidArea.height = 32;
+        this.collisionOn = false;
+        SCREEN_X = gp.SCREEN_WIDTH / 2 - (gp.TILE_SIZE / 2);
+        SCREEN_Y = gp.SCREEN_HEIGHT / 2 - (gp.TILE_SIZE / 2);
+
+        getPlayerImg();
+    }
+
+    public void getPlayerImg() {
+        try {
+            up1 = ImageIO.read(new File("res/player/walkup1.png"));
+            up2 = ImageIO.read(new File("res/player/walkup2.png"));
+            down1 = ImageIO.read(new File("res/player/walkdown1.png"));
+            down2 = ImageIO.read(new File("res/player/walkdown2.png"));
+            left1 = ImageIO.read(new File("res/player/walkleft1.png"));
+            left2 = ImageIO.read(new File("res/player/walkleft2.png"));
+            right1 = ImageIO.read(new File("res/player/walkright1.png"));
+            right2 = ImageIO.read(new File("res/player/walkright2.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update() {
+        if (keyH.shiftPressed) {
+            speed = 10;
+        } else {
+            speed = 5;
+        }
+
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+            if (keyH.upPressed) {
+                direction = "up";
+                worldY -= speed;
+            } else if (keyH.downPressed) {
+                direction = "down";
+                worldY += speed;
+            } else if (keyH.leftPressed) {
+                direction = "left";
+                worldX -= speed;
+            } else if (keyH.rightPressed) {
+                direction = "right";
+                worldX += speed;
+            }
+
+            collisionOn = false;
+            gp.cCheck.checkTile(this);
+
+            if (!collisionOn) {
+                switch (direction) {
+                    case "up": worldY += speed; break;
+                    case "down": worldY -= speed; break;
+                    case "left": worldX += speed; break;
+                    case "right": worldX -= speed; break;
+                }
+            }
+
+            spriteCounter++;
+            if (spriteCounter > 10) {
+                if (spriteNum == 1) {
+                    spriteNum = 2;
+                } else {
+                    spriteNum = 1;
+                }
+                spriteCounter = 0;
+            }
+            
+        }
+    }
+
+    public void draw(Graphics2D g2) {
+
+        BufferedImage image = null;
+        switch (direction) {
+            case "up":
+                if (spriteNum == 1) image = up1;
+                if (spriteNum == 2) image = up2;
+                break;
+            case "down":
+                if (spriteNum == 1) image = down1;
+                if (spriteNum == 2) image = down2;
+                break;
+            case "left":
+                if (spriteNum == 1) image = left1;
+                if (spriteNum == 2) image = left2;
+                break;
+            case "right":
+                if (spriteNum == 1) image = right1;
+                if (spriteNum == 2) image = right2;
+                break;
+        }
+
+        g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE, null);
     }
 
    public void move(int dx, int dy) {
-        if (island.world[y + dy][x + dx] == ' ' ) {
+        if (island.world[worldY + dy][worldX + dx] == ' ' ) {
             
 
             if (dx > 0) lastMove = "d";
@@ -50,10 +185,10 @@ public class Player {
             else if (dy > 0) lastMove = "s";
             else if (dy < 0) lastMove = "w";
 
-            island.world[y][x] = ' ';
-            x += dx;
-            y += dy;
-            island.world[y][x] = 'P';
+            island.world[worldY][worldX] = ' ';
+            worldX += dx;
+            worldY += dy;
+            island.world[worldY][worldX] = 'P';
         }
     }
     public boolean isAnimal(char tile) {
@@ -75,8 +210,8 @@ public class Player {
         for (int dy = -1; dy <= 1; dy++) {
             for (int dx = -1; dx <= 1; dx++) {
                 if (dx == 0 && dy == 0) continue;
-                int checkX = x + dx;
-                int checkY = y + dy;
+                int checkX = worldX + dx;
+                int checkY = worldY + dy;
                 if (isAnimal(island.world[checkY][checkX])) {
                     return island.getAnimalAt(checkX, checkY);
                 }
@@ -94,15 +229,17 @@ public class Player {
         island.removeAnimal(animal);
         System.out.println("Grabbed " + animal.getName());
     }
+
     public void displayStatus() {
         displayStats(this);
         if (grabbedAnimal != null) {
             System.out.println("Currently holding: " + grabbedAnimal.getName());
         }
     }
+
     public void unGrabAnimal() {
         KandangAyam nearbyKandang = findNearbyKandang();
-        int newX = x, newY = y;
+        int newX = worldX, newY = worldY;
         switch (lastMove) {
             case "w": newY--; break;
             case "s": newY++; break;
@@ -132,7 +269,7 @@ public class Player {
     }
 
     public void placeAnimalNearby() {
-        int newX = x, newY = y;
+        int newX = worldX, newY = worldY;
         switch (lastMove) {
             case "w": newY--; break;
             case "s": newY++; break;
@@ -144,10 +281,11 @@ public class Player {
             island.placeAnimal(grabbedAnimal, newX, newY);
         }
     }
+
     public KandangAyam findNearbyKandang() {
         for (Buildings building : island.buildings) {
             if (building instanceof KandangAyam) {
-                if (Math.abs(building.getX() - x) <= 1 && Math.abs(building.getY() - y) <= 1) {
+                if (Math.abs(building.getX() - worldX) <= 1 && Math.abs(building.getY() - worldY) <= 1) {
                     return (KandangAyam) building;
                 }
             }

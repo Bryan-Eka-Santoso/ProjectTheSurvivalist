@@ -1,10 +1,13 @@
-package Object.Entity;
+package Object.Animal;
 
 public class Animal {
     String name;
     int x,y;
     boolean isGrab,inCage;
     boolean readyBreeding;
+    public String direction;
+    
+
     public boolean isReadyBreeding() {
         return readyBreeding;
     }
@@ -41,10 +44,11 @@ public class Animal {
     public void setInCage(boolean inCage) {
         this.inCage = inCage;
     }
-    public Animal(String name, int x, int y) {
+    public Animal(String name, int x, int y, String direction) {
         this.name = name;
         this.x = x;
         this.y = y;
+        this.direction = direction;
         this.isGrab = false;
         this.inCage = false;
         this.readyBreeding = true;

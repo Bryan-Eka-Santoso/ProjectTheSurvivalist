@@ -1,7 +1,7 @@
 package Object.Player;
-import Object.Entity.Animal;
-import Object.Entity.Chicken;
-import Object.Entity.Tiger;
+import Object.Animal.Animal;
+import Object.Animal.Chicken;
+import Object.Animal.Wolf;
 import Object.Items.Unstackable.Buildings.Buildings;
 import java.util.ArrayList;
 import java.util.Random;
@@ -62,7 +62,7 @@ public class Island {
         }
     }
 
-    public void showWorld(Player player, Tiger tiger) {
+    public void showWorld(Player player, Wolf tiger) {
         // Display the world
         for (int i = 0; i < world.length; i++) {
             for (int j = 0; j < world[i].length; j++) {

@@ -2,14 +2,12 @@ package Object;
 import Object.Player.CraftingTable;
 import Object.Player.Island;
 import Object.Player.Player;
-import Object.Entity.Tiger;
+import Object.Animal.Wolf;
 import Object.Items.StackableItem.*;
 import Object.Items.Unstackable.*;
 import Object.Items.Unstackable.Buildings.KandangAyam;
-
 import java.util.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 
 public class Game extends JPanel implements KeyListener { 
@@ -23,6 +21,23 @@ public class Game extends JPanel implements KeyListener {
     final int SPEED = 50;
     int posX = 0;
     int posY = 0;
+
+    public Game() {
+        JFrame window = new JFrame();
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setResizable(false);
+        window.setTitle("The Surivalists");;
+
+        GamePanel gamePanel = new GamePanel();
+        window.add(gamePanel);
+
+        window.pack();
+
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+
+        gamePanel.startgameThread();
+    }
 
     // public Game() {
         
@@ -161,85 +176,84 @@ public class Game extends JPanel implements KeyListener {
         }
     }
 
-    public void Run() {
-        Island island = new Island();
-        Player player = new Player("Player1", island);
-        Tiger tiger = new Tiger("Tiger", 10, 7);
-        player.island.world[tiger.y][tiger.x] = 'T'; // Display tiger on the island
-        player.inventory.addItems(new Material("Wood", 10, 13));
-        player.inventory.addItems(new Material("Wood", 10, 13));
-        player.inventory.addItems(new Material("Stick", 10, 13));
-        player.inventory.addItems(new Sword("Sword"));
-        player.inventory.addItems(new Bread());
-        CraftingTable craftingTable = new CraftingTable();
-        craftingTable.showRecipes();
-        player.inventory.showInventory();
-        boolean isRunning = true;
+    // public void Run() {
+    //     Island island = new Island();
+    //     Player player = new Player("Player1", 5, 5);
+    //     // Wolf tiger = new Wolf("Tiger", 10, 7, "left");
+    //     // player.island.world[tiger.y][tiger.x] = 'T'; // Display tiger on the island
+    //     player.inventory.addItems(new Material("Wood", 10, 13));
+    //     player.inventory.addItems(new Material("Wood", 10, 13));
+    //     player.inventory.addItems(new Material("Stick", 10, 13));
+    //     player.inventory.addItems(new Sword("Sword"));
+    //     player.inventory.addItems(new Bread());
+    //     CraftingTable craftingTable = new CraftingTable();
+    //     craftingTable.showRecipes();
+    //     player.inventory.showInventory();
+    //     boolean isRunning = true;
 
-        //buat test doang
-        KandangAyam kandang = new KandangAyam("Chicken Coop", 7, 7);
-        island.buildings.add(kandang);
-        island.world[7][7] = '='; 
-        //======================================
+    //     //buat test doang
+    //     KandangAyam kandang = new KandangAyam("Chicken Coop", 7, 7);
+    //     island.buildings.add(kandang);
+    //     island.world[7][7] = '='; 
+    //     //======================================
 
-        while (isRunning) {
-            // player.displayStats(player);
-            player.displayStats(player);
-            player.island.showWorld(player, tiger);
-            System.out.println("Use WASD to move, Q to quit.");
-            String input = getString.nextLine().toLowerCase();
-            switch (input) {
-                case "w":
-                    player.move(0, -1);
-                    break;
-                case "s":
-                    player.move(0, 1);
-                    break;
-                case "a":
-                    player.move(-1, 0);
-                    break;
-                case "d":
-                    player.move(1, 0);
-                    break;
-                case "q":
-                    isRunning = false;
-                    break;
-                case "i":
-                    player.inventory.showInventory();
-                    break;
-                case "c":
-                    craftingTable.showRecipes();
-                    System.out.println("Enter the item name to craft: ");
-                    String itemName = getString.nextLine();
-                    craftingTable.craft(player, itemName);
-                    break;
-                case "e":
-                    handleInteraction(player);//useitem jadi satu di procedure ini
-                    break;
-                case "h":
-                    System.out.println("Enter the index of the item to use: ");
-                    int index = getInt.nextInt();
-                    player.selectItem(index - 1);
-                case "g":
-                    player.handleGrabAction();
-                    break;
-                
-                default:
-                    System.out.println("Invalid input! Use WASD to move or Q to quit.");
-                    break;
-            }
-            // tiger.chasePrey(player); // Tiger chases the player if nearby
-        }
+    //     while (isRunning) {
+    //         // player.displayStats(player);
+    //         player.displayStats(player);
+    //         // player.island.showWorld(player, tiger);
+    //         System.out.println("Use WASD to move, Q to quit.");
+    //         String input = getString.nextLine().toLowerCase();
+    //         switch (input) {
+    //             case "w":
+    //                 player.move(0, -1);
+    //                 break;
+    //             case "s":
+    //                 player.move(0, 1);
+    //                 break;
+    //             case "a":
+    //                 player.move(-1, 0);
+    //                 break;
+    //             case "d":
+    //                 player.move(1, 0);
+    //                 break;
+    //             case "q":
+    //                 isRunning = false;
+    //                 break;
+    //             case "i":
+    //                 player.inventory.showInventory();
+    //                 break;
+    //             case "c":
+    //                 craftingTable.showRecipes();
+    //                 System.out.println("Enter the item name to craft: ");
+    //                 String itemName = getString.nextLine();
+    //                 craftingTable.craft(player, itemName);
+    //                 break;
+    //             case "e":
+    //                 handleInteraction(player);//useitem jadi satu di procedure ini
+    //                 break;
+    //             case "h":
+    //                 System.out.println("Enter the index of the item to use: ");
+    //                 int index = getInt.nextInt();
+    //                 player.selectItem(index - 1);
+    //             case "g":
+    //                 player.handleGrabAction();
+    //                 break;
+    //             default:
+    //                 System.out.println("Invalid input! Use WASD to move or Q to quit.");
+    //                 break;
+    //         }
+    //         // tiger.chasePrey(player); // Tiger chases the player if nearby
+    //     }
 
-    }
-    public void handleInteraction(Player player) {
-        KandangAyam nearbyKandang = player.findNearbyKandang();
-        if (nearbyKandang != null) {
+    // }
+    // public void handleInteraction(Player player) {
+    //     KandangAyam nearbyKandang = player.findNearbyKandang();
+    //     if (nearbyKandang != null) {
             
-            nearbyKandang.interact(player, player.island);
-        } else {
-            player.useItem();
-        }
-    }
+    //         nearbyKandang.interact(player, player.island);
+    //     } else {
+    //         player.useItem();
+    //     }
+    // }
 
 }

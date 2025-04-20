@@ -2,7 +2,7 @@ package Object.Items.Unstackable.Buildings;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import Object.Entity.Chicken;
+import Object.Animal.Chicken;
 import Object.Player.Island;
 import Object.Player.Player;
 public class KandangAyam extends Kandang{
