@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 
 import Object.Animal.Wolf;
 import Object.Player.*;
-import java.awt.Font;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -26,10 +25,17 @@ public class GamePanel extends JPanel implements Runnable {
     public final int WORLD_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
+    UI ui = new UI(this);
     TileManager tileM = new TileManager(this);
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     public CollisonChecker cCheck = new CollisonChecker(this);
+
+    // Game State
+    public int gameState;
+    public final int PLAY_STATE = 1;
+    public final int PAUSE_STATE = 2;
+
 
     public Player player = new Player("Player", this, keyH);
     Wolf wolf = new Wolf("Wolf", 25, 10, "down", this);
@@ -43,7 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void setupGame() {
-        
+        gameState = PLAY_STATE;
     }
 
     public void startgameThread() {
@@ -83,7 +89,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
+        if (gameState == PLAY_STATE) {
+            player.update();
+        } 
     }
 
     public void paintComponent(Graphics g) {
@@ -92,6 +100,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileM.draw(g2);
         player.draw(g2);
+        ui.draw(g2);
 
         g2.dispose();
     }
