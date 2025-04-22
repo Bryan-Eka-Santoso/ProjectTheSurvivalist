@@ -28,14 +28,15 @@ public class TileManager {
         try {
             tile[0] = new Tile();
             tile[0].image = ImageIO.read(new File("res/world/calm-water.png"));
+            tile[0].collison = true;
             
             tile[1] = new Tile();
             tile[1].image = ImageIO.read(new File("res/world/grass.png"));
-            tile[1].collison = true;
+            tile[1].collison = false;
             
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(new File("res/world/sand.png"));
-            tile[2].collison = true;
+            tile[2].collison = false;
 
         } catch (IOException e) {
             e.getStackTrace();

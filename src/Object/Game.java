@@ -9,6 +9,7 @@ import Object.Items.Unstackable.Buildings.KandangAyam;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.*;
 
 public class Game extends JPanel implements KeyListener { 
 
@@ -36,6 +37,7 @@ public class Game extends JPanel implements KeyListener {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+        gamePanel.setupGame();
         gamePanel.startgameThread();
     }
 
@@ -44,15 +46,6 @@ public class Game extends JPanel implements KeyListener {
     //     Island island = new Island();
     //     Player player = new Player("Player1", island);
         
-    //     JLabel label = new JLabel("Status Bar");
-    //     label.setBounds(10, 10, 100, 30);
-    //     label.setForeground(Color.BLACK);
-    //     label.setFont(new Font("Arial", Font.BOLD, 16));
-    //     label.setHorizontalAlignment(SwingConstants.CENTER);
-    //     label.setVerticalAlignment(SwingConstants.CENTER);
-    //     label.setBackground(Color.LIGHT_GRAY);
-    //     label.setOpaque(true);
-    //     label.setText(player.displayStats(player));
         
     //     JPanel inventoryPanel = new JPanel();
     //     inventoryPanel.setBackground(Color.LIGHT_GRAY);

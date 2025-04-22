@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+
+import Object.Animal.Wolf;
 import Object.Player.*;
+import java.awt.Font;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -28,7 +31,8 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     public CollisonChecker cCheck = new CollisonChecker(this);
 
-    Player player = new Player("Player", this, keyH);
+    public Player player = new Player("Player", this, keyH);
+    Wolf wolf = new Wolf("Wolf", 25, 10, "down", this);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -36,6 +40,10 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void setupGame() {
+        
     }
 
     public void startgameThread() {

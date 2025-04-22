@@ -38,7 +38,7 @@ public class Player {
     public final int SCREEN_X;
 
     GamePanel gp; 
-    KeyHandler keyH;
+    public KeyHandler keyH;
 
     // public Player(String name, int x, int y) {
     //     this.name = name;
@@ -78,10 +78,10 @@ public class Player {
         this.kandang = new ArrayList<>(); 
         this.direction = "down";
         this.solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 8;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        solidArea.x = 12;
+        solidArea.y = 20;
+        solidArea.width = 24;
+        solidArea.height = 24;
         this.collisionOn = false;
         SCREEN_X = gp.SCREEN_WIDTH / 2 - (gp.TILE_SIZE / 2);
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - (gp.TILE_SIZE / 2);
@@ -114,30 +114,26 @@ public class Player {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
                 direction = "up";
-                worldY -= speed;
             } else if (keyH.downPressed) {
                 direction = "down";
-                worldY += speed;
             } else if (keyH.leftPressed) {
                 direction = "left";
-                worldX -= speed;
             } else if (keyH.rightPressed) {
                 direction = "right";
-                worldX += speed;
             }
-
+            
             collisionOn = false;
             gp.cCheck.checkTile(this);
-
+            
             if (!collisionOn) {
                 switch (direction) {
-                    case "up": worldY += speed; break;
-                    case "down": worldY -= speed; break;
-                    case "left": worldX += speed; break;
-                    case "right": worldX -= speed; break;
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
                 }
             }
-
+            
             spriteCounter++;
             if (spriteCounter > 10) {
                 if (spriteNum == 1) {

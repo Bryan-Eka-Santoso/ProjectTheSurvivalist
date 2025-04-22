@@ -71,7 +71,7 @@ public class Wolf extends Animal {
                 break;
         }
 
-        g2.drawImage(image, x, y, 100, 50 , null);
+        g2.drawImage(image, x, y, gp.TILE_SIZE * 2, gp.TILE_SIZE , null);
     }
 
     public void chasePrey(Player player) {
