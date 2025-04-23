@@ -41,12 +41,7 @@ public class KandangAyam extends Kandang{
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
-                if (!chickensInCage.isEmpty()) {
-                    chickensInCage.get(0).getItem(player);
-                    System.out.println("Got an egg!");
-                } else {
-                    System.out.println("No chickens in kandang!");
-                }
+                    handleGetItem(player);
                 break;
                 case 2:
                     handleBreeding(island);
@@ -59,6 +54,33 @@ public class KandangAyam extends Kandang{
                 default:
                     System.out.println("Invalid option!");
             }
+        }
+    }
+    private void handleGetItem(Player player) {
+        if (chickensInCage.isEmpty()) {
+            System.out.println("No chickens in kandang!");
+            return;
+        }
+
+        System.out.println("\nChickens that can lay eggs:");
+        for (int i = 0; i < chickensInCage.size(); i++) {
+            Chicken chicken = chickensInCage.get(i);
+            System.out.println((i + 1) + ". " + chicken.getName() + " (" + chicken.getGender() + ")"); 
+        }
+
+        System.out.print("Select chicken to get egg from (1-" + chickensInCage.size() + "): ");
+        int choice = scanner.nextInt() - 1;
+
+        if (choice >= 0 && choice < chickensInCage.size()) {
+            Chicken selectedChicken = chickensInCage.get(choice);
+            if (selectedChicken.isReadyGetItem()) {
+                selectedChicken.getItem(player);
+                selectedChicken.setReadyGetItem(false);
+            } else {
+                System.out.println("This chicken cannot lay eggs right now!");
+            }
+        } else {
+            System.out.println("Invalid selection!");
         }
     }
    public void listChickens() {
@@ -80,19 +102,25 @@ public class KandangAyam extends Kandang{
             System.out.println("Kandang is full!");
             return;
         }
-
+        boolean foundMale = false;
+        boolean foundFemale = false;
         System.out.println("\nAvailable Chickens:");
         for (int i = 0; i < chickensInCage.size(); i++) {
-            System.out.println((i + 1) + ". " + chickensInCage.get(i).getName());
+            System.out.println((i + 1) + ". " + chickensInCage.get(i).getName() + " (" + chickensInCage.get(i).getGender() + ")");
+            if(chickensInCage.get(i).getGender().equals("Male")){
+                foundMale = true;
+            }else if(chickensInCage.get(i).getGender().equals("Female")){
+                foundFemale = true;
+            }
         }
-
-        System.out.print("Select first chicken (1-" + chickensInCage.size() + "): ");
+        if(!foundMale || !foundFemale) {
+            System.out.println("need at least 1 male and 1 female to breed!");
+            return;
+        }
+        System.out.print("Select male chicken (1-" + chickensInCage.size() + "): ");
         int firstChoice = scanner.nextInt() - 1;
-
-        
-        System.out.print("Select second chicken (1-" + chickensInCage.size() + "): ");
+        System.out.print("Select female chicken (1-" + chickensInCage.size() + "): ");
         int secondChoice = scanner.nextInt() - 1;
-
        
         if (firstChoice < 0 || firstChoice >= chickensInCage.size() ||
             secondChoice < 0 || secondChoice >= chickensInCage.size() ||
@@ -100,12 +128,9 @@ public class KandangAyam extends Kandang{
             System.out.println("Invalid selection!");
             return;
         }
-
-       
         Chicken baby = chickensInCage.get(firstChoice).breeding(chickensInCage.get(secondChoice));
         if (baby != null) {
             System.out.print("Give a name to the baby chicken: ");
-            
             String name = scannerStr.nextLine();
             baby.setName(name);
             chickensInCage.add(baby);

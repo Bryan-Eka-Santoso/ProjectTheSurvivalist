@@ -164,7 +164,7 @@ public class Game extends JPanel implements KeyListener {
     public void Run() {
         Island island = new Island();
         Player player = new Player("Player1", island);
-        Tiger tiger = new Tiger("Tiger", 10, 7);
+        Tiger tiger = new Tiger("Tiger", 10, 7,"Male");
         player.island.world[tiger.y][tiger.x] = 'T'; // Display tiger on the island
         player.inventory.addItems(new Material("Wood", 10, 13));
         player.inventory.addItems(new Material("Wood", 10, 13));

@@ -87,8 +87,8 @@ public class Island {
             randomX = rand.nextInt(world[0].length - 2) + 1;
             randomY = rand.nextInt(world.length - 2) + 1;
         } while (world[randomY][randomX] != ' ');
-        
-        Chicken chicken = new Chicken("Chicken" , randomX, randomY);
+        String gender = (Math.random() < 0.5) ? "Male" : "Female";
+        Chicken chicken = new Chicken("Chicken" , randomX, randomY,gender);
         animals.add(chicken);
         world[randomY][randomX] = 'A';
     }

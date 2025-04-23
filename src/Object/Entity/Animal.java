@@ -5,6 +5,49 @@ public class Animal {
     int x,y;
     boolean isGrab,inCage;
     boolean readyBreeding;
+    String gender;
+    boolean readyGetItem;
+    
+    public Animal(String name, int x, int y,String gender) {
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.gender = gender;
+        this.isGrab = false;
+        this.inCage = false;
+        this.readyBreeding = true;
+        this.readyGetItem = true;
+    }
+    public void getItem(){
+        
+    }
+    
+    public void grab(){
+        this.isGrab = true;
+    }
+    public void unGrab(int x, int y, boolean inCages) {
+        this.isGrab = false;
+        this.x = x;
+        this.y = y;
+        this.inCage = inCages;
+    }
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+    public boolean isReadyGetItem() {
+        return readyGetItem;
+    }
+    public void setReadyGetItem(boolean readyGetItem) {
+        this.readyGetItem = readyGetItem;
+    }
+    
+    public String getGender() {
+        return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
     public boolean isReadyBreeding() {
         return readyBreeding;
     }
@@ -41,31 +84,5 @@ public class Animal {
     public void setInCage(boolean inCage) {
         this.inCage = inCage;
     }
-    public Animal(String name, int x, int y) {
-        this.name = name;
-        this.x = x;
-        this.y = y;
-        this.isGrab = false;
-        this.inCage = false;
-        this.readyBreeding = true;
-    }
-    public void getItem(){
-
-    }
-
-    public void grab(){
-        this.isGrab = true;
-    }
-    public void unGrab(int x, int y, boolean inCages) {
-        this.isGrab = false;
-        this.x = x;
-        this.y = y;
-        this.inCage = inCages;
-    }
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-
+    
 }
