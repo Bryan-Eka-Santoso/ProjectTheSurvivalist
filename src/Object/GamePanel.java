@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
+import java.util.ArrayList;
 import Object.Animal.Wolf;
+import Object.Plant.*;
 import Object.Player.*;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -25,21 +26,21 @@ public class GamePanel extends JPanel implements Runnable {
     public final int WORLD_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
-    UI ui = new UI(this);
     TileManager tileM = new TileManager(this);
+    UI ui = new UI(this);
     KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     public CollisonChecker cCheck = new CollisonChecker(this);
-
+    
     // Game State
     public int gameState;
     public final int PLAY_STATE = 1;
     public final int PAUSE_STATE = 2;
 
-
+    
     public Player player = new Player("Player", this, keyH);
-    Wolf wolf = new Wolf("Wolf", 25, 10, "down", this);
-
+    ArrayList<Plant> plants = new ArrayList<>();
+    
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         this.setBackground(Color.black);
@@ -50,11 +51,18 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         gameState = PLAY_STATE;
+        addPlant(24, 43);
     }
 
     public void startgameThread() {
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void addPlant(int x, int y) {
+        plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
+        tileM.mapTile[y][x] = 3;
+        
     }
 
     @Override
@@ -99,8 +107,11 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         tileM.draw(g2);
-        player.draw(g2);
+        player.draw(g2);        
         ui.draw(g2);
+        for (Plant p : plants) {
+            p.draw(g2);
+        }
 
         g2.dispose();
     }

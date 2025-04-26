@@ -7,7 +7,6 @@ public class Animal {
     boolean readyBreeding;
     public String direction;
     
-
     public boolean isReadyBreeding() {
         return readyBreeding;
     }

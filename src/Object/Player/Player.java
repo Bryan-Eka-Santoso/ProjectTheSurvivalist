@@ -23,7 +23,7 @@ public class Player {
     public Island island;
     public int itemIndex; // Index of the selected item in the inventory
     Item selectedItem; // Currently selected item
-    public int worldX, worldY, speed;
+    public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public String direction;
     public int spriteCounter = 0;
@@ -78,6 +78,8 @@ public class Player {
         this.kandang = new ArrayList<>(); 
         this.direction = "down";
         this.solidArea = new Rectangle();
+        solidAreaX = solidArea.x;
+        solidAreaY = solidArea.y;
         solidArea.x = 12;
         solidArea.y = 20;
         solidArea.width = 24;
