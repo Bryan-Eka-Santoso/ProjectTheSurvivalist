@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -22,31 +24,90 @@ public class TileManager {
 
         getTileImage();
         loadMap("ProjectTheSurvivalist/res/world/map.txt");
-        for (int i = 0; i < gp.MAX_WORLD_COL; i++) {
-            for (int j = 0; j < gp.MAX_WORLD_ROW; j++) {
-                System.out.print(mapTile[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 
     public void getTileImage() {
         try {
+            
             tile[0] = new Tile();
-            tile[0].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
-            tile[0].collison = true;
+            tile[0].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[0].collison = false;
             
             tile[1] = new Tile();
             tile[1].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
             tile[1].collison = false;
-            
+
             tile[2] = new Tile();
             tile[2].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/sand.png"));
             tile[2].collison = false;
             
             tile[3] = new Tile();
             tile[3].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[3].collison = true;
+            tile[3].collison = false;
+            
+            tile[4] = new Tile();
+            tile[4].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[4].collison = false;
+            
+            tile[5] = new Tile();
+            tile[5].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[5].collison = false;
+            
+            tile[6] = new Tile();
+            tile[6].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[6].collison = false;
+            
+            tile[7] = new Tile();
+            tile[7].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[7].collison = false;
+            
+            tile[8] = new Tile();
+            tile[8].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[8].collison = false;
+            
+            tile[9] = new Tile();
+            tile[9].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[9].collison = false;
+            
+            tile[10] = new Tile();
+            tile[10].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[10].collison = false;
+            
+            tile[11] = new Tile();
+            tile[11].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[11].collison = false;
+            
+            tile[12] = new Tile();
+            tile[12].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
+            tile[12].collison = false;
+
+            tile[13] = new Tile();
+            tile[13].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
+            tile[13].collison = false;
+            
+            tile[14] = new Tile();
+            tile[14].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
+            tile[14].collison = false;
+
+            tile[15] = new Tile();
+            tile[15].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
+            tile[15].collison = false;
+            
+            tile[16] = new Tile();
+            tile[16].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
+            tile[16].collison = false;
+
+            tile[17] = new Tile();
+            tile[17].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
+            tile[17].collison = false;
+
+            tile[18] = new Tile();
+            tile[18].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
+            tile[18].collison = false;
+
+            tile[19] = new Tile();
+            tile[19].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
+            tile[19].collison = false;
 
         } catch (IOException e) {
             e.getStackTrace();
@@ -55,65 +116,54 @@ public class TileManager {
 
     public void loadMap(String path) {
         try {
-            InputStream is = new FileInputStream(new File(path));
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-    
-            StringBuilder sb = new StringBuilder();
+            File file = new File(path);
+            if (!file.exists()) {
+                System.err.println("File tidak ditemukan: " + path);
+                return;
+            }
+
+            InputStream is = new FileInputStream(file);
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+            List<Integer> numbers = new ArrayList<>();
+
             String line;
             while ((line = br.readLine()) != null) {
-                sb.append(line).append(" "); // kasih spasi antar line
+                String[] tokens = line.trim().split(" ");
+                for (String token : tokens) {
+                    if (!token.trim().isEmpty()) { // Pastikan token tidak kosong
+                        numbers.add(Integer.parseInt(token.trim()));
+                    }
+                }
             }
-            
+
             br.close();
-    
-            // Sekarang sb sudah berisi semua angka dalam 1 string
-            String[] numbers = sb.toString().trim().split("\\s+"); // split berdasarkan spasi
-            
+
+            int totalTiles = gp.MAX_WORLD_COL * gp.MAX_WORLD_COL;
+            if (numbers.size() != totalTiles) {
+                throw new IllegalArgumentException("Jumlah angka dalam file tidak sesuai dengan ukuran peta (" 
+                    + gp.MAX_WORLD_COL + "x" + gp.MAX_WORLD_COL + "). Dibutuhkan " + totalTiles + " angka, tetapi ditemukan " + numbers.size() + ".");
+            }
+
             int col = 0;
             int row = 0;
-            for (int i = 0; i < numbers.length; i++) {
-                int num = Integer.parseInt(numbers[i]);
-                mapTile[col][row] = num;
+            for (int num : numbers) {
+                mapTile[row][col] = num;
                 col++;
                 if (col == gp.MAX_WORLD_COL) {
                     col = 0;
                     row++;
                 }
             }
-    
+
+            System.out.println("Peta berhasil dimuat!");
+
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Terjadi kesalahan saat membaca file: " + e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
         }
     }
-
-    // public void loadMap(String path) {
-    //     try {
-    //         InputStream is = new FileInputStream(new File(path));
-    //         BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-    //         int col = 0;
-    //         int row = 0;
-    //         while (col < gp.MAX_WORLD_COL && row < gp.MAX_WORLD_ROW) {
-    //             String line = br.readLine();
-    //             while (col < gp.MAX_WORLD_COL) {
-    //                 String numbers[] = line.split(" ");
-
-    //                 int num = Integer.parseInt(numbers[col]);
-    //                 mapTile[col][row] = num;
-    //                 col++;
-    //             }
-    //             if (col == gp.MAX_WORLD_COL) {
-    //                 col = 0;
-    //                 row++;
-    //             }
-    //         }
-            
-    //         br.close();
-            
-    //     } catch (IOException e) {
-    //         e.getStackTrace();
-    //     }
-    // }
 
     public void draw(Graphics2D g2) {
 
