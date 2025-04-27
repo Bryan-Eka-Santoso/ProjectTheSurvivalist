@@ -54,16 +54,52 @@ public class KeyHandler implements KeyListener, MouseListener {
         int code = e.getKeyCode();
 
         if (code == KeyEvent.VK_W) {
-            upPressed = true;
+            if (gp.gameState == gp.PLAY_STATE) {
+                upPressed = true;
+            }
+            if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+                gp.ui.scrollUp();
+            }
         }
         if (code == KeyEvent.VK_S) {
-            downPressed = true;
+            if (gp.gameState == gp.PLAY_STATE) {
+                downPressed = true;
+            }
+            if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+                gp.ui.scrollDown();
+            }
         }
         if (code == KeyEvent.VK_A) {
-            leftPressed = true;
+            if (gp.gameState == gp.PLAY_STATE) {
+                leftPressed = true;
+            }
+            if (gp.gameState == gp.INVENTORY_STATE) {
+                if (gp.ui.selectedIndex > 0) {
+                    if (gp.ui.slotCol > 0) {
+                        gp.ui.slotCol--;
+                    } else {
+                        gp.ui.slotCol = 8;
+                        gp.ui.slotRow--;
+                    }
+                    gp.ui.selectedIndex--;
+                }
+            }
         }
         if (code == KeyEvent.VK_D) {
-            rightPressed = true;
+            if (gp.gameState == gp.PLAY_STATE) {
+                rightPressed = true;
+            }
+            if (gp.gameState == gp.INVENTORY_STATE) {
+                if (gp.ui.selectedIndex < 31) {
+                    if ((gp.ui.slotCol + 1) % 9 == 0) {
+                        gp.ui.slotCol = 0;
+                        gp.ui.slotRow++;
+                    } else {
+                        gp.ui.slotCol++;
+                    }
+                    gp.ui.selectedIndex++;
+                }
+            } 
         }
         if (code == KeyEvent.VK_SHIFT) {
             shiftPressed = true;
@@ -105,29 +141,24 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.player.inventory.swapItems(temp1, temp2);
             }
         }
-        if (code == KeyEvent.VK_RIGHT) {
-            if (gp.gameState == gp.INVENTORY_STATE) {
-                if (gp.ui.selectedIndex < 31) {
-                    if ((gp.ui.slotCol + 1) % 9 == 0) {
-                        gp.ui.slotCol = 0;
-                        gp.ui.slotRow++;
-                    } else {
-                        gp.ui.slotCol++;
-                    }
-                    gp.ui.selectedIndex++;
-                }
+        if (code == KeyEvent.VK_C) {
+            if (gp.gameState == gp.PLAY_STATE) {
+                gp.gameState = gp.PLAYER_CRAFTING_STATE;
+            } else if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+                gp.gameState = gp.PLAY_STATE;
             } 
         }
-        if (code == KeyEvent.VK_LEFT) {
-            if (gp.gameState == gp.INVENTORY_STATE) {
-                if (gp.ui.selectedIndex > 0) {
-                    if (gp.ui.slotCol > 0) {
-                        gp.ui.slotCol--;
-                    } else {
-                        gp.ui.slotCol = 8;
-                        gp.ui.slotRow--;
-                    }
-                    gp.ui.selectedIndex--;
+        if (code == KeyEvent.VK_UP) {
+            if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+                if (gp.ui.selectedRecipeIndex > 0) {
+                    gp.ui.selectedRecipeIndex--; 
+                }
+            }
+        }
+        if (code == KeyEvent.VK_DOWN) {
+            if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+                if (gp.ui.selectedRecipeIndex < 19) {
+                    gp.ui.selectedRecipeIndex++; 
                 }
             }
         }

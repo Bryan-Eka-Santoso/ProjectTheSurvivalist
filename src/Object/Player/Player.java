@@ -29,6 +29,7 @@ public class Player {
     public int spriteNum = 1;
     public String lastMove;
     public Animal grabbedAnimal;
+    public Crafting recipe;
     ArrayList<Kandang> kandang= new ArrayList<>(); // List of cages owned by the player
 
     public Rectangle solidArea;
@@ -39,31 +40,10 @@ public class Player {
     GamePanel gp; 
     public KeyHandler keyH;
 
-    // public Player(String name, int x, int y) {
-    //     this.name = name;
-    //     this.worldX = x;
-    //     this.worldY = y;
-    //     this.health = 100;
-    //     this.thirst = 100;
-    //     this.hunger = 100;
-    //     this.exp = 0;
-    //     this.level = 1;
-    //     this.speed = 5;
-    //     this.inventory = new Inventory(10);
-    //     solidArea = new Rectangle();
-    //     solidArea.x = 8;
-    //     solidArea.y = 16;
-    //     solidArea.width = 32;
-    //     solidArea.height = 32;
-
-    //     this.grabbedAnimal= null; 
-    //     this.kandang = new ArrayList<>(); 
-    // }
-    
-    public Player(String name, GamePanel gp, KeyHandler keyH) {
+    public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {
         this.name = name;
         this.worldX = gp.TILE_SIZE * 40;
-        this.worldY = gp.TILE_SIZE * 35;
+        this.worldY = gp.TILE_SIZE * 44;
         this.health = 100;
         this.thirst = 100;
         this.hunger = 100;
@@ -86,6 +66,7 @@ public class Player {
         this.collisionOn = false;
         SCREEN_X = gp.SCREEN_WIDTH / 2 - (gp.TILE_SIZE / 2);
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - (gp.TILE_SIZE / 2);
+        this.recipe = recipe;
 
         getPlayerImg();
     }

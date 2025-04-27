@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 20;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 60;
+    final int FPS = 80;
 
     public final int MAX_WORLD_COL = 94;
     public final int MAX_WORLD_ROW = 94;
@@ -31,6 +31,7 @@ public class GamePanel extends JPanel implements Runnable {
     UI ui = new UI(this);
     KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
+    Crafting recipe = new Crafting();
     public CollisonChecker cCheck = new CollisonChecker(this);
     
     // Game State
@@ -38,9 +39,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final int PLAY_STATE = 1;
     public final int PAUSE_STATE = 2;
     public final int INVENTORY_STATE = 3;
+    public final int PLAYER_CRAFTING_STATE = 4;
 
     
-    public Player player = new Player("Player", this, keyH);
+    public Player player = new Player("Player", recipe, this, keyH);
     ArrayList<Plant> plants = new ArrayList<>();
     
     public GamePanel() {

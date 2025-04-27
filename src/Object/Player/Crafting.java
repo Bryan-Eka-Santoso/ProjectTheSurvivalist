@@ -4,27 +4,14 @@ import Object.Items.StackableItem.*;
 import Object.Items.Unstackable.*;
 import java.util.*;
 
-public class CraftingTable {
+public class Crafting {
     HashMap<List<Item>, Item> recipes = new HashMap<>();
 
-    public CraftingTable() {
+    public Crafting() {
         List<Item> recipe1 = Arrays.asList(new Material("Wood", 2), new Material("Stick", 1));
-        recipes.put(recipe1, new Sword("Wooden Sword", 20, 30));
+        recipes.put(recipe1, new Sword("Sword", 20, 30));
     }
-
-    public void showRecipes() {
-        System.out.println("Available Recipes:");
-        for (Map.Entry<List<Item>, Item> entry : recipes.entrySet()) {
-            List<Item> ingredients = entry.getKey();
-            Item result = entry.getValue();
-            System.out.print("Ingredients: ");
-            for (Item ingredient : ingredients) {
-                System.out.print(ingredient.name + " x" + ingredient.currentStack + ", ");
-            }
-            System.out.println("=> Result: " + result.name);
-        }
-    }
-
+    
     public void craft(Player player, String itemName) {
         for (Map.Entry<List<Item>, Item> entry : recipes.entrySet()) {
             List<Item> ingredients = entry.getKey();

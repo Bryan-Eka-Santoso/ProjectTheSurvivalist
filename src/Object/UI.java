@@ -4,6 +4,8 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Shape;
+
 import Object.Items.StackableItem.*;
 
 public class UI {
@@ -12,6 +14,9 @@ public class UI {
     public int slotCol = 0;
     public int slotRow = 0;
     public int selectedIndex = 0;
+    int scrollY = 0; // scroll posisi saat ini
+    int maxScroll = 1000; // max scroll, nanti dihitung dari banyaknya data
+    public int selectedRecipeIndex = 0; // <<<< tambah ini di UI kamu
 
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -23,7 +28,6 @@ public class UI {
         g2.setFont(new Font("Arial", Font.PLAIN, 40));
         g2.setColor(Color.white);
 
-        // drawStats();
         if (gp.gameState != gp.INVENTORY_STATE) {
             drawSelectedItem();
         }
@@ -33,6 +37,69 @@ public class UI {
         if (gp.gameState == gp.INVENTORY_STATE) {
             drawInventory();
         }
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+            PlayerCraftMenu();
+        }
+    }
+
+    public void PlayerCraftMenu() {
+        int frameX = gp.TILE_SIZE * 5;
+        int frameY = gp.TILE_SIZE * 4;
+        int frameWidth = gp.TILE_SIZE * 15;
+        int frameHeight = gp.TILE_SIZE * 7;
+    
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+    
+        Shape oldClip = g2.getClip(); 
+        g2.setClip(frameX + 10, frameY + 10, frameWidth - 20, frameHeight - 20); 
+    
+        int contentX = frameX + 30;
+        int contentY = frameY + 40 - scrollY;
+    
+        for (int i = 0; i < 20; i++) {
+            int itemY = contentY + i * 40;
+
+            if (i == selectedRecipeIndex) {
+                g2.setColor(new Color(100, 100, 255)); // Biru transparan
+                g2.fillRoundRect(contentX - 10, itemY - 25, frameWidth - 50, 35, 10, 10);
+            }
+    
+
+            g2.setColor(Color.white);
+            g2.drawString("Hello " + i, contentX, contentY + i * 40);
+        }
+    
+        g2.setClip(oldClip); // Kembalikan clip ke semula
+    
+        drawScrollBar(frameX + frameWidth - 20, frameY + 10, 10, frameHeight - 30);
+    }
+
+    public void drawScrollBar(int x, int y, int width, int height) {
+        g2.setColor(Color.GRAY);
+        g2.fillRoundRect(x, y, width, height, 10, 10);
+    
+        int totalContentHeight = 120 * 40; // total tinggi konten
+        int visibleHeight = height; // tinggi area kotak (frame)
+        int thumbHeight = (int) ((float) visibleHeight / totalContentHeight * visibleHeight);
+    
+        if (thumbHeight < 30) thumbHeight = 30; // Minimal ukuran thumb biar kelihatan
+    
+        int maxThumbPos = height - thumbHeight;
+        int thumbY = y + (int) ((float) scrollY / (totalContentHeight - visibleHeight) * maxThumbPos);
+    
+        g2.setColor(Color.WHITE);
+        g2.fillRoundRect(x, thumbY, width, thumbHeight, 10, 10);
+    }
+
+    public void scrollUp() {
+        scrollY -= 20;
+        if (scrollY < 0) scrollY = 0;
+    }
+    
+    public void scrollDown() {
+        scrollY += 20;
+        maxScroll = Math.max(0, (15 * 40) - 40);
+        if (scrollY > maxScroll) scrollY = maxScroll;
     }
 
     public void drawSelectedItem() {
@@ -89,8 +156,8 @@ public class UI {
     }
 
     public void drawInventory() {
-        int frameX = gp.TILE_SIZE * 9;
-        int frameY =  gp.TILE_SIZE;
+        int frameX = gp.TILE_SIZE * 8;
+        int frameY =  gp.TILE_SIZE * 4;
         int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 7;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
