@@ -12,7 +12,7 @@ public class GuavaTree extends Plant {
     public GuavaTree (int x, int y, GamePanel gp) {
         super(x, y, gp);
         try {
-            this.image = ImageIO.read(new File("res/plant/tree.png"));
+            this.image = ImageIO.read(new File("ProjectTheSurvivalist/res/plant/tree.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

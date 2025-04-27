@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import Object.Animal.Wolf;
 import Object.Plant.*;
 import Object.Player.*;
+import Object.Items.Unstackable.Sword;
+import Object.Items.StackableItem.Bread;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -36,6 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int gameState;
     public final int PLAY_STATE = 1;
     public final int PAUSE_STATE = 2;
+    public final int INVENTORY_STATE = 3;
 
     
     public Player player = new Player("Player", this, keyH);
@@ -51,7 +54,6 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame() {
         gameState = PLAY_STATE;
-        addPlant(24, 43);
     }
 
     public void startgameThread() {
@@ -61,8 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void addPlant(int x, int y) {
         plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
-        tileM.mapTile[y][x] = 3;
-        
+        tileM.mapTile[x][y] = 3;
     }
 
     @Override
@@ -73,6 +74,9 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
+        addPlant(23, 24);
+        player.inventory.addItems(new Sword("Sword", 20, 30));
+        player.inventory.addItems(new Bread(10));
 
         while (gameThread != null) {
             currentTime = System.nanoTime();
@@ -107,11 +111,11 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         tileM.draw(g2);
-        player.draw(g2);        
-        ui.draw(g2);
         for (Plant p : plants) {
             p.draw(g2);
         }
+        player.draw(g2);        
+        ui.draw(g2);
 
         g2.dispose();
     }

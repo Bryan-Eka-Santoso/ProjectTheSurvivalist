@@ -21,22 +21,26 @@ public class TileManager {
         mapTile = new int[gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
         getTileImage();
-        loadMap("res/world/map.txt");
+        loadMap("ProjectTheSurvivalist/res/world/map.txt");
     }
 
     public void getTileImage() {
         try {
             tile[0] = new Tile();
-            tile[0].image = ImageIO.read(new File("res/world/calm-water.png"));
+            tile[0].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
             tile[0].collison = true;
             
             tile[1] = new Tile();
-            tile[1].image = ImageIO.read(new File("res/world/grass.png"));
+            tile[1].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
             tile[1].collison = false;
             
             tile[2] = new Tile();
-            tile[2].image = ImageIO.read(new File("res/world/sand.png"));
+            tile[2].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/sand.png"));
             tile[2].collison = false;
+            
+            tile[3] = new Tile();
+            tile[3].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
+            tile[3].collison = true;
 
         } catch (IOException e) {
             e.getStackTrace();

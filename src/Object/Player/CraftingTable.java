@@ -9,7 +9,7 @@ public class CraftingTable {
 
     public CraftingTable() {
         List<Item> recipe1 = Arrays.asList(new Material("Wood", 2), new Material("Stick", 1));
-        recipes.put(recipe1, new Sword("Wooden Sword"));
+        recipes.put(recipe1, new Sword("Wooden Sword", 20, 30));
     }
 
     public void showRecipes() {

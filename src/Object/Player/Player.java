@@ -22,7 +22,6 @@ public class Player {
     public Inventory inventory;
     public Island island;
     public int itemIndex; // Index of the selected item in the inventory
-    Item selectedItem; // Currently selected item
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public String direction;
@@ -71,7 +70,7 @@ public class Player {
         this.exp = 0;
         this.level = 1;
         this.speed = 5;
-        this.inventory = new Inventory(10);
+        this.inventory = new Inventory(32);
         this.gp = gp;
         this.keyH = keyH;
         this.grabbedAnimal= null; 
@@ -93,14 +92,14 @@ public class Player {
 
     public void getPlayerImg() {
         try {
-            up1 = ImageIO.read(new File("res/player/walkup1.png"));
-            up2 = ImageIO.read(new File("res/player/walkup2.png"));
-            down1 = ImageIO.read(new File("res/player/walkdown1.png"));
-            down2 = ImageIO.read(new File("res/player/walkdown2.png"));
-            left1 = ImageIO.read(new File("res/player/walkleft1.png"));
-            left2 = ImageIO.read(new File("res/player/walkleft2.png"));
-            right1 = ImageIO.read(new File("res/player/walkright1.png"));
-            right2 = ImageIO.read(new File("res/player/walkright2.png"));
+            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
+            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
+            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
+            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
+            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
+            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
+            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
+            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -171,7 +170,7 @@ public class Player {
                 break;
         }
 
-        g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
     }
 
    public void move(int dx, int dy) {
@@ -193,11 +192,11 @@ public class Player {
         return tile == 'A'; 
     }
 
-    public void handleGrabAction() {
+    public void handleGrabAction(Item selectedItem) {
         if (grabbedAnimal == null) {
             Animal nearbyAnimal = findNearbyAnimal();
             if (nearbyAnimal != null) {
-                grabAnimal(nearbyAnimal);
+                grabAnimal(nearbyAnimal, selectedItem);
             }
         } else {  
             unGrabAnimal();
@@ -218,7 +217,7 @@ public class Player {
         return null;
     }
 
-    public void grabAnimal(Animal animal) {
+    public void grabAnimal(Animal animal, Item selectedItem) {
         if (selectedItem != null) {
             System.out.println("Cannot grab animal while holding an item!");
             return;
@@ -295,17 +294,11 @@ public class Player {
         return grabbedAnimal != null;
     }
 
-    public void selectItem(int index) {
-        selectedItem = inventory.slots[index]; 
-        this.itemIndex = index;
-    }
-
-    public void useItem() {
+    public void useItem(Item selectedItem) {
         if (isHoldingAnimal()) {
             System.out.println("Cannot use items while holding an animal!");
             return;
         }
-        selectItem(itemIndex);
         if (selectedItem != null && selectedItem.name != null) {
             if (selectedItem instanceof Material) {
                 Material material = (Material) selectedItem;
