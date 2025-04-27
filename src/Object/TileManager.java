@@ -22,6 +22,12 @@ public class TileManager {
 
         getTileImage();
         loadMap("ProjectTheSurvivalist/res/world/map.txt");
+        for (int i = 0; i < gp.MAX_WORLD_COL; i++) {
+            for (int j = 0; j < gp.MAX_WORLD_ROW; j++) {
+                System.out.print(mapTile[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     public void getTileImage() {
@@ -51,30 +57,63 @@ public class TileManager {
         try {
             InputStream is = new FileInputStream(new File(path));
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
+    
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append(" "); // kasih spasi antar line
+            }
+            
+            br.close();
+    
+            // Sekarang sb sudah berisi semua angka dalam 1 string
+            String[] numbers = sb.toString().trim().split("\\s+"); // split berdasarkan spasi
+            
             int col = 0;
             int row = 0;
-            while (col < gp.MAX_WORLD_COL && row < gp.MAX_WORLD_ROW) {
-                String line = br.readLine();
-                while (col < gp.MAX_WORLD_COL) {
-                    String numbers[] = line.split(" ");
-
-                    int num = Integer.parseInt(numbers[col]);
-                    mapTile[col][row] = num;
-                    col++;
-                }
+            for (int i = 0; i < numbers.length; i++) {
+                int num = Integer.parseInt(numbers[i]);
+                mapTile[col][row] = num;
+                col++;
                 if (col == gp.MAX_WORLD_COL) {
                     col = 0;
                     row++;
                 }
             }
-            
-            br.close();
-            
+    
         } catch (IOException e) {
-            e.getStackTrace();
+            e.printStackTrace();
         }
     }
+
+    // public void loadMap(String path) {
+    //     try {
+    //         InputStream is = new FileInputStream(new File(path));
+    //         BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+    //         int col = 0;
+    //         int row = 0;
+    //         while (col < gp.MAX_WORLD_COL && row < gp.MAX_WORLD_ROW) {
+    //             String line = br.readLine();
+    //             while (col < gp.MAX_WORLD_COL) {
+    //                 String numbers[] = line.split(" ");
+
+    //                 int num = Integer.parseInt(numbers[col]);
+    //                 mapTile[col][row] = num;
+    //                 col++;
+    //             }
+    //             if (col == gp.MAX_WORLD_COL) {
+    //                 col = 0;
+    //                 row++;
+    //             }
+    //         }
+            
+    //         br.close();
+            
+    //     } catch (IOException e) {
+    //         e.getStackTrace();
+    //     }
+    // }
 
     public void draw(Graphics2D g2) {
 
