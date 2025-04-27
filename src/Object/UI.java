@@ -4,8 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import Object.Items.Unstackable.Sword;
-import Object.Items.Item;
 import Object.Items.StackableItem.*;
 
 public class UI {

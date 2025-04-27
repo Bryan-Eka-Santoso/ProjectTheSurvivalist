@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import Object.Animal.Wolf;
 import Object.Plant.*;
 import Object.Player.*;
 import Object.Items.Unstackable.Sword;

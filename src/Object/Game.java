@@ -1,15 +1,7 @@
 package Object;
-import Object.Player.CraftingTable;
-import Object.Player.Island;
-import Object.Player.Player;
-import Object.Animal.Wolf;
-import Object.Items.StackableItem.*;
-import Object.Items.Unstackable.*;
-import Object.Items.Unstackable.Buildings.KandangAyam;
 import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.awt.*;
 
 public class Game extends JPanel implements KeyListener { 
 
