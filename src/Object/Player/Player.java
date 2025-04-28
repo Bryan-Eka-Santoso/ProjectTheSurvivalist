@@ -1,15 +1,21 @@
 package Object.Player;
 import Object.Items.Unstackable.Buildings.Buildings;
+import Object.Items.Unstackable.Buildings.CowCage;
 import Object.Items.StackableItem.Food;
 import Object.Items.StackableItem.Material;
 import Object.Items.Item;
 import Object.Items.Unstackable.Buildings.Kandang;
 import Object.Items.Unstackable.Buildings.KandangAyam;
+import Object.Items.Unstackable.Buildings.PigCage;
+import Object.Items.Unstackable.Buildings.SheepCage;
 
 import java.util.ArrayList;
 
 import Object.Entity.Animal;
 import Object.Entity.Chicken;
+import Object.Entity.Cow;
+import Object.Entity.Pig;
+import Object.Entity.Sheep;
 
 public class Player {
     public String name;
@@ -57,7 +63,7 @@ public class Player {
         }
     }
     public boolean isAnimal(char tile) {
-        return tile == 'A'; 
+        return tile == 'A' || tile == 'P' || tile == 'C' || tile == 'S';
     }
 
     public void handleGrabAction() {
@@ -101,7 +107,7 @@ public class Player {
         }
     }
     public void unGrabAnimal() {
-        KandangAyam nearbyKandang = findNearbyKandang();
+        Kandang nearbyKandang = findNearbyKandang();
         int newX = x, newY = y;
         switch (lastMove) {
             case "w": newY--; break;
@@ -110,10 +116,36 @@ public class Player {
             case "d": newX++; break;
         }
         if (nearbyKandang != null) {
+            
+            boolean isCorrectCage = (grabbedAnimal instanceof Chicken && nearbyKandang instanceof KandangAyam) ||
+            (grabbedAnimal instanceof Pig && nearbyKandang instanceof PigCage) ||
+            (grabbedAnimal instanceof Cow && nearbyKandang instanceof CowCage) ||
+            (grabbedAnimal instanceof Sheep && nearbyKandang instanceof SheepCage);
+            
+            if (!isCorrectCage) {
+                System.out.println("Wrong cage type for this animal!");
+                return;
+            }
+
             if (nearbyKandang.getCurrentCapacity() < nearbyKandang.getMaxCapacity()) {
-                if (nearbyKandang.addAnimal((Chicken)grabbedAnimal)) {
-                    System.out.println("Added animal to kandang");
-                    island.spawnChicken(); 
+                boolean added = false;
+                if (grabbedAnimal instanceof Chicken) {
+                    added = ((KandangAyam)nearbyKandang).addAnimal((Chicken)grabbedAnimal);
+                } else if (grabbedAnimal instanceof Pig ) {
+                    added = ((PigCage)nearbyKandang).addAnimal((Pig)grabbedAnimal);
+                } else if (grabbedAnimal instanceof Cow ) {
+                    added = ((CowCage)nearbyKandang).addAnimal((Cow)grabbedAnimal);
+                } else if (grabbedAnimal instanceof Sheep ) {
+                    added = ((SheepCage)nearbyKandang).addAnimal((Sheep)grabbedAnimal);
+                }
+                
+                if (added) {
+                    System.out.println("Added " + grabbedAnimal.getName() + " to kandang");
+                    // Spawn new animal of same type
+                    if (grabbedAnimal instanceof Chicken) island.spawnChicken();
+                    else if (grabbedAnimal instanceof Pig) island.spawnPig();
+                    else if (grabbedAnimal instanceof Cow) island.spawnCow();
+                    else if (grabbedAnimal instanceof Sheep) island.spawnSheep();
                     grabbedAnimal = null;
                     return;
                 }
@@ -121,14 +153,17 @@ public class Player {
                 System.out.println("Kandang is full!");
                 return;
             }
-        }else if (island.world[newY][newX] != ' ') {
-           
-            System.out.println("Cannot release animal here ");
-            return;
+        }else{
+            if (island.world[newY][newX] == ' ') {
+                placeAnimalNearby();
+                System.out.println("Released " + grabbedAnimal.getName());
+                grabbedAnimal = null;
+                return;
+            } else {
+                System.out.println("Cannot release animal here - space is occupied!");
+                return;
+            }
         }
-        placeAnimalNearby();
-        System.out.println("Released " + grabbedAnimal.getName());
-        grabbedAnimal = null;
     }
 
     public void placeAnimalNearby() {
@@ -144,11 +179,11 @@ public class Player {
             island.placeAnimal(grabbedAnimal, newX, newY);
         }
     }
-    public KandangAyam findNearbyKandang() {
+    public Kandang findNearbyKandang() {
         for (Buildings building : island.buildings) {
-            if (building instanceof KandangAyam) {
+            if (building instanceof Kandang) {
                 if (Math.abs(building.getX() - x) <= 1 && Math.abs(building.getY() - y) <= 1) {
-                    return (KandangAyam) building;
+                    return (Kandang) building;
                 }
             }
         }

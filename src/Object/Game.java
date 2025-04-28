@@ -6,7 +6,10 @@ import Object.Entity.Tiger;
 import Object.Items.StackableItem.*;
 import Object.Items.Unstackable.*;
 import Object.Items.Unstackable.Buildings.KandangAyam;
-
+import Object.Items.Unstackable.Buildings.CowCage;
+import Object.Items.Unstackable.Buildings.PigCage;
+import Object.Items.Unstackable.Buildings.SheepCage;
+import Object.Items.Unstackable.Buildings.Kandang;
 import java.util.*;
 import javax.swing.*;
 import java.awt.*;
@@ -178,8 +181,18 @@ public class Game extends JPanel implements KeyListener {
 
         //buat test doang
         KandangAyam kandang = new KandangAyam("Chicken Coop", 7, 7);
+        PigCage pigCage = new PigCage("Pig Cage", 7, 9);
+        CowCage cowCage = new CowCage("Cow Cage", 9, 7);
+        SheepCage sheepCage = new SheepCage("Sheep Cage", 9, 9);
         island.buildings.add(kandang);
-        island.world[7][7] = '='; 
+        island.buildings.add(pigCage);
+        island.buildings.add(cowCage);
+        island.buildings.add(sheepCage);
+        
+        island.world[7][7] = '='; // Chicken coop
+        island.world[7][9] = '*';  // Pig cage
+        island.world[9][7] = '@';  // Cow cage
+        island.world[9][9] = '-';  // Sheep cage
         //======================================
 
         while (isRunning) {
@@ -233,7 +246,7 @@ public class Game extends JPanel implements KeyListener {
 
     }
     public void handleInteraction(Player player) {
-        KandangAyam nearbyKandang = player.findNearbyKandang();
+        Kandang nearbyKandang = player.findNearbyKandang();
         if (nearbyKandang != null) {
             
             nearbyKandang.interact(player, player.island);
