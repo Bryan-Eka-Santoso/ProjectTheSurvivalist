@@ -103,8 +103,8 @@ public class UI {
     }
 
     public void drawSelectedItem() {
-        int frameX = gp.TILE_SIZE * 8;
-        int frameY =  gp.TILE_SIZE * 17;
+        int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 3);
         int frameWidth = gp.TILE_SIZE * 14;
         int frameHeight = gp.TILE_SIZE * 2;
         drawSubWindow(frameX, frameY, frameWidth + 10, frameHeight);
@@ -156,8 +156,8 @@ public class UI {
     }
 
     public void drawInventory() {
-        int frameX = gp.TILE_SIZE * 8;
-        int frameY =  gp.TILE_SIZE * 4;
+        int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 14);
         int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 7;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);

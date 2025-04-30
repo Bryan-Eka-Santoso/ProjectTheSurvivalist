@@ -46,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int INVENTORY_STATE = 3;
     public final int PLAYER_CRAFTING_STATE = 4;
 
-    public Player player = null;
+    public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     
@@ -59,10 +59,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void setupGame() {
-        player = new Player("Player", recipe, this, keyH);
         gameState = PLAY_STATE;
     }
-
+    
     public void startgameThread() {
         gameThread = new Thread(this);
         gameThread.start();
@@ -71,7 +70,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void addPlant(int x, int y) {
         plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
     }
-
+    
     public void addAnimal(int x, int y) {
         animals.add(new Chicken("Chiscken", x * TILE_SIZE, y * TILE_SIZE, this));
     }
@@ -90,7 +89,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Sword("Sword", 20, 30));
         player.inventory.addItems(new Bread(10));
         player.inventory.addItems(new Axe("Axe", 20, 30));
-
+        
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
 

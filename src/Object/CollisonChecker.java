@@ -109,24 +109,7 @@ public class CollisonChecker {
         }
     }
 
-    public void animalCheckObject(Player player, Animal animal) {
-        player.solidArea.x = player.worldX + player.solidArea.x;
-        player.solidArea.y = player.worldY + player.solidArea.y;
-
-        animal.solidArea.x = animal.worldX + animal.solidArea.x;
-        animal.solidArea.y = animal.worldY + animal.solidArea.y;
-
-        if (player.solidArea.intersects(animal.solidArea)) {
-            if (animal instanceof Animal) {
-                animal.collisionOn = true;
-            }
-        }
-
-        player.solidArea.x = player.solidAreaDefaultX;
-        player.solidArea.y = player.solidAreaDefaultY;
-        animal.solidArea.x = animal.solidAreaDefaultX;
-        animal.solidArea.y = animal.solidAreaDefaultY;
-
+    public void animalCheckObject(Animal animal) {
         for (int i = 0; i < gp.plants.size(); i++) {
             animal.solidArea.x = animal.worldX + animal.solidArea.x;
             animal.solidArea.y = animal.worldY + animal.solidArea.y;
@@ -206,6 +189,7 @@ public class CollisonChecker {
                         if (player.solidArea.intersects(gp.animals.get(i).solidArea)) {
                             index = i; 
                             player.collisionOn = true;
+                            gp.animals.get(i).collisionOn = true;
                         }
                         break;
                     case "down":
@@ -213,6 +197,7 @@ public class CollisonChecker {
                         if (player.solidArea.intersects(gp.animals.get(i).solidArea)) {
                             index = i; 
                             player.collisionOn = true;
+                            gp.animals.get(i).collisionOn = true;
                         }
                         break;
                     case "left":
@@ -220,6 +205,7 @@ public class CollisonChecker {
                         if (player.solidArea.intersects(gp.animals.get(i).solidArea)) {
                             index = i; 
                             player.collisionOn = true;
+                            gp.animals.get(i).collisionOn = true;
                         }
                         break;
                     case "right":
@@ -227,6 +213,7 @@ public class CollisonChecker {
                         if (player.solidArea.intersects(gp.animals.get(i).solidArea)) {
                             index = i; 
                             player.collisionOn = true;
+                            gp.animals.get(i).collisionOn = true;
                         }
                         break;
                 }
