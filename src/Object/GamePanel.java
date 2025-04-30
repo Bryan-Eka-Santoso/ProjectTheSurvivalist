@@ -12,7 +12,7 @@ import Object.Items.StackableItem.Bread;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    final int ORI_TILE_SIZE = 16;
+    final int ORI_TILE_SIZE = 12;
     final int scale = 3;
 
     public final int TILE_SIZE = ORI_TILE_SIZE * scale;
