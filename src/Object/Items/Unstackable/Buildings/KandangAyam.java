@@ -1,7 +1,9 @@
 package Object.Items.Unstackable.Buildings;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import Object.GamePanel;
 import Object.Animal.Chicken;
 import Object.Player.Island;
 import Object.Player.Player;
@@ -11,9 +13,10 @@ public class KandangAyam extends Kandang{
     ArrayList<Chicken> chickensInCage;
     Scanner scanner = new Scanner(System.in);
     Scanner scannerStr = new Scanner(System.in);
-    public KandangAyam(String name, int x, int y) {
-        super(name, x, y);
-       this.chickensInCage = new ArrayList<Chicken>();
+
+    public KandangAyam(String name, int x, int y, GamePanel gp) {
+        super(name, x, y, gp, new Rectangle(0, 0, 0, 0));
+        this.chickensInCage = new ArrayList<Chicken>();
     }   
     public boolean addAnimal(Chicken chicken) {
         if (chickensInCage.size() < MAX_CAPACITY) {
@@ -102,7 +105,7 @@ public class KandangAyam extends Kandang{
         }
 
        
-        Chicken baby = chickensInCage.get(firstChoice).breeding(chickensInCage.get(secondChoice));
+        Chicken baby = chickensInCage.get(firstChoice).breeding(chickensInCage.get(secondChoice), gp);
         if (baby != null) {
             System.out.print("Give a name to the baby chicken: ");
             
@@ -110,7 +113,7 @@ public class KandangAyam extends Kandang{
             baby.setName(name);
             chickensInCage.add(baby);
             System.out.println("New chicken " + name + " born in kandang!");
-            island.spawnChicken(); 
+            // island.spawnChicken(); 
         }
     }
 

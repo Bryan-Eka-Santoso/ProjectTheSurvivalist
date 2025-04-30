@@ -45,22 +45,22 @@ public class Island {
         {'#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#'}
     };
 
-    public Island() {
-        // Constructor
-        this.world = randomizeIsland();
-        this.buildings = new ArrayList<>(); // Initialize the buildings list
-        this.animals = new ArrayList<>();
-        spawnChickens(INITIAL_CHICKENS);
-    }
+    // public Island() {
+    //     // Constructor
+    //     this.world = randomizeIsland();
+    //     this.buildings = new ArrayList<>(); // Initialize the buildings list
+    //     this.animals = new ArrayList<>();
+        // spawnChickens(INITIAL_CHICKENS);
+    // }
 
-    public char[][] randomizeIsland() {
-        // Randomly choose between island1 and island2
-        if (Math.random() < 0.5) {
-            return island1;
-        } else {
-            return island2;
-        }
-    }
+    // public char[][] randomizeIsland() {
+    //     // Randomly choose between island1 and island2
+    //     if (Math.random() < 0.5) {
+    //         return island1;
+    //     } else {
+    //         return island2;
+    //     }
+    // }
 
     public void showWorld(Player player, Wolf tiger) {
         // Display the world
@@ -79,45 +79,45 @@ public class Island {
     }
 
 
-    private ArrayList<Animal> animals;
-    private static final int INITIAL_CHICKENS = 10;
-    public void spawnChicken() {
-        int randomX, randomY;
-        do {
-            randomX = rand.nextInt(world[0].length - 2) + 1;
-            randomY = rand.nextInt(world.length - 2) + 1;
-        } while (world[randomY][randomX] != ' ');
+    // private ArrayList<Animal> animals;
+    // private static final int INITIAL_CHICKENS = 10;
+    // public void spawnChicken() {
+    //     int randomX, randomY;
+    //     do {
+    //         randomX = rand.nextInt(world[0].length - 2) + 1;
+    //         randomY = rand.nextInt(world.length - 2) + 1;
+    //     } while (world[randomY][randomX] != ' ');
         
-        Chicken chicken = new Chicken("Chicken" , randomX, randomY);
-        animals.add(chicken);
-        world[randomY][randomX] = 'A';
-    }
-    public void spawnChickens(int count) {
-        for (int i = 0; i < count; i++) {
-            spawnChicken();
-        }
-    }
-    public Animal getAnimalAt(int x, int y) {
-        for (Animal animal : animals) {
-            if (animal.getX() == x && animal.getY() == y) {
-                return animal;
-            }
-        }
-        return null;
-    }
-    public void removeAnimal(Animal animal) {
-        animals.remove(animal);
-        world[animal.getY()][animal.getX()] = ' ';
-    }
-    public void placeAnimal(Animal animal, int x, int y) {
-        animal.setPosition(x, y);
-        animals.add(animal);
-        world[y][x] = getAnimalSymbol(animal);
-    }
-    public char getAnimalSymbol(Animal animal) {
-        if (animal instanceof Chicken) return 'A';
-        return '?';
-    }
+    //     Chicken chicken = new Chicken("Chicken" , randomX, randomY);
+    //     animals.add(chicken);
+    //     world[randomY][randomX] = 'A';
+    // }
+    // public void spawnChickens(int count) {
+    //     for (int i = 0; i < count; i++) {
+    //         spawnChicken();
+    //     }
+    // }
+    // public Animal getAnimalAt(int x, int y) {
+    //     for (Animal animal : animals) {
+    //         if (animal.getX() == x && animal.getY() == y) {
+    //             return animal;
+    //         }
+    //     }
+    //     return null;
+    // }
+    // public void removeAnimal(Animal animal) {
+    //     animals.remove(animal);
+    //     world[animal.getY()][animal.getX()] = ' ';
+    // }
+    // public void placeAnimal(Animal animal, int x, int y) {
+    //     animal.setPosition(x, y);
+    //     animals.add(animal);
+    //     world[y][x] = getAnimalSymbol(animal);
+    // }
+    // public char getAnimalSymbol(Animal animal) {
+    //     if (animal instanceof Chicken) return 'A';
+    //     return '?';
+    // }
 
 
 }

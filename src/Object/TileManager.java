@@ -22,8 +22,8 @@ public class TileManager {
         tile = new Tile[30];
         mapTile = new int[gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
-        getTileImage();
         loadMap("ProjectTheSurvivalist/res/world/map.txt");
+        getTileImage();
     }
 
     public void getTileImage() {

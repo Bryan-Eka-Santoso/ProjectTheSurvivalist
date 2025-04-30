@@ -1,8 +1,8 @@
 package Object.Animal;
+
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-
 import Object.GamePanel;
 import Object.Player.*;
 import java.awt.image.BufferedImage;
@@ -21,7 +21,7 @@ public class Wolf extends Animal {
 
     public Wolf(String name, int x, int y, String direction, GamePanel gp) {
         // this.name = name;
-        super(name, x, y, direction);
+        super(name, x, y, 10, direction, gp);
         radius = 5; // Default radius for tiger
         speed = 7;
         this.gp = gp;
