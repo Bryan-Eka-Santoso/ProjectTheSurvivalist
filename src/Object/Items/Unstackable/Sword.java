@@ -1,19 +1,23 @@
 package Object.Items.Unstackable;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class Sword extends Unstackable {
     private int damage;
     private int durability;
-
+    
     public Sword(String name, int damage, int durability) {
         super(name);
         this.damage = damage;
         this.durability = durability;
-    }
-
-    public Sword(String name) {
-        super(name);
-        this.damage = 10; // Default damage
-        this.durability = 100; // Default durability
+        try {
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/sword.png")); 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getDamage() {
