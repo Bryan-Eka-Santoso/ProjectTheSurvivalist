@@ -3,6 +3,7 @@ package Object.Player;
 import Object.Items.Item;
 import Object.Items.StackableItem.Food;
 import Object.Items.StackableItem.Material;
+import Object.Items.StackableItem.Torch;
 import Object.Items.Unstackable.Axe;
 import Object.Items.Unstackable.Sword;
 import Object.Items.Unstackable.Buildings.Buildings;

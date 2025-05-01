@@ -13,13 +13,14 @@ public class UI {
     Graphics2D g2;
     public int slotCol = 0;
     public int slotRow = 0;
-    public int selectedIndex = 0;
+    public int selectedIndex;
     int scrollY = 0; // scroll posisi saat ini
     int maxScroll = 1000; // max scroll, nanti dihitung dari banyaknya data
     public int selectedRecipeIndex = 0; // <<<< tambah ini di UI kamu
 
     public UI (GamePanel gp) {
         this.gp = gp;
+        selectedIndex = 0;
     }
 
     public void draw(Graphics2D g2) {

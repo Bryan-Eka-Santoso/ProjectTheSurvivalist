@@ -31,7 +31,8 @@ public abstract class Animal {
     public void update() {
         collisionOn = false;
         int randomDirection = (int) (Math.random() * 4); // 0: up, 1: down, 2: left, 3: right
-        // gp.cCheck.animalCheckTile(this);
+        randomDirection = 2;
+        gp.cCheck.animalCheckTile(this);
         gp.cCheck.animalCheckObject(this);
         if (!collisionOn) {
             switch (randomDirection) {
