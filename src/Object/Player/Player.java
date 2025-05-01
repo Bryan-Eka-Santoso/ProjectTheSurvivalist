@@ -1,13 +1,10 @@
 package Object.Player;
+
 import Object.Items.Unstackable.Buildings.Buildings;
-import Object.Items.StackableItem.Food;
-import Object.Items.StackableItem.Material;
 import Object.Items.Item;
+import Object.Items.StackableItem.Torch;
 import Object.Items.Unstackable.Buildings.Kandang;
 import Object.Items.Unstackable.Buildings.KandangAyam;
-
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -17,7 +14,6 @@ import javax.imageio.ImageIO;
 import Object.GamePanel;
 import Object.KeyHandler;
 import Object.Animal.TameAnimal;
-import Object.Animal.Chicken;
 
 public class Player {
     public String name;
@@ -33,10 +29,10 @@ public class Player {
     public String lastMove;
     public TameAnimal grabbedAnimal;
     public Crafting recipe;
-    public int solidAreaDefaultX; 
-    public int solidAreaDefaultY; 
+    public int solidAreaDefaultX, solidAreaDefaultY; 
+    public Torch torch;
     ArrayList<Kandang> kandang= new ArrayList<>(); // List of cages owned by the player
-
+    public boolean lightUpdated = true;
     public Rectangle solidArea;
     public boolean collisionOn = false;
     public UseItem interactObj; // Object to handle item interactions

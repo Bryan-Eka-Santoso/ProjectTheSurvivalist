@@ -11,7 +11,7 @@ public class Bread extends Food {
 
     public Bread() {
         super("Bread", 10, 5);
-                try {
+        try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Foods/Bread.png")); 
         } catch (IOException e) {
             e.printStackTrace();

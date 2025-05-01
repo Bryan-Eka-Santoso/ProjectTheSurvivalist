@@ -128,6 +128,7 @@ public class KeyHandler implements KeyListener, MouseListener {
             if (gp.gameState != gp.INVENTORY_STATE){ // Ada bug kalo game state ny di inventory
                 gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
                 gp.ui.selectedIndex = gp.ui.slotCol;
+                gp.player.lightUpdated = true;
             }
         }
         if (code == KeyEvent.VK_R) {

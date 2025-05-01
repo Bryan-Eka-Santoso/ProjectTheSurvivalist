@@ -1,6 +1,5 @@
 package Object.Player;
-import Object.Animal.Animal;
-import Object.Animal.Chicken;
+
 import Object.Animal.Wolf;
 import Object.Items.Unstackable.Buildings.Buildings;
 import java.util.ArrayList;

@@ -1,9 +1,7 @@
 package Object;
 import javax.swing.*;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,8 +10,10 @@ import Object.Plant.*;
 import Object.Player.*;
 import Object.Items.Unstackable.*;
 import Object.Animal.Animal;
+import Object.Environment.EnvironmentManager;
 import Object.Items.StackableItem.Bread;
 import Object.Animal.*;
+import Object.Items.StackableItem.Torch;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -33,7 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
     TileManager tileM = new TileManager(this);
-    UI ui = new UI(this);
+    public UI ui = new UI(this);
+    EnvironmentManager eManager = new EnvironmentManager(this);
     KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     Crafting recipe = new Crafting();
@@ -45,7 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int PAUSE_STATE = 2;
     public final int INVENTORY_STATE = 3;
     public final int PLAYER_CRAFTING_STATE = 4;
-
+    
     public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
@@ -56,6 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+        eManager.setup();
     }
     
     public void setupGame() {
@@ -66,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread = new Thread(this);
         gameThread.start();
     }
-
+    
     public void addPlant(int x, int y) {
         plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
     }
@@ -74,7 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void addAnimal(int x, int y) {
         animals.add(new Chicken("Chiscken", x * TILE_SIZE, y * TILE_SIZE, this));
     }
-
+    
     @Override
     public void run() {
         // TODO Auto-generated method stub
@@ -85,9 +87,10 @@ public class GamePanel extends JPanel implements Runnable {
         long timer = 0;
         addPlant(40, 45);
         addPlant(40, 49);
-        addAnimal(40, 50);
+        addAnimal(30, 50);
         player.inventory.addItems(new Sword("Sword", 20, 30));
-        player.inventory.addItems(new Bread(10));
+        player.inventory.addItems(new Torch(this));
+        player.inventory.addItems(new Bread(34));
         player.inventory.addItems(new Axe("Axe", 20, 30));
         
         long interval = 500_000_000L;
@@ -108,11 +111,10 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             if (currentTime - lastAnimalMoveTime >= interval) {
-                for (Animal animal : animals) {
-                    for (int i = 0; i < animals.size(); i++) {
-                        animals.get(i).update();
-                    }
+                for (int i = 0; i < animals.size(); i++) {
+                    animals.get(i).update();
                 }
+                
                 lastAnimalMoveTime = currentTime;
             }
 
@@ -140,8 +142,9 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < animals.size(); i++) {
             animals.get(i).draw(g2);
         }
+        eManager.lighting.update();
+        eManager.draw(g2);
         player.draw(g2);
-
         ui.draw(g2);
         g2.dispose();
     }
