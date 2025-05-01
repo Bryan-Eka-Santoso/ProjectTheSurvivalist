@@ -1,5 +1,6 @@
 package Object.Plant;
 
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 
@@ -8,9 +9,10 @@ import javax.imageio.ImageIO;
 import Object.GamePanel;
 
 public class GuavaTree extends Plant {
+
     
     public GuavaTree (int x, int y, GamePanel gp) {
-        super(x, y, gp);
+        super(x, y, gp, new Rectangle(12, 24, 24, 20), true);
         try {
             this.image = ImageIO.read(new File("ProjectTheSurvivalist/res/plant/tree.png"));
         } catch (IOException e) {

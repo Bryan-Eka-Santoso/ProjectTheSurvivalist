@@ -73,21 +73,21 @@ public class Inventory {
         return false;
     }
 
-    public void removeItem(String itemName) {
+    public void removeItem(Item selecItem) {
         for (int i = 0; i < slots.length; i++) {
-            if (slots[i] != null && slots[i].name.equals(itemName)) {
+            if (slots[i] != null && slots[i].equals(selecItem)) {
                 if (slots[i].currentStack > 1) {
                     slots[i].currentStack--;
-                    System.out.println("Removed one " + itemName + " from inventory.");
+                    System.out.println("Removed one " + selecItem.name + " from inventory.");
                 } 
                 if (slots[i].currentStack == 1) {
                     slots[i] = null;
-                    System.out.println("Removed " + itemName + " from inventory.");
+                    System.out.println("Removed " + selecItem.name + " from inventory.");
                 }
                 return;
             }
         }
-        System.out.println(itemName + " not found in inventory.");
+        System.out.println(selecItem.name + " not found in inventory.");
     }
 
     public void swapItems(int index1, int index2) {

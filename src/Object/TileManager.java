@@ -22,8 +22,8 @@ public class TileManager {
         tile = new Tile[30];
         mapTile = new int[gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
-        getTileImage();
         loadMap("ProjectTheSurvivalist/res/world/map.txt");
+        getTileImage();
     }
 
     public void getTileImage() {
@@ -152,7 +152,7 @@ public class TileManager {
             int col = 0;
             int row = 0;
             for (int num : numbers) {
-                mapTile[row][col] = num;
+                mapTile[col][row] = num;
                 col++;
                 if (col == gp.MAX_WORLD_COL) {
                     col = 0;
@@ -186,7 +186,11 @@ public class TileManager {
                 && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
                 && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
                 && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
-                g2.drawImage(tile[tileNum].image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+                if (tile[tileNum].image != null) {
+                    g2.drawImage(tile[tileNum].image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+                } else {
+                    System.err.println("Gambar tile tidak ditemukan untuk tile number: " + tileNum);
+                }
             }
             worldCol++;
             

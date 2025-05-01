@@ -103,14 +103,14 @@ public class UI {
     }
 
     public void drawSelectedItem() {
-        int frameX = gp.TILE_SIZE * 8;
-        int frameY =  gp.TILE_SIZE * 17;
-        int frameWidth = gp.TILE_SIZE * 14;
+        int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 3);
+        int frameWidth = gp.TILE_SIZE * 16;
         int frameHeight = gp.TILE_SIZE * 2;
         drawSubWindow(frameX, frameY, frameWidth + 10, frameHeight);
 
-        int slotXStart = frameX + 18;
-        int slotYStart = frameY + 18;
+        int slotXStart = frameX + 25;
+        int slotYStart = frameY + 12;
         int slotX = slotXStart;
         int slotY = slotYStart;
 
@@ -129,7 +129,7 @@ public class UI {
             g2.drawImage(gp.player.inventory.slots[i].img, slotX + 5, slotY + 5, gp.TILE_SIZE, gp.TILE_SIZE, null);
             if (gp.player.inventory.slots[i] instanceof Stackable) {
                 Stackable stackableItem = (Stackable) gp.player.inventory.slots[i];
-                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
                 g2.setFont(font);
                 int dx = 30;
                 if (stackableItem.currentStack < 10) {
@@ -156,13 +156,13 @@ public class UI {
     }
 
     public void drawInventory() {
-        int frameX = gp.TILE_SIZE * 8;
-        int frameY =  gp.TILE_SIZE * 4;
-        int frameWidth = gp.TILE_SIZE * 15;
-        int frameHeight = gp.TILE_SIZE * 7;
+        int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 14);
+        int frameWidth = gp.TILE_SIZE * 17;
+        int frameHeight = gp.TILE_SIZE * 8;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
-        int slotXStart = frameX + 45;
+        int slotXStart = frameX + 40;
         int slotYStart = frameY + 30;
         int slotX = slotXStart;
         int slotY = slotYStart;
@@ -187,7 +187,7 @@ public class UI {
             g2.drawImage(gp.player.inventory.slots[i].img, slotX + 5, slotY + 5, gp.TILE_SIZE, gp.TILE_SIZE, null);
             if (gp.player.inventory.slots[i] instanceof Stackable) {
                 Stackable stackableItem = (Stackable) gp.player.inventory.slots[i];
-                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
                 g2.setFont(font);
                 int dx = 30;
                 if (stackableItem.currentStack < 10) {
