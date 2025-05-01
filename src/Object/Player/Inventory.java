@@ -89,4 +89,10 @@ public class Inventory {
         }
         System.out.println(itemName + " not found in inventory.");
     }
+
+    public void swapItems(int index1, int index2) {
+        Item temp = slots[index1];
+        slots[index1] = slots[index2];
+        slots[index2] = temp;
+    }
 }
