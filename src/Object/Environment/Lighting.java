@@ -63,9 +63,9 @@ public class Lighting {
         fraction[10] = 0.95f;
         fraction[11] = 1f;
         
-        RadialGradientPaint gPaint = new RadialGradientPaint(centerX, centerY, 350, fraction, color); 
+        RadialGradientPaint gPaint = new RadialGradientPaint(centerX, centerY, 10, fraction, color); 
         if (!(gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Torch)) {
-            gPaint = new RadialGradientPaint(centerX, centerY, 100, fraction, color);
+            gPaint = new RadialGradientPaint(centerX, centerY, 10, fraction, color);
         } else {
             gPaint = new RadialGradientPaint(centerX, centerY, ((Torch) gp.player.inventory.slots[gp.ui.selectedIndex]).lightRadius, fraction, color);
         }    
