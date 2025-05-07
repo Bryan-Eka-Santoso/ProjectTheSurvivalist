@@ -142,9 +142,9 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < animals.size(); i++) {
             animals.get(i).draw(g2);
         }
+        player.draw(g2);
         eManager.lighting.update();
         eManager.draw(g2);
-        player.draw(g2);
         ui.draw(g2);
         g2.dispose();
     }
