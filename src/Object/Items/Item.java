@@ -1,5 +1,6 @@
 package Object.Items;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public abstract class Item implements Cloneable {
@@ -21,6 +22,8 @@ public abstract class Item implements Cloneable {
             throw new AssertionError(); // Seharusnya tidak terjadi
         }
     }
+
+
 
 }
 

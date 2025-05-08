@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 
+import javax.swing.JButton;
+
 import Object.Items.StackableItem.*;
 
 public class UI {
@@ -13,6 +15,8 @@ public class UI {
     Graphics2D g2;
     public int slotCol = 0;
     public int slotRow = 0;
+    int mouseX = 0;
+    int mouseY = 0;
     public int selectedIndex;
     int scrollY = 0; // scroll posisi saat ini
     int maxScroll = 1000; // max scroll, nanti dihitung dari banyaknya data
@@ -41,8 +45,25 @@ public class UI {
         if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
             PlayerCraftMenu();
         }
+        if (gp.gameState == gp.DROPPED_ITEM_STATE){
+            boxAmount();
+        }
     }
 
+    public void boxAmount(){
+        int frameX = gp.TILE_SIZE * 5;
+        int frameY = gp.TILE_SIZE * 5;
+        int frameWidth = gp.TILE_SIZE * 14;
+        int frameHeight = gp.TILE_SIZE * 14;
+
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        if (mouseX >= frameX && mouseX <= frameX + frameWidth && mouseY >= frameY && mouseY <= frameY + frameHeight) {
+            mouseX = 0;
+            mouseY = 0;
+            System.out.println("Mouse is over the button!");
+        } 
+    }
     public void PlayerCraftMenu() {
         int frameX = gp.TILE_SIZE * 5;
         int frameY = gp.TILE_SIZE * 4;

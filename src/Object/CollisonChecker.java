@@ -141,7 +141,7 @@ public class CollisonChecker {
                         player.solidArea.y -= player.speed;
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true;
+                            player.collisionOn = true; // Kalo item ini diapus aja
                         }
                         break;
                     case "down":

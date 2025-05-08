@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.io.*; 
 import javax.imageio.ImageIO;
 import Object.GamePanel;
+import Object.ItemDrop;
 import Object.KeyHandler;
 import Object.Animal.TameAnimal;
 
@@ -290,6 +291,13 @@ public class Player {
             return;
         }
         interactObj.useItem(selectedItem, this);
+    }
+
+    public void dropItem(Item selectedItem){
+        // Add to dropped Item list
+        // Item berkurang dari inventory
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem, gp));
+
     }
 
     public String displayStats(Player player) {

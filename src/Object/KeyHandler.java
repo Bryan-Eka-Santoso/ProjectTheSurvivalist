@@ -20,8 +20,10 @@ public class KeyHandler implements KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+        if (gp.gameState == gp.DROPPED_ITEM_STATE) {
+            gp.ui.mouseX = e.getX();
+            gp.ui.mouseY = e.getY();
+        }
     }
 
     @Override
@@ -123,6 +125,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.ui.slotCol = 0;
                 gp.ui.selectedIndex = 0;
             } 
+            gp.player.lightUpdated = true;
         }
         if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
             if (gp.gameState != gp.INVENTORY_STATE){ // Ada bug kalo game state ny di inventory
@@ -163,6 +166,12 @@ public class KeyHandler implements KeyListener, MouseListener {
                 if (gp.ui.selectedRecipeIndex < 19) {
                     gp.ui.selectedRecipeIndex++; 
                 }
+            }
+        }
+        if (code == KeyEvent.VK_Q){
+            if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
+                gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
+                gp.player.inventory.removeItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
             }
         }
     }
