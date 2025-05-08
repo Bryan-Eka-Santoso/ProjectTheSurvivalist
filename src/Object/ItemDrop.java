@@ -31,12 +31,12 @@ public class ItemDrop {
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             
-            g2.drawImage(droppedItem.img, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            g2.drawImage(droppedItem.img, screenX, screenY, 35, 35, null);
             if (droppedItem instanceof Stackable) {
-                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
+                Font font = new Font("Arial", Font.BOLD, 15); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
                 g2.setColor(Color.white);
                 g2.setFont(font);
-                g2.drawString(String.valueOf(droppedItem.currentStack), screenX + 25, screenY + 40);
+                g2.drawString(String.valueOf(droppedItem.currentStack), screenX + 20, screenY + 30);
             }
         }
     }

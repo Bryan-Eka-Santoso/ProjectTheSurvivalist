@@ -48,18 +48,18 @@ public class UI {
     }
 
     public void drawPlusMinus() {
-        int frameX = gp.TILE_SIZE * gp.MAX_SCREEN_COL - (gp.TILE_SIZE * 8);
-        int frameY = gp.TILE_SIZE * gp.MAX_SCREEN_ROW - (gp.TILE_SIZE * 6);
-        int frameWidth = gp.TILE_SIZE * 3;
-        int frameHeight = gp.TILE_SIZE * 5;
+        int frameX = gp.TILE_SIZE * gp.MAX_SCREEN_COL - (gp.TILE_SIZE * 3);
+        int frameY = gp.TILE_SIZE * gp.MAX_SCREEN_ROW - (gp.TILE_SIZE * 5);
+        int frameWidth = gp.TILE_SIZE * 2;
+        int frameHeight = gp.TILE_SIZE * 4;
 
         String plusBtn = "< + >";
         String amount = " 10 ";
         String minusBtn = "< - >";
 
-        int posXPlus = frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2;
+        int posXPlus = frameX + (frameWidth - sentenceLength(plusBtn)) / 2 + 6;
         int posYPlus = frameY + frameHeight / 4;
-        int posXMinus = frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2 + 1;
+        int posXMinus = frameX + (frameWidth - sentenceLength(plusBtn)) / 2 + 10;
         int posYMinus = frameY + frameHeight * 3 / 4;
 
         drawSubWindow(frameX, frameY, frameWidth + 10, frameHeight);
@@ -67,9 +67,6 @@ public class UI {
         g2.drawString(plusBtn, posXPlus, posYPlus);
         g2.drawString(amount, frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2, frameY + frameHeight * 2 / 4);
         g2.drawString(minusBtn, posXMinus, posYMinus);
-
-        System.out.println("Mouse X: " + mouseX + ", Mouse Y: " + mouseY);
-        System.out.println("Plus Button X: " + posXPlus + ", Plus Button Y: " + posYPlus);
 
         if (isMouseOverButton(posXPlus, posYPlus, sentenceLength(plusBtn), 30)) {
             System.out.println("Mouse over plus button");
