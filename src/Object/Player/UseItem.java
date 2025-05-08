@@ -21,7 +21,7 @@ public class UseItem {
                 Food food = (Food) selectedItem;
                 System.out.println("Using food: " + food.name);
                 food.eat(player); // 
-                player.inventory.removeItem(selectedItem.name); 
+                player.inventory.removeItem(selectedItem); 
             } else if (selectedItem instanceof Axe) {
                 Axe axe = (Axe) selectedItem;
                 if (player.plantIndex != -1) {

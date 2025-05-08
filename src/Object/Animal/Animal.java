@@ -9,9 +9,9 @@ import Object.GamePanel;
 public abstract class Animal {
     public String name, direction;
     public int worldX, worldY, speed;
-    public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage up1, up2,up3,up4 ,down1, down2,down3,down4, left1, left2,left3,left4, right1, right2,right3,right4;
     public int spriteCounter = 0;
-    public int spriteNum = 1;
+        public int spriteNum = 1;
     public Rectangle solidArea;
     public int solidAreaDefaultX;
     public int solidAreaDefaultY;
@@ -66,18 +66,26 @@ public abstract class Animal {
             case "up":
                 if (spriteNum == 1) image = up1;
                 if (spriteNum == 2) image = up2;
+                if(spriteNum == 3) image = up3;
+                if(spriteNum == 4) image = up4;
                 break;
             case "down":
                 if (spriteNum == 1) image = down1;
                 if (spriteNum == 2) image = down2;
+                if(spriteNum == 3) image = down3;
+                if(spriteNum == 4) image = down4;
                 break;
             case "left":
                 if (spriteNum == 1) image = left1;
                 if (spriteNum == 2) image = left2;
+                if(spriteNum == 3) image = left3;
+                if(spriteNum == 4) image = left4;
                 break;
             case "right":
                 if (spriteNum == 1) image = right1;
                 if (spriteNum == 2) image = right2;
+                if(spriteNum == 3) image = right3;
+                if(spriteNum == 4) image = right4;
                 break;
         }
 
