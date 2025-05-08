@@ -16,6 +16,7 @@ public class ItemDrop {
         this.worldY = y;
         this.droppedItem = item;
         this.rectangle = new Rectangle();
+        this.gp = gp;
     }
     
     public void draw(Graphics2D g2) {  // Bisa dipake utk dropped item

@@ -294,10 +294,8 @@ public class Player {
     }
 
     public void dropItem(Item selectedItem){
-        // Add to dropped Item list
-        // Item berkurang dari inventory
         gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem, gp));
-
+        // Draw item on map
     }
 
     public String displayStats(Player player) {
