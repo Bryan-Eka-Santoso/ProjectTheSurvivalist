@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import Object.Plant.*;
 import Object.Player.*;
 import Object.Items.Unstackable.*;
-import Object.Animal.Animal;
 import Object.Environment.EnvironmentManager;
 import Object.Items.StackableItem.Bread;
 import Object.Animal.*;
@@ -56,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setBackground(Color.black);
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
+        this.addMouseListener(keyH);
         this.setFocusable(true);
         eManager.setup();
     }

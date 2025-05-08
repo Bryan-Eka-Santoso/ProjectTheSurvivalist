@@ -22,7 +22,6 @@ public class Lighting {
     final int DAWN = 3; 
     int dayState = DAY;
 
-
     public Lighting(GamePanel gp) {
         this.gp = gp;
     }
