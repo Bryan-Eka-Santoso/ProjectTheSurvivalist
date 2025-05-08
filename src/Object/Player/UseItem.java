@@ -26,7 +26,7 @@ public class UseItem {
                 Axe axe = (Axe) selectedItem;
                 if (player.plantIndex != -1) {
                     System.out.println("Using axe: " + axe.name);
-                    player.gp.plants.remove(player.plantIndex); 
+                    player.gp.plants.remove(player.plantIndex);
                     player.plantIndex = -1; 
                 } else {
                     System.out.println("No plant selected to use the axe on!");

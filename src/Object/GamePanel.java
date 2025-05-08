@@ -12,13 +12,14 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import Object.Items.Unstackable.*;
 import Object.Environment.EnvironmentManager;
+import Object.Items.Item;
 import Object.Items.StackableItem.Bread;
 import Object.Animal.*;
 import Object.Items.StackableItem.Torch;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    final int ORI_TILE_SIZE = 16;
+    final int ORI_TILE_SIZE = 12;
     final int scale = 3;
 
     public final int TILE_SIZE = ORI_TILE_SIZE * scale;
@@ -47,10 +48,12 @@ public class GamePanel extends JPanel implements Runnable {
     public final int PAUSE_STATE = 2;
     public final int INVENTORY_STATE = 3;
     public final int PLAYER_CRAFTING_STATE = 4;
+    public final int DROPPED_ITEM_STATE = 5;
     
     public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
+    public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
     
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -59,6 +62,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyH);
         this.addMouseListener(keyH);
         this.setFocusable(true);
+        this.setLayout(null);
         eManager.setup();
     }
     
@@ -90,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Spawn 5 pigs
         spawnAnimal("pig", 5, usedPositions);
     }
+
     private void spawnAnimal(String type, int count, ArrayList<Point> usedPositions) {
         for(int i = 0; i < count; i++) {
             int randomX, randomY;
@@ -165,6 +170,10 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
     
+    public void addAnimal(int x, int y) {
+        animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
+    }
+    
     @Override
     public void run() {
         // TODO Auto-generated method stub
@@ -231,6 +240,9 @@ public class GamePanel extends JPanel implements Runnable {
             animals.get(i).draw(g2);
         }
         player.draw(g2);
+        for (int i = 0; i < droppedItems.size(); i++) {
+            droppedItems.get(i).draw(g2);
+        }
         eManager.lighting.update();
         eManager.draw(g2);
         ui.draw(g2);
