@@ -1,5 +1,4 @@
 package Object.Entity;
-import Object.Player.*;
 
 public class Tiger extends Animal {
     // private String name;

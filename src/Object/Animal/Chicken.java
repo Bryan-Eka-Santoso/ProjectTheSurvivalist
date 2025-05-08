@@ -5,14 +5,11 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 import Object.GamePanel;
 import Object.Items.StackableItem.Egg;
-import Object.CollisonChecker;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 
 public class Chicken extends TameAnimal {
    Random random = new Random();
