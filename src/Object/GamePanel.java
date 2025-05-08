@@ -18,12 +18,12 @@ import Object.Items.StackableItem.Torch;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    final int ORI_TILE_SIZE = 12;
+    final int ORI_TILE_SIZE = 15;
     final int scale = 3;
 
     public final int TILE_SIZE = ORI_TILE_SIZE * scale;
     final int MAX_SCREEN_COL = 25;
-    final int MAX_SCREEN_ROW = 15;
+    final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     final int FPS = 60;
@@ -237,10 +237,10 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < animals.size(); i++) {
             animals.get(i).draw(g2);
         }
-        player.draw(g2);
         for (int i = 0; i < droppedItems.size(); i++) {
             droppedItems.get(i).draw(g2);
         }
+        player.draw(g2);
         eManager.lighting.update();
         eManager.draw(g2);
         ui.draw(g2);

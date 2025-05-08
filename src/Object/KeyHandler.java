@@ -171,7 +171,6 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code == KeyEvent.VK_Q){
             if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
                 gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
-                gp.player.inventory.removeItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
             }
         }
     }

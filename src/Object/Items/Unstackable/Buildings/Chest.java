@@ -12,6 +12,5 @@ public class Chest extends Buildings {
 
     public void showInventory() {
         System.out.println("Chest Inventory:");
-        inventory.showInventory();
     }
 }

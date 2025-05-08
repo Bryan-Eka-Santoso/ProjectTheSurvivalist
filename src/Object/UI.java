@@ -165,12 +165,12 @@ public class UI {
     public void drawSelectedItem() {
         int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
         int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 3);
-        int frameWidth = gp.TILE_SIZE * 16;
+        int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 2;
         drawSubWindow(frameX, frameY, frameWidth + 10, frameHeight);
 
-        int slotXStart = frameX + 25;
-        int slotYStart = frameY + 12;
+        int slotXStart = frameX + 30;
+        int slotYStart = frameY + 15;
         int slotX = slotXStart;
         int slotY = slotYStart;
 
@@ -217,13 +217,13 @@ public class UI {
 
     public void drawInventory() {
         int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
-        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 14);
-        int frameWidth = gp.TILE_SIZE * 17;
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 13);
+        int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 8;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
-        int slotXStart = frameX + 40;
-        int slotYStart = frameY + 30;
+        int slotXStart = frameX + 30;
+        int slotYStart = frameY + 35;
         int slotX = slotXStart;
         int slotY = slotYStart;
 

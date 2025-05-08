@@ -37,7 +37,6 @@ public class Player {
     public final int SCREEN_Y;
     public final int SCREEN_X;
     public  int plantIndex, animalIndex; // Index of the selected plant in the inventory
-
     GamePanel gp; 
     public KeyHandler keyH;
 
@@ -161,25 +160,6 @@ public class Player {
         g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
     }
 
-//    public void move(int dx, int dy) {
-//         if (island.world[worldY + dy][worldX + dx] == ' ' ) {
-            
-
-//             if (dx > 0) lastMove = "d";
-//             else if (dx < 0) lastMove = "a";
-//             else if (dy > 0) lastMove = "s";
-//             else if (dy < 0) lastMove = "w";
-
-//             island.world[worldY][worldX] = ' ';
-//             worldX += dx;
-//             worldY += dy;
-//             island.world[worldY][worldX] = 'P';
-//         }
-//     }
-//     public boolean isAnimal(char tile) {
-//         return tile == 'A' || tile == 'P' || tile == 'C' || tile == 'S';
-//     }
-
     // public void handleGrabAction(Item selectedItem) {
     //     if (grabbedAnimal == null) {
     //         TameAnimal nearbyAnimal = findNearbyAnimal();
@@ -293,8 +273,8 @@ public class Player {
     public void dropItem(Item selectedItem){
         // Add to dropped Item list
         // Item berkurang dari inventory
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem, gp));
-
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
+        gp.player.inventory.removeItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
     }
 
     public String displayStats(Player player) {
