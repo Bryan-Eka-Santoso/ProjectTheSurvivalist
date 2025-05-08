@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     public UI ui = new UI(this);
     EnvironmentManager eManager = new EnvironmentManager(this);
     KeyHandler keyH = new KeyHandler(this);
+    Sound sound = new Sound();
     Thread gameThread;
     Crafting recipe = new Crafting();
     public CollisonChecker cCheck = new CollisonChecker(this);
@@ -67,6 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     public void setupGame() {
         gameState = PLAY_STATE;
+        playMusic(7);
     }
     
     public void startgameThread() {
@@ -245,6 +247,15 @@ public class GamePanel extends JPanel implements Runnable {
         eManager.draw(g2);
         ui.draw(g2);
         g2.dispose();
+    }
+
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+    public void stopMusic() {
+        sound.stop();
     }
 
 }

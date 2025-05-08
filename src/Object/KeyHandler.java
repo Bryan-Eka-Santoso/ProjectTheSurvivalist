@@ -10,6 +10,7 @@ public class KeyHandler implements KeyListener, MouseListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
     GamePanel gp;
     int temp1, temp2, counter;
+    Sound sound = new Sound();
 
     public KeyHandler (GamePanel gp) {
         this.gp = gp;
@@ -130,6 +131,7 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
             if (gp.gameState != gp.INVENTORY_STATE){ // Ada bug kalo game state ny di inventory
                 gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
+                playSE(2);
                 gp.ui.selectedIndex = gp.ui.slotCol;
                 gp.player.lightUpdated = true;
             }
@@ -204,4 +206,8 @@ public class KeyHandler implements KeyListener, MouseListener {
         
     }
     
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
 }
