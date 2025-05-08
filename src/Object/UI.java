@@ -4,11 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-
 import java.awt.Shape;
-
-import javax.swing.JButton;
-
 import Object.Items.StackableItem.*;
 
 public class UI {

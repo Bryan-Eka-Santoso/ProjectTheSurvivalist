@@ -2,7 +2,6 @@ package Object.Player;
 
 import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
-import java.util.ArrayList;
 import Object.GamePanel;
 import Object.ItemDrop;
 import Object.KeyHandler;

@@ -2,7 +2,6 @@ package Object;
 
 import Object.Animal.Animal;
 import Object.Player.Player;
-import Object.Items.Unstackable.Buildings.Buildings;
 public class CollisonChecker {
     
     GamePanel gp;

@@ -12,7 +12,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import Object.Items.Unstackable.*;
 import Object.Environment.EnvironmentManager;
-import Object.Items.Item;
 import Object.Items.StackableItem.Bread;
 import Object.Animal.*;
 import Object.Items.StackableItem.Torch;
