@@ -1,4 +1,4 @@
-package Object;
+package Object.Controller;
 
 import java.awt.Color;
 import java.awt.Font;

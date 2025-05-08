@@ -1,4 +1,4 @@
-package Object;
+package Object.Controller;
 
 import java.awt.Graphics2D;
 import java.io.BufferedReader;

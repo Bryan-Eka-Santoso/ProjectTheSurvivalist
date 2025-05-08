@@ -6,27 +6,28 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import Object.GamePanel;
+
+import Object.Controller.GamePanel;
 import Object.Items.StackableItem.Egg;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 
 public class Chicken extends TameAnimal {
-   Random random = new Random();
-   private Rectangle upHitbox;
-   private Rectangle downHitbox;
-   private Rectangle leftHitbox;
-   private Rectangle rightHitbox;
+    Random random = new Random();
+    private Rectangle upHitbox;
+    private Rectangle downHitbox;
+    private Rectangle leftHitbox;
+    private Rectangle rightHitbox;
    
     public Chicken(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
-       setRandomDirection();
-       this.actionMoveDelay = random.nextInt(91) + 30;
-       upHitbox = new Rectangle(2, 1, 26, 40);   
-       downHitbox = new Rectangle(2, 1, 26, 40);   
-       leftHitbox = new Rectangle(4, 4, 30, 25);   
-       rightHitbox = new Rectangle(4, 4, 30, 25);   // Lebih lebar di kanan
-       this.solidArea = downHitbox; 
+        setRandomDirection();
+        this.actionMoveDelay = random.nextInt(91) + 30;
+        upHitbox = new Rectangle(2, 1, 26, 40);   
+        downHitbox = new Rectangle(2, 1, 26, 40);   
+        leftHitbox = new Rectangle(4, 4, 30, 25);   
+        rightHitbox = new Rectangle(4, 4, 30, 25);   // Lebih lebar di kanan
+        this.solidArea = downHitbox; 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         readyBreeding = true;
@@ -51,12 +52,11 @@ public class Chicken extends TameAnimal {
             e.printStackTrace();
         }
     }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
         do{
-
-          
             int random = this.random.nextInt(4);
     
             switch(random) {
@@ -64,15 +64,14 @@ public class Chicken extends TameAnimal {
                 case 1: newDirection = "down"; break;
                 case 2: newDirection = "left"; break;
                 case 3: newDirection = "right"; break;
-               
             }
-        }while(newDirection.equals(oldDirection));
+        } while (newDirection.equals(oldDirection));
         this.direction = newDirection;
         this.actionMoveDelay = this.random.nextInt(91) + 30;
         gp.player.collisionOn = false;
     }
     private int actionMoveCounter = 0;
-    private  int actionMoveDelay;
+    private int actionMoveDelay;
     private int speed = 8; 
     @Override
     public void update() {
@@ -113,7 +112,7 @@ public class Chicken extends TameAnimal {
                 setRandomDirection();
                 actionMoveCounter = 0;
             }
-        }else {
+        } else {
             String newDirection;
             String oldDirection = this.direction;
 
@@ -133,24 +132,17 @@ public class Chicken extends TameAnimal {
                 case "right": worldX += speed; break;
             }
             actionMoveCounter++;
-
-
         }
-
-       
         spriteCounter++;
         if(spriteCounter > 0) {
             spriteNum++;
             if(spriteNum > 4) {
                 spriteNum = 1;
             }
-           
             spriteCounter = 0;
         }
-
-       
-      
     }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         
@@ -191,6 +183,7 @@ public class Chicken extends TameAnimal {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
         }
     }
+
     public Chicken breeding(Chicken pasangan, GamePanel gp) {
         // Check if both chickens are ready to
         if (readyBreeding) {
@@ -213,5 +206,4 @@ public class Chicken extends TameAnimal {
     public void getItem(Player player) {
         player.inventory.addItems(new Egg("Egg", 10, 1));
     }
-    
 }

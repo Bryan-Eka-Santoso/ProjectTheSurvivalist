@@ -59,6 +59,7 @@
 //             }
 //         }
 //     }
+
 //     private void handleGetItem(Player player) {
 //         if (chickensInCage.isEmpty()) {
 //             System.out.println("No chickens in kandang!");

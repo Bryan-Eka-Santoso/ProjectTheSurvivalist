@@ -21,9 +21,6 @@ public abstract class Item implements Cloneable {
             throw new AssertionError(); // Seharusnya tidak terjadi
         }
     }
-
-
-
 }
 
 

@@ -3,9 +3,7 @@ import Object.Player.Player;
 
 import Object.Items.StackableItem.Egg;
 
-public class Chicken extends Animal {
-  
-   
+public class Chicken extends Animal { 
     public Chicken(String name, int x, int y,String gender) {
         super(name, x, y,gender);
         
@@ -15,7 +13,6 @@ public class Chicken extends Animal {
        if(readyBreeding){
             if(pasangan.isReadyBreeding()){
                 if(!this.getGender().equals(pasangan.getGender())){
-
                     System.out.println("Breeding chicken with " + pasangan.getName());
                     String babyGender = (Math.random() < 0.5) ? "Male" : "Female";
                     
@@ -25,20 +22,18 @@ public class Chicken extends Animal {
                     
                     System.out.println("Baby chicken is born!");
                     return babyChicken;
-                }else{
+                } else {
                     System.out.println("Cannot breed chickens of the same gender!");
-                     return null;
-                }
-                  
-            }else{
+                    return null;
+                }    
+            } else {
                 System.out.println("Partner is not ready to breed.");
                 return null;
             }
-       }else{
+       } else {
               System.out.println("Not ready to breed yet.");
               return null;
        }
-       
     }
     
     public void getItem(Player player) {
@@ -46,10 +41,8 @@ public class Chicken extends Animal {
             player.inventory.addItems(new Egg("Egg", 10, 1));
             setReadyGetItem(false);
             System.out.println("Got an egg from " + getName());
-        }else{
+        } else {
             System.out.println("This chicken cannot lay eggs right now!");  
         }  
     }
-    
-   
 }

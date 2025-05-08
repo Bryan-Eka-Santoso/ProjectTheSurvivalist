@@ -1,6 +1,6 @@
 package Object.Player;
 
-import Object.Sound;
+import Object.Controller.Sound;
 import Object.Items.Item;
 import Object.Items.StackableItem.Food;
 import Object.Items.StackableItem.Material;

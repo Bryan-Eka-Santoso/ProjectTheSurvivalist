@@ -2,10 +2,11 @@ package Object.Player;
 
 import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
-import Object.GamePanel;
-import Object.ItemDrop;
-import Object.KeyHandler;
 import Object.Animal.TameAnimal;
+import Object.Controller.GamePanel;
+import Object.Controller.ItemDrop;
+import Object.Controller.KeyHandler;
+
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;

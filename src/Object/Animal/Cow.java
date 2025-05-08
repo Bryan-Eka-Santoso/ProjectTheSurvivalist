@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import Object.GamePanel;
+
+import Object.Controller.GamePanel;
 import Object.Items.StackableItem.Milk;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
@@ -16,8 +17,8 @@ public class Cow extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
-     Random random = new Random();
-     boolean readyGetItem;
+    Random random = new Random();
+    boolean readyGetItem;
     public Cow(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -56,8 +57,6 @@ public class Cow extends TameAnimal {
         String newDirection= null;
         String oldDirection = this.direction;
         do{
-
-          
             int random = this.random.nextInt(4);
     
             switch(random) {
@@ -67,11 +66,12 @@ public class Cow extends TameAnimal {
                 case 3: newDirection = "right"; break;
                
             }
-        }while(newDirection.equals(oldDirection));
+        } while (newDirection.equals(oldDirection));
         this.direction = newDirection;
         this.actionMoveDelay = this.random.nextInt(91) + 30;
         gp.player.collisionOn = false;
     }
+
     private int actionMoveCounter = 0;
     private  int actionMoveDelay;
     private int speed = 8; 
@@ -96,7 +96,6 @@ public class Cow extends TameAnimal {
         }
        
         collisionOn = false;
-        
         gp.cCheck.animalCheckTile(this);     // Check collision dengan tile
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
         gp.cCheck.checkPlayer(this);        // Check collision dengan player
@@ -115,8 +114,7 @@ public class Cow extends TameAnimal {
                 setRandomDirection();
                 actionMoveCounter = 0;
             }
-        }else {
-          
+        } else {
             String newDirection;
             String oldDirection = this.direction;
 
@@ -136,23 +134,17 @@ public class Cow extends TameAnimal {
                 case "right": worldX += speed; break;
             }
             actionMoveCounter++; 
-            
         }
-
-       
         spriteCounter++;
         if(spriteCounter > 0) {
             spriteNum++;
             if(spriteNum > 4) {
                 spriteNum = 1;
             }
-           
             spriteCounter = 0;
         }
-
-       
-      
     }
+    
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         

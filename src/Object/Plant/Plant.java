@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import Object.GamePanel;
+import Object.Controller.GamePanel;
 
 public class Plant {
     public int worldX, worldY, solidAreaX, solidAreaY;

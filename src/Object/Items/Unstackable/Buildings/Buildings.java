@@ -4,7 +4,6 @@ import Object.Items.Unstackable.Unstackable;
 public class Buildings extends Unstackable {
     private int x, y; // Koordinat posisi bangunan di dunia game
     int width, height; // Ukuran bangunan (lebar dan tinggi)
-    
 
     public int getWidth() {
         return width;
@@ -21,7 +20,6 @@ public class Buildings extends Unstackable {
     public void setHeight(int height) {
         this.height = height;
     }
-
 
     public Buildings(String name, int x, int y) {
         super(name);

@@ -4,6 +4,7 @@
 // import Object.Entity.Sheep;
 // import Object.Player.Island;
 // import Object.Player.Player;
+
 // public class SheepCage extends Kandang {
 //     private static final int MAX_CAPACITY = 10;
 //     ArrayList<Sheep> sheepsInCage;
@@ -27,6 +28,7 @@
 //         System.out.println("Kandang is full! Cannot add more sheeps.");
 //         return false;
 //     }
+
 //     public void interact(Player player, Island island) {
 //         System.out.println("\nKandang Status:");
 //         System.out.println("Current sheeps: " + getCurrentCapacity() + "/" + MAX_CAPACITY);
@@ -56,12 +58,12 @@
 //             }
 //         }
 //     }
+
 //     private void handleGetItem(Player player) {
 //         if (sheepsInCage.isEmpty()) {
 //             System.out.println("No sheeps in kandang!");
 //             return;
 //         }
-
 //         System.out.println("\nsheeps that can lay wools:");
 //         for (int i = 0; i < sheepsInCage.size(); i++) {
 //             Sheep sheep = sheepsInCage.get(i);
@@ -83,6 +85,7 @@
 //             System.out.println("Invalid selection!");
 //         }
 //     }
+
 //    public void listsheeps() {
 //         if (sheepsInCage.isEmpty()) {
 //             System.out.println("No sheeps in kandang!");
@@ -93,6 +96,7 @@
 //             System.out.println((i + 1) + ". " + sheepsInCage.get(i).getName());
 //         }
 //     }
+
 //     public void handleBreeding(Island island) {
 //         if (sheepsInCage.size() < 2) {
 //             System.out.println("Need at least 2 sheeps to breed!");
@@ -146,5 +150,4 @@
 //     public int getMaxCapacity() {
 //         return MAX_CAPACITY;
 //     }
-    
 // }

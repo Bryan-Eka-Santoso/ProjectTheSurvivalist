@@ -1,4 +1,4 @@
-package Object;
+package Object.Controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class KeyHandler implements KeyListener, MouseListener {
-
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
     GamePanel gp;
     int temp1, temp2, counter;
