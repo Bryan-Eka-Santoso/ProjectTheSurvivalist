@@ -206,7 +206,7 @@ public class UI {
         if (gp.player.inventory.slots[slotCol] != null) {
             Font font = new Font("Arial", Font.BOLD, 25); // Family = Arial, Style = Bold, Size = 30
             g2.setFont(font);
-            g2.drawString(gp.player.inventory.slots[slotCol].name, gp.TILE_SIZE * 14, cursorY - 50);
+            g2.drawString(gp.player.inventory.slots[slotCol].name, gp.TILE_SIZE * 12, cursorY - 50);
         }
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
