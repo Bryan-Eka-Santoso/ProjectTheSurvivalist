@@ -25,11 +25,10 @@ public class Chicken extends TameAnimal {
         super(name, x, y, 15, "down", gp);
        setRandomDirection();
        this.actionMoveDelay = random.nextInt(91) + 30;
-       upHitbox = new Rectangle(4, 2, 24, 28);    // Lebih sempit
-       downHitbox = new Rectangle(4, 4, 24, 28);   
-       leftHitbox = new Rectangle(2, 4, 28, 24);   
-       rightHitbox = new Rectangle(4, 4, 28, 24);   // Lebih lebar di kanan
-       
+       upHitbox = new Rectangle(2, 1, 26, 40);   
+       downHitbox = new Rectangle(2, 1, 26, 40);   
+       leftHitbox = new Rectangle(4, 4, 30, 25);   
+       rightHitbox = new Rectangle(4, 4, 30, 25);   // Lebih lebar di kanan
        this.solidArea = downHitbox; 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
@@ -57,7 +56,7 @@ public class Chicken extends TameAnimal {
     }
     private void setRandomDirection() {
         String newDirection= null;
-        String oldDirection = direction;
+        String oldDirection = this.direction;
         do{
 
           
@@ -73,6 +72,7 @@ public class Chicken extends TameAnimal {
         }while(newDirection.equals(oldDirection));
         this.direction = newDirection;
         this.actionMoveDelay = this.random.nextInt(91) + 30;
+        gp.player.collisionOn = false;
     }
     private int actionMoveCounter = 0;
     private  int actionMoveDelay;
@@ -98,7 +98,7 @@ public class Chicken extends TameAnimal {
         }
         collisionOn = false;
         
-        gp.cCheck.animalCheckTile(this);     // Check collision dengan tile
+        gp.cCheck.animalCheckTile(this);    
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
         gp.cCheck.checkPlayer(this);        // Check collision dengan player
         gp.cCheck.checkAnimalCollision(this);
@@ -117,15 +117,27 @@ public class Chicken extends TameAnimal {
                 actionMoveCounter = 0;
             }
         }else {
-          
-            setRandomDirection();
+            String newDirection;
+            String oldDirection = this.direction;
+
+            switch(oldDirection) {
+                case "up": newDirection = "down"; break;
+                case "down": newDirection = "up"; break;
+                case "left": newDirection = "right"; break;
+                case "right": newDirection = "left"; break;
+                default: newDirection = "down"; break;
+            }
+            this.direction = newDirection;
+            this.actionMoveDelay = this.random.nextInt(91)+30;
             switch(direction) {
                 case "up": worldY -= speed; break;
                 case "down": worldY += speed; break;
                 case "left": worldX -= speed; break;
                 case "right": worldX += speed; break;
             }
-            
+            actionMoveCounter++;
+
+
         }
 
        

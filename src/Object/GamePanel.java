@@ -74,94 +74,19 @@ public class GamePanel extends JPanel implements Runnable {
         plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
     }
     public void addAnimals() {
-        // Spawn animals with shared position checking
+       
         ArrayList<Point> usedPositions = new ArrayList<>();
         
-        // Spawn 10 chickens
         spawnAnimal("chicken", 10, usedPositions);
         
-        // Spawn 5 cows
         spawnAnimal("cow", 5, usedPositions);
         
-        // Spawn 5 sheep
         spawnAnimal("sheep", 5, usedPositions);
         
-        // Spawn 5 pigs
         spawnAnimal("pig", 5, usedPositions);
     }
     private void spawnAnimal(String type, int count, ArrayList<Point> usedPositions) {
-        for(int i = 0; i < count; i++) {
-            int randomX, randomY;
-            boolean validPosition;
-            do {
-                validPosition = true;
-                
-                // Generate random position dengan batas 
-                int margin = 3;
-                randomX = (int)(Math.random() * ((MAX_WORLD_COL-margin) * TILE_SIZE));
-                randomY = (int)(Math.random() * ((MAX_WORLD_ROW-margin) * TILE_SIZE));
-                if(randomX < margin * TILE_SIZE || randomY < margin * TILE_SIZE) {
-                    validPosition = false;
-                    continue;
-                }
-                // Check position with temporary animal
-                Animal tempAnimal = null;
-                switch(type) {
-                    case "chicken": tempAnimal = new Chicken("temp", randomX, randomY, this); break;
-                    case "cow": tempAnimal = new Cow("temp", randomX, randomY, this); break;
-                    case "sheep": tempAnimal = new Sheep("temp", randomX, randomY, this); break;
-                    case "pig": tempAnimal = new Pig("temp", randomX, randomY, this); break;
-                }
-                
-                // Check tile collision
-                try {
-                    cCheck.animalCheckTile(tempAnimal);
-                    if(tempAnimal.collisionOn) {
-                        validPosition = false;
-                        continue;
-                    }
-                } catch(ArrayIndexOutOfBoundsException e) {
-                    validPosition = false;
-                    continue;
-                }
-                
-                // Check used positions
-                Point newPos = new Point(randomX, randomY);
-                for(Point pos : usedPositions) {
-                    if(Math.abs(pos.x - randomX) < TILE_SIZE * 2 && 
-                       Math.abs(pos.y - randomY) < TILE_SIZE * 2) {
-                        validPosition = false;
-                        break;
-                    }
-                }
-                
-                // Check plant collision
-                Rectangle tempArea = new Rectangle(randomX, randomY, TILE_SIZE, TILE_SIZE);
-                for(Plant plant : plants) {
-                    if(tempArea.intersects(new Rectangle(plant.worldX, plant.worldY, TILE_SIZE, TILE_SIZE))) {
-                        validPosition = false;
-                        break;
-                    }
-                }
-                
-            } while(!validPosition);
-            
-            // Add position to used positions
-            usedPositions.add(new Point(randomX, randomY));
-            
-            // Create and add actual animal
-            Animal animal = null;
-            switch(type) {
-                case "chicken": animal = new Chicken(type + i, randomX, randomY, this); break;
-                case "cow": animal = new Cow(type + i, randomX, randomY, this); break;
-                case "sheep": animal = new Sheep(type + i, randomX, randomY, this); break;
-                case "pig": animal = new Pig(type + i, randomX, randomY, this); break;
-            }
-            
-            if(animal != null) {
-                animals.add(animal);
-            }
-        }
+      
     }
     
     @Override

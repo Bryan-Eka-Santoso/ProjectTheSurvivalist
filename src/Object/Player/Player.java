@@ -66,7 +66,7 @@ public class Player {
         this.grabbedAnimal= null; 
         this.kandang = new ArrayList<>(); 
         this.direction = "down";
-        this.solidArea = new Rectangle();
+        this.solidArea = new Rectangle(0, 0, 17, 25);
         solidAreaX = solidArea.x;
         solidAreaY = solidArea.y;
         solidArea.x = 12;
