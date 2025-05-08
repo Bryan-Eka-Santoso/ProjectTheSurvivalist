@@ -1,6 +1,6 @@
 package Object.Animal;
-import Object.Player.Player;
 
+import Object.Player.Player;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
