@@ -5,9 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-
-import javax.swing.JButton;
-
 import Object.Items.StackableItem.*;
 
 public class UI {
@@ -43,11 +40,49 @@ public class UI {
             drawInventory();
         }
         if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
-            PlayerCraftMenu();
+            drawPlusMinus();
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE){
             boxAmount();
         }
+    }
+
+    public void drawPlusMinus() {
+        int frameX = gp.TILE_SIZE * gp.MAX_SCREEN_COL - (gp.TILE_SIZE * 3);
+        int frameY = gp.TILE_SIZE * gp.MAX_SCREEN_ROW - (gp.TILE_SIZE * 5);
+        int frameWidth = gp.TILE_SIZE * 2;
+        int frameHeight = gp.TILE_SIZE * 4;
+
+        String plusBtn = "< + >";
+        String amount = " 10 ";
+        String minusBtn = "< - >";
+
+        int posXPlus = frameX + (frameWidth - sentenceLength(plusBtn)) / 2 + 6;
+        int posYPlus = frameY + frameHeight / 4;
+        int posXMinus = frameX + (frameWidth - sentenceLength(plusBtn)) / 2 + 10;
+        int posYMinus = frameY + frameHeight * 3 / 4;
+
+        drawSubWindow(frameX, frameY, frameWidth + 10, frameHeight);
+
+        g2.drawString(plusBtn, posXPlus, posYPlus);
+        g2.drawString(amount, frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2, frameY + frameHeight * 2 / 4);
+        g2.drawString(minusBtn, posXMinus, posYMinus);
+
+        if (isMouseOverButton(posXPlus, posYPlus, sentenceLength(plusBtn), 30)) {
+            System.out.println("Mouse over plus button");
+        }
+        if (isMouseOverButton(posXMinus, posYMinus, sentenceLength(minusBtn), 30)) {
+            System.out.println("Mouse over minus button");
+        }
+    }
+
+    public int sentenceLength(String text) {
+        int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        return length;
+    }
+
+    public boolean isMouseOverButton(int x, int y, int width, int height) {
+        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
     }
 
     public void boxAmount(){
@@ -127,12 +162,12 @@ public class UI {
     public void drawSelectedItem() {
         int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
         int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 3);
-        int frameWidth = gp.TILE_SIZE * 16;
+        int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 2;
         drawSubWindow(frameX, frameY, frameWidth + 10, frameHeight);
 
-        int slotXStart = frameX + 25;
-        int slotYStart = frameY + 12;
+        int slotXStart = frameX + 30;
+        int slotYStart = frameY + 15;
         int slotX = slotXStart;
         int slotY = slotYStart;
 
@@ -171,7 +206,7 @@ public class UI {
         if (gp.player.inventory.slots[slotCol] != null) {
             Font font = new Font("Arial", Font.BOLD, 25); // Family = Arial, Style = Bold, Size = 30
             g2.setFont(font);
-            g2.drawString(gp.player.inventory.slots[slotCol].name, gp.TILE_SIZE * 14, cursorY - 50);
+            g2.drawString(gp.player.inventory.slots[slotCol].name, gp.TILE_SIZE * 12, cursorY - 50);
         }
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
@@ -179,13 +214,13 @@ public class UI {
 
     public void drawInventory() {
         int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
-        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 14);
-        int frameWidth = gp.TILE_SIZE * 17;
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 13);
+        int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 8;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
-        int slotXStart = frameX + 40;
-        int slotYStart = frameY + 30;
+        int slotXStart = frameX + 30;
+        int slotYStart = frameY + 35;
         int slotX = slotXStart;
         int slotY = slotYStart;
 

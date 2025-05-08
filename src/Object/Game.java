@@ -3,7 +3,7 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Game extends JPanel implements KeyListener { 
+public class Game { 
 
     public static Scanner getString = new Scanner(System.in);
     public static Scanner getInt = new Scanner(System.in);

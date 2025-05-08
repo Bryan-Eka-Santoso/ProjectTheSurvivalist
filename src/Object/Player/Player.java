@@ -1,26 +1,23 @@
 package Object.Player;
 
-import Object.Items.Unstackable.Buildings.Buildings;
 import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
-import Object.Items.Unstackable.Buildings.Kandang;
-import Object.Items.Unstackable.Buildings.KandangAyam;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.io.*; 
-import javax.imageio.ImageIO;
 import Object.GamePanel;
 import Object.ItemDrop;
 import Object.KeyHandler;
 import Object.Animal.TameAnimal;
+import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 
 public class Player {
     public String name;
     public int health, thirst, hunger, exp, level; // Player stats
     public Inventory inventory;
-    public Island island;
     public int itemIndex; // Index of the selected item in the inventory
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
@@ -32,7 +29,7 @@ public class Player {
     public Crafting recipe;
     public int solidAreaDefaultX, solidAreaDefaultY; 
     public Torch torch;
-    ArrayList<Kandang> kandang= new ArrayList<>(); // List of cages owned by the player
+    // ArrayList<Kandang> kandang= new ArrayList<>(); // List of cages owned by the player
     public boolean lightUpdated = true;
     public Rectangle solidArea;
     public boolean collisionOn = false;
@@ -40,7 +37,6 @@ public class Player {
     public final int SCREEN_Y;
     public final int SCREEN_X;
     public  int plantIndex, animalIndex; // Index of the selected plant in the inventory
-
     GamePanel gp; 
     public KeyHandler keyH;
 
@@ -58,9 +54,9 @@ public class Player {
         this.gp = gp;
         this.keyH = keyH;
         this.grabbedAnimal= null; 
-        this.kandang = new ArrayList<>(); 
+        // this.kandang = new ArrayList<>(); 
         this.direction = "down";
-        this.solidArea = new Rectangle();
+        this.solidArea = new Rectangle(0, 0, 17, 25);
         solidAreaX = solidArea.x;
         solidAreaY = solidArea.y;
         solidArea.x = 12;
@@ -164,25 +160,6 @@ public class Player {
         g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
     }
 
-   public void move(int dx, int dy) {
-        if (island.world[worldY + dy][worldX + dx] == ' ' ) {
-            
-
-            if (dx > 0) lastMove = "d";
-            else if (dx < 0) lastMove = "a";
-            else if (dy > 0) lastMove = "s";
-            else if (dy < 0) lastMove = "w";
-
-            island.world[worldY][worldX] = ' ';
-            worldX += dx;
-            worldY += dy;
-            island.world[worldY][worldX] = 'P';
-        }
-    }
-    public boolean isAnimal(char tile) {
-        return tile == 'A'; 
-    }
-
     // public void handleGrabAction(Item selectedItem) {
     //     if (grabbedAnimal == null) {
     //         TameAnimal nearbyAnimal = findNearbyAnimal();
@@ -270,16 +247,16 @@ public class Player {
     //     }
     // }
 
-    public KandangAyam findNearbyKandang() {
-        for (Buildings building : island.buildings) {
-            if (building instanceof KandangAyam) {
-                if (Math.abs(building.getX() - worldX) <= 1 && Math.abs(building.getY() - worldY) <= 1) {
-                    return (KandangAyam) building;
-                }
-            }
-        }
-        return null;
-    }
+    // public KandangAyam findNearbyKandang() {
+    //     for (Buildings building : island.buildings) {
+    //         if (building instanceof KandangAyam) {
+    //             if (Math.abs(building.getX() - worldX) <= 1 && Math.abs(building.getY() - worldY) <= 1) {
+    //                 return (KandangAyam) building;
+    //             }
+    //         }
+    //     }
+    //     return null;
+    // }
 
     public boolean isHoldingAnimal() {
         return grabbedAnimal != null;
@@ -294,8 +271,10 @@ public class Player {
     }
 
     public void dropItem(Item selectedItem){
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem, gp));
-        // Draw item on map
+        // Add to dropped Item list
+        // Item berkurang dari inventory
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
+        gp.player.inventory.removeItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
     }
 
     public String displayStats(Player player) {

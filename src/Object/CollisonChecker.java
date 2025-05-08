@@ -1,8 +1,7 @@
 package Object;
-
+import java.awt.Rectangle;
 import Object.Animal.Animal;
 import Object.Player.Player;
-
 public class CollisonChecker {
     
     GamePanel gp;
@@ -61,55 +60,58 @@ public class CollisonChecker {
     }
 
     public void animalCheckTile(Animal animal) {
-        int entityLeftX = animal.worldX + animal.solidArea.x;
-        int entityRightX = animal.worldX + animal.solidArea.x + animal.solidArea.width;
-        int entityTopY = animal.worldY + animal.solidArea.y;
-        int entityBottomY = animal.worldY + animal.solidArea.y + animal.solidArea.height;
-
-        int animalLeftCol = entityLeftX / gp.TILE_SIZE;
-        int animalRightCol = entityRightX / gp.TILE_SIZE;
-        int animalTopRow = entityTopY / gp.TILE_SIZE;
-        int animalBottomRow = entityBottomY / gp.TILE_SIZE;
-
-        int tileNum1 = 0, tileNum2 = 0;
-
-        switch (animal.direction) {
-            case "up":
-                animalTopRow = (entityTopY - animal.speed) / gp.TILE_SIZE;
-                tileNum1 = gp.tileM.mapTile[animalLeftCol][animalTopRow];
-                tileNum2 = gp.tileM.mapTile[animalLeftCol][animalTopRow];
-                if (gp.tileM.tile[tileNum1].collison == true || gp.tileM.tile[tileNum2].collison == true) {
-                    animal.collisionOn = true;
-                }
-                break;
-            case "down":
-                animalBottomRow = (entityBottomY + animal.speed) / gp.TILE_SIZE;
-                tileNum1 = gp.tileM.mapTile[animalLeftCol][animalBottomRow];
-                tileNum2 = gp.tileM.mapTile[animalRightCol][animalBottomRow];
-                if (gp.tileM.tile[tileNum1].collison == true || gp.tileM.tile[tileNum2].collison == true) {
-                    animal.collisionOn = true;
-                }
-                break;
-            case "left":
-                animalLeftCol = (entityLeftX - animal.speed) / gp.TILE_SIZE;
-                tileNum1 = gp.tileM.mapTile[animalLeftCol][animalTopRow];
-                tileNum2 = gp.tileM.mapTile[animalLeftCol][animalBottomRow];
-                if (gp.tileM.tile[tileNum1].collison == true || gp.tileM.tile[tileNum2].collison == true) {
-                    animal.collisionOn = true;
-                }
-                break;
-            case "right":
-                animalRightCol = (entityRightX + animal.speed) / gp.TILE_SIZE;
-                tileNum1 = gp.tileM.mapTile[animalRightCol][animalTopRow];
-                tileNum2 = gp.tileM.mapTile[animalRightCol][animalBottomRow];
-                if (gp.tileM.tile[tileNum1].collison == true || gp.tileM.tile[tileNum2].collison == true) {
-                    animal.collisionOn = true;
-                }
-                break;
+        int nextX = animal.worldX;
+        int nextY = animal.worldY;
+        
+        switch(animal.direction) {
+            case "up": nextY -= animal.speed; break;
+            case "down": nextY += animal.speed; break;
+            case "left": nextX -= animal.speed; break;
+            case "right": nextX += animal.speed; break;
+        }
+    
+        // Calculate collision area positions
+        int entityLeftCol = (nextX + animal.solidArea.x) / gp.TILE_SIZE;
+        int entityRightCol = (nextX + animal.solidArea.x + animal.solidArea.width) / gp.TILE_SIZE;
+        int entityTopRow = (nextY + animal.solidArea.y) / gp.TILE_SIZE;
+        int entityBottomRow = (nextY + animal.solidArea.y + animal.solidArea.height) / gp.TILE_SIZE;
+    
+        // Boundary check
+        if(entityLeftCol < 0 || entityRightCol >= gp.MAX_WORLD_COL || 
+           entityTopRow < 0 || entityBottomRow >= gp.MAX_WORLD_ROW) {
+            animal.collisionOn = true;
+            return;
+        }
+    
+        // Check each corner for valid tile
+        int[] validTiles = {8, 9, 10, 11, 12, 13, 14, 15, 18, 20};
+        
+        int tileNum1 = gp.tileM.mapTile[entityLeftCol][entityTopRow];     // Top left
+        int tileNum2 = gp.tileM.mapTile[entityRightCol][entityTopRow];    // Top right
+        int tileNum3 = gp.tileM.mapTile[entityLeftCol][entityBottomRow];  // Bottom left
+        int tileNum4 = gp.tileM.mapTile[entityRightCol][entityBottomRow]; // Bottom right
+    
+        // Check if all corners are on valid tiles
+        boolean isValid1 = false;
+        boolean isValid2 = false;
+        boolean isValid3 = false;
+        boolean isValid4 = false;
+    
+        for(int validTile : validTiles) {
+            if(tileNum1 == validTile) isValid1 = true;
+            if(tileNum2 == validTile) isValid2 = true;
+            if(tileNum3 == validTile) isValid3 = true;
+            if(tileNum4 == validTile) isValid4 = true;
+        }
+    
+        // If any corner is on invalid tile, set collision
+        if(!isValid1 || !isValid2 || !isValid3 || !isValid4) {
+            animal.collisionOn = true;
         }
     }
 
     public void animalCheckObject(Animal animal) {
+        
         for (int i = 0; i < gp.plants.size(); i++) {
             animal.solidArea.x = animal.worldX + animal.solidArea.x;
             animal.solidArea.y = animal.worldY + animal.solidArea.y;
@@ -174,7 +176,93 @@ public class CollisonChecker {
             }
         return index;
     }
-
+    public void checkPlayer(Animal animal) {
+        // Get hitbox areas
+        animal.solidArea.x = animal.worldX + animal.solidArea.x;
+        animal.solidArea.y = animal.worldY + animal.solidArea.y;
+        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+    
+        // Check collision
+        if(animal.solidArea.intersects(gp.player.solidArea)) {
+            animal.collisionOn = true;
+        }
+    
+        // Reset hitbox positions
+        animal.solidArea.x = animal.solidAreaDefaultX;
+        animal.solidArea.y = animal.solidAreaDefaultY;
+        gp.player.solidArea.x = gp.player.solidAreaDefaultX;
+        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+    }
+    
+    public void checkAnimalCollision(Animal animal) {
+        int nextX = animal.worldX;
+        int nextY = animal.worldY;
+        
+        switch(animal.direction) {
+            case "up": nextY -= animal.speed; break;
+            case "down": nextY += animal.speed; break;
+            case "left": nextX -= animal.speed; break;
+            case "right": nextX += animal.speed; break;
+        }
+    
+        for(Animal otherAnimal : gp.animals) {
+            if(animal == otherAnimal) continue;
+            
+            // Create predicted collision box
+            Rectangle predictedArea = new Rectangle(
+                nextX + animal.solidArea.x,
+                nextY + animal.solidArea.y,
+                animal.solidArea.width,
+                animal.solidArea.height
+            );
+            
+            // Get other animal's area
+            Rectangle otherArea = new Rectangle(
+                otherAnimal.worldX + otherAnimal.solidArea.x,
+                otherAnimal.worldY + otherAnimal.solidArea.y,
+                otherAnimal.solidArea.width,
+                otherAnimal.solidArea.height
+            );
+            
+            // Check collision with predicted position
+            if(predictedArea.intersects(otherArea)) {
+                animal.collisionOn = true;
+                // Add separation force
+                int pushDistance = 2;
+                switch(animal.direction) {
+                    case "up": 
+                        animal.worldY += pushDistance;
+                        otherAnimal.worldY -= pushDistance;
+                        break;
+                    case "down": 
+                        animal.worldY -= pushDistance;
+                        otherAnimal.worldY += pushDistance;
+                        break;
+                    case "left": 
+                        animal.worldX += pushDistance;
+                        otherAnimal.worldX -= pushDistance;
+                        break;
+                    case "right": 
+                        animal.worldX -= pushDistance;
+                        otherAnimal.worldX += pushDistance;
+                        break;
+                }
+                // Force direction change for both animals
+                animal.direction = getOppositeDirection(animal.direction);
+                otherAnimal.direction = getOppositeDirection(otherAnimal.direction);
+            }
+        }
+    }
+    private String getOppositeDirection(String direction) {
+        switch(direction) {
+            case "up": return "down";
+            case "down": return "up";
+            case "left": return "right";
+            case "right": return "left";
+            default: return "down";
+        }
+    }
     public int checkAnimal(Player player, boolean collison) {
         int index = -1; // Default value if no collision is detected
         for (int i = 0; i < gp.animals.size(); i++) {
