@@ -21,7 +21,11 @@ public class KeyHandler implements KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+        System.out.println("Mouse Clicked at: " + e.getX() + ", " + e.getY());
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+            gp.ui.mouseX = e.getX();
+            gp.ui.mouseY = e.getY();
+        }
     }
 
     @Override

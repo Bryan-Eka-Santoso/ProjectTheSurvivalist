@@ -2,7 +2,7 @@ package Object;
 
 import Object.Animal.Animal;
 import Object.Player.Player;
-
+import Object.Items.Unstackable.Buildings.Buildings;
 public class CollisonChecker {
     
     GamePanel gp;
@@ -174,7 +174,48 @@ public class CollisonChecker {
             }
         return index;
     }
-
+    public void checkPlayer(Animal animal) {
+        // Get hitbox areas
+        animal.solidArea.x = animal.worldX + animal.solidArea.x;
+        animal.solidArea.y = animal.worldY + animal.solidArea.y;
+        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+    
+        // Check collision
+        if(animal.solidArea.intersects(gp.player.solidArea)) {
+            animal.collisionOn = true;
+        }
+    
+        // Reset hitbox positions
+        animal.solidArea.x = animal.solidAreaDefaultX;
+        animal.solidArea.y = animal.solidAreaDefaultY;
+        gp.player.solidArea.x = gp.player.solidAreaDefaultX;
+        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+    }
+    public void checkAnimalCollision(Animal animal) {
+        for(Animal otherAnimal : gp.animals) {
+            // Skip if checking against itself
+            if(animal == otherAnimal) continue;
+            
+            // Get collision areas
+            animal.solidArea.x = animal.worldX + animal.solidArea.x;
+            animal.solidArea.y = animal.worldY + animal.solidArea.y;
+            
+            otherAnimal.solidArea.x = otherAnimal.worldX + otherAnimal.solidArea.x;
+            otherAnimal.solidArea.y = otherAnimal.worldY + otherAnimal.solidArea.y;
+            
+            // Check collision
+            if(animal.solidArea.intersects(otherAnimal.solidArea)) {
+                animal.collisionOn = true;
+            }
+            
+            // Reset positions
+            animal.solidArea.x = animal.solidAreaDefaultX;
+            animal.solidArea.y = animal.solidAreaDefaultY;
+            otherAnimal.solidArea.x = otherAnimal.solidAreaDefaultX;
+            otherAnimal.solidArea.y = otherAnimal.solidAreaDefaultY;
+        }
+    }
     public int checkAnimal(Player player, boolean collison) {
         int index = -1; // Default value if no collision is detected
         for (int i = 0; i < gp.animals.size(); i++) {

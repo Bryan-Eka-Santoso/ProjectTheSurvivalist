@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+
 import java.awt.Shape;
 
 import Object.Items.StackableItem.*;
@@ -17,6 +18,8 @@ public class UI {
     int scrollY = 0; // scroll posisi saat ini
     int maxScroll = 1000; // max scroll, nanti dihitung dari banyaknya data
     public int selectedRecipeIndex = 0; // <<<< tambah ini di UI kamu
+    int mouseX = 0;
+    int mouseY = 0;
 
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -39,8 +42,49 @@ public class UI {
             drawInventory();
         }
         if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
-            PlayerCraftMenu();
+            drawPlusMinus();
         }
+    }
+
+    public void drawPlusMinus() {
+        int frameX = gp.TILE_SIZE * gp.MAX_SCREEN_COL - (gp.TILE_SIZE * 8);
+        int frameY = gp.TILE_SIZE * gp.MAX_SCREEN_ROW - (gp.TILE_SIZE * 6);
+        int frameWidth = gp.TILE_SIZE * 3;
+        int frameHeight = gp.TILE_SIZE * 5;
+
+        String plusBtn = "< + >";
+        String amount = " 10 ";
+        String minusBtn = "< - >";
+
+        int posXPlus = frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2;
+        int posYPlus = frameY + frameHeight / 4;
+        int posXMinus = frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2 + 1;
+        int posYMinus = frameY + frameHeight * 3 / 4;
+
+        drawSubWindow(frameX, frameY, frameWidth + 10, frameHeight);
+
+        g2.drawString(plusBtn, posXPlus, posYPlus);
+        g2.drawString(amount, frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2, frameY + frameHeight * 2 / 4);
+        g2.drawString(minusBtn, posXMinus, posYMinus);
+
+        System.out.println("Mouse X: " + mouseX + ", Mouse Y: " + mouseY);
+        System.out.println("Plus Button X: " + posXPlus + ", Plus Button Y: " + posYPlus);
+
+        if (isMouseOverButton(posXPlus, posYPlus, sentenceLength(plusBtn), 30)) {
+            System.out.println("Mouse over plus button");
+        }
+        if (isMouseOverButton(posXMinus, posYMinus, sentenceLength(minusBtn), 30)) {
+            System.out.println("Mouse over minus button");
+        }
+    }
+
+    public int sentenceLength(String text) {
+        int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        return length;
+    }
+
+    public boolean isMouseOverButton(int x, int y, int width, int height) {
+        return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
     }
 
     public void PlayerCraftMenu() {

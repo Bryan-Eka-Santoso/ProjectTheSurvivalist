@@ -76,7 +76,7 @@ public class Wolf extends Animal {
 
     public void chasePrey(Player player) {
         if (isPreyNearby(player)) {
-            player.island.world[y][x] = ' '; // Display tiger on the island
+            // player.island.world[y][x] = ' '; // Display tiger on the island
             if (x + 1 < player.worldX) {
                 x++;
             } else if (x - 1 > player.worldX) {
@@ -87,7 +87,7 @@ public class Wolf extends Animal {
             } else if (y - 1 > player.worldY) {
                 y--;
             }
-            player.island.world[y][x] = 'T'; // Display tiger on the island
+            // player.island.world[y][x] = 'T'; // Display tiger on the island
             System.out.println("Chasing prey at (" + player.worldX + ", " + player.worldY + ")");
         } else {
             System.out.println("No prey nearby to chase.");
