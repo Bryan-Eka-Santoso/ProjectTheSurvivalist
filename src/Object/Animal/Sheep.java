@@ -13,22 +13,21 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 
 public class Sheep extends TameAnimal {
-      Random random = new Random();
-      private Rectangle upHitbox;
-      private Rectangle downHitbox;
-      private Rectangle leftHitbox;
-      private Rectangle rightHitbox;
-     boolean readyGetItem;
+    Random random = new Random();
+    private Rectangle upHitbox;
+    private Rectangle downHitbox;
+    private Rectangle leftHitbox;
+    private Rectangle rightHitbox;
+    boolean readyGetItem;
     public Sheep(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
-       setRandomDirection();
-       this.actionMoveDelay = random.nextInt(91) + 30;
-       upHitbox = new Rectangle(50, 45, 30, 55);    // Lebih sempit di atas
-       downHitbox = new Rectangle(50, 45, 30, 55); // Lebih sempit di bawah
-       leftHitbox = new Rectangle(33, 45, 55,40 );  // Lebih sempit di kiri
-       rightHitbox = new Rectangle(33, 45, 55,40 );
-       
-       this.solidArea = downHitbox;
+        setRandomDirection();
+        this.actionMoveDelay = random.nextInt(91) + 30;
+        upHitbox = new Rectangle(50, 45, 30, 63);    // Lebih sempit di atas
+        downHitbox = new Rectangle(50, 45, 30, 63); // Lebih sempit di bawah
+        leftHitbox = new Rectangle(33, 60, 57,28 );  // Lebih sempit di kiri
+        rightHitbox = new Rectangle(33, 60, 57,28 );
+        this.solidArea = downHitbox;
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         readyBreeding = true;
@@ -56,12 +55,11 @@ public class Sheep extends TameAnimal {
     }
     private void setRandomDirection() {
         String newDirection= null;
-        String oldDirection = direction;
+        String oldDirection = this.direction;
         do{
 
           
             int random = this.random.nextInt(4);
-    
             switch(random) {
                 case 0: newDirection = "up"; break;
                 case 1: newDirection = "down"; break;
@@ -72,6 +70,7 @@ public class Sheep extends TameAnimal {
         }while(newDirection.equals(oldDirection));
         this.direction = newDirection;
         this.actionMoveDelay = this.random.nextInt(91) + 30;
+        gp.player.collisionOn = false;
     }
     private int actionMoveCounter = 0;
     private  int actionMoveDelay;
@@ -117,13 +116,26 @@ public class Sheep extends TameAnimal {
             }
         }else {
           
-            setRandomDirection();
+            String newDirection;
+            String oldDirection = this.direction;
+
+            switch(oldDirection) {
+                case "up": newDirection = "down"; break;
+                case "down": newDirection = "up"; break;
+                case "left": newDirection = "right"; break;
+                case "right": newDirection = "left"; break;
+                default: newDirection = "down"; break;
+            }
+            this.direction = newDirection;
+            this.actionMoveDelay = this.random.nextInt(91)+30;
             switch(direction) {
                 case "up": worldY -= speed; break;
                 case "down": worldY += speed; break;
                 case "left": worldX -= speed; break;
                 case "right": worldX += speed; break;
             }
+            actionMoveCounter++;
+           
             
         }
 
