@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 import Object.GamePanel;
 
-public class Kandang extends Buildings {
+public abstract class Kandang extends Buildings {
     GamePanel gp;
     Rectangle solidArea;
     BufferedImage img;

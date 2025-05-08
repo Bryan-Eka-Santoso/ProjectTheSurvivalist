@@ -5,7 +5,7 @@ import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
 import Object.Items.Unstackable.Buildings.Kandang;
 import Object.Items.Unstackable.Buildings.KandangAyam;
-<<<<<<< HEAD
+
 import Object.Items.Unstackable.Buildings.PigCage;
 import Object.Items.Unstackable.Buildings.SheepCage;
 
@@ -14,7 +14,14 @@ import java.util.ArrayList;
 import Object.GamePanel;
 import Object.KeyHandler;
 import Object.Animal.TameAnimal;
->>>>>>> 9642d91b40a32ffaa4787a4fd562be0f91d98af5
+
+import javax.imageio.ImageIO;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 
 public class Player {
     public String name;
@@ -163,24 +170,24 @@ public class Player {
         g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
     }
 
-   public void move(int dx, int dy) {
-        if (island.world[worldY + dy][worldX + dx] == ' ' ) {
+//    public void move(int dx, int dy) {
+//         if (island.world[worldY + dy][worldX + dx] == ' ' ) {
             
 
-            if (dx > 0) lastMove = "d";
-            else if (dx < 0) lastMove = "a";
-            else if (dy > 0) lastMove = "s";
-            else if (dy < 0) lastMove = "w";
+//             if (dx > 0) lastMove = "d";
+//             else if (dx < 0) lastMove = "a";
+//             else if (dy > 0) lastMove = "s";
+//             else if (dy < 0) lastMove = "w";
 
-            island.world[worldY][worldX] = ' ';
-            worldX += dx;
-            worldY += dy;
-            island.world[worldY][worldX] = 'P';
-        }
-    }
-    public boolean isAnimal(char tile) {
-        return tile == 'A' || tile == 'P' || tile == 'C' || tile == 'S';
-    }
+//             island.world[worldY][worldX] = ' ';
+//             worldX += dx;
+//             worldY += dy;
+//             island.world[worldY][worldX] = 'P';
+//         }
+//     }
+//     public boolean isAnimal(char tile) {
+//         return tile == 'A' || tile == 'P' || tile == 'C' || tile == 'S';
+//     }
 
     // public void handleGrabAction(Item selectedItem) {
     //     if (grabbedAnimal == null) {
@@ -269,16 +276,16 @@ public class Player {
     //     }
     // }
 
-    public KandangAyam findNearbyKandang() {
-        for (Buildings building : island.buildings) {
-            if (building instanceof KandangAyam) {
-                if (Math.abs(building.getX() - worldX) <= 1 && Math.abs(building.getY() - worldY) <= 1) {
-                    return (KandangAyam) building;
-                }
-            }
-        }
-        return null;
-    }
+    // public KandangAyam findNearbyKandang() {
+    //     for (Buildings building : island.buildings) {
+    //         if (building instanceof KandangAyam) {
+    //             if (Math.abs(building.getX() - worldX) <= 1 && Math.abs(building.getY() - worldY) <= 1) {
+    //                 return (KandangAyam) building;
+    //             }
+    //         }
+    //     }
+    //     return null;
+    // }
 
     public boolean isHoldingAnimal() {
         return grabbedAnimal != null;
