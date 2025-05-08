@@ -7,6 +7,8 @@ import java.awt.Graphics2D;
 
 import java.awt.Shape;
 
+import javax.swing.JButton;
+
 import Object.Items.StackableItem.*;
 
 public class UI {
@@ -14,12 +16,12 @@ public class UI {
     Graphics2D g2;
     public int slotCol = 0;
     public int slotRow = 0;
+    int mouseX = 0;
+    int mouseY = 0;
     public int selectedIndex;
     int scrollY = 0; // scroll posisi saat ini
     int maxScroll = 1000; // max scroll, nanti dihitung dari banyaknya data
     public int selectedRecipeIndex = 0; // <<<< tambah ini di UI kamu
-    int mouseX = 0;
-    int mouseY = 0;
 
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -43,6 +45,9 @@ public class UI {
         }
         if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
             drawPlusMinus();
+        }
+        if (gp.gameState == gp.DROPPED_ITEM_STATE){
+            boxAmount();
         }
     }
 
@@ -87,6 +92,20 @@ public class UI {
         return mouseX >= x && mouseX <= x + width && mouseY >= y && mouseY <= y + height;
     }
 
+    public void boxAmount(){
+        int frameX = gp.TILE_SIZE * 5;
+        int frameY = gp.TILE_SIZE * 5;
+        int frameWidth = gp.TILE_SIZE * 14;
+        int frameHeight = gp.TILE_SIZE * 14;
+
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        if (mouseX >= frameX && mouseX <= frameX + frameWidth && mouseY >= frameY && mouseY <= frameY + frameHeight) {
+            mouseX = 0;
+            mouseY = 0;
+            System.out.println("Mouse is over the button!");
+        } 
+    }
     public void PlayerCraftMenu() {
         int frameX = gp.TILE_SIZE * 5;
         int frameY = gp.TILE_SIZE * 4;
@@ -150,12 +169,12 @@ public class UI {
     public void drawSelectedItem() {
         int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
         int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 3);
-        int frameWidth = gp.TILE_SIZE * 14;
+        int frameWidth = gp.TILE_SIZE * 16;
         int frameHeight = gp.TILE_SIZE * 2;
         drawSubWindow(frameX, frameY, frameWidth + 10, frameHeight);
 
-        int slotXStart = frameX + 18;
-        int slotYStart = frameY + 18;
+        int slotXStart = frameX + 25;
+        int slotYStart = frameY + 12;
         int slotX = slotXStart;
         int slotY = slotYStart;
 
@@ -174,7 +193,7 @@ public class UI {
             g2.drawImage(gp.player.inventory.slots[i].img, slotX + 5, slotY + 5, gp.TILE_SIZE, gp.TILE_SIZE, null);
             if (gp.player.inventory.slots[i] instanceof Stackable) {
                 Stackable stackableItem = (Stackable) gp.player.inventory.slots[i];
-                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
                 g2.setFont(font);
                 int dx = 30;
                 if (stackableItem.currentStack < 10) {
@@ -203,11 +222,11 @@ public class UI {
     public void drawInventory() {
         int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
         int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 14);
-        int frameWidth = gp.TILE_SIZE * 15;
-        int frameHeight = gp.TILE_SIZE * 7;
+        int frameWidth = gp.TILE_SIZE * 17;
+        int frameHeight = gp.TILE_SIZE * 8;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
 
-        int slotXStart = frameX + 45;
+        int slotXStart = frameX + 40;
         int slotYStart = frameY + 30;
         int slotX = slotXStart;
         int slotY = slotYStart;
@@ -232,7 +251,7 @@ public class UI {
             g2.drawImage(gp.player.inventory.slots[i].img, slotX + 5, slotY + 5, gp.TILE_SIZE, gp.TILE_SIZE, null);
             if (gp.player.inventory.slots[i] instanceof Stackable) {
                 Stackable stackableItem = (Stackable) gp.player.inventory.slots[i];
-                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
                 g2.setFont(font);
                 int dx = 30;
                 if (stackableItem.currentStack < 10) {
