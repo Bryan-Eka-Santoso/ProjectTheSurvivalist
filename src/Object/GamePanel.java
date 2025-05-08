@@ -131,7 +131,6 @@ public class GamePanel extends JPanel implements Runnable {
                 }
                 
                 // Check used positions
-                Point newPos = new Point(randomX, randomY);
                 for(Point pos : usedPositions) {
                     if(Math.abs(pos.x - randomX) < TILE_SIZE * 2 && 
                        Math.abs(pos.y - randomY) < TILE_SIZE * 2) {
