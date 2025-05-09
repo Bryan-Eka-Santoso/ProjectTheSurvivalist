@@ -6,6 +6,7 @@ import Object.Animal.TameAnimal;
 import Object.Controller.GamePanel;
 import Object.Controller.ItemDrop;
 import Object.Controller.KeyHandler;
+import Object.Controller.UseItem;
 
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -37,8 +38,8 @@ public class Player {
     public UseItem interactObj; // Object to handle item interactions
     public final int SCREEN_Y;
     public final int SCREEN_X;
-    public  int plantIndex, animalIndex; // Index of the selected plant in the inventory
-    GamePanel gp; 
+    public int plantIndex, animalIndex, droppedItem; // Index of the selected plant in the inventory
+    public GamePanel gp;
     public KeyHandler keyH;
 
     public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {
@@ -51,7 +52,7 @@ public class Player {
         this.exp = 0;
         this.level = 1;
         this.speed = 5;
-        this.inventory = new Inventory(32);
+        this.inventory = new Inventory(32, gp);
         this.gp = gp;
         this.keyH = keyH;
         this.grabbedAnimal= null; 
@@ -113,6 +114,7 @@ public class Player {
             gp.cCheck.checkTile(this);
             plantIndex = gp.cCheck.checkPlant(this, true);
             animalIndex = gp.cCheck.checkAnimal(this, true);
+            droppedItem = gp.cCheck.checkItemDrop(this, true);
             
             if (!collisionOn) {
                 switch (direction) {
@@ -132,7 +134,6 @@ public class Player {
                 }
                 spriteCounter = 0;
             }
-            
         }
     }
 

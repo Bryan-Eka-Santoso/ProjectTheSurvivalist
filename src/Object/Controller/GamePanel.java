@@ -112,7 +112,7 @@ public class GamePanel extends JPanel implements Runnable {
         addAnimals();
         player.inventory.addItems(new Sword("Sword", 20, 30));
         player.inventory.addItems(new Torch(this));
-        player.inventory.addItems(new Bread(34));
+        player.inventory.addItems(new Bread(1000));
         player.inventory.addItems(new Axe("Axe", 20, 30));
         
         long interval = 500_000_000L;

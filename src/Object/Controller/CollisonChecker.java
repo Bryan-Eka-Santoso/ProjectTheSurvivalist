@@ -176,6 +176,50 @@ public class CollisonChecker {
             }
         return index;
     }
+
+    public int checkItemDrop(Player player, boolean canTakeItem) {
+        int index = -1; // Default value if no collision is detected
+        for (int i = 0; i < gp.droppedItems.size(); i++) {
+                player.solidArea.x = player.worldX + player.solidArea.x;
+                player.solidArea.y = player.worldY + player.solidArea.y;
+                gp.droppedItems.get(i).solidArea.x = gp.droppedItems.get(i).worldX + gp.droppedItems.get(i).solidArea.x;
+                gp.droppedItems.get(i).solidArea.y = gp.droppedItems.get(i).worldY + gp.droppedItems.get(i).solidArea.y;
+                
+                switch (player.direction) {
+                    case "up":
+                        player.solidArea.y -= player.speed;
+                        if (player.solidArea.intersects(gp.droppedItems.get(i).solidArea)) {
+                            index = i; 
+                        }
+                        break;
+                    case "down":
+                        player.solidArea.y += player.speed;
+                        if (player.solidArea.intersects(gp.droppedItems.get(i).solidArea)) {
+                            index = i; 
+                        }
+                        break;
+                    case "left":
+                        player.solidArea.x -= player.speed;
+                        if (player.solidArea.intersects(gp.droppedItems.get(i).solidArea)) {
+                            index = i; 
+                        }
+                        break;
+                    case "right":
+                        player.solidArea.x += player.speed;
+                        if (player.solidArea.intersects(gp.droppedItems.get(i).solidArea)) {
+                            index = i; 
+                        }
+                        break;
+                }
+                player.solidArea.x = player.solidAreaDefaultX;
+                player.solidArea.y = player.solidAreaDefaultY;
+                gp.droppedItems.get(i).solidArea.x = gp.droppedItems.get(i).solidAreaDefaultX;
+                gp.droppedItems.get(i).solidArea.y = gp.droppedItems.get(i).solidAreaDefaultY;
+
+            }
+        return index;
+    }
+
     public void checkPlayer(Animal animal) {
         // Get hitbox areas
         animal.solidArea.x = animal.worldX + animal.solidArea.x;

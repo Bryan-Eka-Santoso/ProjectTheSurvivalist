@@ -1,13 +1,17 @@
 package Object.Items.Unstackable.Buildings;
+
+import Object.Controller.GamePanel;
 import Object.Player.Inventory;
 
 public class Chest extends Buildings {
     Inventory inventory;
     final int maxSize = 15; // Ukuran maksimum inventory chest
+    GamePanel gp;
 
-    public Chest(int x, int y) {
+    public Chest(int x, int y, GamePanel gp) {
         super("Chest", x, y);
-        inventory = new Inventory(maxSize);
+        inventory = new Inventory(maxSize, gp);
+        this.gp = gp;
     }   
 
     public void showInventory() {

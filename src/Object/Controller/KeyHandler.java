@@ -178,6 +178,13 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
             }
         }
+        if (code == KeyEvent.VK_P) {
+            if (gp.player.droppedItem != -1) {
+                gp.player.inventory.addItems(gp.droppedItems.get(gp.player.droppedItem).droppedItem.clone());
+                gp.droppedItems.remove(gp.player.droppedItem);
+                gp.player.droppedItem = -1;
+            }
+        }
     }
 
     @Override

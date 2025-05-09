@@ -10,8 +10,10 @@ import Object.Items.StackableItem.Stackable;
 
 public class ItemDrop {
     public int worldX, worldY;
-    public Rectangle rectangle;
+    public Rectangle solidArea;
     public Item droppedItem;
+    public int solidAreaDefaultX; 
+    public int solidAreaDefaultY;
     public GamePanel gp;
 
     public ItemDrop(int x, int y, Item item, GamePanel gp) {
@@ -19,7 +21,9 @@ public class ItemDrop {
         this.worldY = y;
         this.droppedItem = item;
         this.gp = gp;
-        this.rectangle = new Rectangle();
+        this.solidArea = new Rectangle(8, 8, 32, 32 );
+        this.solidAreaDefaultX = solidArea.x;
+        this.solidAreaDefaultY = solidArea.y;
     }
     
     public void draw(Graphics2D g2) {  // Bisa dipake utk dropped item
