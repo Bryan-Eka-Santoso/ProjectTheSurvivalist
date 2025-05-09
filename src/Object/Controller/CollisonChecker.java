@@ -83,7 +83,6 @@ public class CollisonChecker {
             return;
         }
     
-        // Check each corner for valid tile
         int[] validTiles = {8, 9, 10, 11, 12, 13, 14, 15, 18, 20};
         
         int tileNum1 = gp.tileM.mapTile[entityLeftCol][entityTopRow];     // Top left
