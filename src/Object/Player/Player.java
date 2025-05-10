@@ -4,16 +4,10 @@ import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
 import Object.Animal.Animal;
 import Object.Animal.TameAnimal;
-import Object.Animal.Chicken;
-import Object.Animal.Cow;
-import Object.Animal.Sheep;
-import Object.Animal.Pig;
-
 import Object.Controller.GamePanel;
 import Object.Controller.ItemDrop;
 import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
-
 import Object.Items.StackableItem.Stackable;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
