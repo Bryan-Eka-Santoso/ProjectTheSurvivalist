@@ -23,14 +23,14 @@ public class Chicken extends TameAnimal {
    
     public Chicken(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
-       setRandomDirection();
-       this.actionMoveDelay = random.nextInt(91) + 30;
-       upHitbox = new Rectangle(4, 2, 24, 28);    // Lebih sempit
-       downHitbox = new Rectangle(4, 4, 24, 28);   
-       leftHitbox = new Rectangle(2, 4, 28, 24);   
-       rightHitbox = new Rectangle(4, 4, 28, 24);   // Lebih lebar di kanan
+        setRandomDirection();
+        this.actionMoveDelay = random.nextInt(91) + 30;
+        upHitbox = new Rectangle(4, 2, 24, 28);    // Lebih sempit
+        downHitbox = new Rectangle(4, 4, 24, 28);   
+        leftHitbox = new Rectangle(2, 4, 28, 24);   
+        rightHitbox = new Rectangle(4, 4, 28, 24);   // Lebih lebar di kanan
        
-       this.solidArea = downHitbox; 
+        this.solidArea = downHitbox; 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         readyBreeding = true;

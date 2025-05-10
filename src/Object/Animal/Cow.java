@@ -55,24 +55,28 @@ public class Cow extends TameAnimal {
             e.printStackTrace();
         }
     }
-    private void setRandomDirection() {
-        String newDirection= null;
-        String oldDirection = direction;
-        do{
-
-          
-            int random = this.random.nextInt(4);
-    
-            switch(random) {
-                case 0: newDirection = "up"; break;
-                case 1: newDirection = "down"; break;
-                case 2: newDirection = "left"; break;
-                case 3: newDirection = "right"; break;
-               
+        public void setRandomDirection() {
+            String newDirection;
+            String oldDirection = this.direction;
+            
+            if (oldDirection == null) {
+                String[] directions = {"up", "down", "left", "right"};
+                newDirection = directions[this.random.nextInt(4)];
+                this.direction = newDirection;
+                this.actionMoveDelay = this.random.nextInt(91) + 30;
+                return;
             }
-        }while(newDirection.equals(oldDirection));
-        this.direction = newDirection;
-        this.actionMoveDelay = this.random.nextInt(91) + 30;
+        
+            switch(oldDirection) {
+                case "up": newDirection = "down"; break;
+                case "down": newDirection = "up"; break;
+                case "left": newDirection = "right"; break;
+                case "right": newDirection = "left"; break;
+                default: newDirection = "down"; break;
+            }
+        
+            this.direction = newDirection;
+            this.actionMoveDelay = this.random.nextInt(91) + 30;
     }
     private int actionMoveCounter = 0;
     private  int actionMoveDelay;
@@ -117,7 +121,7 @@ public class Cow extends TameAnimal {
                 setRandomDirection();
                 actionMoveCounter = 0;
             }
-        }else {
+        } else {
           
             setRandomDirection();
             switch(direction) {
