@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.util.List;
+import java.util.Map;
+
+import Object.Items.Item;
 import Object.Items.StackableItem.*;
 
 public class UI {
@@ -40,7 +44,7 @@ public class UI {
             drawInventory();
         }
         if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
-            drawPlusMinus();
+            PlayerCraftMenu();
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE){
             boxAmount();
@@ -100,7 +104,7 @@ public class UI {
         } 
     }
     public void PlayerCraftMenu() {
-        int frameX = gp.TILE_SIZE * 5;
+        int frameX = gp.TILE_SIZE * 6;
         int frameY = gp.TILE_SIZE * 4;
         int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 7;
@@ -113,17 +117,21 @@ public class UI {
         int contentX = frameX + 30;
         int contentY = frameY + 40 - scrollY;
     
-        for (int i = 0; i < 20; i++) {
-            int itemY = contentY + i * 40;
-
-            if (i == selectedRecipeIndex) {
-                g2.setColor(new Color(100, 100, 255)); // Biru transparan
-                g2.fillRoundRect(contentX - 10, itemY - 25, frameWidth - 50, 35, 10, 10);
+        for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
+            List<Item> ingredients = entry.getKey();
+            Item result = entry.getValue();
+    
+            g2.setColor(Color.WHITE);
+            g2.drawImage(result.img, contentX, contentY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            g2.drawString(result.name, contentX, contentY);
+    
+            int ingredientY = contentY + 20;
+            for (Item ingredient : ingredients) {
+                g2.drawString(ingredient.name, contentX + 50, ingredientY);
+                ingredientY += 20;
             }
     
-
-            g2.setColor(Color.white);
-            g2.drawString("Hello " + i, contentX, contentY + i * 40);
+            contentY += 60; // Jarak antar resep
         }
     
         g2.setClip(oldClip); // Kembalikan clip ke semula

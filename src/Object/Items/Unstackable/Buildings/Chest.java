@@ -9,7 +9,7 @@ public class Chest extends Buildings {
     GamePanel gp;
 
     public Chest(int x, int y, GamePanel gp) {
-        super("Chest", x, y);
+        super("Chest");
         inventory = new Inventory(maxSize, gp);
         this.gp = gp;
     }   

@@ -14,6 +14,8 @@ import Object.Environment.EnvironmentManager;
 import Object.Items.StackableItem.Bread;
 import Object.Animal.*;
 import Object.Items.StackableItem.Torch;
+import Object.Items.Unstackable.Buildings.*;
+import Object.Items.StackableItem.Wood;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -53,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
+    public ArrayList<Buildings> buildings = new ArrayList<>();
     
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -90,6 +93,7 @@ public class GamePanel extends JPanel implements Runnable {
         
         spawnAnimal("pig", 5, usedPositions);
     }
+
 private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
     int attempts = 0;
     int maxAttempts = 1000; // Prevent infinite loop
@@ -164,8 +168,9 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         addAnimals();
         player.inventory.addItems(new Sword("Sword", 20, 30));
         player.inventory.addItems(new Torch(this));
-        player.inventory.addItems(new Bread(1000));
+        player.inventory.addItems(new Bread(10));
         player.inventory.addItems(new Axe("Axe", 20, 30));
+        player.inventory.addItems(new Wood("Wood", 20, 30));
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -185,10 +190,11 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
             }
 
             if (currentTime - lastAnimalMoveTime >= interval) {
-                for (int i = 0; i < animals.size(); i++) {
-                    animals.get(i).update();
+                if (gameState != PAUSE_STATE) {
+                    for (int i = 0; i < animals.size(); i++) {
+                        animals.get(i).update();
+                    }
                 }
-                
                 lastAnimalMoveTime = currentTime;
             }
 
@@ -200,7 +206,7 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
     }
 
     public void update() {
-        if (gameState == PLAY_STATE) {
+        if (gameState != PAUSE_STATE) {
             player.update();
         } 
     }
