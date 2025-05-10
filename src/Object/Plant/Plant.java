@@ -13,11 +13,9 @@ public class Plant {
     public Rectangle solidArea;
     public int solidAreaDefaultX; 
     public int solidAreaDefaultY;
-    public boolean collision;
 
-    public Plant(int x, int y, GamePanel gp, Rectangle solidArea, boolean collision) {
+    public Plant(int x, int y, GamePanel gp, Rectangle solidArea) {
         this.worldX = x;
-        this.collision = collision;
         this.worldY = y;
         this.gp = gp;
         this.solidArea = solidArea;
