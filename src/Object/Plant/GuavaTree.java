@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import Object.GamePanel;
+import Object.Controller.GamePanel;
 
 public class GuavaTree extends Plant {
 

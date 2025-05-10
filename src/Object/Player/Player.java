@@ -2,10 +2,12 @@ package Object.Player;
 
 import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
-import java.util.ArrayList;
-import Object.GamePanel;
-import Object.KeyHandler;
 import Object.Animal.TameAnimal;
+import Object.Controller.GamePanel;
+import Object.Controller.ItemDrop;
+import Object.Controller.KeyHandler;
+import Object.Controller.UseItem;
+import Object.Items.StackableItem.Stackable;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -36,9 +38,8 @@ public class Player {
     public UseItem interactObj; // Object to handle item interactions
     public final int SCREEN_Y;
     public final int SCREEN_X;
-    public  int plantIndex, animalIndex; // Index of the selected plant in the inventory
-
-    GamePanel gp; 
+    public int plantIndex, animalIndex, droppedItem; // Index of the selected plant in the inventory
+    public GamePanel gp;
     public KeyHandler keyH;
 
     public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {
@@ -51,13 +52,13 @@ public class Player {
         this.exp = 0;
         this.level = 1;
         this.speed = 5;
-        this.inventory = new Inventory(32);
+        this.inventory = new Inventory(32, gp);
         this.gp = gp;
         this.keyH = keyH;
         this.grabbedAnimal= null; 
         // this.kandang = new ArrayList<>(); 
         this.direction = "down";
-        this.solidArea = new Rectangle();
+        this.solidArea = new Rectangle(0, 0, 17, 25);
         solidAreaX = solidArea.x;
         solidAreaY = solidArea.y;
         solidArea.x = 12;
@@ -113,6 +114,7 @@ public class Player {
             gp.cCheck.checkTile(this);
             plantIndex = gp.cCheck.checkPlant(this, true);
             animalIndex = gp.cCheck.checkAnimal(this, true);
+            droppedItem = gp.cCheck.checkItemDrop(this, true);
             
             if (!collisionOn) {
                 switch (direction) {
@@ -132,7 +134,6 @@ public class Player {
                 }
                 spriteCounter = 0;
             }
-            
         }
     }
 
@@ -160,25 +161,6 @@ public class Player {
 
         g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
     }
-
-//    public void move(int dx, int dy) {
-//         if (island.world[worldY + dy][worldX + dx] == ' ' ) {
-            
-
-//             if (dx > 0) lastMove = "d";
-//             else if (dx < 0) lastMove = "a";
-//             else if (dy > 0) lastMove = "s";
-//             else if (dy < 0) lastMove = "w";
-
-//             island.world[worldY][worldX] = ' ';
-//             worldX += dx;
-//             worldY += dy;
-//             island.world[worldY][worldX] = 'P';
-//         }
-//     }
-//     public boolean isAnimal(char tile) {
-//         return tile == 'A' || tile == 'P' || tile == 'C' || tile == 'S';
-//     }
 
     // public void handleGrabAction(Item selectedItem) {
     //     if (grabbedAnimal == null) {
@@ -288,6 +270,39 @@ public class Player {
             return;
         }
         interactObj.useItem(selectedItem, this);
+    }
+
+    public void pickUpItem(Item selectedItem) {
+        if (selectedItem != null) {
+            if (selectedItem.currentStack > 0) {
+                if (selectedItem instanceof Stackable) {
+                    Item itemToAdd = selectedItem.clone();
+                    if (itemToAdd.currentStack > itemToAdd.maxStack) {
+                        itemToAdd.currentStack = itemToAdd.maxStack;
+                        selectedItem.currentStack -= itemToAdd.maxStack;
+                    } else {
+                        gp.droppedItems.remove(gp.player.droppedItem);
+                    }
+                    inventory.addItems(itemToAdd);
+                } else {
+                    System.out.println("Picked up " + selectedItem.name);
+                    inventory.addItems(selectedItem.clone());
+                    selectedItem.currentStack = 0;
+                    gp.droppedItems.remove(gp.player.droppedItem);
+                }
+            } else {
+                System.out.println("No items to pick up.");
+            }
+        } else {
+            System.out.println("No item selected.");
+        }
+    }
+
+    public void dropItem(Item selectedItem){
+        // Add to dropped Item list
+        // Item berkurang dari inventory
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
+        gp.player.inventory.removeItem(selectedItem, selectedItem.currentStack);
     }
 
     public String displayStats(Player player) {

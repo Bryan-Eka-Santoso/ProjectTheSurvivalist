@@ -4,6 +4,7 @@
 // import Object.Entity.Cow;
 // import Object.Player.Island;
 // import Object.Player.Player;
+
 // public class CowCage extends Kandang {
 //     private static final int MAX_CAPACITY = 10;
 //     ArrayList<Cow> cowsInCage;
@@ -13,6 +14,7 @@
 //         super(name, x, y);
 //         this.cowsInCage = new ArrayList<>();
 //     }
+
 //     public boolean addAnimal(Cow cow) {
 //         if (cowsInCage.size() < MAX_CAPACITY) {
 //             System.out.print("Give a name to your cow: ");
@@ -25,6 +27,7 @@
 //         System.out.println("Kandang is full! Cannot add more cows.");
 //         return false;
 //     }
+
 //     public void interact(Player player, Island island) {
 //         System.out.println("\nKandang Status:");
 //         System.out.println("Current cows: " + getCurrentCapacity() + "/" + MAX_CAPACITY);
@@ -54,6 +57,7 @@
 //             }
 //         }
 //     }
+
 //     private void handleGetItem(Player player) {
 //         if (cowsInCage.isEmpty()) {
 //             System.out.println("No cows in kandang!");
@@ -81,6 +85,7 @@
 //             System.out.println("Invalid selection!");
 //         }
 //     }
+
 //    public void listcows() {
 //         if (cowsInCage.isEmpty()) {
 //             System.out.println("No cows in kandang!");
@@ -91,6 +96,7 @@
 //             System.out.println((i + 1) + ". " + cowsInCage.get(i).getName());
 //         }
 //     }
+
 //     public void handleBreeding(Island island) {
 //         if (cowsInCage.size() < 2) {
 //             System.out.println("Need at least 2 cows to breed!");
@@ -126,6 +132,7 @@
 //             System.out.println("Invalid selection!");
 //             return;
 //         }
+
 //         Cow baby = cowsInCage.get(firstChoice).breeding(cowsInCage.get(secondChoice));
 //         if (baby != null) {
 //             System.out.print("Give a name to the baby cow: ");
@@ -144,5 +151,4 @@
 //     public int getMaxCapacity() {
 //         return MAX_CAPACITY;
 //     }
-   
 // }

@@ -9,7 +9,7 @@ public class Wood extends Material {
     public Wood(String name, int maxStack, int currentStack) {
         super(name, maxStack, currentStack);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/axe.png")); 
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/wood-log.png")); 
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -18,10 +18,9 @@ public class Wood extends Material {
     public Wood(String name, int maxStack) {
         super(name, maxStack);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/axe.png")); 
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/wood-log.png")); 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
 }

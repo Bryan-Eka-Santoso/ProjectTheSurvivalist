@@ -1,6 +1,6 @@
 package Object.Environment;
 
-import Object.GamePanel;
+import Object.Controller.GamePanel;
 import Object.Items.StackableItem.Torch;
 
 import java.awt.AlphaComposite;

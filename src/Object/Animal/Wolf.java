@@ -3,7 +3,8 @@ package Object.Animal;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import Object.GamePanel;
+
+import Object.Controller.GamePanel;
 import Object.Player.*;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
@@ -50,7 +51,6 @@ public class Wolf extends Animal {
 
     
     public void draw(Graphics2D g2) {
-
         BufferedImage image = null;
         switch (direction) {
             case "up":
@@ -101,5 +101,4 @@ public class Wolf extends Animal {
             return false;
         }
     }
-    
 } 

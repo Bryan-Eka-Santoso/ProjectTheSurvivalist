@@ -1,6 +1,6 @@
 package Object.Animal;
 
-import Object.GamePanel;
+import Object.Controller.GamePanel;
 
 public class TameAnimal extends Animal {
     String name;
@@ -51,11 +51,9 @@ public class TameAnimal extends Animal {
         this.inCage = false;
         this.readyBreeding = true;
     }
-
     public void getItem(){
 
     }
-
     public void grab(){
         this.isGrab = true;
     }
@@ -69,6 +67,4 @@ public class TameAnimal extends Animal {
         this.x = x;
         this.y = y;
     }
-
-
 }
