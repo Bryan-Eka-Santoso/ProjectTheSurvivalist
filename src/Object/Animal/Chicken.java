@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-
 import Object.Controller.GamePanel;
 import Object.Items.StackableItem.Egg;
 import java.awt.image.BufferedImage;

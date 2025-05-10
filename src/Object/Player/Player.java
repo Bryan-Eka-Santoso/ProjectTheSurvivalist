@@ -4,12 +4,10 @@ import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
 import Object.Animal.Animal;
 import Object.Animal.TameAnimal;
-
 import Object.Controller.GamePanel;
 import Object.Controller.ItemDrop;
 import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
-
 import Object.Items.StackableItem.Stackable;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -150,7 +148,6 @@ public class Player {
         }
     }
     public void draw(Graphics2D g2) {
-
         BufferedImage image = null;
         switch (direction) {
             case "up":
@@ -182,8 +179,6 @@ public class Player {
             g2.drawImage(animalImg, animalDrawX, animalDrawY,grabbedAnimal.getWidth(), grabbedAnimal.getHeight(), null);
         
         }
-
-
     }
 
     public void handleGrabAction(Item selectedItem) {
@@ -290,6 +285,11 @@ public class Player {
                 System.out.println("Cannot place animal here!");
             }
         }
+    }
+
+        // public void buildBuildings() {
+
+        // }
        
         // KandangAyam nearbyKandang = findNearbyKandang();
         // if (nearbyKandang != null) {
@@ -305,7 +305,6 @@ public class Player {
         //         return;
         //     }
         // }else
-    }
 
   
 

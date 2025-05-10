@@ -120,36 +120,46 @@ public class UI {
         int contentX = frameX + 30;
         int contentY = frameY + 60 - scrollY;
     
-        g2.drawString("Items to craft: ", contentX, contentY);
-        contentY += 60; // Jarak antar teks
+        g2.drawString("Items to craft:", contentX, contentY);
+        g2.drawString("Materials:", frameWidth - sentenceLength("Materials:"), contentY);
+        contentY += 60;
         for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
             List<Item> ingredients = entry.getKey();
             Item result = entry.getValue();
     
             g2.setColor(Color.WHITE);
             g2.drawImage(result.img, contentX, contentY - 25, 30, 30, null);
-            g2.drawString(String.valueOf(result.currentStack), contentX + 15, contentY);
+            Font font = new Font("Arial", Font.BOLD, 18); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
+            g2.setFont(font);
+            g2.drawString(String.valueOf(result.currentStack), contentX + 20, contentY + 5);
             g2.drawString(result.name, contentX + 50, contentY);
+
+            for (Item ingredient : ingredients) {
+                g2.drawImage(ingredient.img, frameWidth - sentenceLength("Materials:"), contentY - 25, 30, 30, null);
+                Font font2 = new Font("Arial", Font.BOLD, 18);
+                g2.setFont(font2);
+                g2.drawString(String.valueOf(ingredient.currentStack), frameWidth - sentenceLength("Materials:") + 25, contentY + 5);
+            }
     
-            Rectangle hitbox = new Rectangle(contentX, contentY - 30, 200, 40); // Adjust width/height as needed
+            Rectangle hitbox = new Rectangle(contentX, contentY - 30, 200, 40);
             itemHitboxes.add(hitbox);
             itemList.add(result);
 
-            contentY += 60; // Jarak antar resep
+            contentY += 60;
         }
     
-        g2.setClip(oldClip); // Kembalikan clip ke semula
+        g2.setClip(oldClip);
     }
 
     public void drawScrollBar(int x, int y, int width, int height) {
         g2.setColor(Color.GRAY);
         g2.fillRoundRect(x, y, width, height, 10, 10);
     
-        int totalContentHeight = 120 * 40; // total tinggi konten
-        int visibleHeight = height; // tinggi area kotak (frame)
+        int totalContentHeight = 120 * 40;
+        int visibleHeight = height;
         int thumbHeight = (int) ((float) visibleHeight / totalContentHeight * visibleHeight);
     
-        if (thumbHeight < 30) thumbHeight = 30; // Minimal ukuran thumb biar kelihatan
+        if (thumbHeight < 30) thumbHeight = 30;
     
         int maxThumbPos = height - thumbHeight;
         int thumbY = y + (int) ((float) scrollY / (totalContentHeight - visibleHeight) * maxThumbPos);

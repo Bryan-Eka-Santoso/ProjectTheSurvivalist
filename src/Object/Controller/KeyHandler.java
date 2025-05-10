@@ -34,6 +34,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                 Rectangle r = gp.ui.itemHitboxes.get(i);
                 if (r.contains(gp.ui.mouseX, gp.ui.mouseY)) {
                     Item clickedItem = gp.ui.itemList.get(i);
+                    gp.player.recipe.craft(gp.player, clickedItem.name);
                     System.out.println("Clicked on item: " + clickedItem.name);
                     break;
                 }

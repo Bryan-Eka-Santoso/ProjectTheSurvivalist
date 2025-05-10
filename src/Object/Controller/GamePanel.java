@@ -170,7 +170,7 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         player.inventory.addItems(new Torch(this));
         player.inventory.addItems(new Axe("Axe", 20, 30));
         player.inventory.addItems(new Wood("Wood", 20, 30));
-        player.inventory.addItems(new Bread(600));
+        player.inventory.addItems(new Bread(400));
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
