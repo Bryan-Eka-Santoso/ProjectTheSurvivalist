@@ -35,6 +35,7 @@ public class Player {
     public boolean lightUpdated = true;
     public Rectangle solidArea;
     public boolean collisionOn = false;
+    public boolean isBuild = false; 
     public UseItem interactObj; // Object to handle item interactions
     public final int SCREEN_Y;
     public final int SCREEN_X;

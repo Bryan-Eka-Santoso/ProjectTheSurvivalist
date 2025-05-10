@@ -9,15 +9,12 @@ import Object.Items.Unstackable.Unstackable;
 public class Buildings extends Unstackable {
     public int worldX, worldY, solidAreaX, solidAreaY;
     public GamePanel gp;
-    public BufferedImage image;
     public Rectangle solidArea;
     public int solidAreaDefaultX; 
     public int solidAreaDefaultY;
 
-    public Buildings(String name, int x, int y, GamePanel gp, Rectangle solidArea) {
+    public Buildings(String name, GamePanel gp, Rectangle solidArea) {
         super(name);
-        this.worldX = x;
-        this.worldY = y;
         this.gp = gp;
         this.solidArea = solidArea;
         this.solidAreaDefaultX = solidArea.x;
@@ -33,7 +30,16 @@ public class Buildings extends Unstackable {
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
                 
-            g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            g2.drawImage(img, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
         }
+    }
+
+    public void Build(Graphics2D g2) {
+        // Implementasi untuk membangun bangunan
+        // Misalnya, menampilkan gambar bangunan yang sedang dibangun
+        int buildingX = worldX - gp.player.worldX + gp.player.SCREEN_X;
+        int buildingY = worldY - gp.player.worldY + gp.player.SCREEN_Y;
+        g2.fillRect(buildingX, buildingY, 48, 48);
+        
     }
 }

@@ -18,6 +18,7 @@ public class UseItem {
                 System.out.println("Using material: " + material.name);
             } else if (selectedItem instanceof Buildings) {
                 Buildings building = (Buildings) selectedItem;
+                player.isBuild = true; // Set the player to building mode
                 System.out.println("Using building: " + building.name);
             } else if (selectedItem instanceof Food) {
                 Food food = (Food) selectedItem;

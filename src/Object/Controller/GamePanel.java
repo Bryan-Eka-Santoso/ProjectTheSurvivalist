@@ -170,7 +170,8 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         player.inventory.addItems(new Torch(this));
         player.inventory.addItems(new Axe("Axe", 20, 30));
         player.inventory.addItems(new Wood("Wood", 20, 30));
-        player.inventory.addItems(new Bread(400));
+        player.inventory.addItems(new Bread(10));
+        player.inventory.addItems(new Chest(this));
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -224,6 +225,9 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         }
         for (int i = 0; i < animals.size(); i++) {
             animals.get(i).draw(g2);
+        }
+        if (player.isBuild) {
+           ((Buildings)player.inventory.getSelectedItem()).Build(g2);
         }
         player.draw(g2);
         eManager.lighting.update();
