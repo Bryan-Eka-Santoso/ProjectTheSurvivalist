@@ -73,7 +73,7 @@ public class Player {
         SCREEN_X = gp.SCREEN_WIDTH / 2 - gp.TILE_SIZE / 2;
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - gp.TILE_SIZE / 2;
         this.recipe = recipe;
-        interactObj = new UseItem();
+        interactObj = new UseItem(gp);
 
         getPlayerImg();
     }
