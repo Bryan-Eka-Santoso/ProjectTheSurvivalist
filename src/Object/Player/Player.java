@@ -2,6 +2,7 @@ package Object.Player;
 
 import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
+import Object.Items.Unstackable.Buildings.Buildings;
 import Object.Animal.Animal;
 import Object.Animal.TameAnimal;
 import Object.Controller.GamePanel;
@@ -290,9 +291,7 @@ public class Player {
         //         return;
         //     }
         // }else
-
-  
-
+        
     // public KandangAyam findNearbyKandang() {
     //     for (Buildings building : island.buildings) {
     //         if (building instanceof KandangAyam) {
@@ -349,10 +348,6 @@ public class Player {
         // Item berkurang dari inventory
         gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
         gp.player.inventory.removeItem(selectedItem, selectedItem.currentStack);
-    }
-
-    public void build() {
-        
     }
 
     public String displayStats(Player player) {

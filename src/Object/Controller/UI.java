@@ -106,6 +106,7 @@ public class UI {
             System.out.println("Mouse is over the button!");
         } 
     }
+
     public void PlayerCraftMenu() {
         int frameX = gp.TILE_SIZE * 6;
         int frameY = gp.TILE_SIZE * 4;
@@ -134,14 +135,18 @@ public class UI {
             g2.drawString(String.valueOf(result.currentStack), contentX + 20, contentY + 5);
             g2.drawString(result.name, contentX + 50, contentY);
 
+            int drawX = frameWidth - sentenceLength("Materials:") + 30;
+            int drawPictureX = frameWidth - sentenceLength("Materials:") + 5;
             for (Item ingredient : ingredients) {
-                g2.drawImage(ingredient.img, frameWidth - sentenceLength("Materials:"), contentY - 25, 30, 30, null);
+                g2.drawImage(ingredient.img, drawPictureX, contentY - 25, 30, 30, null);
                 Font font2 = new Font("Arial", Font.BOLD, 18);
                 g2.setFont(font2);
-                g2.drawString(String.valueOf(ingredient.currentStack), frameWidth - sentenceLength("Materials:") + 25, contentY + 5);
+                g2.drawString(String.valueOf(ingredient.currentStack), drawX, contentY + 5);
+                drawX += 50;
+                drawPictureX += 50;
             }
     
-            Rectangle hitbox = new Rectangle(contentX, contentY - 30, 200, 40);
+            Rectangle hitbox = new Rectangle(contentX, contentY - 30, 200, 30);
             itemHitboxes.add(hitbox);
             itemList.add(result);
 
