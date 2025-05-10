@@ -2,7 +2,6 @@ package Object.Player;
 
 import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
-import Object.Items.Unstackable.Buildings.Buildings;
 import Object.Animal.Animal;
 import Object.Animal.TameAnimal;
 import Object.Controller.GamePanel;
@@ -291,7 +290,7 @@ public class Player {
         //         return;
         //     }
         // }else
-        
+
     // public KandangAyam findNearbyKandang() {
     //     for (Buildings building : island.buildings) {
     //         if (building instanceof KandangAyam) {
