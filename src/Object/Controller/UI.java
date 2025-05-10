@@ -1,4 +1,4 @@
-package Object;
+package Object.Controller;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

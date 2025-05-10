@@ -1,4 +1,4 @@
-package Object;
+package Object.Controller;
 
 import javax.swing.*;
 import java.awt.Color;

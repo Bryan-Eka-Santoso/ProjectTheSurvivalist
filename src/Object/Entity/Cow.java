@@ -1,4 +1,5 @@
 package Object.Entity;
+
 import Object.Player.Player;
 import Object.Items.StackableItem.Milk;
 

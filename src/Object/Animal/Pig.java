@@ -5,17 +5,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import Object.GamePanel;
+
+import Object.Controller.GamePanel;
+
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 
 public class Pig extends TameAnimal{
     Random random = new Random();
-     boolean readyGetItem;
-     private Rectangle upHitbox;
-     private Rectangle downHitbox;
-     private Rectangle leftHitbox;
-     private Rectangle rightHitbox;
+    boolean readyGetItem;
+    private Rectangle upHitbox;
+    private Rectangle downHitbox;
+    private Rectangle leftHitbox;
+    private Rectangle rightHitbox;
     public Pig(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -50,12 +52,11 @@ public class Pig extends TameAnimal{
             e.printStackTrace();
         }
     }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
         do{
-
-          
             int random = this.random.nextInt(4);
     
             switch(random) {
@@ -65,13 +66,13 @@ public class Pig extends TameAnimal{
                 case 3: newDirection = "right"; break;
                
             }
-        }while(newDirection.equals(oldDirection));
+        } while (newDirection.equals(oldDirection));
         this.direction = newDirection;
         this.actionMoveDelay = this.random.nextInt(91) + 30;
         gp.player.collisionOn = false;
     }
     private int actionMoveCounter = 0;
-    private  int actionMoveDelay;
+    private int actionMoveDelay;
     private int speed = 8; 
     @Override
     public void update() {
@@ -92,8 +93,8 @@ public class Pig extends TameAnimal{
                 solidArea = rightHitbox;
                 break;
         }
+
         collisionOn = false;
-        
         gp.cCheck.animalCheckTile(this);     // Check collision dengan tile
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
         gp.cCheck.checkPlayer(this);        // Check collision dengan player
@@ -112,7 +113,7 @@ public class Pig extends TameAnimal{
                 setRandomDirection();
                 actionMoveCounter = 0;
             }
-        }else {
+        } else {
           
             String newDirection;
             String oldDirection = this.direction;
@@ -133,10 +134,7 @@ public class Pig extends TameAnimal{
                 case "right": worldX += speed; break;
             }
             actionMoveCounter++;
-           
-            
         }
-
        
         spriteCounter++;
         if(spriteCounter > 0) {
@@ -144,13 +142,10 @@ public class Pig extends TameAnimal{
             if(spriteNum > 4) {
                 spriteNum = 1;
             }
-           
             spriteCounter = 0;
         }
-
-       
-      
     }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         
@@ -191,9 +186,7 @@ public class Pig extends TameAnimal{
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE*3, gp.TILE_SIZE*3, null);
         }
     }
-  
-   
-    
+
     public Pig breeding(Pig pasangan, GamePanel gp) {
         if (readyBreeding) {
             if (pasangan.isReadyBreeding()) {
@@ -211,8 +204,6 @@ public class Pig extends TameAnimal{
             return null;
         }
     }
-
-
 
     // public Pig(String name, int x, int y, String gender) {
     //     super(name, x, y, gender);

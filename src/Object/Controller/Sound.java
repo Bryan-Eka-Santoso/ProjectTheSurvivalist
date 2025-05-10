@@ -1,4 +1,4 @@
-package Object;
+package Object.Controller;
 
 import java.io.File;
 import java.net.URL;
@@ -38,7 +38,7 @@ public class Sound {
             System.out.println("Sukses load clip!");
         } catch (Exception e) {
             System.out.println("Gagal load clip:");
-            e.printStackTrace(); // TAMPILKAN error-nya!
+            e.printStackTrace(); // Menampilkan error
         }
     }
 

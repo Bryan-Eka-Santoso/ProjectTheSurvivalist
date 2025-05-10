@@ -23,5 +23,4 @@ public class Wood extends Material {
             e.printStackTrace();
         }
     }
-    
 }

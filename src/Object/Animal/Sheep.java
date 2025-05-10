@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
-import Object.GamePanel;
+
+import Object.Controller.GamePanel;
 import Object.Items.StackableItem.Wool;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
@@ -53,12 +54,11 @@ public class Sheep extends TameAnimal {
             e.printStackTrace();
         }
     }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
         do{
-
-          
             int random = this.random.nextInt(4);
             switch(random) {
                 case 0: newDirection = "up"; break;
@@ -67,13 +67,14 @@ public class Sheep extends TameAnimal {
                 case 3: newDirection = "right"; break;
                
             }
-        }while(newDirection.equals(oldDirection));
+        } while (newDirection.equals(oldDirection));
         this.direction = newDirection;
         this.actionMoveDelay = this.random.nextInt(91) + 30;
         gp.player.collisionOn = false;
     }
+
     private int actionMoveCounter = 0;
-    private  int actionMoveDelay;
+    private int actionMoveDelay;
     private int speed = 8; 
     @Override
     public void update() {
@@ -94,8 +95,8 @@ public class Sheep extends TameAnimal {
                 solidArea = rightHitbox;
                 break;
         }
+
         collisionOn = false;
-        
         gp.cCheck.animalCheckTile(this);     // Check collision dengan tile
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
         gp.cCheck.checkPlayer(this);        // Check collision dengan player
@@ -114,8 +115,7 @@ public class Sheep extends TameAnimal {
                 setRandomDirection();
                 actionMoveCounter = 0;
             }
-        }else {
-          
+        } else {
             String newDirection;
             String oldDirection = this.direction;
 
@@ -135,11 +135,8 @@ public class Sheep extends TameAnimal {
                 case "right": worldX += speed; break;
             }
             actionMoveCounter++;
-           
-            
         }
 
-       
         spriteCounter++;
         if(spriteCounter > 0) {
             spriteNum++;
@@ -149,10 +146,8 @@ public class Sheep extends TameAnimal {
            
             spriteCounter = 0;
         }
-
-       
-      
     }
+
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         

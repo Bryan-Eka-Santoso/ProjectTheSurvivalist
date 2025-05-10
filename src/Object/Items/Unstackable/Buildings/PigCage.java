@@ -29,6 +29,7 @@
 //         System.out.println("Kandang is full! Cannot add more pigs.");
 //         return false;
 //     }
+
 //     public void interact(Player player, Island island) {
 //         System.out.println("\nKandang Status:");
 //         System.out.println("Current pigs: " + getCurrentCapacity() + "/" + MAX_CAPACITY);
@@ -58,9 +59,11 @@
 //             }
 //         }
 //     }
+
 //     private void handleGetItem(Player player) {
 //        System.out.println("tidak menghasilakn apapun");//mboh babi ngehasilno opo
 //     }
+
 //    public void listpigs() {
 //         if (pigsInCage.isEmpty()) {
 //             System.out.println("No pigs in kandang!");
@@ -71,6 +74,7 @@
 //             System.out.println((i + 1) + ". " + pigsInCage.get(i).getName());
 //         }
 //     }
+
 //     public void handleBreeding(Island island) {
 //         if (pigsInCage.size() < 2) {
 //             System.out.println("Need at least 2 pigs to breed!");

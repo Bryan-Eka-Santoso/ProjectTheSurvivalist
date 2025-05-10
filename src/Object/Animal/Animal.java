@@ -4,14 +4,14 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import Object.GamePanel;
+import Object.Controller.GamePanel;
 
 public abstract class Animal {
     public String name, direction;
     public int worldX, worldY, speed;
-    public BufferedImage up1, up2,up3,up4 ,down1, down2,down3,down4, left1, left2,left3,left4, right1, right2,right3,right4;
+    public BufferedImage up1, up2, up3, up4, down1, down2, down3, down4, left1, left2, left3, left4, right1, right2, right3, right4;
     public int spriteCounter = 0;
-        public int spriteNum = 1;
+    public int spriteNum = 1;
     public Rectangle solidArea;
     public int solidAreaDefaultX;
     public int solidAreaDefaultY;
@@ -96,7 +96,7 @@ public abstract class Animal {
             && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
-                
+
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
         }
     }    

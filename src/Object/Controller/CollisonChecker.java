@@ -1,4 +1,4 @@
-package Object;
+package Object.Controller;
 import java.awt.Rectangle;
 import Object.Animal.Animal;
 import Object.Player.Player;

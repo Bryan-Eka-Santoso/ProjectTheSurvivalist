@@ -4,9 +4,9 @@ public class Tiger extends Animal {
     // private String name;
     public int x, y, radius;
 
-    public Tiger(String name, int x, int y,String gender) {
+    public Tiger(String name, int x, int y, String gender) {
         // this.name = name;
-       super(name, x, y,gender);
+        super(name, x, y,gender);
         radius = 5; // Default radius for tiger
     }
 
@@ -36,6 +36,5 @@ public class Tiger extends Animal {
     //     } else {
     //         return false;
     //     }
-    // }
-    
+    // } 
 } 
