@@ -34,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int WORLD_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     EnvironmentManager eManager = new EnvironmentManager(this);
     KeyHandler keyH = new KeyHandler(this);
