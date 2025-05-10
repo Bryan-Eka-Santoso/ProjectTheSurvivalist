@@ -90,10 +90,62 @@ public class GamePanel extends JPanel implements Runnable {
         
         spawnAnimal("pig", 5, usedPositions);
     }
-
-    private void spawnAnimal(String type, int count, ArrayList<Point> usedPositions) {
-      
+private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
+    int attempts = 0;
+    int maxAttempts = 1000; // Prevent infinite loop
+    int spawnedCount = 0;
+    
+    int validTiles = 18;
+    
+    while (spawnedCount < count && attempts < maxAttempts) {
+       
+        int x = (int)(Math.random() * (MAX_WORLD_COL -2));
+        int y = (int)(Math.random() * (MAX_WORLD_ROW -2));
+        Point pos = new Point(x, y);
+        
+        // Check if position is already used
+        if (usedPositions.contains(pos)) {
+            attempts++;
+            continue;
+        }
+        
+        // Check if tile is grass
+        int tileNum = tileM.mapTile[x][y];
+        boolean isValidTile = false;
+        
+        if (tileNum == validTiles) {
+            isValidTile = true;
+        }
+        
+        
+        if (!isValidTile) {
+            attempts++;
+            continue;
+        }
+        
+        // Spawn the animal based on type
+        switch (animalType.toLowerCase()) {
+            case "chicken":
+                animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
+                break;
+            case "cow":
+                animals.add(new Cow("Cow", x * TILE_SIZE, y * TILE_SIZE, this));
+                break;
+            case "sheep":
+                animals.add(new Sheep("Sheep", x * TILE_SIZE, y * TILE_SIZE, this));
+                break;
+            case "pig":
+                animals.add(new Pig("Pig", x * TILE_SIZE, y * TILE_SIZE, this));
+                break;
+        }
+        
+        // Mark position as used
+        usedPositions.add(pos);
+        spawnedCount++;
+        attempts = 0;
     }
+}
+
     
     public void addAnimal(int x, int y) {
         animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
