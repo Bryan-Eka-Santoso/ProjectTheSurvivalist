@@ -26,7 +26,7 @@ public class UseItem {
                 playSE(1);
                 selectedItem.currentStack--;
                 if (selectedItem.currentStack <= 0) {
-                    player.inventory.removeItem(selectedItem); // Remove item from inventory
+                    player.inventory.removeItem(selectedItem, 1); // Remove item from inventory
                 }
             } else if (selectedItem instanceof Axe) {
                 Axe axe = (Axe) selectedItem;

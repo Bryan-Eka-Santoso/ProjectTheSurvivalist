@@ -66,11 +66,11 @@ public class Inventory {
         return false;
     }
 
-    public void removeItem(Item selecItem) {
+    public void removeItem(Item selecItem, int amount) {
         for (int i = 0; i < slots.length; i++) {
             if (slots[i] != null && slots[i].equals(selecItem)) {
                 if (slots[i].currentStack > 1) {
-                    slots[i].currentStack -= selecItem.currentStack;
+                    slots[i].currentStack -= amount;
                     System.out.println("Removed one " + selecItem.name + " from inventory.");
                 } 
                 if (slots[i].currentStack <= 1) {

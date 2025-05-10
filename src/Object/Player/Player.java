@@ -7,7 +7,7 @@ import Object.Controller.GamePanel;
 import Object.Controller.ItemDrop;
 import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
-
+import Object.Items.StackableItem.Stackable;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -272,11 +272,37 @@ public class Player {
         interactObj.useItem(selectedItem, this);
     }
 
+    public void pickUpItem(Item selectedItem) {
+        if (selectedItem != null) {
+            if (selectedItem.currentStack > 0) {
+                if (selectedItem instanceof Stackable) {
+                    Item itemToAdd = selectedItem.clone();
+                    if (itemToAdd.currentStack > itemToAdd.maxStack) {
+                        itemToAdd.currentStack = itemToAdd.maxStack;
+                        selectedItem.currentStack -= itemToAdd.maxStack;
+                    } else {
+                        gp.droppedItems.remove(gp.player.droppedItem);
+                    }
+                    inventory.addItems(itemToAdd);
+                } else {
+                    System.out.println("Picked up " + selectedItem.name);
+                    inventory.addItems(selectedItem.clone());
+                    selectedItem.currentStack = 0;
+                    gp.droppedItems.remove(gp.player.droppedItem);
+                }
+            } else {
+                System.out.println("No items to pick up.");
+            }
+        } else {
+            System.out.println("No item selected.");
+        }
+    }
+
     public void dropItem(Item selectedItem){
         // Add to dropped Item list
         // Item berkurang dari inventory
         gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
-        gp.player.inventory.removeItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
+        gp.player.inventory.removeItem(gp.player.inventory.slots[gp.ui.selectedIndex], gp.player.inventory.slots[gp.ui.selectedIndex].currentStack);
     }
 
     public String displayStats(Player player) {
