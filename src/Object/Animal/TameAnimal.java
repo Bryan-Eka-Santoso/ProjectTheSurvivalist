@@ -1,13 +1,27 @@
 package Object.Animal;
 
 import Object.Controller.GamePanel;
-
+import java.awt.image.BufferedImage;
 public class TameAnimal extends Animal {
     String name;
     int x,y;
     boolean isGrab,inCage;
     boolean readyBreeding;
     public String direction;
+    int grabOffsetX = 0;
+    int grabOffsetY = 0;
+    int width;
+    int height;
+    
+    public TameAnimal(String name, int x, int y, int speed, String direction, GamePanel gp) {
+        super(name, x, y, speed, direction, gp);
+        this.isGrab = false;
+        this.inCage = false;
+        this.width = 0;
+        this.height = 0;
+        this.readyBreeding = true;
+        
+    }
     
     public boolean isReadyBreeding() {
         return readyBreeding;
@@ -45,26 +59,52 @@ public class TameAnimal extends Animal {
     public void setInCage(boolean inCage) {
         this.inCage = inCage;
     }
-    public TameAnimal(String name, int x, int y, int speed, String direction, GamePanel gp) {
-        super(name, x, y, speed, direction, gp);
-        this.isGrab = false;
-        this.inCage = false;
-        this.readyBreeding = true;
-    }
     public void getItem(){
 
     }
     public void grab(){
         this.isGrab = true;
     }
-    public void unGrab(int x, int y, boolean inCages) {
+    public void unGrab() {
         this.isGrab = false;
-        this.x = x;
-        this.y = y;
-        this.inCage = inCages;
+        
     }
     public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
+    public int getWidth() {
+        return width;
+    }
+    public int getHeight() {
+        return height;
+    }
+    public int getGrabOffsetX() {
+        return grabOffsetX;
+    }
+    public int getGrabOffsetY() {
+        return grabOffsetY;
+    }
+      public BufferedImage getDirectionalImage() {
+        BufferedImage image = null;
+        switch (direction) {
+            case "up":
+                image = (spriteNum == 1) ? up1 : up2;
+                break;
+            case "down":
+                image = (spriteNum == 1) ? down1 : down2;
+                break;
+            case "left":
+                image = (spriteNum == 1) ? left1 : left2;
+                break;
+            case "right":
+                image = (spriteNum == 1) ? right1 : right2;
+                break;
+            default:
+                image = down1;
+        }
+        
+        return image;
+    }
+    
 }

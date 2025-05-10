@@ -18,6 +18,8 @@ public class Chicken extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
+    private static final int CHICKEN_WIDTH = 32;
+    private static final int CHICKEN_HEIGHT = 32;
    
     public Chicken(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
@@ -31,6 +33,8 @@ public class Chicken extends TameAnimal {
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         readyBreeding = true;
+        this.grabOffsetX = 0;
+        this.grabOffsetY = -10;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up2.png"));
@@ -52,7 +56,14 @@ public class Chicken extends TameAnimal {
             e.printStackTrace();
         }
     }
-
+    @Override
+    public int getWidth() {
+        return CHICKEN_WIDTH;
+    }
+    @Override
+    public int getHeight() {
+        return CHICKEN_HEIGHT;
+    }
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;

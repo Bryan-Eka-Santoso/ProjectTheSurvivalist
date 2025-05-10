@@ -20,6 +20,8 @@ public class Sheep extends TameAnimal {
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
     boolean readyGetItem;
+    private static final int SHEEP_WIDTH = 128;
+    private static final int SHEEP_HEIGHT = 128;
     public Sheep(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -31,6 +33,8 @@ public class Sheep extends TameAnimal {
         this.solidArea = downHitbox;
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
+        this.grabOffsetX = 0;
+        this.grabOffsetY = -40;
         readyBreeding = true;
         readyGetItem = true;
         try {
@@ -54,7 +58,14 @@ public class Sheep extends TameAnimal {
             e.printStackTrace();
         }
     }
-
+    @Override
+    public int getWidth() {
+        return SHEEP_WIDTH;
+    }
+    @Override
+    public int getHeight() {
+        return SHEEP_HEIGHT;
+    }
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
