@@ -4,10 +4,11 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Shape;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import Object.Items.Item;
 import Object.Items.StackableItem.*;
 
@@ -20,8 +21,10 @@ public class UI {
     int mouseY = 0;
     public int selectedIndex;
     int scrollY = 0; // scroll posisi saat ini
-    int maxScroll = 1000; // max scroll, nanti dihitung dari banyaknya data
+    int maxScroll = 5; // max scroll, nanti dihitung dari banyaknya data
     public int selectedRecipeIndex = 0; // <<<< tambah ini di UI kamu
+    public List<Rectangle> itemHitboxes = new ArrayList<>();
+    public List<Item> itemList = new ArrayList<>(); // to match index with the rectangle
 
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -115,28 +118,27 @@ public class UI {
         g2.setClip(frameX + 10, frameY + 10, frameWidth - 20, frameHeight - 20); 
     
         int contentX = frameX + 30;
-        int contentY = frameY + 40 - scrollY;
+        int contentY = frameY + 60 - scrollY;
     
+        g2.drawString("Items to craft: ", contentX, contentY);
+        contentY += 60; // Jarak antar teks
         for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
             List<Item> ingredients = entry.getKey();
             Item result = entry.getValue();
     
             g2.setColor(Color.WHITE);
-            g2.drawImage(result.img, contentX, contentY, gp.TILE_SIZE, gp.TILE_SIZE, null);
-            g2.drawString(result.name, contentX, contentY);
+            g2.drawImage(result.img, contentX, contentY - 25, 30, 30, null);
+            g2.drawString(String.valueOf(result.currentStack), contentX + 15, contentY);
+            g2.drawString(result.name, contentX + 50, contentY);
     
-            int ingredientY = contentY + 20;
-            for (Item ingredient : ingredients) {
-                g2.drawString(ingredient.name, contentX + 50, ingredientY);
-                ingredientY += 20;
-            }
-    
+            Rectangle hitbox = new Rectangle(contentX, contentY - 30, 200, 40); // Adjust width/height as needed
+            itemHitboxes.add(hitbox);
+            itemList.add(result);
+
             contentY += 60; // Jarak antar resep
         }
     
         g2.setClip(oldClip); // Kembalikan clip ke semula
-    
-        drawScrollBar(frameX + frameWidth - 20, frameY + 10, 10, frameHeight - 30);
     }
 
     public void drawScrollBar(int x, int y, int width, int height) {
@@ -163,7 +165,7 @@ public class UI {
     
     public void scrollDown() {
         scrollY += 20;
-        maxScroll = Math.max(0, (15 * 40) - 40);
+        maxScroll = gp.player.recipe.recipes.size() * 60;
         if (scrollY > maxScroll) scrollY = maxScroll;
     }
 

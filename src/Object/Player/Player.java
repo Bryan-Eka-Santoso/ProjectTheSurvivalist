@@ -302,7 +302,7 @@ public class Player {
         // Add to dropped Item list
         // Item berkurang dari inventory
         gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
-        gp.player.inventory.removeItem(gp.player.inventory.slots[gp.ui.selectedIndex], gp.player.inventory.slots[gp.ui.selectedIndex].currentStack);
+        gp.player.inventory.removeItem(selectedItem, selectedItem.currentStack);
     }
 
     public String displayStats(Player player) {

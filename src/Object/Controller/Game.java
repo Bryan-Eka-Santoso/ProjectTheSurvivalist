@@ -19,7 +19,7 @@ public class Game {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("The Surivalists");;
+        window.setTitle("The Surivalists");
 
         GamePanel gamePanel = new GamePanel();
         window.add(gamePanel);

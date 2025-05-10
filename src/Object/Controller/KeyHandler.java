@@ -1,9 +1,12 @@
 package Object.Controller;
 
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import Object.Items.Item;
 
 public class KeyHandler implements KeyListener, MouseListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
@@ -24,6 +27,18 @@ public class KeyHandler implements KeyListener, MouseListener {
             gp.ui.mouseX = e.getX();
             gp.ui.mouseY = e.getY();
         }
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+            gp.ui.mouseX = e.getX();
+            gp.ui.mouseY = e.getY();
+            for (int i = 0; i < gp.ui.itemHitboxes.size(); i++) {
+                Rectangle r = gp.ui.itemHitboxes.get(i);
+                if (r.contains(gp.ui.mouseX, gp.ui.mouseY)) {
+                    Item clickedItem = gp.ui.itemList.get(i);
+                    System.out.println("Clicked on item: " + clickedItem.name);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -41,7 +56,7 @@ public class KeyHandler implements KeyListener, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+    
     }
 
     @Override

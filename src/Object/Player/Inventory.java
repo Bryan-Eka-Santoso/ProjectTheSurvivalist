@@ -27,7 +27,6 @@ public class Inventory {
                     continue;
                 }
             }
-            
             if (slots[i] == null && newItem.currentStack > 0) {
                 if (newItem.currentStack > newItem.maxStack) {
                     newItem.currentStack -= newItem.maxStack;

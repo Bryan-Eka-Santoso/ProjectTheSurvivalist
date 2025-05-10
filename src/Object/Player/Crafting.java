@@ -9,19 +9,22 @@ public class Crafting {
 
     public Crafting() {
         List<Item> recipe1 = Arrays.asList(new Material("Wood", 2));
-        recipes.put(recipe1, new Sword("Sword", 20, 30));
+        recipes.put(recipe1, new Sword("Sword1", 20, 30));
 
         List<Item> recipe2 = Arrays.asList(new Material("Wood", 2));
-        recipes.put(recipe2, new Sword("Sword", 20, 30));
+        recipes.put(recipe2, new Sword("Sword2", 20, 30));
 
         List<Item> recipe3 = Arrays.asList(new Material("Wood", 2));
-        recipes.put(recipe3, new Sword("Sword", 20, 30));
+        recipes.put(recipe3, new Sword("Sword3", 20, 30));
 
         List<Item> recipe4 = Arrays.asList(new Material("Wood", 2));
-        recipes.put(recipe4, new Sword("Sword", 20, 30));
+        recipes.put(recipe4, new Sword("Sword4", 20, 30));
 
         List<Item> recipe5 = Arrays.asList(new Material("Wood", 2));
-        recipes.put(recipe5, new Sword("Sword", 20, 30));
+        recipes.put(recipe5, new Sword("Sword5", 20, 30));
+
+        List<Item> recipe6 = Arrays.asList(new Material("Wood", 2));
+        recipes.put(recipe6, new Bread(5));
     }
     
     public void craft(Player player, String itemName) {
