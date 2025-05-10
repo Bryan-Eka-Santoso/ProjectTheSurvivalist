@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 public class TileManager {
     GamePanel gp;
     Tile[] tile;
-    int mapTile[][];
+    public int mapTile[][];
 
     public TileManager(GamePanel gp) {
         this.gp= gp;

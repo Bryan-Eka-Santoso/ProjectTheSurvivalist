@@ -199,6 +199,9 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.player.droppedItem = -1;
             }
         }
+        if (code == KeyEvent.VK_G){
+            gp.player.handleGrabAction(gp.player.inventory.getSelectedItem());
+        }
     }
 
     @Override
