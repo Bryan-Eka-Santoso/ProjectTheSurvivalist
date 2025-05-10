@@ -1,7 +1,6 @@
 package Object.Player;
 
 import Object.Items.Item;
-import Object.Items.StackableItem.Torch;
 import Object.Animal.Animal;
 import Object.Animal.TameAnimal;
 import Object.Controller.GamePanel;
@@ -30,8 +29,6 @@ public class Player {
     public TameAnimal grabbedAnimal;
     public Crafting recipe;
     public int solidAreaDefaultX, solidAreaDefaultY; 
-    public Torch torch;
-    // ArrayList<Kandang> kandang= new ArrayList<>(); // List of cages owned by the player
     public boolean lightUpdated = true;
     public Rectangle solidArea;
     public boolean collisionOn = false;
@@ -39,7 +36,7 @@ public class Player {
     public UseItem interactObj; // Object to handle item interactions
     public final int SCREEN_Y;
     public final int SCREEN_X;
-    public int plantIndex, animalIndex, droppedItem; // Index of the selected plant in the inventory
+    public int plantIndex, animalIndex, droppedItem, buildingIndex; // Index of the selected plant in the inventory
     public GamePanel gp;
     public KeyHandler keyH;
 
@@ -57,7 +54,6 @@ public class Player {
         this.gp = gp;
         this.keyH = keyH;
         this.grabbedAnimal= null; 
-        // this.kandang = new ArrayList<>(); 
         this.direction = "down";
         this.solidArea = new Rectangle(0, 0, 17, 25);
         solidAreaX = solidArea.x;
@@ -116,6 +112,7 @@ public class Player {
             plantIndex = gp.cCheck.checkPlant(this, true);
             animalIndex = gp.cCheck.checkAnimal(this, true);
             droppedItem = gp.cCheck.checkItemDrop(this, true);
+            buildingIndex = gp.cCheck.checkBuildings(this, true);
             
             if (!collisionOn) {
                 switch (direction) {

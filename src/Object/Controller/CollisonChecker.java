@@ -130,6 +130,25 @@ public class CollisonChecker {
         }
     }
 
+    public void animalCheckBuildings(Animal animal) {
+        for (int i = 0; i < gp.buildings.size(); i++) {
+            animal.solidArea.x = animal.worldX + animal.solidArea.x;
+            animal.solidArea.y = animal.worldY + animal.solidArea.y;
+            gp.buildings.get(i).solidArea.x = gp.buildings.get(i).worldX + gp.buildings.get(i).solidArea.x;
+            gp.buildings.get(i).solidArea.y = gp.buildings.get(i).worldY + gp.buildings.get(i).solidArea.y;
+
+            if (animal.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                if (animal instanceof Animal) {
+                    animal.collisionOn = true;
+                }
+            }
+            animal.solidArea.x = animal.solidAreaDefaultX;
+            animal.solidArea.y = animal.solidAreaDefaultY;
+            gp.buildings.get(i).solidArea.x = gp.buildings.get(i).solidAreaDefaultX;
+            gp.buildings.get(i).solidArea.y = gp.buildings.get(i).solidAreaDefaultY;
+        }
+    }
+
     public int checkPlant(Player player, boolean collison) {
         int index = -1; // Default value if no collision is detected
         for (int i = 0; i < gp.plants.size(); i++) {
@@ -172,6 +191,53 @@ public class CollisonChecker {
                 player.solidArea.y = player.solidAreaDefaultY;
                 gp.plants.get(i).solidArea.x = gp.plants.get(i).solidAreaDefaultX;
                 gp.plants.get(i).solidArea.y = gp.plants.get(i).solidAreaDefaultY;
+
+            }
+        return index;
+    }
+
+    public int checkBuildings(Player player, boolean collison) {
+        int index = -1; // Default value if no collision is detected
+        for (int i = 0; i < gp.buildings.size(); i++) {
+                player.solidArea.x = player.worldX + player.solidArea.x;
+                player.solidArea.y = player.worldY + player.solidArea.y;
+                gp.buildings.get(i).solidArea.x = gp.buildings.get(i).worldX + gp.buildings.get(i).solidArea.x;
+                gp.buildings.get(i).solidArea.y = gp.buildings.get(i).worldY + gp.buildings.get(i).solidArea.y;
+                
+                switch (player.direction) {
+                    case "up":
+                        player.solidArea.y -= player.speed;
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                            index = i; 
+                            player.collisionOn = true; // Kalo item ini diapus aja
+                        }
+                        break;
+                    case "down":
+                        player.solidArea.y += player.speed;
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                            index = i; 
+                            player.collisionOn = true;
+                        }
+                        break;
+                    case "left":
+                        player.solidArea.x -= player.speed;
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                            index = i; 
+                            player.collisionOn = true;
+                        }
+                        break;
+                    case "right":
+                        player.solidArea.x += player.speed;
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                            index = i; 
+                            player.collisionOn = true;
+                        }
+                        break;
+                }
+                player.solidArea.x = player.solidAreaDefaultX;
+                player.solidArea.y = player.solidAreaDefaultY;
+                gp.buildings.get(i).solidArea.x = gp.buildings.get(i).solidAreaDefaultX;
+                gp.buildings.get(i).solidArea.y = gp.buildings.get(i).solidAreaDefaultY;
 
             }
         return index;
