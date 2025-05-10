@@ -1,16 +1,20 @@
-package Object.Items.Unstackable.Buildings;
-import Object.Player.Inventory;
+// package Object.Items.Unstackable.Buildings;
 
-public class Chest extends Buildings {
-    Inventory inventory;
-    final int maxSize = 15; // Ukuran maksimum inventory chest
+// import Object.Controller.GamePanel;
+// import Object.Player.Inventory;
 
-    public Chest(int x, int y) {
-        super("Chest", x, y);
-        inventory = new Inventory(maxSize);
-    }   
+// public class Chest extends Buildings {
+//     Inventory inventory;
+//     final int maxSize = 15; // Ukuran maksimum inventory chest
+//     GamePanel gp;
 
-    public void showInventory() {
-        System.out.println("Chest Inventory:");
-    }
-}
+//     // public Chest(int x, int y, GamePanel gp) {
+//     //     super("Chest");
+//     //     inventory = new Inventory(maxSize, gp);
+//     //     this.gp = gp;
+//     // }   
+
+//     public void showInventory() {
+//         System.out.println("Chest Inventory:");
+//     }
+// }

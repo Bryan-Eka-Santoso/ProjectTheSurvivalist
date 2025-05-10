@@ -1,12 +1,12 @@
-package Object.Player;
+package Object.Controller;
 
-import Object.Controller.Sound;
 import Object.Items.Item;
 import Object.Items.StackableItem.Food;
 import Object.Items.StackableItem.Material;
 import Object.Items.Unstackable.Axe;
 import Object.Items.Unstackable.Sword;
 import Object.Items.Unstackable.Buildings.Buildings;
+import Object.Player.Player;
 
 public class UseItem {
 
@@ -24,7 +24,10 @@ public class UseItem {
                 System.out.println("Using food: " + food.name);
                 food.eat(player); // 
                 playSE(1);
-                player.inventory.removeItem(selectedItem); 
+                selectedItem.currentStack--;
+                if (selectedItem.currentStack <= 0) {
+                    player.inventory.removeItem(selectedItem, 1); // Remove item from inventory
+                }
             } else if (selectedItem instanceof Axe) {
                 Axe axe = (Axe) selectedItem;
                 if (player.plantIndex != -1) {

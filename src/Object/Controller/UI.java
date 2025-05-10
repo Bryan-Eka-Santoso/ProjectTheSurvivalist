@@ -4,7 +4,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Shape;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import Object.Items.Item;
 import Object.Items.StackableItem.*;
 
 public class UI {
@@ -16,8 +21,10 @@ public class UI {
     int mouseY = 0;
     public int selectedIndex;
     int scrollY = 0; // scroll posisi saat ini
-    int maxScroll = 1000; // max scroll, nanti dihitung dari banyaknya data
+    int maxScroll = 5; // max scroll, nanti dihitung dari banyaknya data
     public int selectedRecipeIndex = 0; // <<<< tambah ini di UI kamu
+    public List<Rectangle> itemHitboxes = new ArrayList<>();
+    public List<Item> itemList = new ArrayList<>(); // to match index with the rectangle
 
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -40,7 +47,7 @@ public class UI {
             drawInventory();
         }
         if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
-            drawPlusMinus();
+            PlayerCraftMenu();
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE){
             boxAmount();
@@ -99,8 +106,9 @@ public class UI {
             System.out.println("Mouse is over the button!");
         } 
     }
+
     public void PlayerCraftMenu() {
-        int frameX = gp.TILE_SIZE * 5;
+        int frameX = gp.TILE_SIZE * 6;
         int frameY = gp.TILE_SIZE * 4;
         int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 7;
@@ -111,35 +119,52 @@ public class UI {
         g2.setClip(frameX + 10, frameY + 10, frameWidth - 20, frameHeight - 20); 
     
         int contentX = frameX + 30;
-        int contentY = frameY + 40 - scrollY;
+        int contentY = frameY + 60 - scrollY;
     
-        for (int i = 0; i < 20; i++) {
-            int itemY = contentY + i * 40;
+        g2.drawString("Items to craft:", contentX, contentY);
+        g2.drawString("Materials:", frameWidth - sentenceLength("Materials:"), contentY);
+        contentY += 60;
+        for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
+            List<Item> ingredients = entry.getKey();
+            Item result = entry.getValue();
+    
+            g2.setColor(Color.WHITE);
+            g2.drawImage(result.img, contentX, contentY - 25, 30, 30, null);
+            Font font = new Font("Arial", Font.BOLD, 18); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
+            g2.setFont(font);
+            g2.drawString(String.valueOf(result.currentStack), contentX + 20, contentY + 5);
+            g2.drawString(result.name, contentX + 50, contentY);
 
-            if (i == selectedRecipeIndex) {
-                g2.setColor(new Color(100, 100, 255)); // Biru transparan
-                g2.fillRoundRect(contentX - 10, itemY - 25, frameWidth - 50, 35, 10, 10);
+            int drawX = frameWidth - sentenceLength("Materials:") + 30;
+            int drawPictureX = frameWidth - sentenceLength("Materials:") + 5;
+            for (Item ingredient : ingredients) {
+                g2.drawImage(ingredient.img, drawPictureX, contentY - 25, 30, 30, null);
+                Font font2 = new Font("Arial", Font.BOLD, 18);
+                g2.setFont(font2);
+                g2.drawString(String.valueOf(ingredient.currentStack), drawX, contentY + 5);
+                drawX += 50;
+                drawPictureX += 50;
             }
     
+            Rectangle hitbox = new Rectangle(contentX, contentY - 30, 200, 30);
+            itemHitboxes.add(hitbox);
+            itemList.add(result);
 
-            g2.setColor(Color.white);
-            g2.drawString("Hello " + i, contentX, contentY + i * 40);
+            contentY += 60;
         }
     
-        g2.setClip(oldClip); // Kembalikan clip ke semula
-    
-        drawScrollBar(frameX + frameWidth - 20, frameY + 10, 10, frameHeight - 30);
+        g2.setClip(oldClip);
     }
 
     public void drawScrollBar(int x, int y, int width, int height) {
         g2.setColor(Color.GRAY);
         g2.fillRoundRect(x, y, width, height, 10, 10);
     
-        int totalContentHeight = 120 * 40; // total tinggi konten
-        int visibleHeight = height; // tinggi area kotak (frame)
+        int totalContentHeight = 120 * 40;
+        int visibleHeight = height;
         int thumbHeight = (int) ((float) visibleHeight / totalContentHeight * visibleHeight);
     
-        if (thumbHeight < 30) thumbHeight = 30; // Minimal ukuran thumb biar kelihatan
+        if (thumbHeight < 30) thumbHeight = 30;
     
         int maxThumbPos = height - thumbHeight;
         int thumbY = y + (int) ((float) scrollY / (totalContentHeight - visibleHeight) * maxThumbPos);
@@ -155,7 +180,7 @@ public class UI {
     
     public void scrollDown() {
         scrollY += 20;
-        maxScroll = Math.max(0, (15 * 40) - 40);
+        maxScroll = gp.player.recipe.recipes.size() * 60;
         if (scrollY > maxScroll) scrollY = maxScroll;
     }
 

@@ -1,9 +1,10 @@
 package Object.Controller;
+
 import java.awt.Rectangle;
 import Object.Animal.Animal;
 import Object.Player.Player;
+
 public class CollisonChecker {
-    
     GamePanel gp;
 
     public CollisonChecker (GamePanel gp) {
@@ -83,7 +84,6 @@ public class CollisonChecker {
             return;
         }
     
-        // Check each corner for valid tile
         int[] validTiles = {8, 9, 10, 11, 12, 13, 14, 15, 18, 20};
         
         int tileNum1 = gp.tileM.mapTile[entityLeftCol][entityTopRow];     // Top left
@@ -176,6 +176,46 @@ public class CollisonChecker {
             }
         return index;
     }
+
+    public int checkItemDrop(Player player, boolean canTakeItem) {
+        int index = -1; // Default value if no collision is detected
+        for (int i = 0; i < gp.droppedItems.size(); i++) {
+                player.solidArea.x = player.worldX + player.solidArea.x;
+                player.solidArea.y = player.worldY + player.solidArea.y;
+                gp.droppedItems.get(i).solidArea.x = gp.droppedItems.get(i).worldX + gp.droppedItems.get(i).solidArea.x;
+                gp.droppedItems.get(i).solidArea.y = gp.droppedItems.get(i).worldY + gp.droppedItems.get(i).solidArea.y;
+                
+                switch (player.direction) {
+                    case "up":
+                        if (player.solidArea.intersects(gp.droppedItems.get(i).solidArea)) {
+                            index = i; 
+                        }
+                        break;
+                    case "down":
+                        if (player.solidArea.intersects(gp.droppedItems.get(i).solidArea)) {
+                            index = i; 
+                        }
+                        break;
+                    case "left":
+                        if (player.solidArea.intersects(gp.droppedItems.get(i).solidArea)) {
+                            index = i; 
+                        }
+                        break;
+                    case "right":
+                        if (player.solidArea.intersects(gp.droppedItems.get(i).solidArea)) {
+                            index = i; 
+                        }
+                        break;
+                }
+                player.solidArea.x = player.solidAreaDefaultX;
+                player.solidArea.y = player.solidAreaDefaultY;
+                gp.droppedItems.get(i).solidArea.x = gp.droppedItems.get(i).solidAreaDefaultX;
+                gp.droppedItems.get(i).solidArea.y = gp.droppedItems.get(i).solidAreaDefaultY;
+
+            }
+        return index;
+    }
+
     public void checkPlayer(Animal animal) {
         // Get hitbox areas
         animal.solidArea.x = animal.worldX + animal.solidArea.x;
@@ -199,15 +239,15 @@ public class CollisonChecker {
         int nextX = animal.worldX;
         int nextY = animal.worldY;
         
-        switch(animal.direction) {
+        switch (animal.direction) {
             case "up": nextY -= animal.speed; break;
             case "down": nextY += animal.speed; break;
             case "left": nextX -= animal.speed; break;
             case "right": nextX += animal.speed; break;
         }
     
-        for(Animal otherAnimal : gp.animals) {
-            if(animal == otherAnimal) continue;
+        for (Animal otherAnimal : gp.animals) {
+            if (animal == otherAnimal) continue;
             
             // Create predicted collision box
             Rectangle predictedArea = new Rectangle(
@@ -226,11 +266,11 @@ public class CollisonChecker {
             );
             
             // Check collision with predicted position
-            if(predictedArea.intersects(otherArea)) {
+            if (predictedArea.intersects(otherArea)) {
                 animal.collisionOn = true;
                 // Add separation force
                 int pushDistance = 2;
-                switch(animal.direction) {
+                switch (animal.direction) {
                     case "up": 
                         animal.worldY += pushDistance;
                         otherAnimal.worldY -= pushDistance;
@@ -254,6 +294,7 @@ public class CollisonChecker {
             }
         }
     }
+
     private String getOppositeDirection(String direction) {
         switch(direction) {
             case "up": return "down";
@@ -263,6 +304,7 @@ public class CollisonChecker {
             default: return "down";
         }
     }
+
     public int checkAnimal(Player player, boolean collison) {
         int index = -1; // Default value if no collision is detected
         for (int i = 0; i < gp.animals.size(); i++) {

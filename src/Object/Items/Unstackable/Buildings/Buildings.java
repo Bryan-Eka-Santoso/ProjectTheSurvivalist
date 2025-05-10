@@ -1,44 +1,39 @@
 package Object.Items.Unstackable.Buildings;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+
+import Object.Controller.GamePanel;
 import Object.Items.Unstackable.Unstackable;
 
 public class Buildings extends Unstackable {
-    private int x, y; // Koordinat posisi bangunan di dunia game
-    int width, height; // Ukuran bangunan (lebar dan tinggi)
+    public int worldX, worldY, solidAreaX, solidAreaY;
+    public GamePanel gp;
+    public BufferedImage image;
+    public Rectangle solidArea;
+    public int solidAreaDefaultX; 
+    public int solidAreaDefaultY;
 
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public Buildings(String name, int x, int y) {
+    public Buildings(String name, int x, int y, GamePanel gp, Rectangle solidArea) {
         super(name);
-        this.x = x; // Koordinat x bangunan
-        this.y = y; // Koordinat y bangunan
-        this.width = 1; // Default lebar bangunan
-        this.height = 1; // Default tinggi bangunan
+        this.worldX = x;
+        this.worldY = y;
+        this.gp = gp;
+        this.solidArea = solidArea;
+        this.solidAreaDefaultX = solidArea.x;
+        this.solidAreaDefaultY = solidArea.y;
     }
 
-    public String getName() {
-        return name;
-    }
+    public void draw(Graphics2D g2) {  // Bisa dipake utk dropped item
+        int screenX = worldX - gp.player.worldX + gp.player.SCREEN_X;
+        int screenY = worldY - gp.player.worldY + gp.player.SCREEN_Y;
 
-    public int getX() {
-        return x;
+        if (worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X 
+            && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
+            && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
+            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
+                
+            g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        }
     }
-
-    public int getY() {
-        return y;
-    }
-    
 }

@@ -19,6 +19,8 @@ public class Cow extends TameAnimal {
     private Rectangle rightHitbox;
     Random random = new Random();
     boolean readyGetItem;
+    private static final int COW_WIDTH = 128;
+    private static final int COW_HEIGHT = 128;
     public Cow(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -32,6 +34,8 @@ public class Cow extends TameAnimal {
         this.solidAreaDefaultY = solidArea.y;
         readyBreeding = true;
         readyGetItem = true;
+        this.grabOffsetX = 0;
+        this.grabOffsetY = -40;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up2.png"));
@@ -52,6 +56,14 @@ public class Cow extends TameAnimal {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public int getWidth() {
+        return COW_WIDTH;
+    }
+    @Override
+    public int getHeight() {
+        return COW_HEIGHT;
     }
     private void setRandomDirection() {
         String newDirection= null;

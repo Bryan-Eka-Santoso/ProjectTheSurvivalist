@@ -14,6 +14,8 @@ import Object.Environment.EnvironmentManager;
 import Object.Items.StackableItem.Bread;
 import Object.Animal.*;
 import Object.Items.StackableItem.Torch;
+import Object.Items.Unstackable.Buildings.*;
+import Object.Items.StackableItem.Wood;
 
 public class GamePanel extends JPanel implements Runnable {
 
@@ -32,7 +34,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int WORLD_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
-    TileManager tileM = new TileManager(this);
+    public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     EnvironmentManager eManager = new EnvironmentManager(this);
     KeyHandler keyH = new KeyHandler(this);
@@ -53,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
+    public ArrayList<Buildings> buildings = new ArrayList<>();
     
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -91,9 +94,62 @@ public class GamePanel extends JPanel implements Runnable {
         spawnAnimal("pig", 5, usedPositions);
     }
 
-    private void spawnAnimal(String type, int count, ArrayList<Point> usedPositions) {
-      
+private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
+    int attempts = 0;
+    int maxAttempts = 1000; // Prevent infinite loop
+    int spawnedCount = 0;
+    
+    int validTiles = 18;
+    
+    while (spawnedCount < count && attempts < maxAttempts) {
+       
+        int x = (int)(Math.random() * (MAX_WORLD_COL -2));
+        int y = (int)(Math.random() * (MAX_WORLD_ROW -2));
+        Point pos = new Point(x, y);
+        
+        // Check if position is already used
+        if (usedPositions.contains(pos)) {
+            attempts++;
+            continue;
+        }
+        
+        // Check if tile is grass
+        int tileNum = tileM.mapTile[x][y];
+        boolean isValidTile = false;
+        
+        if (tileNum == validTiles) {
+            isValidTile = true;
+        }
+        
+        
+        if (!isValidTile) {
+            attempts++;
+            continue;
+        }
+        
+        // Spawn the animal based on type
+        switch (animalType.toLowerCase()) {
+            case "chicken":
+                animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
+                break;
+            case "cow":
+                animals.add(new Cow("Cow", x * TILE_SIZE, y * TILE_SIZE, this));
+                break;
+            case "sheep":
+                animals.add(new Sheep("Sheep", x * TILE_SIZE, y * TILE_SIZE, this));
+                break;
+            case "pig":
+                animals.add(new Pig("Pig", x * TILE_SIZE, y * TILE_SIZE, this));
+                break;
+        }
+        
+        // Mark position as used
+        usedPositions.add(pos);
+        spawnedCount++;
+        attempts = 0;
     }
+}
+
     
     public void addAnimal(int x, int y) {
         animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
@@ -112,8 +168,9 @@ public class GamePanel extends JPanel implements Runnable {
         addAnimals();
         player.inventory.addItems(new Sword("Sword", 20, 30));
         player.inventory.addItems(new Torch(this));
-        player.inventory.addItems(new Bread(34));
         player.inventory.addItems(new Axe("Axe", 20, 30));
+        player.inventory.addItems(new Wood("Wood", 20, 30));
+        player.inventory.addItems(new Bread(400));
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -133,10 +190,11 @@ public class GamePanel extends JPanel implements Runnable {
             }
 
             if (currentTime - lastAnimalMoveTime >= interval) {
-                for (int i = 0; i < animals.size(); i++) {
-                    animals.get(i).update();
+                if (gameState != PAUSE_STATE) {
+                    for (int i = 0; i < animals.size(); i++) {
+                        animals.get(i).update();
+                    }
                 }
-                
                 lastAnimalMoveTime = currentTime;
             }
 
@@ -148,7 +206,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (gameState == PLAY_STATE) {
+        if (gameState != PAUSE_STATE) {
             player.update();
         } 
     }

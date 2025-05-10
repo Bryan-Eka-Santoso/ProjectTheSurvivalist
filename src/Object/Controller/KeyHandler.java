@@ -1,9 +1,12 @@
 package Object.Controller;
 
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import Object.Items.Item;
 
 public class KeyHandler implements KeyListener, MouseListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
@@ -24,6 +27,19 @@ public class KeyHandler implements KeyListener, MouseListener {
             gp.ui.mouseX = e.getX();
             gp.ui.mouseY = e.getY();
         }
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+            gp.ui.mouseX = e.getX();
+            gp.ui.mouseY = e.getY();
+            for (int i = 0; i < gp.ui.itemHitboxes.size(); i++) {
+                Rectangle r = gp.ui.itemHitboxes.get(i);
+                if (r.contains(gp.ui.mouseX, gp.ui.mouseY)) {
+                    Item clickedItem = gp.ui.itemList.get(i);
+                    gp.player.recipe.craft(gp.player, clickedItem.name);
+                    System.out.println("Clicked on item: " + clickedItem.name);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
@@ -41,7 +57,7 @@ public class KeyHandler implements KeyListener, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-        
+    
     }
 
     @Override
@@ -130,12 +146,15 @@ public class KeyHandler implements KeyListener, MouseListener {
             } 
             gp.player.lightUpdated = true;
         }
-        if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
-            if (gp.gameState != gp.INVENTORY_STATE){ // Ada bug kalo game state ny di inventory
-                gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
-                playSE(2);
-                gp.ui.selectedIndex = gp.ui.slotCol;
-                gp.player.lightUpdated = true;
+        if(gp.player.grabbedAnimal == null){
+
+            if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
+                if (gp.gameState != gp.INVENTORY_STATE){ // Ada bug kalo game state ny di inventory
+                    gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
+                    playSE(2);
+                    gp.ui.selectedIndex = gp.ui.slotCol;
+                    gp.player.lightUpdated = true;
+                }
             }
         }
         if (code == KeyEvent.VK_R) {
@@ -177,6 +196,15 @@ public class KeyHandler implements KeyListener, MouseListener {
             if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
                 gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
             }
+        }
+        if (code == KeyEvent.VK_P) {
+            if (gp.player.droppedItem != -1) {
+                gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
+                gp.player.droppedItem = -1;
+            }
+        }
+        if (code == KeyEvent.VK_G){
+            gp.player.handleGrabAction(gp.player.inventory.getSelectedItem());
         }
     }
 
