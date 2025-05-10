@@ -18,6 +18,8 @@ public class Pig extends TameAnimal{
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
+    private static final int PIG_WIDTH = 128;
+    private static final int PIG_HEIGHT = 128;
     public Pig(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -31,6 +33,8 @@ public class Pig extends TameAnimal{
         this.solidAreaDefaultY = solidArea.y;
         readyBreeding = true;
         readyGetItem = true;
+        this.grabOffsetX = 0;
+        this.grabOffsetY = -40;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/up2.png"));
@@ -52,7 +56,14 @@ public class Pig extends TameAnimal{
             e.printStackTrace();
         }
     }
-
+    @Override
+    public int getWidth() {
+        return PIG_WIDTH;
+    }
+    @Override
+    public int getHeight() {
+        return PIG_HEIGHT;
+    }
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;

@@ -124,11 +124,7 @@ public class Player {
                     case "right": worldX += speed; break;
                 }
             }
-            if (grabbedAnimal != null) {
-                grabbedAnimal.worldX = worldX;
-                grabbedAnimal.worldY = worldY;
-            }
-            
+            updateGrabbedAnimalPosition();
             spriteCounter++;
             if (spriteCounter > 10) {
                 if (spriteNum == 1) {
@@ -140,7 +136,17 @@ public class Player {
             }
         }
     }
-
+    private void updateGrabbedAnimalPosition() {
+        if (grabbedAnimal != null) {
+           
+            grabbedAnimal.worldX = worldX;
+            grabbedAnimal.worldY = worldY;
+           
+            grabbedAnimal.direction = direction;
+           
+            grabbedAnimal.spriteNum = spriteNum;
+        }
+    }
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         switch (direction) {
@@ -164,7 +170,14 @@ public class Player {
 
         g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
         if (grabbedAnimal != null) {
-            grabbedAnimal.draw(g2);
+            
+            BufferedImage animalImg = grabbedAnimal.getDirectionalImage();
+            int animalDrawX = SCREEN_X + grabbedAnimal.getGrabOffsetX();
+            int animalDrawY = SCREEN_Y + grabbedAnimal.getGrabOffsetY();
+            
+            // Gambar hewan dengan ukuran yang sesuai dengan jenis hewannya
+            g2.drawImage(animalImg, animalDrawX, animalDrawY,grabbedAnimal.getWidth(), grabbedAnimal.getHeight(), null);
+        
         }
     }
 
@@ -208,6 +221,7 @@ public class Player {
         grabbedAnimal = animal;
    
         gp.animals.remove(animal);
+        updateGrabbedAnimalPosition();
         grabbedAnimal.grab();
         System.out.println("Grabbed " + animal.getName());
         
@@ -263,6 +277,7 @@ public class Player {
             if(canPlace){
                 grabbedAnimal.worldX = newX;
                 grabbedAnimal.worldY = newY;
+                grabbedAnimal.unGrab();
                 gp.animals.add(grabbedAnimal);
                 System.out.println("Placed " + grabbedAnimal.getName() + " at (" + newX + ", " + newY + ")");
                 grabbedAnimal = null;
