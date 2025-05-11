@@ -12,7 +12,7 @@ import Object.Controller.GamePanel;
 import Object.Items.StackableItem.Wool;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
-
+import java.awt.Color;
 public class Sheep extends TameAnimal {
     Random random = new Random();
     private Rectangle upHitbox;
@@ -37,6 +37,7 @@ public class Sheep extends TameAnimal {
         this.grabOffsetY = -40;
         readyBreeding = true;
         readyGetItem = true;
+        this.hp = 100;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/sheep/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/sheep/up2.png"));
@@ -112,6 +113,7 @@ public class Sheep extends TameAnimal {
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
         gp.cCheck.checkPlayer(this);        // Check collision dengan player
         gp.cCheck.checkAnimalCollision(this);
+        gp.cCheck.animalCheckBuildings(this);
         
         // Jika tidak ada collision, boleh bergerak
         if(!collisionOn) {
@@ -158,7 +160,7 @@ public class Sheep extends TameAnimal {
             spriteCounter = 0;
         }
     }
-
+    @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         
@@ -197,6 +199,18 @@ public class Sheep extends TameAnimal {
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE * 3, gp.TILE_SIZE * 3, null);
+            if(hp < 100) {
+                double oneScale = (double)gp.TILE_SIZE/100;
+                double hpBarValue = oneScale * hp;
+
+                g2.setColor(new Color(35,35,35));
+                g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE+2, 12);
+
+                g2.setColor(new Color(255,0,30));
+                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
+                
+               
+            }
         }
     }
   

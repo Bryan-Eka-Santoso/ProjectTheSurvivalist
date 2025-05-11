@@ -50,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int INVENTORY_STATE = 3;
     public final int PLAYER_CRAFTING_STATE = 4;
     public final int DROPPED_ITEM_STATE = 5;
+    public final int BUILDING_STATE = 6;
     
     public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
@@ -103,8 +104,8 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
     
     while (spawnedCount < count && attempts < maxAttempts) {
        
-        int x = (int)(Math.random() * (MAX_WORLD_COL -2));
-        int y = (int)(Math.random() * (MAX_WORLD_ROW -2));
+        int x = (int)(Math.random() * (MAX_WORLD_COL -5));
+        int y = (int)(Math.random() * (MAX_WORLD_ROW -5));
         Point pos = new Point(x, y);
         
         // Check if position is already used
@@ -170,7 +171,8 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         player.inventory.addItems(new Torch(this));
         player.inventory.addItems(new Axe("Axe", 20, 30));
         player.inventory.addItems(new Wood("Wood", 20, 30));
-        player.inventory.addItems(new Bread(400));
+        player.inventory.addItems(new Bread(10));
+        player.inventory.addItems(new Chest(this));
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -224,6 +226,12 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         }
         for (int i = 0; i < animals.size(); i++) {
             animals.get(i).draw(g2);
+        }
+        for (int i = 0; i < buildings.size(); i++) {
+            buildings.get(i).draw(g2);
+        }
+        if (gameState == BUILDING_STATE) {
+            ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
         player.draw(g2);
         eManager.lighting.update();

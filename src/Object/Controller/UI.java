@@ -25,6 +25,7 @@ public class UI {
     public int selectedRecipeIndex = 0; // <<<< tambah ini di UI kamu
     public List<Rectangle> itemHitboxes = new ArrayList<>();
     public List<Item> itemList = new ArrayList<>(); // to match index with the rectangle
+    public List<List<Item>> recipeKeys = new ArrayList<>(); 
 
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -111,36 +112,92 @@ public class UI {
         } 
     }
 
+    // public void PlayerCraftMenu() {
+    //     int frameX = gp.TILE_SIZE * 6;
+    //     int frameY = gp.TILE_SIZE * 4;
+    //     int frameWidth = gp.TILE_SIZE * 15;
+    //     int frameHeight = gp.TILE_SIZE * 7;
+    
+    //     drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+    
+    //     Shape oldClip = g2.getClip(); 
+    //     g2.setClip(frameX + 10, frameY + 10, frameWidth - 20, frameHeight - 20); 
+    
+    //     int contentX = frameX + 30;
+    //     int contentY = frameY + 60 - scrollY;
+    
+    //     g2.drawString("Items to craft:", contentX, contentY);
+    //     g2.drawString("Materials:", frameWidth - sentenceLength("Materials:"), contentY);
+    //     contentY += 60;
+    //     for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
+    //         List<Item> ingredients = entry.getKey();
+    //         Item result = entry.getValue();
+    
+    //         g2.setColor(Color.WHITE);
+    //         g2.drawImage(result.img, contentX, contentY - 25, 30, 30, null);
+    //         Font font = new Font("Arial", Font.BOLD, 18); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
+    //         g2.setFont(font);
+    //         g2.drawString(String.valueOf(result.currentStack), contentX + 20, contentY + 5);
+    //         g2.drawString(result.name, contentX + 50, contentY);
+
+    //         int drawX = frameWidth - sentenceLength("Materials:") + 30;
+    //         int drawPictureX = frameWidth - sentenceLength("Materials:") + 5;
+    //         for (Item ingredient : ingredients) {
+    //             g2.drawImage(ingredient.img, drawPictureX, contentY - 25, 30, 30, null);
+    //             Font font2 = new Font("Arial", Font.BOLD, 18);
+    //             g2.setFont(font2);
+    //             g2.drawString(String.valueOf(ingredient.currentStack), drawX, contentY + 5);
+    //             drawX += 50;
+    //             drawPictureX += 50;
+    //         }
+    
+    //         Rectangle hitbox = new Rectangle(contentX, contentY - 30 + scrollY, 200, 30);
+    //         g2.drawRect(contentX, contentY - 30 + scrollY, 200, 300);
+    //         itemHitboxes.add(hitbox);
+    //         itemList.add(result);
+
+    //         contentY += 60;
+    //     }
+    
+    //     g2.setClip(oldClip);
+    // }
     public void PlayerCraftMenu() {
         int frameX = gp.TILE_SIZE * 6;
         int frameY = gp.TILE_SIZE * 4;
         int frameWidth = gp.TILE_SIZE * 15;
         int frameHeight = gp.TILE_SIZE * 7;
-    
+
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-    
-        Shape oldClip = g2.getClip(); 
-        g2.setClip(frameX + 10, frameY + 10, frameWidth - 20, frameHeight - 20); 
-    
+
+        // Clear previous frame's data
+        itemHitboxes.clear();
+        itemList.clear();
+        recipeKeys.clear();
+
+        Shape oldClip = g2.getClip();
+        g2.setClip(frameX + 10, frameY + 10, frameWidth - 20, frameHeight - 20);
+
         int contentX = frameX + 30;
         int contentY = frameY + 60 - scrollY;
-    
+
         g2.drawString("Items to craft:", contentX, contentY);
-        g2.drawString("Materials:", frameWidth - sentenceLength("Materials:"), contentY);
+        g2.drawString("Materials:", frameX + frameWidth - sentenceLength("Materials:") - 250, contentY);
         contentY += 60;
+
         for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
             List<Item> ingredients = entry.getKey();
             Item result = entry.getValue();
-    
+
             g2.setColor(Color.WHITE);
             g2.drawImage(result.img, contentX, contentY - 25, 30, 30, null);
-            Font font = new Font("Arial", Font.BOLD, 18); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
+
+            Font font = new Font("Arial", Font.BOLD, 18);
             g2.setFont(font);
             g2.drawString(String.valueOf(result.currentStack), contentX + 20, contentY + 5);
             g2.drawString(result.name, contentX + 50, contentY);
 
-            int drawX = frameWidth - sentenceLength("Materials:") + 30;
-            int drawPictureX = frameWidth - sentenceLength("Materials:") + 5;
+            int drawX = frameX + frameWidth - sentenceLength("Materials:") + 30 - 300;
+            int drawPictureX = frameX + frameWidth - sentenceLength("Materials:") + 5 - 300;
             for (Item ingredient : ingredients) {
                 g2.drawImage(ingredient.img, drawPictureX, contentY - 25, 30, 30, null);
                 Font font2 = new Font("Arial", Font.BOLD, 18);
@@ -149,32 +206,18 @@ public class UI {
                 drawX += 50;
                 drawPictureX += 50;
             }
-    
-            Rectangle hitbox = new Rectangle(contentX, contentY - 30, 200, 30);
+            g2.drawRect(contentX, contentY - 35, frameWidth - 60, 50);
+
+            // Create hitbox for the full row
+            Rectangle hitbox = new Rectangle(contentX, contentY - 35, frameWidth - 60, 50);
             itemHitboxes.add(hitbox);
             itemList.add(result);
+            recipeKeys.add(ingredients); // track the key (ingredient list)
 
             contentY += 60;
         }
-    
-        g2.setClip(oldClip);
-    }
 
-    public void drawScrollBar(int x, int y, int width, int height) {
-        g2.setColor(Color.GRAY);
-        g2.fillRoundRect(x, y, width, height, 10, 10);
-    
-        int totalContentHeight = 120 * 40;
-        int visibleHeight = height;
-        int thumbHeight = (int) ((float) visibleHeight / totalContentHeight * visibleHeight);
-    
-        if (thumbHeight < 30) thumbHeight = 30;
-    
-        int maxThumbPos = height - thumbHeight;
-        int thumbY = y + (int) ((float) scrollY / (totalContentHeight - visibleHeight) * maxThumbPos);
-    
-        g2.setColor(Color.WHITE);
-        g2.fillRoundRect(x, thumbY, width, thumbHeight, 10, 10);
+        g2.setClip(oldClip);
     }
 
     public void scrollUp() {
@@ -186,6 +229,23 @@ public class UI {
         scrollY += 20;
         maxScroll = gp.player.recipe.recipes.size() * 60;
         if (scrollY > maxScroll) scrollY = maxScroll;
+    }
+
+    public void checkCraftClick(int mouseX, int mouseY) {
+        List<List<Item>> recipeKeys = new ArrayList<>();
+        itemHitboxes.clear();
+        itemList.clear();
+        recipeKeys.clear();
+        for (int i = 0; i < itemHitboxes.size(); i++) {
+            if (itemHitboxes.get(i).contains(mouseX, mouseY)) {
+                List<Item> ingredients = recipeKeys.get(i); // ← this is your key
+                Item result = itemList.get(i);              // ← optional, if you need it
+
+                // Do something with the clicked recipe
+                System.out.println("Clicked recipe to craft: " + result.name);
+                System.out.println("Needs: " + ingredients.size() + " ingredients");
+            }
+        }
     }
 
     public void drawSelectedItem() {
