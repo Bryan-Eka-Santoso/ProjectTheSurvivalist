@@ -198,11 +198,11 @@ public class Pig extends TameAnimal{
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE*3, gp.TILE_SIZE*3, null);
             if(hp < 100) {
-                double oneScale = (double)gp.TILE_SIZE/100;
+                double oneScale = (double)gp.TILE_SIZE*3/100;
                 double hpBarValue = oneScale * hp;
 
                 g2.setColor(new Color(35,35,35));
-                g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE+2, 12);
+                g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE*3+2, 12);
 
                 g2.setColor(new Color(255,0,30));
                 g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
