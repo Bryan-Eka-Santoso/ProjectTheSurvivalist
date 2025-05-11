@@ -12,6 +12,7 @@ public class TameAnimal extends Animal {
     int grabOffsetY = 0;
     int width;
     int height;
+    public int hp;
     
     public TameAnimal(String name, int x, int y, int speed, String direction, GamePanel gp) {
         super(name, x, y, speed, direction, gp);
@@ -20,6 +21,7 @@ public class TameAnimal extends Animal {
         this.width = 0;
         this.height = 0;
         this.readyBreeding = true;
+        this.hp = 100;
         
     }
     
@@ -103,7 +105,7 @@ public class TameAnimal extends Animal {
             default:
                 image = down1;
         }
-        
+
         return image;
     }
     
