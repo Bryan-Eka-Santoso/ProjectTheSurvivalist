@@ -14,16 +14,28 @@ import Object.Animal.Pig;
 import Object.Animal.Sheep;
 
 public class UseItem {
-
+    GamePanel gp;
     Sound sound = new Sound();
+    
+    public UseItem(GamePanel gp) {
+        this.gp = gp;
+    }
+
     public void useItem(Item selectedItem, Player player) {
         if (selectedItem != null && selectedItem.name != null) {
             if (selectedItem instanceof Material) {
                 Material material = (Material) selectedItem;
                 System.out.println("Using material: " + material.name);
             } else if (selectedItem instanceof Buildings) {
-                Buildings building = (Buildings) selectedItem;
-                System.out.println("Using building: " + building.name);
+                if (!player.isBuild) {
+                    Buildings building = (Buildings) selectedItem;
+                    player.isBuild = true; // Set the player to building mode
+                    gp.gameState = gp.BUILDING_STATE; // Change game state to building
+                    System.out.println("Using building: " + building.name);
+                } else {
+                    player.isBuild = false; // Set the player to not building mode
+                    gp.gameState = gp.PLAY_STATE; // Change game state back to play
+                }
             } else if (selectedItem instanceof Food) {
                 Food food = (Food) selectedItem;
                 System.out.println("Using food: " + food.name);

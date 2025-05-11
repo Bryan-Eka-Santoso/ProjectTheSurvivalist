@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import Object.Items.Item;
+import Object.Items.Unstackable.Buildings.Buildings;
 
 public class KeyHandler implements KeyListener, MouseListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
@@ -72,7 +73,7 @@ public class KeyHandler implements KeyListener, MouseListener {
         int code = e.getKeyCode();
 
         if (code == KeyEvent.VK_W) {
-            if (gp.gameState == gp.PLAY_STATE) {
+            if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                 upPressed = true;
             }
             if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
@@ -80,7 +81,7 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_S) {
-            if (gp.gameState == gp.PLAY_STATE) {
+            if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                 downPressed = true;
             }
             if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
@@ -88,7 +89,7 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_A) {
-            if (gp.gameState == gp.PLAY_STATE) {
+            if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                 leftPressed = true;
             }
             if (gp.gameState == gp.INVENTORY_STATE) {
@@ -105,7 +106,7 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_D) {
-            if (gp.gameState == gp.PLAY_STATE) {
+            if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                 rightPressed = true;
             }
             if (gp.gameState == gp.INVENTORY_STATE) {
@@ -128,26 +129,27 @@ public class KeyHandler implements KeyListener, MouseListener {
             gp.player.useItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
         }
         if (code == KeyEvent.VK_ESCAPE) {
-            if (gp.gameState == gp.PLAY_STATE) {
+            if (gp.gameState != gp.PAUSE_STATE) {
                 gp.gameState = gp.PAUSE_STATE;
             } else if (gp.gameState == gp.PAUSE_STATE) {
                 gp.gameState = gp.PLAY_STATE;
             } 
         }
         if (code == KeyEvent.VK_I) {
-            playSE(2);
-            if (gp.gameState == gp.PLAY_STATE) {
-                gp.gameState = gp.INVENTORY_STATE;
-            } else if (gp.gameState == gp.INVENTORY_STATE) {
-                gp.gameState = gp.PLAY_STATE;
-                gp.ui.slotRow = 0;
-                gp.ui.slotCol = 0;
-                gp.ui.selectedIndex = 0;
-            } 
-            gp.player.lightUpdated = true;
+            if (!gp.player.isBuild) {
+                playSE(2);
+                if (gp.gameState == gp.PLAY_STATE) {
+                    gp.gameState = gp.INVENTORY_STATE;
+                } else if (gp.gameState == gp.INVENTORY_STATE) {
+                    gp.gameState = gp.PLAY_STATE;
+                    gp.ui.slotRow = 0;
+                    gp.ui.slotCol = 0;
+                    gp.ui.selectedIndex = 0;
+                } 
+                gp.player.lightUpdated = true;
+            }
         }
-        if(gp.player.grabbedAnimal == null){
-
+        if (gp.player.grabbedAnimal == null && !gp.player.isBuild) {
             if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
                 if (gp.gameState != gp.INVENTORY_STATE){ // Ada bug kalo game state ny di inventory
                     gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
@@ -157,7 +159,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                 }
             }
         }
-        if (code == KeyEvent.VK_R) {
+        if (code == KeyEvent.VK_R && !gp.player.isBuild) {
             playSE(2);
             if (counter == 0) {
                 temp1 = gp.ui.selectedIndex;
@@ -171,7 +173,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.player.inventory.swapItems(temp1, temp2);
             }
         }
-        if (code == KeyEvent.VK_C) {
+        if (code == KeyEvent.VK_C && !gp.player.isBuild) {
             if (gp.gameState == gp.PLAY_STATE) {
                 gp.gameState = gp.PLAYER_CRAFTING_STATE;
             } else if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
@@ -192,19 +194,44 @@ public class KeyHandler implements KeyListener, MouseListener {
                 }
             }
         }
-        if (code == KeyEvent.VK_Q){
+        if (code == KeyEvent.VK_Q && !gp.player.isBuild) {
             if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
                 gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
             }
         }
-        if (code == KeyEvent.VK_P) {
+        if (code == KeyEvent.VK_P && !gp.player.isBuild) {
             if (gp.player.droppedItem != -1) {
                 gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
                 gp.player.droppedItem = -1;
             }
         }
-        if (code == KeyEvent.VK_G){
+        if (code == KeyEvent.VK_G && !gp.player.isBuild) {
             gp.player.handleGrabAction(gp.player.inventory.getSelectedItem());
+        }
+        if (code == KeyEvent.VK_SPACE) {
+            Buildings building = (Buildings) gp.player.inventory.getSelectedItem();
+            if (gp.gameState == gp.BUILDING_STATE && building.canBuild()) {
+                building.worldX = gp.player.worldX;
+                building.worldY = gp.player.worldY;
+                gp.player.isBuild = false;
+                gp.gameState = gp.PLAY_STATE;
+                gp.player.inventory.removeItem(building, 1);
+                switch (gp.player.direction) {
+                    case "up":
+                        building.worldY -= gp.TILE_SIZE;
+                        break;
+                    case "down":
+                        building.worldY += gp.TILE_SIZE;
+                        break;
+                    case "left":
+                        building.worldX -= building.width;
+                        break;
+                    case "right":
+                        building.worldX += gp.TILE_SIZE;
+                        break;
+                }
+                gp.buildings.add((Buildings) building.clone());
+            }
         }
     }
 

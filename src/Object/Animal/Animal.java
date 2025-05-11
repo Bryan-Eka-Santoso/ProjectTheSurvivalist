@@ -37,6 +37,7 @@ public abstract class Animal {
         randomDirection = 2;
         gp.cCheck.animalCheckTile(this);
         gp.cCheck.animalCheckObject(this);
+        gp.cCheck.animalCheckBuildings(this);
         if (!collisionOn) {
             switch (randomDirection) {
                 case 0:

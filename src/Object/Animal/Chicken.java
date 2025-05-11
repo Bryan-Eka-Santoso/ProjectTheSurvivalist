@@ -82,9 +82,11 @@ public class Chicken extends TameAnimal {
         this.actionMoveDelay = this.random.nextInt(91) + 30;
         gp.player.collisionOn = false;
     }
+
     private int actionMoveCounter = 0;
     private int actionMoveDelay;
     private int speed = 8; 
+
     @Override
     public void update() {
         if(direction == null) {
@@ -110,6 +112,7 @@ public class Chicken extends TameAnimal {
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
         gp.cCheck.checkPlayer(this);        // Check collision dengan player
         gp.cCheck.checkAnimalCollision(this);
+        gp.cCheck.animalCheckBuildings(this); // Check collision dengan buildings
         
         // Jika tidak ada collision, boleh bergerak
         if(!collisionOn) {

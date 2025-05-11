@@ -1,7 +1,6 @@
 package Object.Player;
 
 import Object.Items.Item;
-import Object.Items.StackableItem.Torch;
 import Object.Animal.Animal;
 import Object.Animal.TameAnimal;
 import Object.Controller.GamePanel;
@@ -9,6 +8,7 @@ import Object.Controller.ItemDrop;
 import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
 import Object.Items.StackableItem.Stackable;
+import Object.Plant.Plant;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -31,15 +31,14 @@ public class Player {
     public TameAnimal grabbedAnimal;
     public Crafting recipe;
     public int solidAreaDefaultX, solidAreaDefaultY; 
-    public Torch torch;
-    // ArrayList<Kandang> kandang= new ArrayList<>(); // List of cages owned by the player
     public boolean lightUpdated = true;
     public Rectangle solidArea;
     public boolean collisionOn = false;
+    public boolean isBuild = false; 
     public UseItem interactObj; // Object to handle item interactions
     public final int SCREEN_Y;
     public final int SCREEN_X;
-    public int plantIndex, animalIndex, droppedItem; // Index of the selected plant in the inventory
+    public int plantIndex, animalIndex, droppedItem, buildingIndex; // Index of the selected plant in the inventory
     public GamePanel gp;
     public KeyHandler keyH;
     public Boolean isCutting;
@@ -59,7 +58,6 @@ public class Player {
         this.gp = gp;
         this.keyH = keyH;
         this.grabbedAnimal= null; 
-        // this.kandang = new ArrayList<>(); 
         this.direction = "down";
         this.solidArea = new Rectangle(0, 0, 17, 25);
         solidAreaX = solidArea.x;
@@ -75,7 +73,7 @@ public class Player {
         SCREEN_X = gp.SCREEN_WIDTH / 2 - gp.TILE_SIZE / 2;
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - gp.TILE_SIZE / 2;
         this.recipe = recipe;
-        interactObj = new UseItem();
+        interactObj = new UseItem(gp);
         this.isCutting = false;
         getPlayerImg();
         getPlayerCutImg();
@@ -136,6 +134,7 @@ public class Player {
             plantIndex = gp.cCheck.checkPlant(this, true);
             animalIndex = gp.cCheck.checkAnimal(this, true);
             droppedItem = gp.cCheck.checkItemDrop(this, true);
+            buildingIndex = gp.cCheck.checkBuildings(this, true);
             
             if (!collisionOn) {
                 switch (direction) {
@@ -326,7 +325,7 @@ public class Player {
     }
 
     public void unGrabAnimal() {
-        if(grabbedAnimal != null){
+        if (grabbedAnimal != null){
             int newX = worldX, newY = worldY;   
             switch (direction) {
                 case "up":
@@ -357,22 +356,28 @@ public class Player {
             boolean canPlace = true;
             grabbedAnimal.worldX = newX;
             grabbedAnimal.worldY = newY;
-            for(Animal other : gp.animals) {
-                if(Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
+            for (Animal other : gp.animals) {
+                if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
                 Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
                     canPlace = false;
                     break;
                 }
             }
-
-            if(canPlace){
+            for (Plant other : gp.plants) {
+                if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
+                Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
+                    canPlace = false;
+                    break;
+                }
+            }
+            if (canPlace) {
                 grabbedAnimal.worldX = newX;
                 grabbedAnimal.worldY = newY;
                 grabbedAnimal.unGrab();
                 gp.animals.add(grabbedAnimal);
                 System.out.println("Placed " + grabbedAnimal.getName() + " at (" + newX + ", " + newY + ")");
                 grabbedAnimal = null;
-            }else {
+            } else {
                 System.out.println("Cannot place animal here!");
             }
         }
@@ -396,8 +401,6 @@ public class Player {
         //         return;
         //     }
         // }else
-
-  
 
     // public KandangAyam findNearbyKandang() {
     //     for (Buildings building : island.buildings) {

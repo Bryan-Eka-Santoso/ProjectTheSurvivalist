@@ -17,9 +17,8 @@ public class Plant {
     public int hp;
     Graphics2D g2;
 
-    public Plant(int x, int y, GamePanel gp, Rectangle solidArea, boolean collision) {
+    public Plant(int x, int y, GamePanel gp, Rectangle solidArea) {
         this.worldX = x;
-        this.collision = collision;
         this.worldY = y;
         this.gp = gp;
         this.solidArea = solidArea;

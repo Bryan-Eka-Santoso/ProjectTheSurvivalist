@@ -113,6 +113,7 @@ public class Sheep extends TameAnimal {
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
         gp.cCheck.checkPlayer(this);        // Check collision dengan player
         gp.cCheck.checkAnimalCollision(this);
+        gp.cCheck.animalCheckBuildings(this);
         
         // Jika tidak ada collision, boleh bergerak
         if(!collisionOn) {
