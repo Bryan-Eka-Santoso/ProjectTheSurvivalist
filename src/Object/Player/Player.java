@@ -23,6 +23,7 @@ public class Player {
     public int itemIndex; // Index of the selected item in the inventory
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage cutup1, cutup2, cutdown1, cutdown2, cutleft1, cutleft2, cutright1, cutright2;
     public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -41,7 +42,8 @@ public class Player {
     public int plantIndex, animalIndex, droppedItem; // Index of the selected plant in the inventory
     public GamePanel gp;
     public KeyHandler keyH;
-
+    public Boolean isCutting;
+    public Rectangle cutArea = new Rectangle(0, 0, 0, 0);
     public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {
         this.name = name;
         this.worldX = gp.TILE_SIZE * 40;
@@ -73,8 +75,11 @@ public class Player {
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - gp.TILE_SIZE / 2;
         this.recipe = recipe;
         interactObj = new UseItem();
-
+        this.isCutting = false;
         getPlayerImg();
+        getPlayerCutImg();
+        cutArea.width = 36;
+        cutArea.height = 36;
     }
 
     public void getPlayerImg() {
@@ -91,6 +96,21 @@ public class Player {
             e.printStackTrace();
         }
     }
+    public void getPlayerCutImg() {
+        try {
+            cutup1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
+            cutup2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
+            cutdown1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutdown.png"));
+            cutdown2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutdown.png"));
+            cutleft1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutleft.png"));
+            cutleft2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutleft.png"));
+            cutright1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutright.png"));
+            cutright2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutright.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void update() {
         if (keyH.shiftPressed) {
@@ -136,52 +156,121 @@ public class Player {
             }
         }
     }
-    private void updateGrabbedAnimalPosition() {
-        if (grabbedAnimal != null) {
-           
-            grabbedAnimal.worldX = worldX;
-            grabbedAnimal.worldY = worldY;
-           
-            grabbedAnimal.direction = direction;
-           
-            grabbedAnimal.spriteNum = spriteNum;
-        }
-    }
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        switch (direction) {
-            case "up":
-                if (spriteNum == 1) image = up1;
-                if (spriteNum == 2) image = up2;
-                break;
-            case "down":
-                if (spriteNum == 1) image = down1;
-                if (spriteNum == 2) image = down2;
-                break;
-            case "left":
-                if (spriteNum == 1) image = left1;
-                if (spriteNum == 2) image = left2;
-                break;
-            case "right":
-                if (spriteNum == 1) image = right1;
-                if (spriteNum == 2) image = right2;
-                break;
+        if (!isCutting) {
+            switch (direction) {
+                case "up":
+                    if (spriteNum == 1) image = up1;
+                    if (spriteNum == 2) image = up2;
+                    break;
+                case "down":
+                    if (spriteNum == 1) image = down1;
+                    if (spriteNum == 2) image = down2;
+                    break;
+                case "left":
+                    if (spriteNum == 1) image = left1;
+                    if (spriteNum == 2) image = left2;
+                    break;
+                case "right":
+                    if (spriteNum == 1) image = right1;
+                    if (spriteNum == 2) image = right2;
+                    break;
+            }
+        } 
+        else {
+            switch (direction) {
+                case "up":
+                    if (spriteNum == 1) image = cutup1;
+                    if (spriteNum == 2) image = cutup2;
+                    break;
+                case "down":
+                    if (spriteNum == 1) image = cutdown1;
+                    if (spriteNum == 2) image = cutdown2;
+                    break;
+                case "left":
+                    if (spriteNum == 1) image = cutleft1;
+                    if (spriteNum == 2) image = cutleft2;
+                    break;
+                case "right":
+                    if (spriteNum == 1) image = cutright1;
+                    if (spriteNum == 2) image = cutright2;
+                    break;
+            }
         }
-
-        g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
-        if (grabbedAnimal != null) {
             
-            BufferedImage animalImg = grabbedAnimal.getDirectionalImage();
-            int animalDrawX = SCREEN_X + grabbedAnimal.getGrabOffsetX();
-            int animalDrawY = SCREEN_Y + grabbedAnimal.getGrabOffsetY();
-            
-            // Gambar hewan dengan ukuran yang sesuai dengan jenis hewannya
-            g2.drawImage(animalImg, animalDrawX, animalDrawY,grabbedAnimal.getWidth(), grabbedAnimal.getHeight(), null);
-        
+            g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
+            if (grabbedAnimal != null) {
+                
+                BufferedImage animalImg = grabbedAnimal.getDirectionalImage();
+                int animalDrawX = SCREEN_X + grabbedAnimal.getGrabOffsetX();
+                int animalDrawY = SCREEN_Y + grabbedAnimal.getGrabOffsetY();
+                
+                
+                g2.drawImage(animalImg, animalDrawX, animalDrawY,grabbedAnimal.getWidth(), grabbedAnimal.getHeight(), null);
+                
+            }
         }
-    }
+        public void cutting(){
+           
+            spriteCounter++;
+            if(spriteCounter == 1) {
+                spriteNum = 1;
+                isCutting = true;
+            }
+            
+            if(spriteCounter == 2) {
+                spriteNum = 2;
+                int currentWorldX = worldX;
+                int currentWorldY = worldY;
+                int solidAreaWidth = solidArea.width;
+                int solidAreaHeight = solidArea.height;
+            
+                switch(direction){
+                    case "up":
+                        worldY -= cutArea.height;
+                        break;
+                    case "down":
+                        worldY += cutArea.height;
+                        break;
+                    case "left":
+                        worldX -= cutArea.width;
+                        break;
+                    case "right":
+                        worldX += cutArea.width;
+                        break;
+                }
+                
+                solidArea.width = cutArea.width;
+                solidArea.height = cutArea.height;
 
-    public void handleGrabAction(Item selectedItem) {
+                plantIndex = gp.cCheck.checkPlant(this, true);
+                
+                worldX = currentWorldX;
+                worldY = currentWorldY;
+                solidArea.width = solidAreaWidth;
+                solidArea.height = solidAreaHeight;
+            }
+            
+            if(spriteCounter > 2){
+                spriteNum = 1;
+                spriteCounter = 0;
+                isCutting = false;
+            }
+        }
+       
+        private void updateGrabbedAnimalPosition() {
+            if (grabbedAnimal != null) {
+               
+                grabbedAnimal.worldX = worldX;
+                grabbedAnimal.worldY = worldY;
+               
+                grabbedAnimal.direction = direction;
+               
+                grabbedAnimal.spriteNum = spriteNum;
+            }
+        }
+        public void handleGrabAction(Item selectedItem) {
         if (grabbedAnimal == null) {
             TameAnimal nearbyAnimal = findNearbyAnimal();
             if (nearbyAnimal != null) {

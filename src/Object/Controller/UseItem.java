@@ -30,10 +30,16 @@ public class UseItem {
                 }
             } else if (selectedItem instanceof Axe) {
                 Axe axe = (Axe) selectedItem;
+                player.isCutting = true;
+                player.cutting();
                 if (player.plantIndex != -1) {
+                    player.gp.plants.get(player.plantIndex).hp -= 20;
                     System.out.println("Using axe: " + axe.name);
-                    player.gp.plants.remove(player.plantIndex);
-                    player.plantIndex = -1; 
+                    if(player.gp.plants.get(player.plantIndex).hp <= 0) {
+                       
+                        player.gp.plants.remove(player.plantIndex);
+                        player.plantIndex = -1; 
+                    }
                     playSE(6); // Play axe sound effect
                 } else {
                     System.out.println("No plant selected to use the axe on!");
