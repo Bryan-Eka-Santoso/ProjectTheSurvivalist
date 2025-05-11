@@ -9,7 +9,7 @@ import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
 import Object.Items.StackableItem.Stackable;
 import Object.Plant.Plant;
-
+import Object.Controller.UseItem;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -74,13 +74,8 @@ public class Player {
         SCREEN_X = gp.SCREEN_WIDTH / 2 - gp.TILE_SIZE / 2;
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - gp.TILE_SIZE / 2;
         this.recipe = recipe;
-<<<<<<< HEAD
         interactObj = new UseItem(gp);
-
-=======
-        interactObj = new UseItem();
         this.isCutting = false;
->>>>>>> 7599083feb86537051248b0d0840f37dbf8218f6
         getPlayerImg();
         getPlayerCutImg();
         cutArea.width = 36;

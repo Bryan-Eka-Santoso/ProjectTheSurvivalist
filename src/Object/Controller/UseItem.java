@@ -16,6 +16,7 @@ import Object.Animal.Sheep;
 public class UseItem {
     GamePanel gp;
     Sound sound = new Sound();
+    
     public UseItem(GamePanel gp) {
         this.gp = gp;
     }
