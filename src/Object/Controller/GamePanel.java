@@ -104,8 +104,8 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
     
     while (spawnedCount < count && attempts < maxAttempts) {
        
-        int x = (int)(Math.random() * (MAX_WORLD_COL -2));
-        int y = (int)(Math.random() * (MAX_WORLD_ROW -2));
+        int x = (int)(Math.random() * (MAX_WORLD_COL -5));
+        int y = (int)(Math.random() * (MAX_WORLD_ROW -5));
         Point pos = new Point(x, y);
         
         // Check if position is already used

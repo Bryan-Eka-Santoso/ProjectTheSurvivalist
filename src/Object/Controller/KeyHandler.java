@@ -255,6 +255,9 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code == KeyEvent.VK_SHIFT) {
             shiftPressed = false;
         }
+        if(code == KeyEvent.VK_E) {
+            gp.player.isCutting = false;
+        }
     }
 
     @Override

@@ -10,6 +10,7 @@ import Object.Controller.GamePanel;
 import Object.Items.StackableItem.Egg;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
+import java.awt.Color;
 
 public class Chicken extends TameAnimal {
     Random random = new Random();
@@ -34,6 +35,7 @@ public class Chicken extends TameAnimal {
         readyBreeding = true;
         this.grabOffsetX = 0;
         this.grabOffsetY = -10;
+        this.hp = 60;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up2.png"));
@@ -155,7 +157,7 @@ public class Chicken extends TameAnimal {
             spriteCounter = 0;
         }
     }
-
+    @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         
@@ -194,6 +196,18 @@ public class Chicken extends TameAnimal {
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            if(hp < 60) {
+                double oneScale = (double)gp.TILE_SIZE/60;
+                double hpBarValue = oneScale * hp;
+
+                g2.setColor(new Color(35,35,35));
+                g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE+2, 12);
+
+                g2.setColor(new Color(255,0,30));
+                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
+                
+               
+            }
         }
     }
 

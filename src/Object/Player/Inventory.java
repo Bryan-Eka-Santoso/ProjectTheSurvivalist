@@ -87,6 +87,7 @@ public class Inventory {
         slots[index1] = slots[index2];
         slots[index2] = temp;
     }
+    
     public Item getSelectedItem() {
         return slots[gp.ui.selectedIndex];
     }
