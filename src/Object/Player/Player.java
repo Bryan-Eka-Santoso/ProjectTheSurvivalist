@@ -43,6 +43,7 @@ public class Player {
     public GamePanel gp;
     public KeyHandler keyH;
     public Boolean isCutting;
+    public Boolean isSlash;
     public Rectangle cutArea = new Rectangle(0, 0, 0, 0);
     public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {
         this.name = name;
@@ -245,6 +246,7 @@ public class Player {
                 solidArea.height = cutArea.height;
 
                 plantIndex = gp.cCheck.checkPlant(this, true);
+                animalIndex = gp.cCheck.checkAnimal(this, true);
                 
                 worldX = currentWorldX;
                 worldY = currentWorldY;

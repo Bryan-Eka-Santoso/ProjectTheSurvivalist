@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-
+import java.awt.Color;
 import Object.Controller.GamePanel;
 import Object.Items.StackableItem.Milk;
 import java.awt.image.BufferedImage;
@@ -36,6 +36,7 @@ public class Cow extends TameAnimal {
         readyGetItem = true;
         this.grabOffsetX = 0;
         this.grabOffsetY = -40;
+        this.hp = 100;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up2.png"));
@@ -156,7 +157,7 @@ public class Cow extends TameAnimal {
             spriteCounter = 0;
         }
     }
-    
+    @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         
@@ -195,6 +196,18 @@ public class Cow extends TameAnimal {
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE * 3, gp.TILE_SIZE *3, null);
+            if(hp < 100) {
+                double oneScale = (double)gp.TILE_SIZE/100;
+                double hpBarValue = oneScale * hp;
+
+                g2.setColor(new Color(35,35,35));
+                g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE+2, 12);
+
+                g2.setColor(new Color(255,0,30));
+                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
+                
+               
+            }
         }
     }
   

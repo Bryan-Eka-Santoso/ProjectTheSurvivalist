@@ -7,6 +7,11 @@ import Object.Items.Unstackable.Axe;
 import Object.Items.Unstackable.Sword;
 import Object.Items.Unstackable.Buildings.Buildings;
 import Object.Player.Player;
+import Object.Animal.Animal;
+import Object.Animal.Chicken;
+import Object.Animal.Cow;
+import Object.Animal.Pig;
+import Object.Animal.Sheep;
 
 public class UseItem {
 
@@ -46,8 +51,49 @@ public class UseItem {
                 }
             } else if (selectedItem instanceof Sword) {
                 Sword sword = (Sword) selectedItem;
-                System.out.println("Using sword: " + sword.name);
-                playSE(4);
+                player.isCutting = true;
+                player.cutting();
+                if (player.animalIndex != -1) {
+                    int damage = sword.getDamage();
+                    Animal animal = player.gp.animals.get(player.animalIndex);
+                    if(animal instanceof Chicken) {
+                        Chicken chicken = (Chicken)animal;
+                        chicken.hp -= damage;
+                        System.out.println("Hit chicken: " + chicken.hp + "/" + 60);
+                        if(chicken.hp <= 0) {
+                            player.gp.animals.remove(player.animalIndex);
+                            player.animalIndex = -1;
+                        }
+                    }
+                    else if(animal instanceof Pig) {
+                        Pig pig = (Pig)animal;
+                        pig.hp -= damage;
+                        System.out.println("Hit pig: " + pig.hp + "/" + 80);
+                        if(pig.hp <= 0) {
+                            player.gp.animals.remove(player.animalIndex);
+                            player.animalIndex = -1;
+                        }
+                    }
+                    else if(animal instanceof Sheep) {
+                        Sheep sheep = (Sheep)animal;
+                        sheep.hp -= damage;
+                        System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
+                        if(sheep.hp <= 0) {
+                            player.gp.animals.remove(player.animalIndex);
+                            player.animalIndex = -1;
+                        }
+                    }
+                    else if(animal instanceof Cow) {
+                        Cow cow = (Cow)animal;
+                        cow.hp -= damage;
+                        System.out.println("Hit cow: " + cow.hp + "/" + 100);
+                        if(cow.hp <= 0) {
+                            player.gp.animals.remove(player.animalIndex);
+                            player.animalIndex = -1;
+                        }
+                    }
+                    playSE(4); // Play axe sound effect
+                }
             } else {
                 System.out.println("Unknown item type!"); 
             }
