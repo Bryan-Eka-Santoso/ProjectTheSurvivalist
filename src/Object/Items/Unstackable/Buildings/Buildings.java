@@ -3,7 +3,9 @@ package Object.Items.Unstackable.Buildings;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import Object.Animal.Animal;
 import Object.Controller.GamePanel;
+import Object.Plant.Plant;
 import Object.Items.Unstackable.Unstackable;
 
 public class Buildings extends Unstackable {
@@ -34,70 +36,82 @@ public class Buildings extends Unstackable {
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
                 
-            g2.drawImage(img, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            g2.drawImage(img, screenX, screenY, width, height, null);
         }
     }
 
     public void Build(Graphics2D g2) {
-        g2.setColor(Color.RED);
-        
-        int dx = gp.TILE_SIZE;
-        int dy = gp.TILE_SIZE;
+        if (!canBuild()) {
+            g2.setColor(Color.RED);
+        } else {
+            g2.setColor(Color.GREEN);
+        }
 
         switch (gp.player.direction) {
             case "up":
-                g2.drawRect(gp.player.SCREEN_X, gp.player.SCREEN_Y - dy, width, height);
-                g2.fillRect(gp.player.SCREEN_X, gp.player.SCREEN_Y - dy, width, height);
+                g2.drawRect(gp.player.SCREEN_X, gp.player.SCREEN_Y - height, width, height);
+                g2.fillRect(gp.player.SCREEN_X, gp.player.SCREEN_Y - height, width, height);
                 break;
             case "down":
-                g2.drawRect(gp.player.SCREEN_X, gp.player.SCREEN_Y + dy, width, height);
-                g2.fillRect(gp.player.SCREEN_X, gp.player.SCREEN_Y + dy, width, height);
+                g2.drawRect(gp.player.SCREEN_X, gp.player.SCREEN_Y + height, width, height);
+                g2.fillRect(gp.player.SCREEN_X, gp.player.SCREEN_Y + height, width, height);
                 break;
             case "left":
-                g2.drawRect(gp.player.SCREEN_X - dx, gp.player.SCREEN_Y, width, height);
-                g2.fillRect(gp.player.SCREEN_X - dx, gp.player.SCREEN_Y, width, height);
+                g2.drawRect(gp.player.SCREEN_X - width, gp.player.SCREEN_Y, width, height);
+                g2.fillRect(gp.player.SCREEN_X - width, gp.player.SCREEN_Y, width, height);
                 break;
             case "right":
-                g2.drawRect(gp.player.SCREEN_X + dx, gp.player.SCREEN_Y, width, height);
-                g2.fillRect(gp.player.SCREEN_X + dx, gp.player.SCREEN_Y, width, height);
+                g2.drawRect(gp.player.SCREEN_X + width, gp.player.SCREEN_Y, width, height);
+                g2.fillRect(gp.player.SCREEN_X + width, gp.player.SCREEN_Y, width, height);
                 break;
         }
+        
     }
 
-    // public boolean canBuild() {
-    //     int tileNum1 = 0, tileNum2 = 0;
-    //     boolean canBuild = true;
-    //     switch (gp.player.direction) {
-    //         case "up":
-    //             playerTopRow = (entityTopY - player.speed) / gp.TILE_SIZE;
-    //             tileNum1 = gp.tileM.mapTile[playerLeftCol][playerTopRow];
-    //             tileNum2 = gp.tileM.mapTile[playerRightCol][playerTopRow];
-    //             if (gp.tileM.tile[tileNum1].collison == true || gp.tileM.tile[tileNum2].collison == true) {
-    //                 player.collisionOn = true;
-    //             }
-    //         case "down":
-    //             playerBottomRow = (entityBottomY + player.speed) / gp.TILE_SIZE;
-    //             tileNum1 = gp.tileM.mapTile[playerLeftCol][playerBottomRow];
-    //             tileNum2 = gp.tileM.mapTile[playerRightCol][playerBottomRow];
-    //             if (gp.tileM.tile[tileNum1].collison == true || gp.tileM.tile[tileNum2].collison == true) {
-    //                 player.collisionOn = true;
-    //             }
-    //         case "left":
-    //             playerLeftCol = (entityLeftX - player.speed) / gp.TILE_SIZE;
-    //             tileNum1 = gp.tileM.mapTile[playerLeftCol][playerTopRow];
-    //             tileNum2 = gp.tileM.mapTile[playerLeftCol][playerBottomRow];
-    //             if (gp.tileM.tile[tileNum1].collison == true || gp.tileM.tile[tileNum2].collison == true) {
-    //                 player.collisionOn = true;
-    //             }
-    //         case "right":
-    //             playerRightCol = (entityRightX + player.speed) / gp.TILE_SIZE;
-    //             tileNum1 = gp.tileM.mapTile[playerRightCol][playerTopRow];
-    //             tileNum2 = gp.tileM.mapTile[playerRightCol][playerBottomRow];
-    //             if (gp.tileM.tile[tileNum1].collison == true || gp.tileM.tile[tileNum2].collison == true) {
-    //                 player.collisionOn = true;
-    //             }
-    //     }
-    //     return canBuild;
-    // }
+    public boolean canBuild() {
+        int newX = gp.player.worldX, newY = gp.player.worldY; 
+        switch (gp.player.direction) {
+            case "up":
+                newY = gp.player.worldY - height;  
+                break;
+            case "down":
+                newY = gp.player.worldY + height;  
+                break;
+            case "left":
+                newX = gp.player.worldX - width;  
+                break;
+            case "right":
+                newX = gp.player.worldX+ width;  
+                break;
+        }
+        if (newX < 0 || newX >= gp.MAX_WORLD_COL * gp.TILE_SIZE || 
+            newY < 0 || newY >= gp.MAX_WORLD_ROW * gp.TILE_SIZE) {
+            System.out.println("Cannot place building outside map bounds!");
+            return false;
+        }
+        int tileNum = gp.tileM.mapTile[newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
+        if (tileNum != 8 && tileNum != 9 && tileNum != 10 && tileNum != 11 && 
+            tileNum != 12 && tileNum != 13 && tileNum != 14 && tileNum != 15 && 
+            tileNum != 18 && tileNum != 20 && tileNum != 17) {
+            System.out.println("Cannot place animal on this type of tile!");
+            return false;
+        }
+        boolean canPlace = true;
+        for (Animal other : gp.animals) {
+            if(Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
+            Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
+                canPlace = false;
+                break;
+            }
+        }
+        for (Plant other : gp.plants) {
+            if(Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
+            Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
+                canPlace = false;
+                break;
+            }
+        }
+        return canPlace;
+    }
 
 }

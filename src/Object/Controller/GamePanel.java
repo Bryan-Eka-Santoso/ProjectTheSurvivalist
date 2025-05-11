@@ -230,10 +230,10 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         for (int i = 0; i < buildings.size(); i++) {
             buildings.get(i).draw(g2);
         }
-        player.draw(g2);
         if (gameState == BUILDING_STATE) {
             ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
+        player.draw(g2);
         eManager.lighting.update();
         eManager.draw(g2);
         ui.draw(g2);

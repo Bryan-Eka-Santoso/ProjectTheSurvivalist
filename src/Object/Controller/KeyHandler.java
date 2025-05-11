@@ -209,8 +209,8 @@ public class KeyHandler implements KeyListener, MouseListener {
             gp.player.handleGrabAction(gp.player.inventory.getSelectedItem());
         }
         if (code == KeyEvent.VK_SPACE) {
-            if (gp.gameState == gp.BUILDING_STATE) {
-                Buildings building = (Buildings) gp.player.inventory.getSelectedItem();
+            Buildings building = (Buildings) gp.player.inventory.getSelectedItem();
+            if (gp.gameState == gp.BUILDING_STATE && building.canBuild()) {
                 building.worldX = gp.player.worldX;
                 building.worldY = gp.player.worldY;
                 gp.player.isBuild = false;
@@ -224,7 +224,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                         building.worldY += gp.TILE_SIZE;
                         break;
                     case "left":
-                        building.worldX -= gp.TILE_SIZE;
+                        building.worldX -= building.width;
                         break;
                     case "right":
                         building.worldX += gp.TILE_SIZE;
