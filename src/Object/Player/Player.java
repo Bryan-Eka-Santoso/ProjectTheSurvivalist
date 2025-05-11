@@ -9,7 +9,6 @@ import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
 import Object.Items.StackableItem.Stackable;
 import Object.Plant.Plant;
-import Object.Controller.UseItem;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
