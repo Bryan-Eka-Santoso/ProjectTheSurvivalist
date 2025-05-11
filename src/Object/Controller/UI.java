@@ -49,12 +49,14 @@ public class UI {
         if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
             PlayerCraftMenu();
         }
-        if (gp.gameState == gp.DROPPED_ITEM_STATE){
-            boxAmount();
-        }
+        // if (gp.gameState == gp.DROPPED_ITEM_STATE){
+        //     drawPlusMinus();
+        // }
     }
 
-    public void drawPlusMinus() {
+    public int drawAndGetStacks() {
+        int stacksToDrop = 1;
+        
         int frameX = gp.TILE_SIZE * gp.MAX_SCREEN_COL - (gp.TILE_SIZE * 3);
         int frameY = gp.TILE_SIZE * gp.MAX_SCREEN_ROW - (gp.TILE_SIZE * 5);
         int frameWidth = gp.TILE_SIZE * 2;
@@ -81,6 +83,8 @@ public class UI {
         if (isMouseOverButton(posXMinus, posYMinus, sentenceLength(minusBtn), 30)) {
             System.out.println("Mouse over minus button");
         }
+
+        return stacksToDrop;
     }
 
     public int sentenceLength(String text) {

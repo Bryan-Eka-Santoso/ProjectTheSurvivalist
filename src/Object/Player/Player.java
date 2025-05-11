@@ -2,6 +2,7 @@ package Object.Player;
 
 import Object.Items.Item;
 import Object.Items.StackableItem.Torch;
+import Object.Items.Unstackable.Unstackable;
 import Object.Animal.Animal;
 import Object.Animal.TameAnimal;
 import Object.Controller.GamePanel;
@@ -357,11 +358,27 @@ public class Player {
         }
     }
 
+    public Item getStackableItem(Item item){
+        item.currentStack = gp.ui.drawAndGetStacks(); // Methodnya dirubah biar dia ngembaliin jumlah yang mau di drop
+
+        return item;
+    }
+    
     public void dropItem(Item selectedItem){
-        // Add to dropped Item list
-        // Item berkurang dari inventory
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
-        gp.player.inventory.removeItem(selectedItem, selectedItem.currentStack);
+        // gp.ui.drawPlusMinus();
+        
+        // gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
+        // gp.player.inventory.removeItem(selectedItem, selectedItem.currentStack);
+
+        if (selectedItem instanceof Unstackable){
+            gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
+            gp.player.inventory.removeItem(selectedItem, 1);
+            return;
+        }
+        Item stackableItem = getStackableItem(selectedItem.clone());
+        
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, stackableItem, gp));
+        gp.player.inventory.removeItem(selectedItem, 1); 
     }
 
     public String displayStats(Player player) {
