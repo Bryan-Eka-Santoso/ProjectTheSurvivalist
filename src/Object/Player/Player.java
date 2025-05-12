@@ -8,6 +8,7 @@ import Object.Controller.ItemDrop;
 import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
 import Object.Items.StackableItem.Stackable;
+import Object.Items.Unstackable.Unstackable;
 import Object.Plant.Plant;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -453,27 +454,9 @@ public class Player {
         }
     }
 
-    public Item getStackableItem(Item item){
-        item.currentStack = gp.ui.drawAndGetStacks(); // Methodnya dirubah biar dia ngembaliin jumlah yang mau di drop
-
-        return item;
-    }
-    
-    public void dropItem(Item selectedItem){
-        // gp.ui.drawPlusMinus();
-        
-        // gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
-        // gp.player.inventory.removeItem(selectedItem, selectedItem.currentStack);
-
-        if (selectedItem instanceof Unstackable){
-            gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
-            gp.player.inventory.removeItem(selectedItem, 1);
-            return;
-        }
-        Item stackableItem = getStackableItem(selectedItem.clone());
-        
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, stackableItem, gp));
-        gp.player.inventory.removeItem(selectedItem, 1); 
+    public void dropItem(Item selectedItem, int amount){
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount));
+        gp.player.inventory.removeItem(selectedItem, amount);
     }
 
     public String displayStats(Player player) {

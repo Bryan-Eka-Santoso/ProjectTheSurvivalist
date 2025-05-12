@@ -41,7 +41,7 @@ public class Inventory {
         }
         if (newItem.currentStack > 0) {
             System.out.println("Inventory full. " + newItem.name + " x" + newItem.currentStack + " not added to inventory.");
-            gp.player.dropItem(newItem);
+            gp.player.dropItem(newItem, newItem.currentStack);
         } else {
             System.out.println("Added " + temp + " " + newItem.name + " to inventory.");
         }
