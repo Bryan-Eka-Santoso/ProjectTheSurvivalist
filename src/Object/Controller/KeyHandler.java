@@ -7,12 +7,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import Object.Items.Item;
+import Object.Items.StackableItem.Stackable;
 import Object.Items.Unstackable.Buildings.Buildings;
 
 public class KeyHandler implements KeyListener, MouseListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
     GamePanel gp;
-    int temp1, temp2, counter;
+    int temp1, temp2, counter, itemStack;
     Sound sound = new Sound();
 
     public KeyHandler (GamePanel gp) {
@@ -181,6 +182,11 @@ public class KeyHandler implements KeyListener, MouseListener {
             } 
         }
         if (code == KeyEvent.VK_UP) {
+            if (gp.gameState == gp.DROPPED_ITEM_STATE){
+                if (gp.ui.amountToDrop < itemStack){
+                    gp.ui.amountToDrop++;
+                }
+            }
             if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
                 if (gp.ui.selectedRecipeIndex > 0) {
                     gp.ui.selectedRecipeIndex--; 
@@ -188,6 +194,11 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_DOWN) {
+            if (gp.gameState == gp.DROPPED_ITEM_STATE){
+                if (gp.ui.amountToDrop > 1){
+                    gp.ui.amountToDrop--;
+                }
+            }
             if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
                 if (gp.ui.selectedRecipeIndex < 19) {
                     gp.ui.selectedRecipeIndex++; 
@@ -195,8 +206,21 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_Q && !gp.player.isBuild) {
-            if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
-                gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
+            if (gp.gameState == gp.DROPPED_ITEM_STATE){
+                gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], gp.ui.amountToDrop);
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.amountToDrop = 1;
+            }
+            else if (gp.gameState == gp.PLAY_STATE){
+                if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
+                    if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Stackable){
+                        itemStack = gp.player.inventory.slots[gp.ui.selectedIndex].currentStack;
+                        gp.gameState = gp.DROPPED_ITEM_STATE;
+                    } else {
+                        gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], 1);
+                    }
+
+                }
             }
         }
         if (code == KeyEvent.VK_P && !gp.player.isBuild) {

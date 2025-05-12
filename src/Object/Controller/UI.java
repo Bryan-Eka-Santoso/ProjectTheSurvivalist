@@ -17,6 +17,7 @@ public class UI {
     Graphics2D g2;
     public int slotCol = 0;
     public int slotRow = 0;
+    public int amountToDrop = 1;
     int mouseX = 0;
     int mouseY = 0;
     public int selectedIndex;
@@ -50,19 +51,21 @@ public class UI {
         if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
             PlayerCraftMenu();
         }
-        if (gp.gameState == gp.DROPPED_ITEM_STATE){
-            boxAmount();
+        if (gp.gameState == gp.DROPPED_ITEM_STATE) {
+            drawAndGetStacks();
         }
+
+        drawStats();
     }
 
-    public void drawPlusMinus() {
+    public void drawAndGetStacks() {
         int frameX = gp.TILE_SIZE * gp.MAX_SCREEN_COL - (gp.TILE_SIZE * 3);
         int frameY = gp.TILE_SIZE * gp.MAX_SCREEN_ROW - (gp.TILE_SIZE * 5);
         int frameWidth = gp.TILE_SIZE * 2;
         int frameHeight = gp.TILE_SIZE * 4;
 
         String plusBtn = "< + >";
-        String amount = " 10 ";
+        String amount = " " + String.valueOf(amountToDrop) + " ";
         String minusBtn = "< - >";
 
         int posXPlus = frameX + (frameWidth - sentenceLength(plusBtn)) / 2 + 6;
@@ -76,13 +79,8 @@ public class UI {
         g2.drawString(amount, frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2, frameY + frameHeight * 2 / 4);
         g2.drawString(minusBtn, posXMinus, posYMinus);
 
-        if (isMouseOverButton(posXPlus, posYPlus, sentenceLength(plusBtn), 30)) {
-            System.out.println("Mouse over plus button");
-        }
-        if (isMouseOverButton(posXMinus, posYMinus, sentenceLength(minusBtn), 30)) {
-            System.out.println("Mouse over minus button");
-        }
     }
+
 
     public int sentenceLength(String text) {
         int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
@@ -356,11 +354,22 @@ public class UI {
     }
 
     public void drawStats() {
-        int frameX = gp.TILE_SIZE;
-        int frameY = gp.TILE_SIZE;
-        int frameWidth = gp.TILE_SIZE * 8;
-        int frameHeight = gp.TILE_SIZE * 4;
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+        int frameX = gp.TILE_SIZE / 2;
+        int frameY = gp.TILE_SIZE / 2;
+        int frameWidth = gp.TILE_SIZE * 6;
+        int frameHeight = gp.TILE_SIZE * 3;
+
+        Color c = new Color(255,255,255, 255);
+        g2.setColor(c);
+        g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, 35, 35);
+        
+        // BufferedImage img = null;
+        // try {
+        //     img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
+        // g2.drawImage(img, frameX, frameY, frameWidth, frameHeight, null);
     }
 
     public void drawSubWindow(int x, int y, int width, int height) {

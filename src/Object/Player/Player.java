@@ -453,11 +453,9 @@ public class Player {
         }
     }
 
-    public void dropItem(Item selectedItem){
-        // Add to dropped Item list
-        // Item berkurang dari inventory
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp));
-        gp.player.inventory.removeItem(selectedItem, selectedItem.currentStack);
+    public void dropItem(Item selectedItem, int amount){
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount));
+        gp.player.inventory.removeItem(selectedItem, amount);
     }
 
     public String displayStats(Player player) {

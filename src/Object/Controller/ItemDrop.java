@@ -16,7 +16,7 @@ public class ItemDrop {
     public int solidAreaDefaultY;
     public GamePanel gp;
 
-    public ItemDrop(int x, int y, Item item, GamePanel gp) {
+    public ItemDrop(int x, int y, Item item, GamePanel gp, int amount) {
         this.worldX = x;
         this.worldY = y;
         this.droppedItem = item;
@@ -24,6 +24,7 @@ public class ItemDrop {
         this.solidArea = new Rectangle(8, 8, 32, 32 );
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
+        this.droppedItem.currentStack = amount;
     }
     
     public void draw(Graphics2D g2) {  // Bisa dipake utk dropped item
