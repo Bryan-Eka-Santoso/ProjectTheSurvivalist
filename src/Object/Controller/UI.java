@@ -105,56 +105,7 @@ public class UI {
             System.out.println("Mouse is over the button!");
         } 
     }
-
-    // public void PlayerCraftMenu() {
-    //     int frameX = gp.TILE_SIZE * 6;
-    //     int frameY = gp.TILE_SIZE * 4;
-    //     int frameWidth = gp.TILE_SIZE * 15;
-    //     int frameHeight = gp.TILE_SIZE * 7;
     
-    //     drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-    
-    //     Shape oldClip = g2.getClip(); 
-    //     g2.setClip(frameX + 10, frameY + 10, frameWidth - 20, frameHeight - 20); 
-    
-    //     int contentX = frameX + 30;
-    //     int contentY = frameY + 60 - scrollY;
-    
-    //     g2.drawString("Items to craft:", contentX, contentY);
-    //     g2.drawString("Materials:", frameWidth - sentenceLength("Materials:"), contentY);
-    //     contentY += 60;
-    //     for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
-    //         List<Item> ingredients = entry.getKey();
-    //         Item result = entry.getValue();
-    
-    //         g2.setColor(Color.WHITE);
-    //         g2.drawImage(result.img, contentX, contentY - 25, 30, 30, null);
-    //         Font font = new Font("Arial", Font.BOLD, 18); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
-    //         g2.setFont(font);
-    //         g2.drawString(String.valueOf(result.currentStack), contentX + 20, contentY + 5);
-    //         g2.drawString(result.name, contentX + 50, contentY);
-
-    //         int drawX = frameWidth - sentenceLength("Materials:") + 30;
-    //         int drawPictureX = frameWidth - sentenceLength("Materials:") + 5;
-    //         for (Item ingredient : ingredients) {
-    //             g2.drawImage(ingredient.img, drawPictureX, contentY - 25, 30, 30, null);
-    //             Font font2 = new Font("Arial", Font.BOLD, 18);
-    //             g2.setFont(font2);
-    //             g2.drawString(String.valueOf(ingredient.currentStack), drawX, contentY + 5);
-    //             drawX += 50;
-    //             drawPictureX += 50;
-    //         }
-    
-    //         Rectangle hitbox = new Rectangle(contentX, contentY - 30 + scrollY, 200, 30);
-    //         g2.drawRect(contentX, contentY - 30 + scrollY, 200, 300);
-    //         itemHitboxes.add(hitbox);
-    //         itemList.add(result);
-
-    //         contentY += 60;
-    //     }
-    
-    //     g2.setClip(oldClip);
-    // }
     public void PlayerCraftMenu() {
         int frameX = gp.TILE_SIZE * 6;
         int frameY = gp.TILE_SIZE * 4;
