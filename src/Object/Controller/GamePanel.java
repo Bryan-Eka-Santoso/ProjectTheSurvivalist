@@ -99,15 +99,21 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
     int attempts = 0;
     int maxAttempts = 1000; // Prevent infinite loop
     int spawnedCount = 0;
-    
     int validTiles = 18;
     
+    int playerSpawnX = 40; 
+    int playerSpawnY = 44; 
+    int safeZoneRadius = 5;
     while (spawnedCount < count && attempts < maxAttempts) {
        
         int x = (int)(Math.random() * (MAX_WORLD_COL -5));
         int y = (int)(Math.random() * (MAX_WORLD_ROW -5));
         Point pos = new Point(x, y);
-        
+
+        if (Math.abs(x - playerSpawnX) < safeZoneRadius && Math.abs(y - playerSpawnY) < safeZoneRadius) {
+            attempts++;
+            continue;
+        }
         // Check if position is already used
         if (usedPositions.contains(pos)) {
             attempts++;
