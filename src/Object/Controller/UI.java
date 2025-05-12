@@ -200,7 +200,6 @@ public class UI {
                 drawX += 50;
                 drawPictureX += 50;
             }
-            g2.drawRect(contentX, contentY - 35, frameWidth - 60, 50);
 
             // Create hitbox for the full row
             Rectangle hitbox = new Rectangle(contentX, contentY - 35, frameWidth - 60, 50);
