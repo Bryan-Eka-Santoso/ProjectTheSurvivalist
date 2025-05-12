@@ -78,9 +78,7 @@ public class UI {
         g2.drawString(plusBtn, posXPlus, posYPlus);
         g2.drawString(amount, frameX + frameWidth / 2 - sentenceLength(plusBtn) / 2, frameY + frameHeight * 2 / 4);
         g2.drawString(minusBtn, posXMinus, posYMinus);
-
     }
-
 
     public int sentenceLength(String text) {
         int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
@@ -105,7 +103,7 @@ public class UI {
             System.out.println("Mouse is over the button!");
         } 
     }
-    
+
     public void PlayerCraftMenu() {
         int frameX = gp.TILE_SIZE * 6;
         int frameY = gp.TILE_SIZE * 4;
