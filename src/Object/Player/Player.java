@@ -277,209 +277,220 @@ public class Player {
                 grabbedAnimal.spriteNum = spriteNum;
             }
         }
+
         public void handleGrabAction(Item selectedItem) {
-        if (grabbedAnimal == null) {
-            TameAnimal nearbyAnimal = findNearbyAnimal();
-            if (nearbyAnimal != null) {
-                grabAnimal(nearbyAnimal, selectedItem);
+            if (grabbedAnimal == null) {
+                TameAnimal nearbyAnimal = findNearbyAnimal();
+                if (nearbyAnimal != null) {
+                    grabAnimal(nearbyAnimal, selectedItem);
+                }
+            } else {  
+                unGrabAnimal();
             }
-        } else {  
-            unGrabAnimal();
         }
-    }
 
-    public TameAnimal findNearbyAnimal() {
-        int playerCol = worldX / gp.TILE_SIZE;
-        int playerRow = worldY / gp.TILE_SIZE;
-        for (Animal animal : gp.animals){
-            if (animal instanceof TameAnimal) {
-                int animalCol = animal.worldX / gp.TILE_SIZE;
-                int animalRow = animal.worldY / gp.TILE_SIZE;
-                if (Math.abs(playerCol - animalCol) <= 1 && Math.abs(playerRow - animalRow) <= 1) {
-                    return (TameAnimal) animal;
+        public TameAnimal findNearbyAnimal() {
+            int playerCol = worldX / gp.TILE_SIZE;
+            int playerRow = worldY / gp.TILE_SIZE;
+            for (Animal animal : gp.animals){
+                if (animal instanceof TameAnimal) {
+                    int animalCol = animal.worldX / gp.TILE_SIZE;
+                    int animalRow = animal.worldY / gp.TILE_SIZE;
+                    if (Math.abs(playerCol - animalCol) <= 1 && Math.abs(playerRow - animalRow) <= 1) {
+                        return (TameAnimal) animal;
+                    }
                 }
             }
+            return null;
         }
-        return null;
-    }
 
-    public void grabAnimal(TameAnimal animal, Item selectedItem) {
-    
-        if (selectedItem != null) {
-            System.out.println("Cannot grab animal while holding an item!");
-            return;
-        }
-        if (grabbedAnimal != null) {
-            System.out.println("Already holding an animal!");
-            return;
-         }
-
-        grabbedAnimal = animal;
-   
-        gp.animals.remove(animal);
-        updateGrabbedAnimalPosition();
-        grabbedAnimal.grab();
-        System.out.println("Grabbed " + animal.getName());
+        public void grabAnimal(TameAnimal animal, Item selectedItem) {
         
-    }
+            if (selectedItem != null) {
+                System.out.println("Cannot grab animal while holding an item!");
+                return;
+            }
+            if (grabbedAnimal != null) {
+                System.out.println("Already holding an animal!");
+                return;
+            }
 
-    public void displayStatus() {
-        displayStats(this);
-        if (grabbedAnimal != null) {
-            System.out.println("Currently holding: " + grabbedAnimal.getName());
+            grabbedAnimal = animal;
+    
+            gp.animals.remove(animal);
+            updateGrabbedAnimalPosition();
+            grabbedAnimal.grab();
+            System.out.println("Grabbed " + animal.getName());
+            
         }
-    }
 
-    public void unGrabAnimal() {
-        if (grabbedAnimal != null){
-            int newX = worldX, newY = worldY;   
-            switch (direction) {
-                case "up":
-                    newY = worldY - gp.TILE_SIZE;
-                    break;
-                case "down":
-                    newY = worldY + gp.TILE_SIZE;
-                    break;
-                case "left":
-                    newX = worldX - gp.TILE_SIZE;
-                    break;
-                case "right":
-                    newX = worldX + gp.TILE_SIZE;
-                    break;
+        public void displayStatus() {
+            displayStats(this);
+            if (grabbedAnimal != null) {
+                System.out.println("Currently holding: " + grabbedAnimal.getName());
             }
-            if(newX < 0 || newX >= gp.MAX_WORLD_COL * gp.TILE_SIZE || 
-            newY < 0 || newY >= gp.MAX_WORLD_ROW * gp.TILE_SIZE) {
-                System.out.println("Cannot place animal outside map bounds!");
-                return;
-             }
-            int tileNum = gp.tileM.mapTile[newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
-            if (tileNum != 8 && tileNum != 9 && tileNum != 10 && tileNum != 11 && 
-                tileNum != 12 && tileNum != 13 && tileNum != 14 && tileNum != 15 && 
-                tileNum != 18 && tileNum != 20) {
-                System.out.println("Cannot place animal on this type of tile!");
-                return;
-            }
-            boolean canPlace = true;
-            grabbedAnimal.worldX = newX;
-            grabbedAnimal.worldY = newY;
-            for (Animal other : gp.animals) {
-                if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
-                Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
-                    canPlace = false;
-                    break;
+        }
+
+        public void unGrabAnimal() {
+            if (grabbedAnimal != null){
+                int newX = worldX, newY = worldY;   
+                switch (direction) {
+                    case "up":
+                        newY = worldY - gp.TILE_SIZE;
+                        break;
+                    case "down":
+                        newY = worldY + gp.TILE_SIZE;
+                        break;
+                    case "left":
+                        newX = worldX - gp.TILE_SIZE;
+                        break;
+                    case "right":
+                        newX = worldX + gp.TILE_SIZE;
+                        break;
                 }
-            }
-            for (Plant other : gp.plants) {
-                if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
-                Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
-                    canPlace = false;
-                    break;
+                if(newX < 0 || newX >= gp.MAX_WORLD_COL * gp.TILE_SIZE || 
+                newY < 0 || newY >= gp.MAX_WORLD_ROW * gp.TILE_SIZE) {
+                    System.out.println("Cannot place animal outside map bounds!");
+                    return;
                 }
-            }
-            if (canPlace) {
+                int tileNum = gp.tileM.mapTile[newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
+                if (tileNum != 8 && tileNum != 9 && tileNum != 10 && tileNum != 11 && 
+                    tileNum != 12 && tileNum != 13 && tileNum != 14 && tileNum != 15 && 
+                    tileNum != 18 && tileNum != 20) {
+                    System.out.println("Cannot place animal on this type of tile!");
+                    return;
+                }
+                boolean canPlace = true;
                 grabbedAnimal.worldX = newX;
                 grabbedAnimal.worldY = newY;
-                grabbedAnimal.unGrab();
-                gp.animals.add(grabbedAnimal);
-                System.out.println("Placed " + grabbedAnimal.getName() + " at (" + newX + ", " + newY + ")");
-                grabbedAnimal = null;
-            } else {
-                System.out.println("Cannot place animal here!");
+                for (Animal other : gp.animals) {
+                    if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
+                    Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                for (Plant other : gp.plants) {
+                    if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
+                    Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
+                        canPlace = false;
+                        break;
+                    }
+                }
+                if (canPlace) {
+                    grabbedAnimal.worldX = newX;
+                    grabbedAnimal.worldY = newY;
+                    grabbedAnimal.unGrab();
+                    gp.animals.add(grabbedAnimal);
+                    System.out.println("Placed " + grabbedAnimal.getName() + " at (" + newX + ", " + newY + ")");
+                    grabbedAnimal = null;
+                } else {
+                    System.out.println("Cannot place animal here!");
+                }
             }
         }
-    }
 
-        // public void buildBuildings() {
+            // public void buildBuildings() {
 
-        // }
-       
-        // KandangAyam nearbyKandang = findNearbyKandang();
-        // if (nearbyKandang != null) {
-        //     if (nearbyKandang.getCurrentCapacity() < nearbyKandang.getMaxCapacity()) {
-        //         if (nearbyKandang.addAnimal((Chicken)grabbedAnimal)) {
-        //             System.out.println("Added animal to kandang");
-        //             island.spawnChicken(); 
-        //             grabbedAnimal = null;
-        //             return;
+            // }
+        
+            // KandangAyam nearbyKandang = findNearbyKandang();
+            // if (nearbyKandang != null) {
+            //     if (nearbyKandang.getCurrentCapacity() < nearbyKandang.getMaxCapacity()) {
+            //         if (nearbyKandang.addAnimal((Chicken)grabbedAnimal)) {
+            //             System.out.println("Added animal to kandang");
+            //             island.spawnChicken(); 
+            //             grabbedAnimal = null;
+            //             return;
+            //         }
+            //     } else {
+            //         System.out.println("Kandang is full!");
+            //         return;
+            //     }
+            // }else
+
+        // public KandangAyam findNearbyKandang() {
+        //     for (Buildings building : island.buildings) {
+        //         if (building instanceof KandangAyam) {
+        //             if (Math.abs(building.getX() - worldX) <= 1 && Math.abs(building.getY() - worldY) <= 1) {
+        //                 return (KandangAyam) building;
+        //             }
         //         }
-        //     } else {
-        //         System.out.println("Kandang is full!");
-        //         return;
         //     }
-        // }else
+        //     return null;
+        // }
 
-    // public KandangAyam findNearbyKandang() {
-    //     for (Buildings building : island.buildings) {
-    //         if (building instanceof KandangAyam) {
-    //             if (Math.abs(building.getX() - worldX) <= 1 && Math.abs(building.getY() - worldY) <= 1) {
-    //                 return (KandangAyam) building;
-    //             }
-    //         }
-    //     }
-    //     return null;
-    // }
-
-    public boolean isHoldingAnimal() {
-        return grabbedAnimal != null;
-    }
-    
-
-    public void useItem(Item selectedItem) {
-        if (isHoldingAnimal()) {
-            System.out.println("Cannot use items while holding an animal!");
-            return;
+        public boolean isHoldingAnimal() {
+            return grabbedAnimal != null;
         }
-        interactObj.useItem(selectedItem, this);
-    }
+        
 
-    public void interactBuild(Buildings selectedBuilding) {
-        if (selectedBuilding != null) {
-            interactBuild.interact();
-        } else {
-            System.out.println("No building selected.");
+        public void useItem(Item selectedItem) {
+            if (isHoldingAnimal()) {
+                System.out.println("Cannot use items while holding an animal!");
+                return;
+            }
+            interactObj.useItem(selectedItem, this);
         }
 
-    }
+        public void interactBuild(Buildings selectedBuilding) {
+            if (selectedBuilding != null) {
+                interactBuild.interact();
+            } else {
+                System.out.println("No building selected.");
+            }
 
-    public void pickUpItem(Item selectedItem) {
-        if (selectedItem != null) {
-            if (selectedItem.currentStack > 0) {
-                if (selectedItem instanceof Stackable) {
-                    Item itemToAdd = selectedItem.clone();
-                    if (itemToAdd.currentStack > itemToAdd.maxStack) {
-                        itemToAdd.currentStack = itemToAdd.maxStack;
-                        selectedItem.currentStack -= itemToAdd.maxStack;
+        }
+
+        public void pickUpItem(Item selectedItem) {
+            if (selectedItem != null) {
+                if (selectedItem.currentStack > 0) {
+                    if (selectedItem instanceof Stackable) {
+                        Item itemToAdd = selectedItem.clone();
+                        if (itemToAdd.currentStack > itemToAdd.maxStack) {
+                            itemToAdd.currentStack = itemToAdd.maxStack;
+                            selectedItem.currentStack -= itemToAdd.maxStack;
+                        } else {
+                            gp.droppedItems.remove(gp.player.droppedItem);
+                        }
+                        inventory.addItems(itemToAdd);
                     } else {
+                        System.out.println("Picked up " + selectedItem.name);
+                        inventory.addItems(selectedItem.clone());
+                        selectedItem.currentStack = 0;
                         gp.droppedItems.remove(gp.player.droppedItem);
                     }
-                    inventory.addItems(itemToAdd);
                 } else {
-                    System.out.println("Picked up " + selectedItem.name);
-                    inventory.addItems(selectedItem.clone());
-                    selectedItem.currentStack = 0;
-                    gp.droppedItems.remove(gp.player.droppedItem);
+                    System.out.println("No items to pick up.");
                 }
             } else {
-                System.out.println("No items to pick up.");
+                System.out.println("No item selected.");
             }
-        } else {
-            System.out.println("No item selected.");
         }
-    }
 
-    public void dropItem(Item selectedItem, int amount){
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount));
-        gp.player.inventory.removeItem(selectedItem, amount);
-    }
+        public void dropItem(Item selectedItem, int amount){
+            gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount));
+            gp.player.inventory.removeItem(selectedItem, amount);
+        }
 
-    public String displayStats(Player player) {
-        return  "<html> ======Player stats====== <br>" +
-                "Player name: " + player.name + "<br>" +
-                "Health: " + player.health + "<br>" +
-                "Thirst: " + player.thirst + "<br>" +
-                "Hunger: " + player.hunger + "<br>" +
-                "Experience: " + player.exp + "<br>" +
-                "Level: " + player.level + "</html>";
-    }
-    
+        public void takeBuilding(Buildings selectedBuilding) {
+            if (selectedBuilding != null) {
+                gp.buildings.remove(selectedBuilding);
+                gp.player.inventory.addItems(selectedBuilding);
+                System.out.println("Picked up " + selectedBuilding.name);
+            } else {
+                System.out.println("No building selected.");
+            }
+        }
+
+        public String displayStats(Player player) {
+            return  "<html> ======Player stats====== <br>" +
+                    "Player name: " + player.name + "<br>" +
+                    "Health: " + player.health + "<br>" +
+                    "Thirst: " + player.thirst + "<br>" +
+                    "Hunger: " + player.hunger + "<br>" +
+                    "Experience: " + player.exp + "<br>" +
+                    "Level: " + player.level + "</html>";
+        }
+        
 }

@@ -223,6 +223,11 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_P && !gp.player.isBuild) {
+            if (gp.buildings.size() > 0) {
+                if (gp.player.buildingIndex != -1 && gp.gameState == gp.PLAY_STATE) {
+                    gp.player.takeBuilding(gp.buildings.get(gp.player.buildingIndex));
+                }
+            }
             if (gp.player.droppedItem != -1) {
                 gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
                 gp.player.droppedItem = -1;

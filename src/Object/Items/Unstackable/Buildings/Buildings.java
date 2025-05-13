@@ -86,14 +86,12 @@ public class Buildings extends Unstackable {
         }
         if (newX < 0 || newX >= gp.MAX_WORLD_COL * gp.TILE_SIZE || 
             newY < 0 || newY >= gp.MAX_WORLD_ROW * gp.TILE_SIZE) {
-            System.out.println("Cannot place building outside map bounds!");
             return false;
         }
         int tileNum = gp.tileM.mapTile[newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
         if (tileNum != 8 && tileNum != 9 && tileNum != 10 && tileNum != 11 && 
             tileNum != 12 && tileNum != 13 && tileNum != 14 && tileNum != 15 && 
             tileNum != 18 && tileNum != 20 && tileNum != 17) {
-            System.out.println("Cannot place animal on this type of tile!");
             return false;
         }
         boolean canPlace = true;

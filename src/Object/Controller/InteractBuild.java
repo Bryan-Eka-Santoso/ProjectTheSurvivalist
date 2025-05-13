@@ -14,7 +14,7 @@ public class InteractBuild {
     public void interact() {
         Buildings building = (Buildings) gp.buildings.get(gp.player.buildingIndex);
         if (building instanceof Chest) {
-            ((Chest) building).openChest();
+            ((Chest) building).openChest(gp.ui.g2);
         }   
     }
 }
