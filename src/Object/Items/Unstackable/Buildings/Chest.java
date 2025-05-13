@@ -22,4 +22,10 @@ public class Chest extends Buildings {
             e.printStackTrace();
         }
     }   
+
+    public void openChest() {
+        // Logika untuk membuka chest
+        System.out.println("Chest opened!");
+        
+    }
 }

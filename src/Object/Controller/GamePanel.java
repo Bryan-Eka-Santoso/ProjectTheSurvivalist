@@ -225,21 +225,42 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
 
         tileM.draw(g2);
         for (int i = 0; i < plants.size(); i++) {
-            plants.get(i).draw(g2);
+            if (plants.get(i).worldY <= player.worldY) {
+                plants.get(i).draw(g2);
+            }
         }
         for (int i = 0; i < droppedItems.size(); i++) {
             droppedItems.get(i).draw(g2);
         }
         for (int i = 0; i < animals.size(); i++) {
-            animals.get(i).draw(g2);
+            if (animals.get(i).worldY <= player.worldY) {
+                animals.get(i).draw(g2);
+            }
         }
         for (int i = 0; i < buildings.size(); i++) {
-            buildings.get(i).draw(g2);
+            if (buildings.get(i).worldY <= player.worldY) {
+                buildings.get(i).draw(g2);
+            }
         }
         if (gameState == BUILDING_STATE) {
             ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
         player.draw(g2);
+        for (int i = 0; i < plants.size(); i++) {
+            if (plants.get(i).worldY > player.worldY) {
+                plants.get(i).draw(g2);
+            }
+        }
+        for (int i = 0; i < animals.size(); i++) {
+            if (animals.get(i).worldY > player.worldY) {
+                animals.get(i).draw(g2);
+            }
+        }
+        for (int i = 0; i < buildings.size(); i++) {
+            if (buildings.get(i).worldY > player.worldY) {
+                buildings.get(i).draw(g2);
+            }
+        }
         eManager.lighting.update();
         eManager.draw(g2);
         ui.draw(g2);

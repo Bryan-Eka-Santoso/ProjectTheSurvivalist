@@ -4,10 +4,12 @@ import Object.Items.Item;
 import Object.Animal.Animal;
 import Object.Animal.TameAnimal;
 import Object.Controller.GamePanel;
+import Object.Controller.InteractBuild;
 import Object.Controller.ItemDrop;
 import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
 import Object.Items.StackableItem.Stackable;
+import Object.Items.Unstackable.Buildings.Buildings;
 import Object.Plant.Plant;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -44,6 +46,8 @@ public class Player {
     public Boolean isCutting;
     public Boolean isSlash;
     public Rectangle cutArea = new Rectangle(0, 0, 0, 0);
+    public InteractBuild interactBuild;
+
     public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {
         this.name = name;
         this.worldX = gp.TILE_SIZE * 40;
@@ -74,6 +78,7 @@ public class Player {
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - gp.TILE_SIZE / 2;
         this.recipe = recipe;
         interactObj = new UseItem(gp);
+        interactBuild = new InteractBuild(gp);
         this.isCutting = false;
         getPlayerImg();
         getPlayerCutImg();
@@ -95,6 +100,7 @@ public class Player {
             e.printStackTrace();
         }
     }
+
     public void getPlayerCutImg() {
         try {
             cutup1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
@@ -419,12 +425,20 @@ public class Player {
     
 
     public void useItem(Item selectedItem) {
-       
         if (isHoldingAnimal()) {
             System.out.println("Cannot use items while holding an animal!");
             return;
         }
         interactObj.useItem(selectedItem, this);
+    }
+
+    public void interactBuild(Buildings selectedBuilding) {
+        if (selectedBuilding != null) {
+            interactBuild.interact();
+        } else {
+            System.out.println("No building selected.");
+        }
+
     }
 
     public void pickUpItem(Item selectedItem) {

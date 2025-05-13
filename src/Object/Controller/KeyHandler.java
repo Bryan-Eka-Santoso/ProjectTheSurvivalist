@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import Object.Items.Item;
 import Object.Items.StackableItem.Stackable;
 import Object.Items.Unstackable.Buildings.Buildings;
@@ -257,12 +256,13 @@ public class KeyHandler implements KeyListener, MouseListener {
                     }
                     gp.buildings.add((Buildings) building.clone());
                 }
+            } else if (gp.buildings.size() > 0) {
+                if (gp.player.buildingIndex != -1 && gp.gameState == gp.PLAY_STATE) {
+                    gp.player.interactBuild(gp.buildings.get(gp.player.buildingIndex));
+                }
             }
-        } else {
-            if (gp.player.buildingIndex != -1) {
-                
-            }
-        }
+        } 
+        
     }
 
     @Override
