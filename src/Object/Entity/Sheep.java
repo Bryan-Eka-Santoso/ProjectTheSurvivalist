@@ -10,7 +10,7 @@ public class Sheep extends Animal {
     
     public void getItem(Player player) {
         if(readyGetItem) {
-            player.inventory.addItems(new Wool("Wool", 10, 1));
+            player.inventory.addItems(new Wool(1));
             setReadyGetItem(false);
             System.out.println("Got wool from " + getName());
         } else {

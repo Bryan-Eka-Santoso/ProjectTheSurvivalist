@@ -72,7 +72,7 @@ public class Inventory {
                     slots[i].currentStack -= amount;
                     System.out.println("Removed one " + selecItem.name + " from inventory.");
                 } 
-                if (slots[i].currentStack <= 1) {
+                else if (slots[i].currentStack <= 1) {
                     slots[i] = null;
                     System.out.println("Removed " + selecItem.name + " from inventory.");
                 }

@@ -310,7 +310,7 @@ public class UI {
         Color c = new Color(255,255,255, 255);
         g2.setColor(c);
         g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, 35, 35);
-        
+
         // BufferedImage img = null;
         // try {
         //     img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));

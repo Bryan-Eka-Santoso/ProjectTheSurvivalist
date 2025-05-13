@@ -1,12 +1,21 @@
 package Object.Controller;
 
 import Object.Items.Item;
+import Object.Items.StackableItem.Feather;
 import Object.Items.StackableItem.Food;
 import Object.Items.StackableItem.Material;
+import Object.Items.StackableItem.RawChicken;
+import Object.Items.StackableItem.RawMeat;
+import Object.Items.StackableItem.RawMutton;
+import Object.Items.StackableItem.RawPork;
+import Object.Items.StackableItem.Wood;
 import Object.Items.Unstackable.Axe;
 import Object.Items.Unstackable.Sword;
 import Object.Items.Unstackable.Buildings.Buildings;
 import Object.Player.Player;
+
+import java.util.Random;
+
 import Object.Animal.Animal;
 import Object.Animal.Chicken;
 import Object.Animal.Cow;
@@ -16,6 +25,7 @@ import Object.Animal.Sheep;
 public class UseItem {
     GamePanel gp;
     Sound sound = new Sound();
+    Random rand = new Random();
     
     public UseItem(GamePanel gp) {
         this.gp = gp;
@@ -53,7 +63,7 @@ public class UseItem {
                     player.gp.plants.get(player.plantIndex).hp -= 20;
                     System.out.println("Using axe: " + axe.name);
                     if(player.gp.plants.get(player.plantIndex).hp <= 0) {
-                       
+                        player.gp.droppedItems.add(new ItemDrop(player.gp.plants.get(player.plantIndex).worldX, player.gp.plants.get(player.plantIndex).worldY, new Wood(1), gp));
                         player.gp.plants.remove(player.plantIndex);
                         player.plantIndex = -1; 
                     }
@@ -73,6 +83,8 @@ public class UseItem {
                         chicken.hp -= damage;
                         System.out.println("Hit chicken: " + chicken.hp + "/" + 60);
                         if(chicken.hp <= 0) {
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawChicken(1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.animalIndex = -1;
                         }
@@ -82,6 +94,7 @@ public class UseItem {
                         pig.hp -= damage;
                         System.out.println("Hit pig: " + pig.hp + "/" + 80);
                         if(pig.hp <= 0) {
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.animalIndex = -1;
                         }
@@ -91,6 +104,7 @@ public class UseItem {
                         sheep.hp -= damage;
                         System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
                         if(sheep.hp <= 0) {
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMutton(1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.animalIndex = -1;
                         }
@@ -100,6 +114,7 @@ public class UseItem {
                         cow.hp -= damage;
                         System.out.println("Hit cow: " + cow.hp + "/" + 100);
                         if(cow.hp <= 0) {
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.animalIndex = -1;
                         }
