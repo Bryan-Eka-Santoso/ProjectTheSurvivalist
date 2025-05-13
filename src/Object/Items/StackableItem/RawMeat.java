@@ -5,9 +5,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Wool extends Material {
-    public Wool(int currentStack) {
-        super("Wool", 10, currentStack);
+public class RawMeat extends Food {
+    public RawMeat(int currentStack) {
+        super("Raw Meat", 10, currentStack);
             try {
                 this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Foods/null.png")); 
             } catch (IOException e) {

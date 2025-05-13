@@ -215,7 +215,7 @@ public class Sheep extends TameAnimal {
     }
   
     public void getItem(Player player) {
-        player.inventory.addItems(new Wool("Wool", 10, 1));
+        player.inventory.addItems(new Wool(1));
     }
     
     public Sheep breeding(Sheep pasangan, GamePanel gp) {
