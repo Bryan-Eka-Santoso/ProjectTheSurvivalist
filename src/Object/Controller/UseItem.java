@@ -9,8 +9,7 @@ import Object.Items.StackableItem.RawMeat;
 import Object.Items.StackableItem.RawMutton;
 import Object.Items.StackableItem.RawPork;
 import Object.Items.StackableItem.Wood;
-import Object.Items.Unstackable.Axe;
-import Object.Items.Unstackable.Sword;
+import Object.Items.Unstackable.Arsenals.*;
 import Object.Items.Unstackable.Buildings.Buildings;
 import Object.Player.Player;
 
@@ -55,30 +54,56 @@ public class UseItem {
                 if (selectedItem.currentStack <= 0) {
                     player.inventory.removeItem(selectedItem, 1); // Remove item from inventory
                 }
-            } else if (selectedItem instanceof Axe) {
-                Axe axe = (Axe) selectedItem;
-                player.isCutting = true;
-                player.cutting();
+            } else if (selectedItem instanceof Arsenal){
+                Arsenal arsenal = (Arsenal) selectedItem;
                 if (player.plantIndex != -1) {
-                    player.gp.plants.get(player.plantIndex).hp -= 20;
-                    System.out.println("Using axe: " + axe.name);
-                    if(player.gp.plants.get(player.plantIndex).hp <= 0) {
-                        player.gp.droppedItems.add(new ItemDrop(player.gp.plants.get(player.plantIndex).worldX, player.gp.plants.get(player.plantIndex).worldY, new Wood(1), gp));
+
+                    player.gp.plants.get(player.plantIndex).hp -= arsenal.damage;
+                    if (selectedItem instanceof Axe){
+                        System.out.println("Using sword: " + arsenal.name);
+                        arsenal.durability--;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    }
+
+                    if (selectedItem instanceof Sword){
+                        System.out.println("Using sword: " + arsenal.name);
+                        arsenal.durability -= 3;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    }
+
+                    if (selectedItem instanceof Club){
+                        System.out.println("Using club: " + arsenal.name);
+                        arsenal.durability -= 7;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    }
+
+                    System.out.println("Plant HP: " + player.gp.plants.get(player.plantIndex).hp);
+                    player.isCutting = true;
+                    player.cutting();
+                    if (player.gp.plants.get(player.plantIndex).hp <= 0) {
+                        player.gp.droppedItems.add(new ItemDrop(player.gp.plants.get(player.plantIndex).worldX, player.gp.plants.get(player.plantIndex).worldY, new Wood(rand.nextInt(4) + 4), gp));
                         player.gp.plants.remove(player.plantIndex);
                         player.plantIndex = -1; 
                     }
-                    playSE(6); // Play axe sound effect
-                } else {
-                    System.out.println("No plant selected to use the axe on!");
-                }
-            } else if (selectedItem instanceof Sword) {
-                Sword sword = (Sword) selectedItem;
-                player.isCutting = true;
-                player.cutting();
-                if (player.animalIndex != -1) {
-                    int damage = sword.getDamage();
+                    playSE(6);
+                } else if (player.animalIndex != -1) {
                     Animal animal = player.gp.animals.get(player.animalIndex);
-                    if(animal instanceof Chicken) {
+                    animal.hp -= arsenal.damage;
+                    int damage = arsenal.damage;
+
+                    if (selectedItem instanceof Axe){
+                        System.out.println("Using sword: " + arsenal.name);
+                        arsenal.durability -= 3;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    }
+
+                    if (selectedItem instanceof Sword || selectedItem instanceof Club){
+                        System.out.println("Using sword/club: " + arsenal.name);
+                        arsenal.durability--;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    }
+
+                    if (animal instanceof Chicken) {
                         Chicken chicken = (Chicken)animal;
                         chicken.hp -= damage;
                         System.out.println("Hit chicken: " + chicken.hp + "/" + 60);
@@ -86,16 +111,18 @@ public class UseItem {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawChicken(1), gp));
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
                             player.gp.animals.remove(player.animalIndex);
+                            player.gainExp(rand.nextInt(10) + 5);
                             player.animalIndex = -1;
                         }
                     }
-                    else if(animal instanceof Pig) {
+                    else if (animal instanceof Pig) {
                         Pig pig = (Pig)animal;
                         pig.hp -= damage;
                         System.out.println("Hit pig: " + pig.hp + "/" + 80);
                         if(pig.hp <= 0) {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
                             player.gp.animals.remove(player.animalIndex);
+                            player.gainExp(rand.nextInt(10) + 7);
                             player.animalIndex = -1;
                         }
                     }
@@ -106,6 +133,7 @@ public class UseItem {
                         if(sheep.hp <= 0) {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMutton(1), gp));
                             player.gp.animals.remove(player.animalIndex);
+                            player.gainExp(rand.nextInt(10) + 8);
                             player.animalIndex = -1;
                         }
                     }
@@ -116,12 +144,90 @@ public class UseItem {
                         if(cow.hp <= 0) {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
                             player.gp.animals.remove(player.animalIndex);
+                            player.gainExp(rand.nextInt(10) + 9);
                             player.animalIndex = -1;
                         }
                     }
-                    playSE(4); // Play axe sound effect
+                    playSE(4);
+                } else {
+                    System.out.println("No plant or animal selected to use the arsenal on!");
                 }
-            } else {
+                if (arsenal.durability <= 0) {
+                    player.inventory.removeItem(arsenal, 1); // Remove item from inventory
+                }
+            }
+        //     } else if (selectedItem instanceof Axe) {
+        //         Axe axe = (Axe) selectedItem;
+        //         player.isCutting = true;
+        //         player.cutting();
+        //         if (player.plantIndex != -1) {
+        //             player.gp.plants.get(player.plantIndex).hp -= 20;
+        //             System.out.println("Using axe: " + axe.name);
+        //             if(player.gp.plants.get(player.plantIndex).hp <= 0) {
+        //                 player.gp.droppedItems.add(new ItemDrop(player.gp.plants.get(player.plantIndex).worldX, player.gp.plants.get(player.plantIndex).worldY, new Wood(1), gp));
+        //                 player.gp.plants.remove(player.plantIndex);
+        //                 player.plantIndex = -1; 
+        //             }
+        //             playSE(6); // Play axe sound effect
+        //         } else {
+        //             System.out.println("No plant selected to use the axe on!");
+        //         }
+        //     } else if (selectedItem instanceof Sword) {
+        //         Sword sword = (Sword) selectedItem;
+        //         player.isCutting = true;
+        //         player.cutting();
+        //         if (player.animalIndex != -1) {
+        //             int damage = sword.damage;
+        //             System.out.println(sword.damage);
+        //             Animal animal = player.gp.animals.get(player.animalIndex);
+        //             if(animal instanceof Chicken) {
+        //                 Chicken chicken = (Chicken)animal;
+        //                 chicken.hp -= damage;
+        //                 System.out.println("Hit chicken: " + chicken.hp + "/" + 60);
+        //                 if(chicken.hp <= 0) {
+        //                     player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawChicken(1), gp));
+        //                     player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
+        //                     player.gp.animals.remove(player.animalIndex);
+        //                     player.gainExp(rand.nextInt(10) + 5);
+        //                     player.animalIndex = -1;
+        //                 }
+        //             }
+        //             else if(animal instanceof Pig) {
+        //                 Pig pig = (Pig)animal;
+        //                 pig.hp -= damage;
+        //                 System.out.println("Hit pig: " + pig.hp + "/" + 80);
+        //                 if(pig.hp <= 0) {
+        //                     player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
+        //                     player.gp.animals.remove(player.animalIndex);
+        //                     player.gainExp(rand.nextInt(10) + 7);
+        //                     player.animalIndex = -1;
+        //                 }
+        //             }
+        //             else if(animal instanceof Sheep) {
+        //                 Sheep sheep = (Sheep)animal;
+        //                 sheep.hp -= damage;
+        //                 System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
+        //                 if(sheep.hp <= 0) {
+        //                     player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMutton(1), gp));
+        //                     player.gp.animals.remove(player.animalIndex);
+        //                     player.gainExp(rand.nextInt(10) + 8);
+        //                     player.animalIndex = -1;
+        //                 }
+        //             }
+        //             else if(animal instanceof Cow) {
+        //                 Cow cow = (Cow)animal;
+        //                 cow.hp -= damage;
+        //                 System.out.println("Hit cow: " + cow.hp + "/" + 100);
+        //                 if(cow.hp <= 0) {
+        //                     player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
+        //                     player.gp.animals.remove(player.animalIndex);
+        //                     player.gainExp(rand.nextInt(10) + 9);
+        //                     player.animalIndex = -1;
+        //                 }
+        //             }
+        //             playSE(4); // Play sword sound effect
+        //         }
+            else {
                 System.out.println("Unknown item type!"); 
             }
         } else {

@@ -2,28 +2,30 @@ package Object.Player;
 import Object.Items.Item;
 import Object.Items.StackableItem.*;
 import Object.Items.Unstackable.*;
+import Object.Items.Unstackable.Arsenals.Sword;
+
 import java.util.*;
 
 public class Crafting {
     public HashMap<List<Item>, Item> recipes = new HashMap<>();
 
     public Crafting() {
-        List<Item> recipe1 = Arrays.asList(new Wood("Wood", 10, 2));
+        List<Item> recipe1 = Arrays.asList(new Wood(2));
         recipes.put(recipe1, new Sword("Sword1", 20, 30));
 
-        List<Item> recipe2 = Arrays.asList(new Wood("Wood", 10, 2));
+        List<Item> recipe2 = Arrays.asList(new Wood(2));
         recipes.put(recipe2, new Sword("Sword2", 20, 30));
 
-        List<Item> recipe3 = Arrays.asList(new Wood("Wood", 10, 2), new Wood("Wood", 10, 2));
+        List<Item> recipe3 = Arrays.asList(new Wood(2), new Wood(2));
         recipes.put(recipe3, new Sword("Sword3", 20, 30));
 
-        List<Item> recipe4 = Arrays.asList(new Wood("Wood", 10, 2));
+        List<Item> recipe4 = Arrays.asList(new Wood(2));
         recipes.put(recipe4, new Sword("Sword4", 20, 30));
 
-        List<Item> recipe5 = Arrays.asList(new Wood("Wood", 10, 2));
+        List<Item> recipe5 = Arrays.asList(new Wood(2));
         recipes.put(recipe5, new Sword("Sword5", 20, 30));
 
-        List<Item> recipe6 = Arrays.asList(new Wood("Wood", 10, 2));
+        List<Item> recipe6 = Arrays.asList(new Wood(2));
         recipes.put(recipe6, new Bread(5));
     }
     
