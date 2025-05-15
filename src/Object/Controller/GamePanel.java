@@ -14,7 +14,7 @@ import Object.Environment.EnvironmentManager;
 import Object.Items.StackableItem.Bread;
 import Object.Animal.*;
 import Object.Items.StackableItem.Torch;
-import Object.Items.Unstackable.Buildings.*;
+import Object.Items.Buildings.*;
 import Object.Items.StackableItem.Wood;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -51,6 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int PLAYER_CRAFTING_STATE = 4;
     public final int DROPPED_ITEM_STATE = 5;
     public final int BUILDING_STATE = 6;
+    public final int OPEN_CHEST_STATE = 7;
     
     public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
@@ -178,7 +179,7 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         player.inventory.addItems(new Axe("Axe", 20, 30));
         player.inventory.addItems(new Wood(30));
         player.inventory.addItems(new Bread(10));
-        player.inventory.addItems(new Chest(this));
+        player.inventory.addItems(new Chest(this, 10));
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -222,6 +223,10 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
+        if (gameState == OPEN_CHEST_STATE) {
+            
+        }
 
         tileM.draw(g2);
         for (int i = 0; i < plants.size(); i++) {

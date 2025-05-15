@@ -1,4 +1,4 @@
-package Object.Items.Unstackable.Buildings;
+package Object.Items.Buildings;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -17,8 +17,8 @@ public class Chest extends Buildings {
     final int maxSize = 15; // Ukuran maksimum inventory chest
     GamePanel gp;
 
-    public Chest(GamePanel gp) {
-        super("Chest", gp, new Rectangle(9, 9, 30, 30), 48, 48);
+    public Chest(GamePanel gp, int currentStack) {
+        super("Chest", 5, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48);
         inventory = new Inventory(maxSize, gp);
         this.gp = gp;
         try {

@@ -9,7 +9,7 @@ import Object.Controller.ItemDrop;
 import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
 import Object.Items.StackableItem.Stackable;
-import Object.Items.Unstackable.Buildings.Buildings;
+import Object.Items.Buildings.*;
 import Object.Plant.Plant;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -475,6 +475,7 @@ public class Player {
 
         public void takeBuilding(Buildings selectedBuilding) {
             if (selectedBuilding != null) {
+                selectedBuilding.currentStack = 1;
                 gp.buildings.remove(selectedBuilding);
                 gp.player.inventory.addItems(selectedBuilding);
                 System.out.println("Picked up " + selectedBuilding.name);

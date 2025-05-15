@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import Object.Items.Item;
 import Object.Items.StackableItem.Stackable;
-import Object.Items.Unstackable.Buildings.Buildings;
+import Object.Items.Buildings.*;
 
 public class KeyHandler implements KeyListener, MouseListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
@@ -125,7 +125,7 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code == KeyEvent.VK_SHIFT) {
             shiftPressed = true;
         }
-        if (code == KeyEvent.VK_E) {
+        if (code == KeyEvent.VK_E && gp.gameState != gp.INVENTORY_STATE) {
             gp.player.useItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
         }
         if (code == KeyEvent.VK_ESCAPE) {
@@ -212,7 +212,7 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
             else if (gp.gameState == gp.PLAY_STATE){
                 if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
-                    if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Stackable){
+                    if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Stackable || gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Buildings){
                         itemStack = gp.player.inventory.slots[gp.ui.selectedIndex].currentStack;
                         gp.gameState = gp.DROPPED_ITEM_STATE;
                     } else {

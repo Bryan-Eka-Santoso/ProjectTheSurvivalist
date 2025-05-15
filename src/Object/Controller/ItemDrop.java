@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import Object.Items.Item;
+import Object.Items.Buildings.Buildings;
 import Object.Items.StackableItem.Stackable;
 
 public class ItemDrop {
@@ -46,7 +47,7 @@ public class ItemDrop {
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             
             g2.drawImage(droppedItem.img, screenX, screenY, 35, 35, null);
-            if (droppedItem instanceof Stackable) {
+            if (droppedItem instanceof Stackable || droppedItem instanceof Buildings) {
                 Font font = new Font("Arial", Font.BOLD, 15); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
                 g2.setColor(Color.white);
                 g2.setFont(font);

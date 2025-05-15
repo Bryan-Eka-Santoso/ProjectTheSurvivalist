@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import Object.Items.Item;
+import Object.Items.Buildings.Buildings;
 import Object.Items.StackableItem.*;
 
 public class UI {
@@ -53,6 +54,9 @@ public class UI {
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE) {
             drawAndGetStacks();
+        }
+        if (gp.gameState == gp.BUILDING_STATE) {
+
         }
 
         drawStats();
@@ -225,6 +229,16 @@ public class UI {
                 }
                 g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
             }
+            if (gp.player.inventory.slots[i] instanceof Buildings) {
+                Buildings stackableItem = (Buildings) gp.player.inventory.slots[i];
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
+                g2.setFont(font);
+                int dx = 30;
+                if (stackableItem.currentStack < 10) {
+                    dx = 40;
+                }
+                g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
+            }
             slotX += (gp.TILE_SIZE + 25);
         }
 
@@ -275,6 +289,16 @@ public class UI {
             g2.drawImage(gp.player.inventory.slots[i].img, slotX + 5, slotY + 5, gp.TILE_SIZE, gp.TILE_SIZE, null);
             if (gp.player.inventory.slots[i] instanceof Stackable) {
                 Stackable stackableItem = (Stackable) gp.player.inventory.slots[i];
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
+                g2.setFont(font);
+                int dx = 30;
+                if (stackableItem.currentStack < 10) {
+                    dx = 40;
+                }
+                g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
+            }
+            if (gp.player.inventory.slots[i] instanceof Buildings) {
+                Buildings stackableItem = (Buildings) gp.player.inventory.slots[i];
                 Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
                 g2.setFont(font);
                 int dx = 30;

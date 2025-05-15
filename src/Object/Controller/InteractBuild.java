@@ -1,8 +1,6 @@
 package Object.Controller;
 
-import Object.Items.Unstackable.Buildings.Buildings;
-import Object.Items.Unstackable.Buildings.Chest;
-
+import Object.Items.Buildings.*;
 public class InteractBuild {
     GamePanel gp;
     Sound sound = new Sound();

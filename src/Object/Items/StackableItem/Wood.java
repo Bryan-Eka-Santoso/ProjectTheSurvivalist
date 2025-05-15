@@ -16,7 +16,7 @@ public class Wood extends Material {
     }
 
     public Wood(int currentStack) {
-        super("Wood", 20, 1);
+        super("Wood", 20, currentStack);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/wood-log.png")); 
         } catch (IOException e) {

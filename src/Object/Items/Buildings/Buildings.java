@@ -1,4 +1,4 @@
-package Object.Items.Unstackable.Buildings;
+package Object.Items.Buildings;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -6,17 +6,17 @@ import java.awt.Rectangle;
 import Object.Animal.Animal;
 import Object.Controller.GamePanel;
 import Object.Plant.Plant;
-import Object.Items.Unstackable.Unstackable;
+import Object.Items.Item;
 
-public class Buildings extends Unstackable {
+public class Buildings extends Item {
     public int worldX, worldY, width, height;
     public GamePanel gp;
     public Rectangle solidArea;
     public int solidAreaDefaultX; 
     public int solidAreaDefaultY;
 
-    public Buildings(String name, GamePanel gp, Rectangle solidArea, int width, int height) {
-        super(name);
+    public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height) {
+        super(name, maxStack, currentStack);
         this.gp = gp;
         this.worldX = gp.player.worldX;
         this.worldY = gp.player.worldY;
@@ -103,6 +103,13 @@ public class Buildings extends Unstackable {
             }
         }
         for (Plant other : gp.plants) {
+            if(Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
+            Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
+                canPlace = false;
+                break;
+            }
+        }
+        for (Buildings other : gp.buildings) {
             if(Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
             Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
                 canPlace = false;
