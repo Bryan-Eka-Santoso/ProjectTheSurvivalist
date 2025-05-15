@@ -1,4 +1,4 @@
-import Object.Controller.Game;
+import Objek.Controller.Game;
 
 public class App {
     public static void main(String[] args) {
