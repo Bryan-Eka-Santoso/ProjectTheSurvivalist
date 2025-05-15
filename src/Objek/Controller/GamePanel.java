@@ -177,9 +177,12 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         player.inventory.addItems(new Sword("Sword", 20, 30));
         player.inventory.addItems(new Torch(this, 5));
         player.inventory.addItems(new Axe("Axe", 20, 30));
-        player.inventory.addItems(new Wood(30));
+        player.inventory.addItems(new Wood(10));
         player.inventory.addItems(new Bread(10));
-        player.inventory.addItems(new Chest(this, 10));
+        player.inventory.addItems(new Chest(this, 5));
+        player.inventory.addItems(new CraftingTable(this, 10));
+        player.inventory.addItems(new Campfire(this, 10));
+        player.inventory.addItems(new Smelter(this, 1));
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();

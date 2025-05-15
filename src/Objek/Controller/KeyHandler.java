@@ -345,7 +345,9 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.ui.selectedChestIndex = 0;
             } else if (gp.gameState == gp.BUILDING_STATE) {
                 Buildings building = (Buildings) gp.player.inventory.getSelectedItem().clone();
-                ((Chest) building).inventory = new Inventory(32, gp);
+                if (building instanceof Chest) {
+                    ((Chest) building).inventory = new Inventory(32, gp);
+                }
                 if (building.canBuild()) {
                     building.worldX = gp.player.worldX;
                     building.worldY = gp.player.worldY;

@@ -10,12 +10,10 @@ import Objek.Player.Inventory;
 public class Chest extends Buildings {
     public Inventory inventory;
     public int maxCapacity = 32;
-    GamePanel gp;
 
     public Chest(GamePanel gp, int currentStack) {
         super("Chest", 5, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48);
         this.inventory = new Inventory(32, gp);
-        this.gp = gp;
 
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/chest.png"));
