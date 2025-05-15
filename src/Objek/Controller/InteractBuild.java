@@ -13,7 +13,6 @@ public class InteractBuild {
         Buildings building = (Buildings) gp.buildings.get(gp.player.buildingIndex);
         if (building instanceof Chest) {
             gp.gameState = gp.OPEN_CHEST_STATE;
-            System.out.println("Interacting with chest: " + building.name);
         }   
     }
 }

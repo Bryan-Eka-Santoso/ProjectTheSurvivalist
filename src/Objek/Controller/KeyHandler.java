@@ -9,18 +9,22 @@ import java.awt.event.MouseListener;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Player.Inventory;
 
 public class KeyHandler implements KeyListener, MouseListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
     GamePanel gp;
     int temp1, temp2, counter, itemStack;
     Sound sound = new Sound();
+    boolean isTemp1Chest, isTemp2Chest;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
         temp1 = 0;
         temp2 = 0;
         counter = 0;
+        isTemp1Chest = false;
+        isTemp2Chest = false;
     }
 
     @Override
@@ -114,16 +118,24 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
             if (gp.gameState == gp.OPEN_CHEST_STATE) {
                 playSE(2);
-                if (gp.ui.selectedChestIndex > 0) {
-                    if (gp.ui.slotCol > 0) {
-                        gp.ui.slotCol--;
-                    } else {
-                        gp.ui.slotCol = 3;
-                        gp.ui.slotRow--;
-                    }
-                    if (gp.ui.isPointingChest) {
+                if (gp.ui.isPointingChest && gp.ui.selectedChestIndex > 0) {
+                    if (gp.ui.selectedChestIndex > 0) {
+                        if (gp.ui.slotCol > 0) {
+                            gp.ui.slotCol--;
+                        } else {
+                            gp.ui.slotCol = 3;
+                            gp.ui.slotRow--;
+                        }
                         gp.ui.selectedChestIndex--;
-                    } else {
+                }
+                } else if (gp.ui.selectedIndex > 0) {
+                    if (gp.ui.selectedIndex > 0) {
+                        if (gp.ui.slotCol > 0) {
+                            gp.ui.slotCol--;
+                        } else {
+                            gp.ui.slotCol = 3;
+                            gp.ui.slotRow--;
+                        }
                         gp.ui.selectedIndex--;
                     }
                 }
@@ -148,17 +160,27 @@ public class KeyHandler implements KeyListener, MouseListener {
             if (gp.gameState == gp.OPEN_CHEST_STATE) {
                 playSE(2);
                 int maxIndex = gp.ui.isPointingChest ? 31 : 23;
-                if (gp.ui.selectedChestIndex < maxIndex) {
-                    if ((gp.ui.slotCol + 1) % 4 == 0) {
-                        gp.ui.slotCol = 0;
-                        gp.ui.slotRow++;
-                    } else {
-                        gp.ui.slotCol++;
-                    }
+                if (gp.ui.isPointingChest) {
                     if (gp.ui.selectedChestIndex < maxIndex) {
-                        gp.ui.selectedChestIndex++;
-                    } else {
-                        gp.ui.selectedIndex++;
+                        if ((gp.ui.slotCol + 1) % 4 == 0) {
+                            gp.ui.slotCol = 0;
+                            gp.ui.slotRow++;
+                            gp.ui.selectedChestIndex++;
+                        } else {
+                            gp.ui.slotCol++;
+                            gp.ui.selectedChestIndex++;
+                        }
+                    }
+                } else {
+                    if (gp.ui.selectedIndex < maxIndex) {
+                        if ((gp.ui.slotCol + 1) % 4 == 0) {
+                            gp.ui.slotCol = 0;
+                            gp.ui.slotRow++;
+                            gp.ui.selectedIndex++;
+                        } else if (gp.ui.selectedIndex < maxIndex) {
+                            gp.ui.slotCol++;
+                            gp.ui.selectedIndex++;
+                        }
                     }
                 }
             }
@@ -190,7 +212,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.player.lightUpdated = true;
             }
         }
-        if (gp.player.grabbedAnimal == null && !gp.player.isBuild) {
+        if (gp.player.grabbedAnimal == null && gp.gameState == gp.PLAY_STATE) {
             if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
                 if (gp.gameState != gp.INVENTORY_STATE){ // Ada bug kalo game state ny di inventory
                     gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
@@ -201,17 +223,60 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_R && !gp.player.isBuild) {
-            playSE(2);
-            if (counter == 0) {
-                temp1 = gp.ui.selectedIndex;
-            }
-            if (counter == 1) {
-                temp2 = gp.ui.selectedIndex;
-            }
-            counter++;
-            if (counter == 2) {
-                counter = 0;
-                gp.player.inventory.swapItems(temp1, temp2);
+            if (gp.gameState == gp.INVENTORY_STATE || gp.gameState == gp.PLAY_STATE) {
+                playSE(2);
+                if (counter == 0) {
+                    temp1 = gp.ui.selectedIndex;
+                }
+                if (counter == 1) {
+                    temp2 = gp.ui.selectedIndex;
+                }
+                counter++;
+                if (counter == 2) {
+                    counter = 0;
+                    gp.player.inventory.swapItems(temp1, temp2);
+                }
+            } else {
+                playSE(2);
+                if (counter == 0) {
+                    if (gp.ui.isPointingChest) {
+                        temp1 = gp.ui.selectedChestIndex;
+                        isTemp1Chest = true;
+                    } else {
+                        temp1 = gp.ui.selectedIndex;
+                    }
+                }
+                if (counter == 1) {
+                    if (gp.ui.isPointingChest) {
+                        temp2 = gp.ui.selectedChestIndex;
+                        isTemp2Chest = true;
+                    } else {
+                        temp2 = gp.ui.selectedIndex;
+                    }
+                }
+                counter++;
+                if (counter == 2) {
+                    counter = 0;
+                    if (isTemp1Chest && isTemp2Chest) {
+                        Item tempItem = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1];  
+                        ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1] = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2];
+                        ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2] = tempItem;
+                    } else if (isTemp1Chest && !isTemp2Chest) {
+                        Item tempItem1 = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1];  
+                        Item tempItem2 = gp.player.inventory.slots[temp2];
+                        ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1] = tempItem2;
+                        gp.player.inventory.slots[temp2] = tempItem1;
+                    } else if (!isTemp1Chest && isTemp2Chest) {
+                        Item tempItem1 = gp.player.inventory.slots[temp1];
+                        Item tempItem2 = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2];
+                        gp.player.inventory.slots[temp1] = tempItem2;
+                        ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2] = tempItem1;
+                    } else {
+                        gp.player.inventory.swapItems(temp1, temp2);
+                    }
+                    isTemp1Chest = false;
+                    isTemp2Chest = false;
+                }
             }
         }
         if (code == KeyEvent.VK_C && !gp.player.isBuild) {
@@ -259,16 +324,10 @@ public class KeyHandler implements KeyListener, MouseListener {
                     } else {
                         gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], 1);
                     }
-
                 }
             }
         }
         if (code == KeyEvent.VK_P && !gp.player.isBuild) {
-            if (gp.buildings.size() > 0) {
-                if (gp.player.buildingIndex != -1 && gp.gameState == gp.PLAY_STATE) {
-                    gp.player.takeBuilding(gp.buildings.get(gp.player.buildingIndex));
-                }
-            }
             if (gp.player.droppedItem != -1) {
                 gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
                 gp.player.droppedItem = -1;
@@ -285,31 +344,38 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.ui.selectedIndex = 0;
                 gp.ui.selectedChestIndex = 0;
             } else if (gp.gameState == gp.BUILDING_STATE) {
-                Buildings building = (Buildings) gp.player.inventory.getSelectedItem();
+                Buildings building = (Buildings) gp.player.inventory.getSelectedItem().clone();
+                ((Chest) building).inventory = new Inventory(32, gp);
                 if (building.canBuild()) {
                     building.worldX = gp.player.worldX;
                     building.worldY = gp.player.worldY;
                     gp.player.isBuild = false;
                     gp.gameState = gp.PLAY_STATE;
-                    gp.player.inventory.removeItem(building, 1);
+                    gp.player.inventory.removeItem(gp.player.inventory.getSelectedItem(), 1);
                     switch (gp.player.direction) {
                         case "up":
-                        building.worldY -= gp.TILE_SIZE;
+                            building.worldY -= gp.TILE_SIZE;
                         break;
                         case "down":
-                        building.worldY += gp.TILE_SIZE;
+                            building.worldY += gp.TILE_SIZE;
                         break;
                         case "left":
-                        building.worldX -= building.width;
+                            building.worldX -= building.width;
                         break;
                         case "right":
-                        building.worldX += gp.TILE_SIZE;
+                            building.worldX += gp.TILE_SIZE;
                         break;
                     }
-                    gp.buildings.add((Buildings) building.clone());
+                    gp.buildings.add((Buildings) building);
                 }
             } else if (gp.buildings.size() > 0) {
+                counter = 0;
+                gp.ui.slotCol = 0;
+                gp.ui.slotRow = 0;
+                gp.ui.selectedIndex = 0;
+                gp.ui.selectedChestIndex = 0;
                 if (gp.player.buildingIndex != -1 && gp.gameState == gp.PLAY_STATE) {
+                    System.out.println(gp.player.buildingIndex);
                     gp.player.interactBuild(gp.buildings.get(gp.player.buildingIndex));
                 }
             }

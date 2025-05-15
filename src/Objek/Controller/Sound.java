@@ -35,7 +35,7 @@ public class Sound {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             clip = AudioSystem.getClip();
             clip.open(ais);
-            System.out.println("Sukses load clip!");
+            // System.out.println("Sukses load clip!");
         } catch (Exception e) {
             System.out.println("Gagal load clip:");
             e.printStackTrace(); // Menampilkan error

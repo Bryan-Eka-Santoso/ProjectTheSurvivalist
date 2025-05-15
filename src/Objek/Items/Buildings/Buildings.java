@@ -3,7 +3,6 @@ package Objek.Items.Buildings;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-
 import Objek.Animal.Animal;
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;

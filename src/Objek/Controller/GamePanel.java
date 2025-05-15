@@ -224,10 +224,6 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (gameState == OPEN_CHEST_STATE) {
-            
-        }
-
         tileM.draw(g2);
         for (int i = 0; i < buildings.size(); i++) {
             if (buildings.get(i).worldY <= player.worldY) {
