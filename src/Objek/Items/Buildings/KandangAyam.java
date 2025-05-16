@@ -17,8 +17,6 @@ public class KandangAyam extends Kandang{
     Scanner scanner = new Scanner(System.in);
     Scanner scannerStr = new Scanner(System.in);
 
-
-
     public KandangAyam(GamePanel gp) {
         super("Kandang Ayam", gp );
         this.gp = gp;

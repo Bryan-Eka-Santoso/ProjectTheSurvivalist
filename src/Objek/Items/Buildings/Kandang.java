@@ -2,7 +2,6 @@ package Objek.Items.Buildings;
 
 import Objek.Player.Player;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import Objek.Animal.TameAnimal;
@@ -12,9 +11,8 @@ import Objek.Controller.GamePanel;
 
 public abstract class Kandang extends Buildings {
 
-    
     public Kandang(String name,GamePanel gp) {
-        super(name, gp, new Rectangle(11,10,42,40),64,64);
+        super(name, 3, 1, gp, new Rectangle(11,10,42,40),64,64);
         this.gp = gp;
         this.worldX = gp.player.worldX;
         this.worldY = gp.player.worldY;

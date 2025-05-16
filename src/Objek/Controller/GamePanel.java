@@ -205,12 +205,8 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         player.inventory.addItems(new CraftingTable(this, 10));
         player.inventory.addItems(new Campfire(this, 10));
         player.inventory.addItems(new Smelter(this, 1));
-        player.inventory.addItems(new Chest(this));
+        player.inventory.addItems(new Chest(this, 2));
         player.inventory.addItems(new KandangAyam(this));
-        player.inventory.addItems(new PigCage(this));
-        player.inventory.addItems(new SheepCage(this));
-        player.inventory.addItems(new CowCage(this));
-
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();

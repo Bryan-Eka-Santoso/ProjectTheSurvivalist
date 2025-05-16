@@ -326,47 +326,21 @@ public class Player {
             
         }
 
-        public void displayStatus() {
-            displayStats(this);
-            if (grabbedAnimal != null) {
-                System.out.println("Currently holding: " + grabbedAnimal.getName());
-            }
-        }
-
-    public void unGrabAnimal() {
-        if (grabbedAnimal != null){
-            for(Buildings building : gp.buildings) {
-                if(building instanceof Kandang) {
-                    if(Math.abs(worldX - building.worldX) <= gp.TILE_SIZE && 
-                    Math.abs(worldY - building.worldY) <= gp.TILE_SIZE) {   
-                        Kandang kandang = (Kandang)building;
-                        if(kandang.addAnimal(grabbedAnimal)) {
-                            grabbedAnimal = null;
-                            gp.checkAndRespawnAnimals();
-                            return;
+        public void unGrabAnimal() {
+            if (grabbedAnimal != null){
+                for(Buildings building : gp.buildings) {
+                    if(building instanceof Kandang) {
+                        if(Math.abs(worldX - building.worldX) <= gp.TILE_SIZE && 
+                        Math.abs(worldY - building.worldY) <= gp.TILE_SIZE) {   
+                            Kandang kandang = (Kandang)building;
+                            if(kandang.addAnimal(grabbedAnimal)) {
+                                grabbedAnimal = null;
+                                gp.checkAndRespawnAnimals();
+                                return;
+                            }
                         }
                     }
                 }
-            }
-            int newX = worldX, newY = worldY;   
-            switch (direction) {
-                case "up":
-                    newY = worldY - gp.TILE_SIZE;
-                    break;
-                case "down":
-                    newY = worldY + gp.TILE_SIZE;
-                    break;
-                case "left":
-                    newX = worldX - gp.TILE_SIZE;
-                    break;
-                case "right":
-                    newX = worldX + gp.TILE_SIZE;
-                    break;
-            }
-        }
-
-        public void unGrabAnimal() {
-            if (grabbedAnimal != null){
                 int newX = worldX, newY = worldY;   
                 switch (direction) {
                     case "up":
@@ -383,9 +357,9 @@ public class Player {
                         break;
                 }
                 if(newX < 0 || newX >= gp.MAX_WORLD_COL * gp.TILE_SIZE || 
-                newY < 0 || newY >= gp.MAX_WORLD_ROW * gp.TILE_SIZE) {
-                    System.out.println("Cannot place animal outside map bounds!");
-                    return;
+                    newY < 0 || newY >= gp.MAX_WORLD_ROW * gp.TILE_SIZE) {
+                        System.out.println("Cannot place animal outside map bounds!");
+                        return;
                 }
                 int tileNum = gp.tileM.mapTile[newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
                 if (tileNum != 8 && tileNum != 9 && tileNum != 10 && tileNum != 11 && 
@@ -399,31 +373,31 @@ public class Player {
                 grabbedAnimal.worldY = newY;
                 for (Animal other : gp.animals) {
                     if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
-                    Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
+                        Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
                         canPlace = false;
                         break;
                     }
                 }
-                for (Plant other : gp.plants) {
-                    if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
-                    Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
-                        canPlace = false;
-                        break;
+                    for (Plant other : gp.plants) {
+                        if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
+                        Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
+                            canPlace = false;
+                            break;
+                        }
                     }
-                }
-                if (canPlace) {
-                    grabbedAnimal.worldX = newX;
-                    grabbedAnimal.worldY = newY;
-                    grabbedAnimal.unGrab();
-                    gp.animals.add(grabbedAnimal);
-                    System.out.println("Placed " + grabbedAnimal.getName() + " at (" + newX + ", " + newY + ")");
-                    grabbedAnimal = null;
-                } else {
-                    System.out.println("Cannot place animal here!");
-                }
+                    if (canPlace) {
+                        grabbedAnimal.worldX = newX;
+                        grabbedAnimal.worldY = newY;
+                        grabbedAnimal.unGrab();
+                        gp.animals.add(grabbedAnimal);
+                        System.out.println("Placed " + grabbedAnimal.getName() + " at (" + newX + ", " + newY + ")");
+                        grabbedAnimal = null;
+                    } else {
+                        System.out.println("Cannot place animal here!");
+                    }
             }
         }
-     
+
         public boolean isHoldingAnimal() {
             return grabbedAnimal != null;
         }
@@ -486,5 +460,4 @@ public class Player {
                 System.out.println("No building selected.");
             }
         }
-    }
 }
