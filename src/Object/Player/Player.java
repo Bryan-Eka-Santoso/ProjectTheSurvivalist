@@ -10,6 +10,7 @@ import Object.Controller.KeyHandler;
 import Object.Controller.UseItem;
 import Object.Items.StackableItem.Stackable;
 import Object.Items.Unstackable.Buildings.Buildings;
+import Object.Items.Unstackable.Buildings.Kandang;
 import Object.Plant.Plant;
 import javax.imageio.ImageIO;
 import java.awt.Graphics2D;
@@ -332,6 +333,19 @@ public class Player {
 
     public void unGrabAnimal() {
         if (grabbedAnimal != null){
+            for(Buildings building : gp.buildings) {
+                if(building instanceof Kandang) {
+                    if(Math.abs(worldX - building.worldX) <= gp.TILE_SIZE && 
+                    Math.abs(worldY - building.worldY) <= gp.TILE_SIZE) {   
+                        Kandang kandang = (Kandang)building;
+                        if(kandang.addAnimal(grabbedAnimal)) {
+                            grabbedAnimal = null;
+                            gp.checkAndRespawnAnimals();
+                            return;
+                        }
+                    }
+                }
+            }
             int newX = worldX, newY = worldY;   
             switch (direction) {
                 case "up":
@@ -389,36 +403,7 @@ public class Player {
         }
     }
 
-        // public void buildBuildings() {
-
-        // }
-       
-        // KandangAyam nearbyKandang = findNearbyKandang();
-        // if (nearbyKandang != null) {
-        //     if (nearbyKandang.getCurrentCapacity() < nearbyKandang.getMaxCapacity()) {
-        //         if (nearbyKandang.addAnimal((Chicken)grabbedAnimal)) {
-        //             System.out.println("Added animal to kandang");
-        //             island.spawnChicken(); 
-        //             grabbedAnimal = null;
-        //             return;
-        //         }
-        //     } else {
-        //         System.out.println("Kandang is full!");
-        //         return;
-        //     }
-        // }else
-
-    // public KandangAyam findNearbyKandang() {
-    //     for (Buildings building : island.buildings) {
-    //         if (building instanceof KandangAyam) {
-    //             if (Math.abs(building.getX() - worldX) <= 1 && Math.abs(building.getY() - worldY) <= 1) {
-    //                 return (KandangAyam) building;
-    //             }
-    //         }
-    //     }
-    //     return null;
-    // }
-
+    
     public boolean isHoldingAnimal() {
         return grabbedAnimal != null;
     }

@@ -19,7 +19,10 @@ public class Sheep extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
+    String gender;
     boolean readyGetItem;
+    
+    boolean readyBreeding;
     private static final int SHEEP_WIDTH = 128;
     private static final int SHEEP_HEIGHT = 128;
     public Sheep(String name, int x, int y, GamePanel gp) {
@@ -35,8 +38,10 @@ public class Sheep extends TameAnimal {
         this.solidAreaDefaultY = solidArea.y;
         this.grabOffsetX = 0;
         this.grabOffsetY = -40;
-        readyBreeding = true;
-        readyGetItem = true;
+        this.gender = (Math.random() < 0.5) ? "Male" : "Female";
+        this.readyBreeding = true;
+        this.readyGetItem = true;
+        
         this.hp = 100;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/sheep/up1.png"));
@@ -66,6 +71,12 @@ public class Sheep extends TameAnimal {
     @Override
     public int getHeight() {
         return SHEEP_HEIGHT;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public boolean isReadyGetItem() {
+        return readyGetItem;
     }
     private void setRandomDirection() {
         String newDirection= null;

@@ -75,6 +75,7 @@ public class UseItem {
                         if(chicken.hp <= 0) {
                             player.gp.animals.remove(player.animalIndex);
                             player.animalIndex = -1;
+                            player.gp.checkAndRespawnAnimals();
                         }
                     }
                     else if(animal instanceof Pig) {

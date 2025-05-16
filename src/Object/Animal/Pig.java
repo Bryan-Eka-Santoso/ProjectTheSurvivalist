@@ -14,7 +14,9 @@ import java.awt.Color;
 
 public class Pig extends TameAnimal{
     Random random = new Random();
+    String gender;
     boolean readyGetItem;
+    boolean readyBreeding;
     private Rectangle upHitbox;
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
@@ -32,8 +34,9 @@ public class Pig extends TameAnimal{
         this.solidArea = downHitbox;
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
-        readyBreeding = true;
-        readyGetItem = true;
+        this.gender = (Math.random() < 0.5) ? "Male" : "Female";
+        this.readyBreeding = true;
+        this.readyGetItem = true;
         this.grabOffsetX = 0;
         this.grabOffsetY = -40;
         this.hp = 100;
@@ -61,6 +64,12 @@ public class Pig extends TameAnimal{
     @Override
     public int getWidth() {
         return PIG_WIDTH;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public boolean isReadyGetItem() {
+        return readyGetItem;
     }
     @Override
     public int getHeight() {

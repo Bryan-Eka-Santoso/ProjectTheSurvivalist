@@ -55,6 +55,7 @@ public class UI {
             drawAndGetStacks();
         }
 
+
         drawStats();
     }
 
@@ -103,7 +104,15 @@ public class UI {
             System.out.println("Mouse is over the button!");
         } 
     }
+    public void menuKandang(){
+        int frameX = gp.TILE_SIZE * 6;
+        int frameY = gp.TILE_SIZE * 4;
+        int frameWidth = gp.TILE_SIZE * 15;
+        int frameHeight = gp.TILE_SIZE * 7;
 
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+    }
     public void PlayerCraftMenu() {
         int frameX = gp.TILE_SIZE * 6;
         int frameY = gp.TILE_SIZE * 4;

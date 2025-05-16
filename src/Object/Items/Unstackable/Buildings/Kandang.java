@@ -1,21 +1,33 @@
-// package Object.Items.Unstackable.Buildings;
-// import Object.Player.Island;
-// import Object.Player.Player;
+package Object.Items.Unstackable.Buildings;
+import Object.Player.Player;
 
-// import java.awt.Rectangle;
-// import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import Object.Animal.TameAnimal;
+import javax.imageio.ImageIO;
 
-// import Object.GamePanel;
+import Object.Controller.GamePanel;
 
-// public abstract class Kandang extends Buildings {
-//     GamePanel gp;
-//     Rectangle solidArea;
-//     BufferedImage img;
+public abstract class Kandang extends Buildings {
 
-//     public Kandang(String name, int x, int y, GamePanel gp, Rectangle solidArea) {
-//         super(name, x, y);
-//     }
-//     public abstract int getCurrentCapacity();
-//     public abstract int getMaxCapacity();
-//     public abstract void interact(Player player, Island island);
-// }
+    
+    public Kandang(String name,GamePanel gp) {
+        super(name, gp, new Rectangle(11,10,42,40),64,64);
+        this.gp = gp;
+        this.worldX = gp.player.worldX;
+        this.worldY = gp.player.worldY;
+        this.solidAreaDefaultX = solidArea.x;
+        this.solidAreaDefaultY = solidArea.y;
+        try {
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/coop.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public abstract int getCurrentCapacity();
+    public abstract int getMaxCapacity();
+    public abstract void interact(Player player, GamePanel gp);
+    public abstract boolean addAnimal(TameAnimal animal);
+}

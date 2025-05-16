@@ -17,8 +17,12 @@ public class Cow extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
+    
     Random random = new Random();
+    String gender;
     boolean readyGetItem;
+    
+    boolean readyBreeding;
     private static final int COW_WIDTH = 128;
     private static final int COW_HEIGHT = 128;
     public Cow(String name, int x, int y, GamePanel gp) {
@@ -32,8 +36,9 @@ public class Cow extends TameAnimal {
         this.solidArea = downHitbox;
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
-        readyBreeding = true;
-        readyGetItem = true;
+        this.gender = (Math.random() < 0.5) ? "Male" : "Female";
+        this.readyBreeding = true;
+        this.readyGetItem = true;
         this.grabOffsetX = 0;
         this.grabOffsetY = -40;
         this.hp = 100;
@@ -61,6 +66,12 @@ public class Cow extends TameAnimal {
     @Override
     public int getWidth() {
         return COW_WIDTH;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public boolean isReadyGetItem() {
+        return readyGetItem;
     }
     @Override
     public int getHeight() {
