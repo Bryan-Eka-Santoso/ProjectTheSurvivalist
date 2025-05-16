@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class MetalSword extends Sword {
     public MetalSword() {
-        super("Metal Sword", 18, 120);
+        super("Metal Sword", 18, 140);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/metalsword.png")); 
         } catch (IOException e) {

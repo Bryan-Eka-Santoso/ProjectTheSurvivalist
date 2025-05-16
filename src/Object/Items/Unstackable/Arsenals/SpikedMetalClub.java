@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class SpikedMetalClub extends Club {
     public SpikedMetalClub() {
-        super("Spiked Metal Club", 26, 105);
+        super("Spiked Metal Club", 26, 115);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/spikedmetalclub.png")); 
         } catch (IOException e) {

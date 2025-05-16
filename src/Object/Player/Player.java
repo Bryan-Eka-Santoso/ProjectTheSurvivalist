@@ -91,10 +91,15 @@ public class Player {
     public void gainExp(int amount) {
         exp += amount;
         if (exp >= maxExp) {
-            exp -= maxExp; // Reset exp
-            level++; // Increase level
-            maxExp += 50; // Increase max exp for next level
+            exp -= maxExp;
+            level++;
+            maxExp += 50;
             System.out.println("Level up! Current level: " + level);
+        }
+        if (level > 10) {
+            // TODO: Implement benefits of leveling up
+        } else if (level > 20) {
+            // TODO: Implement benefits of leveling up
         }
     }
 

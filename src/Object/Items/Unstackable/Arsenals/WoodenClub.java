@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class WoodenClub extends Club {
     public WoodenClub() {
-        super("Wooden Club", 15, 45);
+        super("Wooden Club", 15, 60);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/woodenclub.png")); 
         } catch (IOException e) {

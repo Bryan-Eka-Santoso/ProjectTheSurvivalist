@@ -3,6 +3,7 @@ package Object.Controller;
 import Object.Items.Item;
 import Object.Items.StackableItem.Feather;
 import Object.Items.StackableItem.Food;
+import Object.Items.StackableItem.Guava;
 import Object.Items.StackableItem.Material;
 import Object.Items.StackableItem.RawChicken;
 import Object.Items.StackableItem.RawMeat;
@@ -11,6 +12,8 @@ import Object.Items.StackableItem.RawPork;
 import Object.Items.StackableItem.Wood;
 import Object.Items.Unstackable.Arsenals.*;
 import Object.Items.Unstackable.Buildings.Buildings;
+import Object.Plant.GuavaTree;
+import Object.Plant.Plant;
 import Object.Player.Player;
 
 import java.util.Random;
@@ -57,8 +60,9 @@ public class UseItem {
             } else if (selectedItem instanceof Arsenal){
                 Arsenal arsenal = (Arsenal) selectedItem;
                 if (player.plantIndex != -1) {
+                    Plant plant = player.gp.plants.get(player.plantIndex);
 
-                    player.gp.plants.get(player.plantIndex).hp -= arsenal.damage;
+                    plant.hp -= arsenal.damage;
                     if (selectedItem instanceof Axe){
                         System.out.println("Using sword: " + arsenal.name);
                         arsenal.durability--;
@@ -77,11 +81,16 @@ public class UseItem {
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     }
 
-                    System.out.println("Plant HP: " + player.gp.plants.get(player.plantIndex).hp);
+                    System.out.println("Plant HP: " + plant.hp);
                     player.isCutting = true;
                     player.cutting();
-                    if (player.gp.plants.get(player.plantIndex).hp <= 0) {
-                        player.gp.droppedItems.add(new ItemDrop(player.gp.plants.get(player.plantIndex).worldX, player.gp.plants.get(player.plantIndex).worldY, new Wood(rand.nextInt(4) + 4), gp));
+                    if (plant.hp <= 0) {
+                        if (plant instanceof GuavaTree) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX, plant.worldY, new Guava(rand.nextInt(2) + 1), gp));
+                        } else if (plant instanceof GuavaTree) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX, plant.worldY, new Guava(rand.nextInt(2) + 1), gp));
+                        }
+                        player.gp.droppedItems.add(new ItemDrop(plant.worldX, plant.worldY, new Wood(rand.nextInt(4) + 4), gp));
                         player.gp.plants.remove(player.plantIndex);
                         player.plantIndex = -1; 
                     }
