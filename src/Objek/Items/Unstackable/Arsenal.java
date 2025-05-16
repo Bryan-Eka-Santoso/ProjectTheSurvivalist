@@ -1,6 +1,4 @@
-package Object.Items.Unstackable.Arsenals;
-
-import Object.Items.Unstackable.Unstackable;
+package Objek.Items.Unstackable;
 
 public class Arsenal extends Unstackable {
     public int damage;

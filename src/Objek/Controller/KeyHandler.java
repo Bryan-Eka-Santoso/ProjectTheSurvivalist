@@ -317,7 +317,11 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_Q && !gp.player.isBuild) {
-            if (gp.gameState == gp.PLAY_STATE){
+            if (gp.gameState == gp.DROPPED_ITEM_STATE){
+                gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], gp.ui.amountToDrop);
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.amountToDrop = 1;
+            } else if (gp.gameState == gp.PLAY_STATE){
                 if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
                     if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Stackable || gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Buildings){
                         itemStack = gp.player.inventory.slots[gp.ui.selectedIndex].currentStack;

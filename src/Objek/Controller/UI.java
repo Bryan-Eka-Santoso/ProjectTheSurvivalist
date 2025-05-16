@@ -12,19 +12,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-<<<<<<< HEAD:src/Objek/Controller/UI.java
 import Objek.Items.Item;
 import Objek.Items.Buildings.Buildings;
 import Objek.Items.Buildings.Chest;
 import Objek.Items.StackableItem.*;
-=======
+import Objek.Items.Unstackable.Arsenal;
 import javax.imageio.ImageIO;
-
-import Object.Items.Item;
-import Object.Items.StackableItem.*;
-import Object.Items.Unstackable.Arsenals.Arsenal;
->>>>>>> 9d0ab79882836d0cd58b19fba5253f05deedc55e:src/Object/Controller/UI.java
 
 public class UI {
     GamePanel gp;
@@ -550,6 +543,7 @@ public class UI {
         int frameHeight = gp.TILE_SIZE * 3;
         Color c = new Color(255,255,255, 255);
         g2.setColor(c);
+        BufferedImage img = null;
         try {
             img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));
         } catch (IOException e) {
@@ -604,15 +598,6 @@ public class UI {
         g2.setColor(Color.WHITE);
         g2.drawString("Level: " + gp.player.level, barX, levelBarY - 5);
         g2.drawString("EXP: " + gp.player.exp + "/" + gp.player.maxExp, barX, levelBarY + barHeight + 15);
-
-        Color c = new Color(0, 0, 0, 210);
-        g2.setColor(c);
-        g2.fillRoundRect(x, y, width, height, 35, 35);
-
-        c = new Color(255, 255, 255);
-        g2.setColor(c);
-        g2.setStroke(new BasicStroke(5));
-        g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
     }
 
     public void drawPauseScreen() {
@@ -629,5 +614,17 @@ public class UI {
         int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         int x = (int)(gp.SCREEN_WIDTH / 2 - length/2);
         return x;
+    }
+
+    
+    public void drawSubWindow(int x, int y, int width, int height) {
+        Color c = new Color(0, 0, 0, 210);
+        g2.setColor(c);
+        g2.fillRoundRect(x, y, width, height, 35, 35);
+
+        c = new Color(255, 255, 255);
+        g2.setColor(c);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
     }
 }

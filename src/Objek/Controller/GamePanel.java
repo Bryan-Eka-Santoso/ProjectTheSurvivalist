@@ -119,71 +119,79 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
-    int attempts = 0;
-    int maxAttempts = 1000; // Prevent infinite loop
-    int spawnedCount = 0;
-    int validTiles = 18;
-    
-    int playerSpawnX = 40; 
-    int playerSpawnY = 44; 
-    int safeZoneRadius = 5;
-    while (spawnedCount < count && attempts < maxAttempts) {
-       
-        int x = (int)(Math.random() * (MAX_WORLD_COL -5));
-        int y = (int)(Math.random() * (MAX_WORLD_ROW -5));
-        Point pos = new Point(x, y);
+    private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
+        int attempts = 0;
+        int maxAttempts = 1000; // Prevent infinite loop
+        int spawnedCount = 0;
+        int validTiles = 18;
+        
+        int playerSpawnX = 40; 
+        int playerSpawnY = 44; 
+        int safeZoneRadius = 5;
+        while (spawnedCount < count && attempts < maxAttempts) {
+        
+            int x = (int)(Math.random() * (MAX_WORLD_COL -5));
+            int y = (int)(Math.random() * (MAX_WORLD_ROW -5));
+            Point pos = new Point(x, y);
 
-        if (Math.abs(x - playerSpawnX) < safeZoneRadius && Math.abs(y - playerSpawnY) < safeZoneRadius) {
-            attempts++;
-            continue;
+            if (Math.abs(x - playerSpawnX) < safeZoneRadius && Math.abs(y - playerSpawnY) < safeZoneRadius) {
+                attempts++;
+                continue;
+            }
+            // Check if position is already used
+            if (usedPositions.contains(pos)) {
+                attempts++;
+                continue;
+            }
+            
+            // Check if tile is grass
+            int tileNum = tileM.mapTile[x][y];
+            boolean isValidTile = false;
+            
+            if (tileNum == validTiles) {
+                isValidTile = true;
+            }
+            
+            
+            if (!isValidTile) {
+                attempts++;
+                continue;
+            }
+            
+            // Spawn the animal based on type
+            switch (animalType.toLowerCase()) {
+                case "chicken":
+                    animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "cow":
+                    animals.add(new Cow("Cow", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "sheep":
+                    animals.add(new Sheep("Sheep", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "pig":
+                    animals.add(new Pig("Pig", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+            }
+            
+            // Mark position as used
+            usedPositions.add(pos);
+            spawnedCount++;
+            attempts = 0;
         }
-        // Check if position is already used
-        if (usedPositions.contains(pos)) {
-            attempts++;
-            continue;
-        }
-        
-        // Check if tile is grass
-        int tileNum = tileM.mapTile[x][y];
-        boolean isValidTile = false;
-        
-        if (tileNum == validTiles) {
-            isValidTile = true;
-        }
-        
-        
-        if (!isValidTile) {
-            attempts++;
-            continue;
-        }
-        
-        // Spawn the animal based on type
-        switch (animalType.toLowerCase()) {
-            case "chicken":
-                animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
-                break;
-            case "cow":
-                animals.add(new Cow("Cow", x * TILE_SIZE, y * TILE_SIZE, this));
-                break;
-            case "sheep":
-                animals.add(new Sheep("Sheep", x * TILE_SIZE, y * TILE_SIZE, this));
-                break;
-            case "pig":
-                animals.add(new Pig("Pig", x * TILE_SIZE, y * TILE_SIZE, this));
-                break;
-        }
-        
-        // Mark position as used
-        usedPositions.add(pos);
-        spawnedCount++;
-        attempts = 0;
     }
-}
 
-    
-    public void addAnimal(int x, int y) {
-        animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
+  public void addAnimals() {
+       
+        ArrayList<Point> usedPositions = new ArrayList<>();
+        
+        spawnAnimal("chicken", 10, usedPositions);
+        
+        spawnAnimal("cow", 5, usedPositions);
+        
+        spawnAnimal("sheep", 5, usedPositions);
+        
+        spawnAnimal("pig", 5, usedPositions);
     }
     
     @Override
@@ -207,7 +215,7 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         player.inventory.addItems(new SpikedWoodenClub());
         player.inventory.addItems(new MetalClub());
         player.inventory.addItems(new SpikedMetalClub());
-        player.inventory.addItems(new Torch(this));
+        player.inventory.addItems(new Torch(this, 5));
         player.inventory.addItems(new WoodenClub());
         player.inventory.addItems(new Wood(30));
         player.inventory.addItems(new Bread(10));

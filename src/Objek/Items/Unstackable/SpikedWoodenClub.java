@@ -1,4 +1,4 @@
-package Object.Items.Unstackable.Arsenals;
+package Objek.Items.Unstackable;
 
 import java.io.File;
 import java.io.IOException;
