@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 60;
+    final int FPS = 45;
 
     public final int MAX_WORLD_COL = 98;
     public final int MAX_WORLD_ROW = 98;
@@ -196,10 +196,20 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         long timer = 0;
         addPlant(40, 45);
         addPlant(40, 49);
-        player.inventory.addItems(new Sword("Sword", 20, 30));
-        player.inventory.addItems(new Torch(this, 5));
-        player.inventory.addItems(new Axe("Axe", 20, 30));
-        player.inventory.addItems(new Wood(10));
+        addAnimals();
+        // player.inventory.addItems(new Sword("Sword", 5, 10));
+        player.inventory.addItems(new WindAxe());
+        player.inventory.addItems(new LightweightAxe());
+        player.inventory.addItems(new FlimsyAxe());
+        player.inventory.addItems(new GoldSword());
+        player.inventory.addItems(new MetalSword());
+        player.inventory.addItems(new WoodenClub());
+        player.inventory.addItems(new SpikedWoodenClub());
+        player.inventory.addItems(new MetalClub());
+        player.inventory.addItems(new SpikedMetalClub());
+        player.inventory.addItems(new Torch(this));
+        player.inventory.addItems(new WoodenClub());
+        player.inventory.addItems(new Wood(30));
         player.inventory.addItems(new Bread(10));
         player.inventory.addItems(new Chest(this, 5));
         player.inventory.addItems(new CraftingTable(this, 10));

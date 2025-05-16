@@ -23,6 +23,8 @@ import java.io.IOException;
 public class Player {
     public String name;
     public int health, thirst, hunger, exp, level; // Player stats
+    public int maxHealth = 100, maxThirst = 100, maxHunger = 100;
+    public int maxExp = 100;
     public Inventory inventory;
     public int itemIndex; // Index of the selected item in the inventory
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
@@ -86,6 +88,21 @@ public class Player {
         getPlayerCutImg();
         cutArea.width = 36;
         cutArea.height = 36;
+    }
+
+    public void gainExp(int amount) {
+        exp += amount;
+        if (exp >= maxExp) {
+            exp -= maxExp;
+            level++;
+            maxExp += 50;
+            System.out.println("Level up! Current level: " + level);
+        }
+        if (level > 10) {
+            // TODO: Implement benefits of leveling up
+        } else if (level > 20) {
+            // TODO: Implement benefits of leveling up
+        }
     }
 
     public void getPlayerImg() {

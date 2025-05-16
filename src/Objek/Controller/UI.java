@@ -6,14 +6,25 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+<<<<<<< HEAD:src/Objek/Controller/UI.java
 import Objek.Items.Item;
 import Objek.Items.Buildings.Buildings;
 import Objek.Items.Buildings.Chest;
 import Objek.Items.StackableItem.*;
+=======
+import javax.imageio.ImageIO;
+
+import Object.Items.Item;
+import Object.Items.StackableItem.*;
+import Object.Items.Unstackable.Arsenals.Arsenal;
+>>>>>>> 9d0ab79882836d0cd58b19fba5253f05deedc55e:src/Object/Controller/UI.java
 
 public class UI {
     GamePanel gp;
@@ -374,6 +385,32 @@ public class UI {
             g2.drawRoundRect(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
             g2.setColor(Color.WHITE);
             g2.drawImage(gp.player.inventory.slots[i].img, slotX + 5, slotY + 5, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            if (gp.player.inventory.slots[i] instanceof Arsenal) {
+                Arsenal arsenalItem = (Arsenal) gp.player.inventory.slots[i];
+                if (arsenalItem.durability < arsenalItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
             if (gp.player.inventory.slots[i] instanceof Stackable) {
                 Stackable stackableItem = (Stackable) gp.player.inventory.slots[i];
                 Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
@@ -462,6 +499,32 @@ public class UI {
                 }
                 g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
             }
+            if (gp.player.inventory.slots[i] instanceof Arsenal) { // Assuming ArsenalItem has durability
+                Arsenal arsenalItem = (Arsenal) gp.player.inventory.slots[i];
+                if (arsenalItem.durability < arsenalItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
             if ((i + 1) % 9 == 0) {
                 slotX = slotXStart;
                 slotY += (gp.TILE_SIZE + 25);
@@ -481,17 +544,67 @@ public class UI {
     }
 
     public void drawStats() {
-        int frameX = gp.TILE_SIZE / 2;
-        int frameY = gp.TILE_SIZE / 2;
+        int frameX = gp.TILE_SIZE;
+        int frameY = gp.TILE_SIZE;
         int frameWidth = gp.TILE_SIZE * 6;
         int frameHeight = gp.TILE_SIZE * 3;
-
         Color c = new Color(255,255,255, 255);
         g2.setColor(c);
-        g2.fillRoundRect(frameX, frameY, frameWidth, frameHeight, 35, 35);
-    }
+        try {
+            img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        g2.drawImage(img, frameX, frameY, frameWidth, frameHeight, null);
 
-    public void drawSubWindow(int x, int y, int width, int height) {
+        // Bar dimensions
+        int barX = frameX + gp.TILE_SIZE / 2;
+        int barY = frameY + gp.TILE_SIZE / 2;
+        int barWidth = frameWidth - gp.TILE_SIZE;
+        int barHeight = gp.TILE_SIZE / 4;
+
+        // Health bar
+        g2.setColor(Color.RED);
+        g2.fillRect(barX, barY, (int) (barWidth * (gp.player.health / 100.0)), barHeight);
+        g2.setColor(Color.BLACK);
+        g2.drawRect(barX, barY, barWidth, barHeight);
+        g2.drawString("Health: " + gp.player.health + "/100", barX, barY - 5);
+
+        // Hunger bar
+        g2.setColor(Color.ORANGE);
+        g2.fillRect(barX, barY + gp.TILE_SIZE / 2, (int) (barWidth * (gp.player.hunger / 100.0)), barHeight);
+        g2.setColor(Color.BLACK);
+        g2.drawRect(barX, barY + gp.TILE_SIZE / 2, barWidth, barHeight);
+        g2.drawString("Hunger: " + gp.player.hunger + "/100", barX, barY + gp.TILE_SIZE / 2 - 5);
+
+        // Thirst bar
+        g2.setColor(Color.BLUE);
+        g2.fillRect(barX, barY + gp.TILE_SIZE, (int) (barWidth * (gp.player.thirst / 100.0)), barHeight);
+        g2.setColor(Color.BLACK);
+        g2.drawRect(barX, barY + gp.TILE_SIZE, barWidth, barHeight);
+        g2.drawString("Thirst: " + gp.player.thirst + "/100", barX, barY + gp.TILE_SIZE - 5);
+
+        // Level bar
+        int levelBarY = frameY + gp.TILE_SIZE * 4;
+        float brightness = (float) gp.player.exp / gp.player.maxExp;
+
+        // Draw the bar background (darker tone)
+        g2.setColor(new Color(50, 50, 50));
+        g2.fillRect(barX, levelBarY, barWidth, barHeight);
+
+        // Draw the brighter part of the bar
+        g2.setColor(new Color((int) (255 * brightness), (int) (255 * brightness), 0));
+        g2.fillRect(barX, levelBarY, (int) (barWidth * brightness), barHeight);
+
+        // Draw the bar border
+        g2.setColor(Color.BLACK);
+        g2.drawRect(barX, levelBarY, barWidth, barHeight);
+
+        // Draw the level and exp text
+        g2.setColor(Color.WHITE);
+        g2.drawString("Level: " + gp.player.level, barX, levelBarY - 5);
+        g2.drawString("EXP: " + gp.player.exp + "/" + gp.player.maxExp, barX, levelBarY + barHeight + 15);
+
         Color c = new Color(0, 0, 0, 210);
         g2.setColor(c);
         g2.fillRoundRect(x, y, width, height, 35, 35);
