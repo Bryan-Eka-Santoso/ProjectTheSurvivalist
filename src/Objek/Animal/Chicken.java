@@ -16,16 +16,23 @@ import java.awt.Color;
 
 public class Chicken extends TameAnimal {
     Random random = new Random();
+    String gender;
+    boolean readyGetItem;
+    boolean readyBreeding;
     private Rectangle upHitbox;
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
     private static final int CHICKEN_WIDTH = 32;
     private static final int CHICKEN_HEIGHT = 32;
-   
+    
     public Chicken(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
+        this.gender = (Math.random() < 0.5) ? "Male" : "Female";
+        this.readyBreeding = true;
+        this.readyGetItem = true;
+        
         this.actionMoveDelay = random.nextInt(91) + 30;
         upHitbox = new Rectangle(2, 1, 26, 40);   
         downHitbox = new Rectangle(2, 1, 26, 40);   
@@ -62,6 +69,12 @@ public class Chicken extends TameAnimal {
     @Override
     public int getWidth() {
         return CHICKEN_WIDTH;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public boolean isReadyGetItem() {
+        return readyGetItem;
     }
     @Override
     public int getHeight() {

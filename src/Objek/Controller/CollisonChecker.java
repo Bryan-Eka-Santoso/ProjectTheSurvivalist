@@ -85,7 +85,7 @@ public class CollisonChecker {
             return;
         }
     
-        int[] validTiles = {8, 9, 10, 11, 12, 13, 14, 15, 18, 20};
+        int validTiles =18;
         
         int tileNum1 = gp.tileM.mapTile[entityLeftCol][entityTopRow];     // Top left
         int tileNum2 = gp.tileM.mapTile[entityRightCol][entityTopRow];    // Top right
@@ -98,12 +98,11 @@ public class CollisonChecker {
         boolean isValid3 = false;
         boolean isValid4 = false;
     
-        for(int validTile : validTiles) {
-            if(tileNum1 == validTile) isValid1 = true;
-            if(tileNum2 == validTile) isValid2 = true;
-            if(tileNum3 == validTile) isValid3 = true;
-            if(tileNum4 == validTile) isValid4 = true;
-        }
+        if(tileNum1 == validTiles) isValid1 = true;
+        if(tileNum2 == validTiles) isValid2 = true;
+        if(tileNum3 == validTiles) isValid3 = true;
+        if(tileNum4 == validTiles) isValid4 = true;
+        
     
         // If any corner is on invalid tile, set collision
         if(!isValid1 || !isValid2 || !isValid3 || !isValid4) {

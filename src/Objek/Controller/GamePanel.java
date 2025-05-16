@@ -52,6 +52,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final int DROPPED_ITEM_STATE = 5;
     public final int BUILDING_STATE = 6;
     public final int OPEN_CHEST_STATE = 7;
+    private static final int MAX_CHICKENS = 10;
+    private static final int MAX_COWS = 5;
+    private static final int MAX_SHEEP = 5;
+    private static final int MAX_PIGS = 5;
     
     public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
@@ -83,17 +87,36 @@ public class GamePanel extends JPanel implements Runnable {
     public void addPlant(int x, int y) {
         plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
     }
-    public void addAnimals() {
-       
+    public void checkAndRespawnAnimals() {
+        int chickenCount = 0;
+        int cowCount = 0;
+        int sheepCount = 0;
+        int pigCount = 0;
+
+        for(Animal animal : animals) {
+            if(animal instanceof Chicken) chickenCount++;
+            else if(animal instanceof Cow) cowCount++;
+            else if(animal instanceof Sheep) sheepCount++;
+            else if(animal instanceof Pig) pigCount++;
+        }
+
         ArrayList<Point> usedPositions = new ArrayList<>();
-        
-        spawnAnimal("chicken", 10, usedPositions);
-        
-        spawnAnimal("cow", 5, usedPositions);
-        
-        spawnAnimal("sheep", 5, usedPositions);
-        
-        spawnAnimal("pig", 5, usedPositions);
+        for(Animal animal : animals) {
+            usedPositions.add(new Point(animal.worldX/TILE_SIZE, animal.worldY/TILE_SIZE));
+        }
+
+        if(chickenCount < MAX_CHICKENS) {
+            spawnAnimal("chicken", MAX_CHICKENS - chickenCount, usedPositions);
+        }
+        if(cowCount < MAX_COWS) {
+            spawnAnimal("cow", MAX_COWS - cowCount, usedPositions);
+        }
+        if(sheepCount < MAX_SHEEP) {
+            spawnAnimal("sheep", MAX_SHEEP - sheepCount, usedPositions);
+        }
+        if(pigCount < MAX_PIGS) {
+            spawnAnimal("pig", MAX_PIGS - pigCount, usedPositions);
+        }
     }
 
 private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
@@ -173,7 +196,6 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         long timer = 0;
         addPlant(40, 45);
         addPlant(40, 49);
-        addAnimals();
         player.inventory.addItems(new Sword("Sword", 20, 30));
         player.inventory.addItems(new Torch(this, 5));
         player.inventory.addItems(new Axe("Axe", 20, 30));
@@ -183,6 +205,12 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         player.inventory.addItems(new CraftingTable(this, 10));
         player.inventory.addItems(new Campfire(this, 10));
         player.inventory.addItems(new Smelter(this, 1));
+        player.inventory.addItems(new Chest(this));
+        player.inventory.addItems(new KandangAyam(this));
+        player.inventory.addItems(new PigCage(this));
+        player.inventory.addItems(new SheepCage(this));
+        player.inventory.addItems(new CowCage(this));
+
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -197,6 +225,7 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
 
             if (delta >= 1) {
                 update();
+                checkAndRespawnAnimals();  
                 repaint();
                 delta--;
             }
@@ -213,7 +242,6 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
             if (timer >= 1000000000) {
                 timer = 0;
             }
-
         }
     }
 

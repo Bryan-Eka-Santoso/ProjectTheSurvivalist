@@ -86,6 +86,7 @@ public class UseItem {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.animalIndex = -1;
+                            player.gp.checkAndRespawnAnimals();
                         }
                     }
                     else if(animal instanceof Pig) {
