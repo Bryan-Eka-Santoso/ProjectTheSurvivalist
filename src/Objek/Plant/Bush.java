@@ -1,12 +1,10 @@
-package Object.Plant;
+package Objek.Plant;
 
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
-import Object.Controller.GamePanel;
+import Objek.Controller.GamePanel;
 
 public class Bush extends Plant {
     public Bush(int x, int y, GamePanel gp) {

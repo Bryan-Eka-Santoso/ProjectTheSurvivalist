@@ -1,6 +1,6 @@
-package Object.Plant;
+package Objek.Plant;
 
-import Object.Controller.GamePanel;
+import Objek.Controller.GamePanel;
 
 public class BerryBush extends Plant {
     public BerryBush(int x, int y, GamePanel gp) {
