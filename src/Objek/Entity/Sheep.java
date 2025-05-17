@@ -1,6 +1,6 @@
 package Objek.Entity;
 
-import Objek.Items.StackableItem.Wool;
+import Objek.Items.StackableItem.Materials.Wool;
 import Objek.Player.Player;
 
 public class Sheep extends Animal {

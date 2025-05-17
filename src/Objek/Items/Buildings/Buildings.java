@@ -14,6 +14,7 @@ public class Buildings extends Item {
     public Rectangle solidArea;
     public int solidAreaDefaultX; 
     public int solidAreaDefaultY;
+    public int hp = 100;
 
     public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height) {
         super(name, maxStack, currentStack);

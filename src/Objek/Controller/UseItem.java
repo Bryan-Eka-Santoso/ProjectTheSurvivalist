@@ -8,19 +8,19 @@ import Objek.Animal.Pig;
 import Objek.Animal.Sheep;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.Feather;
-import Objek.Items.StackableItem.Food;
-import Objek.Items.StackableItem.Guava;
-import Objek.Items.StackableItem.Material;
-import Objek.Items.StackableItem.RawChicken;
-import Objek.Items.StackableItem.RawMeat;
-import Objek.Items.StackableItem.RawMutton;
-import Objek.Items.StackableItem.RawPork;
-import Objek.Items.StackableItem.Wood;
-import Objek.Items.Unstackable.Arsenal;
-import Objek.Items.Unstackable.Axe;
-import Objek.Items.Unstackable.Club;
-import Objek.Items.Unstackable.Sword;
+import Objek.Items.StackableItem.Foods.Food;
+import Objek.Items.StackableItem.Foods.Guava;
+import Objek.Items.StackableItem.Foods.RawChicken;
+import Objek.Items.StackableItem.Foods.RawMeat;
+import Objek.Items.StackableItem.Foods.RawMutton;
+import Objek.Items.StackableItem.Foods.RawPork;
+import Objek.Items.StackableItem.Materials.Feather;
+import Objek.Items.StackableItem.Materials.Material;
+import Objek.Items.StackableItem.Materials.Wood;
+import Objek.Items.Unstackable.Arsenals.Arsenal;
+import Objek.Items.Unstackable.Arsenals.Axe;
+import Objek.Items.Unstackable.Arsenals.Club;
+import Objek.Items.Unstackable.Arsenals.Sword;
 import Objek.Plant.*;
 import Objek.Player.Player;
 
@@ -59,6 +59,8 @@ public class UseItem {
                 }
             } else if (selectedItem instanceof Arsenal){
                 Arsenal arsenal = (Arsenal) selectedItem;
+                player.isCutting = true;
+                player.cutting();
                 if (player.plantIndex != -1) {
                     Plant plant = player.gp.plants.get(player.plantIndex);
 
@@ -82,8 +84,6 @@ public class UseItem {
                     }
 
                     System.out.println("Plant HP: " + plant.hp);
-                    player.isCutting = true;
-                    player.cutting();
                     if (plant.hp <= 0) {
                         if (plant instanceof GuavaTree) {
                             player.gp.droppedItems.add(new ItemDrop(plant.worldX, plant.worldY, new Guava(rand.nextInt(2) + 1), gp));

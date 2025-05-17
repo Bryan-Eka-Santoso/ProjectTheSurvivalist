@@ -33,7 +33,7 @@ public class KeyHandler implements KeyListener, MouseListener {
             gp.ui.mouseX = e.getX();
             gp.ui.mouseY = e.getY();
         }
-        if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE || gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
             gp.ui.mouseX = e.getX();
             gp.ui.mouseY = e.getY();
             for (int i = 0; i < gp.ui.itemHitboxes.size(); i++) {
@@ -81,7 +81,7 @@ public class KeyHandler implements KeyListener, MouseListener {
             if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                 upPressed = true;
             }
-            if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+            if (gp.gameState == gp.PLAYER_CRAFTING_STATE || gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
                 gp.ui.scrollUp();
             }
         }
@@ -89,7 +89,7 @@ public class KeyHandler implements KeyListener, MouseListener {
             if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                 downPressed = true;
             }
-            if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+            if (gp.gameState == gp.PLAYER_CRAFTING_STATE || gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
                 gp.ui.scrollDown();
             }
             if (gp.gameState == gp.OPEN_CHEST_STATE) {
@@ -103,18 +103,6 @@ public class KeyHandler implements KeyListener, MouseListener {
         if (code == KeyEvent.VK_A) {
             if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                 leftPressed = true;
-            }
-            if (gp.gameState == gp.INVENTORY_STATE) {
-                playSE(2);
-                if (gp.ui.selectedIndex > 0) {
-                    if (gp.ui.slotCol > 0) {
-                        gp.ui.slotCol--;
-                    } else {
-                        gp.ui.slotCol = 8;
-                        gp.ui.slotRow--;
-                    }
-                    gp.ui.selectedIndex--;
-                }
             }
             if (gp.gameState == gp.OPEN_CHEST_STATE) {
                 playSE(2);
@@ -145,18 +133,6 @@ public class KeyHandler implements KeyListener, MouseListener {
             if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                 rightPressed = true;
             }
-            if (gp.gameState == gp.INVENTORY_STATE) {
-                playSE(2);
-                if (gp.ui.selectedIndex < 23) {
-                    if ((gp.ui.slotCol + 1) % 9 == 0) {
-                        gp.ui.slotCol = 0;
-                        gp.ui.slotRow++;
-                    } else {
-                        gp.ui.slotCol++;
-                    }
-                    gp.ui.selectedIndex++;
-                }
-            } 
             if (gp.gameState == gp.OPEN_CHEST_STATE) {
                 playSE(2);
                 int maxIndex = gp.ui.isPointingChest ? 31 : 23;
@@ -298,6 +274,54 @@ public class KeyHandler implements KeyListener, MouseListener {
                 }
             }
         }
+        if (code == KeyEvent.VK_RIGHT) {
+            if (gp.player.grabbedAnimal == null && gp.gameState == gp.PLAY_STATE){
+                if (gp.ui.slotCol < 8) {
+                    gp.ui.slotCol++;
+                } else {
+                    gp.ui.slotCol = 0;
+                }
+                gp.ui.selectedIndex = gp.ui.slotCol;
+                gp.player.lightUpdated = true;
+                playSE(2);
+            }
+            if (gp.gameState == gp.INVENTORY_STATE) {
+                playSE(2);
+                if (gp.ui.selectedIndex < 23) {
+                    if ((gp.ui.slotCol + 1) % 9 == 0) {
+                        gp.ui.slotCol = 0;
+                        gp.ui.slotRow++;
+                    } else {
+                        gp.ui.slotCol++;
+                    }
+                    gp.ui.selectedIndex++;
+                }
+            }
+        }
+        if (code == KeyEvent.VK_LEFT) {
+            if (gp.player.grabbedAnimal == null && gp.gameState == gp.PLAY_STATE){
+                if (gp.ui.slotCol > 0) {
+                    gp.ui.slotCol--;
+                } else {
+                    gp.ui.slotCol = 8;
+                }
+                gp.ui.selectedIndex = gp.ui.slotCol;
+                gp.player.lightUpdated = true;
+                playSE(2);
+            }
+            if (gp.gameState == gp.INVENTORY_STATE) {
+                playSE(2);
+                if (gp.ui.selectedIndex > 0) {
+                    if (gp.ui.slotCol > 0) {
+                        gp.ui.slotCol--;
+                    } else {
+                        gp.ui.slotCol = 8;
+                        gp.ui.slotRow--;
+                    }
+                    gp.ui.selectedIndex--;
+                }
+            }
+        }
         if (code == KeyEvent.VK_DOWN) {
             if (gp.gameState == gp.DROPPED_ITEM_STATE){
                 if (gp.ui.amountToDrop > 1){
@@ -342,7 +366,9 @@ public class KeyHandler implements KeyListener, MouseListener {
             gp.player.handleGrabAction(gp.player.inventory.getSelectedItem());
         }
         if (code == KeyEvent.VK_SPACE) {
-            if (gp.gameState == gp.OPEN_CHEST_STATE) {
+            if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
+                gp.gameState = gp.PLAY_STATE;
+            } else if (gp.gameState == gp.OPEN_CHEST_STATE) {
                 gp.gameState = gp.PLAY_STATE;
                 gp.ui.slotCol = 0;
                 gp.ui.slotRow = 0;
