@@ -2,26 +2,58 @@ package Objek.Player;
 import java.util.*;
 
 import Objek.Items.Item;
-import Objek.Items.StackableItem.*;
-import Objek.Items.Unstackable.*;
+import Objek.Items.StackableItem.Materials.Gem;
+import Objek.Items.StackableItem.Materials.MetalFrame;
+import Objek.Items.StackableItem.Materials.MetalSheet;
+import Objek.Items.StackableItem.Materials.SwordHandle;
+import Objek.Items.StackableItem.Materials.ToolHandle;
+import Objek.Items.StackableItem.Materials.Wood;
+import Objek.Items.Unstackable.Arsenals.WindAxe;
+import Objek.Items.Unstackable.Arsenals.LightweightAxe;
+import Objek.Items.Unstackable.Arsenals.FlimsyAxe;
 
 public class Crafting {
-    public HashMap<List<Item>, Item> recipes = new HashMap<>();
+    public LinkedHashMap<List<Item>, Item> currentRecipe = new LinkedHashMap<>();
+    public LinkedHashMap<List<Item>, Item> smallRecipes = new LinkedHashMap<>();
+    public LinkedHashMap<List<Item>, Item> recipes = new LinkedHashMap<>();
 
     public Crafting() {
+        smallRecipes = fillSmallRecipes();
+        recipes = fillRecipes();
+
+    }
+
+    private LinkedHashMap<List<Item>, Item> fillSmallRecipes() {
+        LinkedHashMap<List<Item>, Item> r = new LinkedHashMap<>();
+
+        List<Item> recipe1 = Arrays.asList(new MetalSheet(1), new MetalFrame(1));
+        r.put(recipe1, new SwordHandle(1));
+
+        List<Item> recipe2 = Arrays.asList(new Wood(2), new MetalSheet(1));
+        r.put(recipe2, new ToolHandle(1));
+
+        return r;
+    }
+
+    private LinkedHashMap<List<Item>, Item> fillRecipes() {
+        LinkedHashMap<List<Item>, Item> r = new LinkedHashMap<>();
+
+        r.putAll(smallRecipes);
+
         List<Item> recipe1 = Arrays.asList(new Wood(3), new Gem(2));
-        recipes.put(recipe1, new WindAxe());
+        r.put(recipe1, new WindAxe());
 
         List<Item> recipe2 = Arrays.asList(new Wood(3), new MetalSheet(2));
-        recipes.put(recipe2, new LightweightAxe());
+        r.put(recipe2, new LightweightAxe());
 
         List<Item> recipe3 = Arrays.asList(new Wood(4));
-        recipes.put(recipe3, new FlimsyAxe());
+        r.put(recipe3, new FlimsyAxe());
 
+        return r;
     }
     
     public void craft(Player player, String itemName) {
-        for (Map.Entry<List<Item>, Item> entry : recipes.entrySet()) {
+        for (Map.Entry<List<Item>, Item> entry : currentRecipe.entrySet()) {
             List<Item> ingredients = entry.getKey();
             Item result = entry.getValue().clone();
             if (result.name.equals(itemName)) {

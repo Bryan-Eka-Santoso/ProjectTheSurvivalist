@@ -13,6 +13,9 @@ public class InteractBuild {
         Buildings building = (Buildings) gp.buildings.get(gp.player.buildingIndex);
         if (building instanceof Chest) {
             gp.gameState = gp.OPEN_CHEST_STATE;
-        }   
+        }
+        if (building instanceof CraftingTable) {
+            gp.gameState = gp.OPEN_CRAFTINGTABLE_STATE;
+        }
     }
 }

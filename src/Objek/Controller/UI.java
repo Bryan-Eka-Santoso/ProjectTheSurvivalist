@@ -16,7 +16,8 @@ import Objek.Items.Item;
 import Objek.Items.Buildings.Buildings;
 import Objek.Items.Buildings.Chest;
 import Objek.Items.StackableItem.*;
-import Objek.Items.Unstackable.Arsenal;
+import Objek.Items.Unstackable.Arsenals.*;
+
 import javax.imageio.ImageIO;
 
 public class UI {
@@ -58,7 +59,13 @@ public class UI {
         if (gp.gameState == gp.INVENTORY_STATE) {
             drawInventory();
         }
-        if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE){
+            gp.player.recipe.currentRecipe = gp.player.recipe.smallRecipes;
+        }
+        if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
+            gp.player.recipe.currentRecipe = gp.player.recipe.recipes;
+        }
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE || gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
             PlayerCraftMenu();
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE) {
@@ -290,7 +297,7 @@ public class UI {
         g2.drawString("Materials:", frameX + frameWidth - sentenceLength("Materials:") - 250, contentY);
         contentY += 60;
 
-        for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
+        for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.currentRecipe.entrySet()) {
             List<Item> ingredients = entry.getKey();
             Item result = entry.getValue();
 
@@ -332,7 +339,7 @@ public class UI {
     
     public void scrollDown() {
         scrollY += 20;
-        maxScroll = gp.player.recipe.recipes.size() * 60;
+        maxScroll = gp.player.recipe.currentRecipe.size() * 20;
         if (scrollY > maxScroll) scrollY = maxScroll;
     }
 

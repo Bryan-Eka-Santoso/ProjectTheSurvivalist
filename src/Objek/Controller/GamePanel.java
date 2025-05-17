@@ -4,9 +4,15 @@ import javax.swing.*;
 import Objek.Animal.*;
 import Objek.Environment.EnvironmentManager;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.Bread;
-import Objek.Items.StackableItem.Wood;
-import Objek.Items.Unstackable.*;
+import Objek.Items.StackableItem.Foods.Bread;
+import Objek.Items.StackableItem.Materials.Gem;
+import Objek.Items.StackableItem.Materials.MetalFrame;
+import Objek.Items.StackableItem.Materials.MetalSheet;
+import Objek.Items.StackableItem.Materials.SwordHandle;
+import Objek.Items.StackableItem.Materials.ToolHandle;
+import Objek.Items.StackableItem.Materials.Wood;
+import Objek.Items.StackableItem.Seeds.GuavaSeeds;
+import Objek.Items.Unstackable.Arsenals.*;
 import Objek.Plant.*;
 import Objek.Player.*;
 
@@ -27,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 45;
+    final int FPS = 60;
 
     public final int MAX_WORLD_COL = 98;
     public final int MAX_WORLD_ROW = 98;
@@ -52,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int DROPPED_ITEM_STATE = 5;
     public final int BUILDING_STATE = 6;
     public final int OPEN_CHEST_STATE = 7;
+    public final int OPEN_CRAFTINGTABLE_STATE = 8;
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
@@ -152,7 +159,6 @@ public class GamePanel extends JPanel implements Runnable {
                 isValidTile = true;
             }
             
-            
             if (!isValidTile) {
                 attempts++;
                 continue;
@@ -185,7 +191,7 @@ public class GamePanel extends JPanel implements Runnable {
        
         ArrayList<Point> usedPositions = new ArrayList<>();
         
-        spawnAnimal("chicken", 10, usedPositions);
+        spawnAnimal("chicken", 5, usedPositions);
         
         spawnAnimal("cow", 5, usedPositions);
         
@@ -206,15 +212,21 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant(40, 49);
         addAnimals();
         // player.inventory.addItems(new Sword("Sword", 5, 10));
+        player.inventory.addItems(new GuavaSeeds(5));
+        player.inventory.addItems(new Orchard(this, 5));
+        player.inventory.addItems(new CraftingTable(this, 10));
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new LightweightAxe());
         player.inventory.addItems(new FlimsyAxe());
         player.inventory.addItems(new GoldSword());
         player.inventory.addItems(new MetalSword());
         player.inventory.addItems(new WoodenClub());
-        player.inventory.addItems(new SpikedWoodenClub());
-        player.inventory.addItems(new MetalClub());
-        player.inventory.addItems(new SpikedMetalClub());
+        player.inventory.addItems(new MetalSheet(10));
+        player.inventory.addItems(new MetalFrame(10));
+        player.inventory.addItems(new Wood(10));
+        player.inventory.addItems(new SwordHandle(10));
+        player.inventory.addItems(new ToolHandle(10));
+        player.inventory.addItems(new Gem(10));
         player.inventory.addItems(new Torch(this, 5));
         player.inventory.addItems(new WoodenClub());
         player.inventory.addItems(new Wood(30));
