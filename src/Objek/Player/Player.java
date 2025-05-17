@@ -22,11 +22,11 @@ import java.io.IOException;
 
 public class Player {
     public String name;
-    public int health, thirst, hunger, exp, level; // Player stats
+    public int health, thirst, hunger, exp, level; 
     public int maxHealth = 100, maxThirst = 100, maxHunger = 100;
     public int maxExp = 100;
     public Inventory inventory;
-    public int itemIndex; // Index of the selected item in the inventory
+    public int itemIndex; 
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage cutup1, cutup2, cutdown1, cutdown2, cutleft1, cutleft2, cutright1, cutright2;
@@ -41,10 +41,10 @@ public class Player {
     public Rectangle solidArea;
     public boolean collisionOn = false;
     public boolean isBuild = false; 
-    public UseItem interactObj; // Object to handle item interactions
+    public UseItem interactObj;
     public final int SCREEN_Y;
     public final int SCREEN_X;
-    public int plantIndex, animalIndex, droppedItem, buildingIndex; // Index of the selected plant in the inventory
+    public int plantIndex, animalIndex, droppedItem, buildingIndex;
     public GamePanel gp;
     public KeyHandler keyH;
     public Boolean isCutting;
