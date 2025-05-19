@@ -94,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void addPlant(int x, int y) {
         plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
     }
+    
     public void checkAndRespawnAnimals() {
         int chickenCount = 0;
         int cowCount = 0;
