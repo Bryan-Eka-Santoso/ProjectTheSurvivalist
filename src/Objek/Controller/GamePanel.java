@@ -2,6 +2,8 @@ package Objek.Controller;
 
 import javax.swing.*;
 import Objek.Animal.*;
+import Objek.Animal.Fish.Arwana;
+import Objek.Animal.Fish.Belida;
 import Objek.Environment.EnvironmentManager;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Bread;
@@ -63,6 +65,8 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
+     public final int maxMap = 10;
+    public int currentMap = 0;
     
     public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
@@ -153,7 +157,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             
             // Check if tile is grass
-            int tileNum = tileM.mapTile[x][y];
+            int tileNum = tileM.mapTile[currentMap][x][y];
             boolean isValidTile = false;
             
             if (tileNum == validTiles) {
@@ -188,7 +192,52 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
-  public void addAnimals() {
+    public void spawnFish(String animalType, int count, ArrayList<Point> usedPositions) {
+        int attempts = 0;
+        int maxAttempts = 1000;
+        int spawnedCount = 0;
+        int validTiles = 16;
+        
+        while (spawnedCount < count && attempts < maxAttempts) {
+        
+            int x = (int)(Math.random() * (MAX_WORLD_COL -8));
+            int y = (int)(Math.random() * (MAX_WORLD_ROW -8));
+            Point pos = new Point(x, y);
+            
+            if (usedPositions.contains(pos)) {
+                attempts++;
+                continue;
+            }
+            
+            int tileNum = tileM.mapTile[currentMap][x][y];
+            boolean isValidTile = false;
+            
+            if (tileNum == validTiles) {
+                isValidTile = true;
+            }
+            
+            
+            if (!isValidTile) {
+                attempts++;
+                continue;
+            }
+
+            switch (animalType.toLowerCase()) {
+                case "arwana":
+                    animals.add(new Arwana("arwana", 0, 9, x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "belida":
+                    animals.add(new Belida("belida", 0, 7, x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+            }
+            
+            usedPositions.add(pos);
+            spawnedCount++;
+            attempts = 0;
+        }
+    }
+
+    public void addAnimals() {
        
         ArrayList<Point> usedPositions = new ArrayList<>();
         

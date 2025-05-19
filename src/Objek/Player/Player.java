@@ -1,7 +1,6 @@
 package Objek.Player;
 
 import javax.imageio.ImageIO;
-
 import Objek.Animal.Animal;
 import Objek.Animal.TameAnimal;
 import Objek.Controller.GamePanel;
@@ -13,7 +12,6 @@ import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
 import Objek.Plant.Plant;
-
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -107,14 +105,25 @@ public class Player {
 
     public void getPlayerImg() {
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
+            if(gp.currentMap == 0){
+                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
+                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
+                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
+                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
+                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
+                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
+                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
+                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
+            } else {
+                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater1.png"));
+                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater2.png"));
+                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater1.png"));
+                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater2.png"));
+                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater1.png"));
+                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
+                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
+                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -378,7 +387,7 @@ public class Player {
                         System.out.println("Cannot place animal outside map bounds!");
                         return;
                 }
-                int tileNum = gp.tileM.mapTile[newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
+                int tileNum = gp.tileM.mapTile[gp.currentMap][newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
                 if (tileNum != 8 && tileNum != 9 && tileNum != 10 && tileNum != 11 && 
                     tileNum != 12 && tileNum != 13 && tileNum != 14 && tileNum != 15 && 
                     tileNum != 18 && tileNum != 20) {

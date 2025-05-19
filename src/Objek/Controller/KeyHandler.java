@@ -1,10 +1,12 @@
 package Objek.Controller;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
@@ -413,7 +415,35 @@ public class KeyHandler implements KeyListener, MouseListener {
                 }
             }
         } 
-        
+        if(code == KeyEvent.VK_F) {
+            ArrayList<Point> usedPositions = new ArrayList<>();
+            int col = gp.player.worldX / gp.TILE_SIZE;
+            int row = gp.player.worldY / gp.TILE_SIZE;
+            
+            if(gp.currentMap == 0){
+                if((col == 27 || col == 28) && row == 17) {
+                    gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                    gp.currentMap = 1;
+                    gp.animals.clear();
+                    gp.player.getPlayerImg();
+                    gp.tileM.getTileImage();
+                    gp.player.worldY = 11 * gp.TILE_SIZE;
+                    gp.player.worldX = 72 * gp.TILE_SIZE;
+                    gp.spawnFish("Arwana", 100, usedPositions);
+                    gp.spawnFish("Belida", 100, usedPositions);
+                }
+            } else if(gp.currentMap == 1){
+                if(col == 72 && row == 11) {
+                    gp.tileM.loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
+                    gp.currentMap = 0;
+                    gp.animals.clear();
+                    gp.player.getPlayerImg();
+                    gp.tileM.getTileImage();
+                    gp.player.worldY = 18 * gp.TILE_SIZE;
+                    gp.player.worldX = 28 * gp.TILE_SIZE;
+                }
+            }
+        } 
     }
 
     @Override
