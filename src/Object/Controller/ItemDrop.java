@@ -21,7 +21,7 @@ public class ItemDrop {
         this.worldY = y;
         this.droppedItem = item;
         this.gp = gp;
-        this.solidArea = new Rectangle(8, 8, 32, 32 );
+        this.solidArea = new Rectangle(8, 8, 32, 32);
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
     }
@@ -33,7 +33,7 @@ public class ItemDrop {
         if (worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X 
             && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
-            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
+            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
             
             g2.drawImage(droppedItem.img, screenX, screenY, 35, 35, null);
             if (droppedItem instanceof Stackable) {

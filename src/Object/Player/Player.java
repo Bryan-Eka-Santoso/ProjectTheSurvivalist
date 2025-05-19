@@ -79,14 +79,25 @@ public class Player {
 
     public void getPlayerImg() {
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
+            if(gp.currentMap == 0){
+                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
+                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
+                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
+                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
+                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
+                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
+                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
+                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
+            } else {
+                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater1.png"));
+                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater2.png"));
+                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater1.png"));
+                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater2.png"));
+                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater1.png"));
+                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
+                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
+                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.Point;
+import java.util.ArrayList;
 
 import Object.Items.Item;
 
@@ -188,15 +190,43 @@ public class KeyHandler implements KeyListener, MouseListener {
                 }
             }
         }
-        if (code == KeyEvent.VK_Q){
+        if (code == KeyEvent.VK_Q) {
             if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
                 gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
             }
-        }
-        if (code == KeyEvent.VK_P) {
+        }        if (code == KeyEvent.VK_P) {
             if (gp.player.droppedItem != -1) {
                 gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
                 gp.player.droppedItem = -1;
+            }
+        }
+        if(code == KeyEvent.VK_F) {
+            ArrayList<Point> usedPositions = new ArrayList<>();
+            int col = gp.player.worldX / gp.TILE_SIZE;
+            int row = gp.player.worldY / gp.TILE_SIZE;
+            
+            if(gp.currentMap == 0){
+                if((col == 27 || col == 28) && row == 17) {
+                    gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                    gp.currentMap = 1;
+                    gp.animals.clear();
+                    gp.player.getPlayerImg();
+                    gp.tileM.getTileImage();
+                    gp.player.worldY = 11 * gp.TILE_SIZE;
+                    gp.player.worldX = 72 * gp.TILE_SIZE;
+                    gp.spawnFish("Arwana", 100, usedPositions);
+                    gp.spawnFish("Belida", 100, usedPositions);
+                }
+            } else if(gp.currentMap == 1){
+                if(col == 72 && row == 11) {
+                    gp.tileM.loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
+                    gp.currentMap = 0;
+                    gp.animals.clear();
+                    gp.player.getPlayerImg();
+                    gp.tileM.getTileImage();
+                    gp.player.worldY = 18 * gp.TILE_SIZE;
+                    gp.player.worldX = 28 * gp.TILE_SIZE;
+                }
             }
         }
     }

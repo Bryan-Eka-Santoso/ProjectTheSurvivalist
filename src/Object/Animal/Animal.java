@@ -16,7 +16,7 @@ public abstract class Animal {
     public int solidAreaDefaultX;
     public int solidAreaDefaultY;
     public boolean collisionOn;
-    GamePanel gp;
+    public GamePanel gp;
 
     public Animal(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
         this.gp = gp;

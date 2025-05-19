@@ -13,6 +13,8 @@ import Object.Items.Unstackable.*;
 import Object.Environment.EnvironmentManager;
 import Object.Items.StackableItem.Bread;
 import Object.Animal.*;
+import Object.Fish.Arwana;
+import Object.Fish.Belida;
 import Object.Items.StackableItem.Torch;
 import Object.Items.Unstackable.Buildings.*;
 import Object.Items.StackableItem.Wood;
@@ -27,10 +29,12 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 60;
+    final int FPS = 30;
 
     public final int MAX_WORLD_COL = 98;
     public final int MAX_WORLD_ROW = 98;
+    public final int maxMap = 10;
+    public int currentMap = 0;
     public final int WORLD_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
@@ -82,7 +86,6 @@ public class GamePanel extends JPanel implements Runnable {
         plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
     }
     public void addAnimals() {
-       
         ArrayList<Point> usedPositions = new ArrayList<>();
         
         spawnAnimal("chicken", 10, usedPositions);
@@ -93,68 +96,103 @@ public class GamePanel extends JPanel implements Runnable {
         
         spawnAnimal("pig", 5, usedPositions);
     }
-
-private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
-    int attempts = 0;
-    int maxAttempts = 1000; // Prevent infinite loop
-    int spawnedCount = 0;
-    
-    int validTiles = 18;
-    
-    while (spawnedCount < count && attempts < maxAttempts) {
-       
-        int x = (int)(Math.random() * (MAX_WORLD_COL -2));
-        int y = (int)(Math.random() * (MAX_WORLD_ROW -2));
-        Point pos = new Point(x, y);
+    public void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
+        int attempts = 0;
+        int maxAttempts = 1000;
+        int spawnedCount = 0;
+        int validTiles;
+        validTiles = 18;
         
-        // Check if position is already used
-        if (usedPositions.contains(pos)) {
-            attempts++;
-            continue;
-        }
+        while (spawnedCount < count && attempts < maxAttempts) {
         
-        // Check if tile is grass
-        int tileNum = tileM.mapTile[x][y];
-        boolean isValidTile = false;
-        
-        if (tileNum == validTiles) {
-            isValidTile = true;
-        }
-        
-        
-        if (!isValidTile) {
-            attempts++;
-            continue;
-        }
-        
-        // Spawn the animal based on type
-        switch (animalType.toLowerCase()) {
-            case "chicken":
-                animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
-                break;
-            case "cow":
-                animals.add(new Cow("Cow", x * TILE_SIZE, y * TILE_SIZE, this));
-                break;
-            case "sheep":
-                animals.add(new Sheep("Sheep", x * TILE_SIZE, y * TILE_SIZE, this));
-                break;
-            case "pig":
-                animals.add(new Pig("Pig", x * TILE_SIZE, y * TILE_SIZE, this));
-                break;
-        }
-        
-        // Mark position as used
-        usedPositions.add(pos);
-        spawnedCount++;
-        attempts = 0;
+            int x = (int)(Math.random() * (MAX_WORLD_COL -2));
+            int y = (int)(Math.random() * (MAX_WORLD_ROW -2));
+            Point pos = new Point(x, y);
+            
+            if (usedPositions.contains(pos)) {
+                attempts++;
+                continue;
+            }
+            
+            int tileNum = tileM.mapTile[currentMap][x][y];
+            boolean isValidTile = false;
+            
+            if (tileNum == validTiles) {
+                isValidTile = true;
+            }
+            
+            
+            if (!isValidTile) {
+                attempts++;
+                continue;
+            }
+            switch (animalType.toLowerCase()) {
+                case "chicken":
+                    animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "cow":
+                    animals.add(new Cow("Cow", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "sheep":
+                    animals.add(new Sheep("Sheep", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "pig":
+                    animals.add(new Pig("Pig", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                
+            }
+            
+            usedPositions.add(pos);
+            spawnedCount++;
+            attempts = 0;
     }
 }
+    
+    public void spawnFish(String animalType, int count, ArrayList<Point> usedPositions) {
+        int attempts = 0;
+        int maxAttempts = 1000;
+        int spawnedCount = 0;
+        int validTiles = 16;
+        
+        while (spawnedCount < count && attempts < maxAttempts) {
+        
+            int x = (int)(Math.random() * (MAX_WORLD_COL -8));
+            int y = (int)(Math.random() * (MAX_WORLD_ROW -8));
+            Point pos = new Point(x, y);
+            
+            if (usedPositions.contains(pos)) {
+                attempts++;
+                continue;
+            }
+            
+            int tileNum = tileM.mapTile[currentMap][x][y];
+            boolean isValidTile = false;
+            
+            if (tileNum == validTiles) {
+                isValidTile = true;
+            }
+            
+            
+            if (!isValidTile) {
+                attempts++;
+                continue;
+            }
 
-    
-    public void addAnimal(int x, int y) {
-        animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
+            switch (animalType.toLowerCase()) {
+                case "arwana":
+                    animals.add(new Arwana("arwana", 0, 9, x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "belida":
+                    animals.add(new Belida("belida", 0, 7, x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+            }
+            
+            usedPositions.add(pos);
+            spawnedCount++;
+            attempts = 0;
+        }
     }
-    
+
     @Override
     public void run() {
         // TODO Auto-generated method stub
@@ -163,9 +201,13 @@ private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPosi
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        addPlant(40, 45);
-        addPlant(40, 49);
-        addAnimals();
+        if(currentMap == 0){
+            addPlant(40, 45);
+            addPlant(40, 49);
+            addAnimals();
+        } else {
+            addAnimals();
+        }
         player.inventory.addItems(new Sword("Sword", 20, 30));
         player.inventory.addItems(new Torch(this));
         player.inventory.addItems(new Axe("Axe", 20, 30));
