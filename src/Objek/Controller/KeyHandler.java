@@ -400,6 +400,9 @@ public class KeyHandler implements KeyListener, MouseListener {
                         break;
                     }
                     gp.buildings.add((Buildings) building);
+                    if (building instanceof Torch) {
+                        gp.player.isPlaceTorch = true;
+                    }
                 }
             } else if (gp.buildings.size() > 0) {
                 counter = 0;

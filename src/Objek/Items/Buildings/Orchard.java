@@ -1,7 +1,7 @@
 package Objek.Items.Buildings;
 
 import Objek.Controller.GamePanel;
-import Objek.Plant.Tree;
+import Objek.Plant.*;
 
 public class Orchard extends Buildings {
     public Tree tree;

@@ -15,6 +15,7 @@ public class Bush extends Plant {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.collision = false;
     }
     
 }

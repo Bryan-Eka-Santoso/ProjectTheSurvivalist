@@ -11,7 +11,9 @@ import Objek.Items.StackableItem.Materials.MetalSheet;
 import Objek.Items.StackableItem.Materials.SwordHandle;
 import Objek.Items.StackableItem.Materials.ToolHandle;
 import Objek.Items.StackableItem.Materials.Wood;
+import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
+import Objek.Items.StackableItem.Seeds.MangoSeeds;
 import Objek.Items.Unstackable.*;
 import Objek.Items.Unstackable.Arsenals.*;
 import Objek.Plant.*;
@@ -92,8 +94,8 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
     }
     
-    public void addPlant(int x, int y) {
-        plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
+    public void addPlant(Tree tree) {
+        plants.add(tree);
     }
     public void checkAndRespawnAnimals() {
         int chickenCount = 0;
@@ -210,12 +212,17 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        addPlant(40, 45);
-        addPlant(40, 49);
+        addPlant(new GuavaTree(40 * TILE_SIZE, 45 * TILE_SIZE, this));
+        addPlant(new GuavaTree(40 * TILE_SIZE, 49 * TILE_SIZE, this));
+        addPlant(new PalmTree(40 * TILE_SIZE,  54 * TILE_SIZE, this));
         addAnimals();
         // player.inventory.addItems(new Sword("Sword", 5, 10));
+        player.inventory.addItems(new Torch(this, 5));
         player.inventory.addItems(new GuavaSeeds(5));
+        player.inventory.addItems(new CoconutSeeds(5));
+        player.inventory.addItems(new MangoSeeds(5));
         player.inventory.addItems(new Orchard(this, 5));
+        player.inventory.addItems(new Chest(this, 5));
         player.inventory.addItems(new CraftingTable(this, 10));
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new LightweightAxe());
@@ -232,11 +239,9 @@ public class GamePanel extends JPanel implements Runnable {
         // player.inventory.addItems(new SpikedWoodenClub());
         // player.inventory.addItems(new MetalClub());
         // player.inventory.addItems(new SpikedMetalClub());
-        player.inventory.addItems(new Torch(this, 5));
         // player.inventory.addItems(new WoodenClub());
         // player.inventory.addItems(new Wood(30));
         // player.inventory.addItems(new Bread(10));
-        // player.inventory.addItems(new Chest(this, 5));
         // player.inventory.addItems(new Campfire(this, 10));
         // player.inventory.addItems(new Smelter(this, 1));
         // player.inventory.addItems(new Chest(this, 2));
@@ -323,7 +328,9 @@ public class GamePanel extends JPanel implements Runnable {
                 buildings.get(i).draw(g2);
             }
         }
-        eManager.lighting.update();
+        
+        // Update the lighting system before drawing it
+        eManager.update();
         eManager.draw(g2);
         ui.draw(g2);
         g2.dispose();

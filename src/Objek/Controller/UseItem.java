@@ -17,6 +17,10 @@ import Objek.Items.StackableItem.Foods.RawPork;
 import Objek.Items.StackableItem.Materials.Feather;
 import Objek.Items.StackableItem.Materials.Material;
 import Objek.Items.StackableItem.Materials.Wood;
+import Objek.Items.StackableItem.Seeds.CoconutSeeds;
+import Objek.Items.StackableItem.Seeds.GuavaSeeds;
+import Objek.Items.StackableItem.Seeds.MangoSeeds;
+import Objek.Items.StackableItem.Seeds.Seeds;
 import Objek.Items.Unstackable.Arsenals.Arsenal;
 import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
@@ -35,6 +39,35 @@ public class UseItem {
 
     public void useItem(Item selectedItem, Player player) {
         if (selectedItem != null && selectedItem.name != null) {
+            if (selectedItem instanceof Seeds){
+                if (gp.buildings.get(gp.player.buildingIndex) instanceof Orchard) {
+                    Orchard orchard = (Orchard) gp.buildings.get(gp.player.buildingIndex);
+                    if (orchard.tree == null) {
+                        if (selectedItem instanceof GuavaSeeds) {
+                            GuavaSeeds seeds = (GuavaSeeds) selectedItem;
+                            orchard.tree = new GuavaTree(0, 0, gp);
+                            player.inventory.removeItem(seeds, 1);
+                            System.out.println("Planted a " + seeds.name + "!");
+                        } else if (selectedItem instanceof MangoSeeds) {
+                            MangoSeeds seeds = (MangoSeeds) selectedItem;
+                            orchard.tree = new MangoTree(0, 0, gp);
+                            player.inventory.removeItem(seeds, 1);
+                            System.out.println("Planted a " + seeds.name + "!");
+                        } else if (selectedItem instanceof CoconutSeeds) {
+                            CoconutSeeds seeds = (CoconutSeeds) selectedItem;
+                            orchard.tree = new PalmTree(0, 0, gp);
+                            player.inventory.removeItem(seeds, 1);
+                            System.out.println("Planted a " + seeds.name + "!");
+                        } else {
+                            System.out.println("You cannot plant this seed here!");
+                        }
+                    } else {
+                        System.out.println("You already planted a tree here!");
+                    }
+                } else {
+                    System.out.println("You need to be at an orchard to plant seeds!");
+                }
+            }
             if (selectedItem instanceof Material) {
                 Material material = (Material) selectedItem;
                 System.out.println("Using material: " + material.name);

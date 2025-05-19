@@ -37,7 +37,7 @@ public class Player {
     public TameAnimal grabbedAnimal;
     public Crafting recipe;
     public int solidAreaDefaultX, solidAreaDefaultY; 
-    public boolean lightUpdated = true;
+    public boolean lightUpdated = true, isPlaceTorch = false;
     public Rectangle solidArea;
     public boolean collisionOn = false;
     public boolean isBuild = false; 
