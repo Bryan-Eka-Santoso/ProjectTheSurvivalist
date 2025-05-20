@@ -7,11 +7,6 @@ import Objek.Animal.Fish.Belida;
 import Objek.Environment.EnvironmentManager;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Bread;
-import Objek.Items.StackableItem.Materials.Gem;
-import Objek.Items.StackableItem.Materials.MetalFrame;
-import Objek.Items.StackableItem.Materials.MetalSheet;
-import Objek.Items.StackableItem.Materials.SwordHandle;
-import Objek.Items.StackableItem.Materials.ToolHandle;
 import Objek.Items.StackableItem.Materials.Wood;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.Unstackable.Arsenals.*;
@@ -44,7 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
-    EnvironmentManager eManager = new EnvironmentManager(this);
+    public EnvironmentManager eManager = new EnvironmentManager(this);
     KeyHandler keyH = new KeyHandler(this);
     Sound sound = new Sound();
     Thread gameThread;
@@ -61,11 +56,14 @@ public class GamePanel extends JPanel implements Runnable {
     public final int BUILDING_STATE = 6;
     public final int OPEN_CHEST_STATE = 7;
     public final int OPEN_CRAFTINGTABLE_STATE = 8;
+    public final int OPEN_SMELTER_STATE = 9;
+    public final int OPEN_BED_STATE = 10;
+
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
-     public final int maxMap = 10;
+    public final int maxMap = 10;
     public int currentMap = 0;
     
     public Player player = new Player("Player", recipe, this, keyH);
@@ -266,25 +264,11 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Orchard(this, 5));
         player.inventory.addItems(new CraftingTable(this, 10));
         player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new LightweightAxe());
-        player.inventory.addItems(new FlimsyAxe());
-        player.inventory.addItems(new GoldSword());
-        player.inventory.addItems(new MetalSword());
-        player.inventory.addItems(new WoodenClub());
-        player.inventory.addItems(new MetalSheet(10));
-        player.inventory.addItems(new MetalFrame(10));
-        player.inventory.addItems(new Wood(10));
-        player.inventory.addItems(new SwordHandle(10));
-        player.inventory.addItems(new ToolHandle(10));
-        player.inventory.addItems(new Gem(10));
         player.inventory.addItems(new Torch(this, 5));
-        player.inventory.addItems(new WoodenClub());
-        player.inventory.addItems(new Wood(30));
+        player.inventory.addItems(new Wood(20));
         player.inventory.addItems(new Bread(10));
         player.inventory.addItems(new Chest(this, 5));
-        player.inventory.addItems(new CraftingTable(this, 10));
-        player.inventory.addItems(new Campfire(this, 10));
-        player.inventory.addItems(new Smelter(this, 1));
+        player.inventory.addItems(new Furnace(this, 1));
         player.inventory.addItems(new Chest(this, 2));
         player.inventory.addItems(new KandangAyam(this));
         player.inventory.addItems(new Bed(this, 1));
@@ -381,6 +365,7 @@ public class GamePanel extends JPanel implements Runnable {
         sound.play();
         sound.loop();
     }
+    
     public void stopMusic() {
         sound.stop();
     }

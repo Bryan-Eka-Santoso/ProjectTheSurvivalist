@@ -36,6 +36,7 @@ public class Player {
     public Crafting recipe;
     public int solidAreaDefaultX, solidAreaDefaultY; 
     public boolean lightUpdated = true;
+    public boolean isPlaceTroch = false;
     public Rectangle solidArea;
     public boolean collisionOn = false;
     public boolean isBuild = false; 
