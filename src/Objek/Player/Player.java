@@ -12,6 +12,7 @@ import Objek.Controller.UseItem;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Plant.Bush;
 import Objek.Plant.Plant;
 
 import java.awt.Graphics2D;
@@ -157,6 +158,11 @@ public class Player {
             collisionOn = false;
             gp.cCheck.checkTile(this);
             plantIndex = gp.cCheck.checkPlant(this, true);
+            if (plantIndex != -1){
+                if (gp.plants.get(plantIndex) instanceof Bush) {
+                    collisionOn = false;
+                }
+            }
             animalIndex = gp.cCheck.checkAnimal(this, true);
             droppedItem = gp.cCheck.checkItemDrop(this, true);
             buildingIndex = gp.cCheck.checkBuildings(this, true);

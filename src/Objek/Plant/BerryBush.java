@@ -2,12 +2,11 @@ package Objek.Plant;
 
 import Objek.Controller.GamePanel;
 
-public class BerryBush extends Plant {
+public class BerryBush extends Bush {
     public BerryBush(int x, int y, GamePanel gp) {
-        super(x, y, gp, new java.awt.Rectangle(12, 24, 24, 20));
-        this.hp = 100;
+        super(x, y, gp);
         try {
-            this.image = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/plant/berrybush.png"));
+            this.image = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/plant/bush4c.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

@@ -8,8 +8,10 @@ import Objek.Animal.Pig;
 import Objek.Animal.Sheep;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Foods.Coconut;
 import Objek.Items.StackableItem.Foods.Food;
 import Objek.Items.StackableItem.Foods.Guava;
+import Objek.Items.StackableItem.Foods.Mango;
 import Objek.Items.StackableItem.Foods.RawChicken;
 import Objek.Items.StackableItem.Foods.RawMeat;
 import Objek.Items.StackableItem.Foods.RawMutton;
@@ -24,6 +26,7 @@ import Objek.Items.StackableItem.Seeds.Seeds;
 import Objek.Items.Unstackable.Arsenals.Arsenal;
 import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
+import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
 import Objek.Plant.*;
 import Objek.Player.Player;
@@ -39,34 +42,16 @@ public class UseItem {
 
     public void useItem(Item selectedItem, Player player) {
         if (selectedItem != null && selectedItem.name != null) {
-            if (selectedItem instanceof Seeds){
-                if (gp.buildings.get(gp.player.buildingIndex) instanceof Orchard) {
-                    Orchard orchard = (Orchard) gp.buildings.get(gp.player.buildingIndex);
-                    if (orchard.tree == null) {
-                        if (selectedItem instanceof GuavaSeeds) {
-                            GuavaSeeds seeds = (GuavaSeeds) selectedItem;
-                            orchard.tree = new GuavaTree(0, 0, gp);
-                            player.inventory.removeItem(seeds, 1);
-                            System.out.println("Planted a " + seeds.name + "!");
-                        } else if (selectedItem instanceof MangoSeeds) {
-                            MangoSeeds seeds = (MangoSeeds) selectedItem;
-                            orchard.tree = new MangoTree(0, 0, gp);
-                            player.inventory.removeItem(seeds, 1);
-                            System.out.println("Planted a " + seeds.name + "!");
-                        } else if (selectedItem instanceof CoconutSeeds) {
-                            CoconutSeeds seeds = (CoconutSeeds) selectedItem;
-                            orchard.tree = new PalmTree(0, 0, gp);
-                            player.inventory.removeItem(seeds, 1);
-                            System.out.println("Planted a " + seeds.name + "!");
-                        } else {
-                            System.out.println("You cannot plant this seed here!");
-                        }
-                    } else {
-                        System.out.println("You already planted a tree here!");
-                    }
-                } else {
-                    System.out.println("You need to be at an orchard to plant seeds!");
+            if (selectedItem instanceof Seeds && gp.buildings.get(gp.player.buildingIndex) instanceof Orchard) {
+                Seeds seed = (Seeds) selectedItem;
+                Orchard orchard = (Orchard) gp.buildings.get(gp.player.buildingIndex);
+                if (orchard.seed != null) {
+                    System.out.println("Orchard already has a seed planted!");
+                    return;
                 }
+                orchard.plant(seed);
+                System.out.println("Using seed: " + seed.name);
+                gp.player.inventory.removeItem(seed, 1); // Remove seed from inventory
             }
             if (selectedItem instanceof Material) {
                 Material material = (Material) selectedItem;
@@ -104,7 +89,7 @@ public class UseItem {
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     }
 
-                    if (selectedItem instanceof Sword){
+                    if (selectedItem instanceof Sword || selectedItem instanceof Pickaxe){
                         System.out.println("Using sword: " + arsenal.name);
                         arsenal.durability -= 3;
                         System.out.println("Arsenal durability: " + arsenal.durability);
@@ -133,13 +118,11 @@ public class UseItem {
                     animal.hp -= arsenal.damage;
                     int damage = arsenal.damage;
 
-                    if (selectedItem instanceof Axe){
-                        System.out.println("Using sword: " + arsenal.name);
+                    if (selectedItem instanceof Axe || selectedItem instanceof Pickaxe){
+                        System.out.println("Using axe/pickaxe: " + arsenal.name);
                         arsenal.durability -= 3;
                         System.out.println("Arsenal durability: " + arsenal.durability);
-                    }
-
-                    if (selectedItem instanceof Sword || selectedItem instanceof Club){
+                    } else {
                         System.out.println("Using sword/club: " + arsenal.name);
                         arsenal.durability--;
                         System.out.println("Arsenal durability: " + arsenal.durability);
@@ -192,6 +175,74 @@ public class UseItem {
                         }
                     }
                     playSE(4);
+                } else if (player.buildingIndex != -1) {
+                    Buildings building = player.gp.buildings.get(player.buildingIndex);
+                    building.hp -= arsenal.damage;
+                    System.out.println("Using arsenal on building: " + arsenal.name);
+                    System.out.println("Building HP: " + building.hp);
+
+                    if (selectedItem instanceof Pickaxe){
+                        System.out.println("Using pickaxe: " + arsenal.name);
+                        arsenal.durability--;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    } else if (selectedItem instanceof Axe && !(building instanceof Smelter)) {
+                        System.out.println("Using axe: " + arsenal.name);
+                        arsenal.durability--;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    } else {
+                        System.out.println("Using sword/club: " + arsenal.name);
+                        arsenal.durability -= 3;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    }
+
+                    if (building.hp <= 0) {
+                        if (building instanceof Chest) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Chest(gp, 1), gp));
+                            Chest chest = (Chest) building;
+                            for (int i = 0; i < chest.inventory.slots.length; i++) {
+                                int scatterX = rand.nextInt(75) - 30;
+                                int scatterY = rand.nextInt(30) - 30;
+                                if (chest.inventory.slots[i] != null) {
+                                    player.gp.droppedItems.add(new ItemDrop(building.worldX + scatterX, building.worldY + scatterY, chest.inventory.slots[i], gp));
+                                    chest.inventory.slots[i] = null;
+                                }
+                            }
+                        } else if (building instanceof CraftingTable) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new CraftingTable(gp, 1), gp));
+                        } else if (building instanceof Orchard) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Orchard(gp, 1), gp));
+                            Orchard orchard = (Orchard) building;
+                            if (orchard.seed != null) {
+                                if (orchard.seed instanceof GuavaSeeds){
+                                    if (orchard.phase.equals("tree")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Guava(rand.nextInt(1) + 1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new GuavaSeeds(rand.nextInt(1) + 1), gp));
+                                    }
+                                } else if (orchard.seed instanceof CoconutSeeds){
+                                    if (orchard.phase.equals("tree")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Coconut(rand.nextInt(1) + 1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new CoconutSeeds(rand.nextInt(1) + 1), gp));
+                                    }
+                                } else if (orchard.seed instanceof MangoSeeds){
+                                    if (orchard.phase.equals("tree")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Mango(rand.nextInt(1) + 1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new MangoSeeds(rand.nextInt(1) + 1), gp));
+                                    }
+                                }
+                            }
+                        } else if (building instanceof Campfire) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Campfire(gp, 1), gp));
+                        }
+                        player.gp.buildings.remove(player.buildingIndex);
+                        player.buildingIndex = -1; 
+                    }
+                    playSE(6);
                 } else {
                     System.out.println("No plant or animal selected to use the arsenal on!");
                 }

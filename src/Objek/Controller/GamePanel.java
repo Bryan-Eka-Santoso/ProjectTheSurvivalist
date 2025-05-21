@@ -94,8 +94,8 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
     }
     
-    public void addPlant(Tree tree) {
-        plants.add(tree);
+    public void addPlant(Plant p) {
+        plants.add(p);
     }
     public void checkAndRespawnAnimals() {
         int chickenCount = 0;
@@ -215,21 +215,25 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant(new GuavaTree(40 * TILE_SIZE, 45 * TILE_SIZE, this));
         addPlant(new GuavaTree(40 * TILE_SIZE, 49 * TILE_SIZE, this));
         addPlant(new PalmTree(40 * TILE_SIZE,  54 * TILE_SIZE, this));
+        addPlant(new Bush(40 * TILE_SIZE,  57 * TILE_SIZE, this));
+        addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addAnimals();
         // player.inventory.addItems(new Sword("Sword", 5, 10));
         player.inventory.addItems(new Torch(this, 5));
+        player.inventory.addItems(new LightweightPickaxe());
+        player.inventory.addItems(new IcePickaxe());
         player.inventory.addItems(new GuavaSeeds(5));
         player.inventory.addItems(new CoconutSeeds(5));
         player.inventory.addItems(new MangoSeeds(5));
         player.inventory.addItems(new Orchard(this, 5));
         player.inventory.addItems(new Chest(this, 5));
         player.inventory.addItems(new CraftingTable(this, 10));
-        player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new LightweightAxe());
-        player.inventory.addItems(new FlimsyAxe());
-        player.inventory.addItems(new GoldSword());
-        player.inventory.addItems(new MetalSword());
-        player.inventory.addItems(new WoodenClub());
+        // player.inventory.addItems(new WindAxe());
+        // player.inventory.addItems(new LightweightAxe());
+        // player.inventory.addItems(new FlimsyAxe());
+        // player.inventory.addItems(new GoldSword());
+        // player.inventory.addItems(new MetalSword());
+        // player.inventory.addItems(new WoodenClub());
         player.inventory.addItems(new MetalSheet(10));
         player.inventory.addItems(new MetalFrame(10));
         player.inventory.addItems(new Wood(10));
@@ -326,6 +330,9 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < buildings.size(); i++) {
             if (buildings.get(i).worldY > player.worldY) {
                 buildings.get(i).draw(g2);
+            }
+            if (buildings.get(i) instanceof Orchard orchard) {
+                orchard.updateGrowth();
             }
         }
         

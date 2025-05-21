@@ -17,16 +17,18 @@ public class Plant {
     public int solidAreaDefaultY;
     public boolean collision;
     public int hp;
+    public int maxHp;
     Graphics2D g2;
 
-    public Plant(int x, int y, GamePanel gp, Rectangle solidArea) {
+    public Plant(int hp, int x, int y, GamePanel gp, Rectangle solidArea) {
         this.worldX = x;
         this.worldY = y;
         this.gp = gp;
         this.solidArea = solidArea;
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
-        this.hp = 100;
+        this.hp = hp;
+        this.maxHp = hp;
     }
 
     public void draw(Graphics2D g2) {  // Bisa dipake utk dropped item
@@ -39,7 +41,7 @@ public class Plant {
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
                 
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
-            if(hp < 100) {
+            if(hp < maxHp) {
                 double oneScale = (double)gp.TILE_SIZE/100;
                 double hpBarValue = oneScale * hp;
                 
