@@ -302,7 +302,9 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (delta >= 1) {
                 update();
-                checkAndRespawnAnimals();  
+                if(currentMap == 0){
+                    checkAndRespawnAnimals();
+                }
                 repaint();
                 delta--;
             }

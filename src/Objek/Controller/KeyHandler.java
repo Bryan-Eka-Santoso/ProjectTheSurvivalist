@@ -419,6 +419,9 @@ public class KeyHandler implements KeyListener, MouseListener {
             ArrayList<Point> usedPositions = new ArrayList<>();
             int col = gp.player.worldX / gp.TILE_SIZE;
             int row = gp.player.worldY / gp.TILE_SIZE;
+
+            // System.out.println(col + " " + row);
+            // System.out.println(gp.player.worldX + " " + gp.player.worldY);
             
             if(gp.currentMap == 0){
                 if((col == 27 || col == 28) && row == 17) {
@@ -431,6 +434,14 @@ public class KeyHandler implements KeyListener, MouseListener {
                     gp.player.worldX = 72 * gp.TILE_SIZE;
                     gp.spawnFish("Arwana", 100, usedPositions);
                     gp.spawnFish("Belida", 100, usedPositions);
+                } else if(col == 43 && row == 55){
+                    gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
+                    gp.currentMap = 2;
+                    gp.animals.clear();
+                    gp.player.getPlayerImg();
+                    gp.tileM.getTileImage();
+                    gp.player.worldY = 24 * gp.TILE_SIZE;
+                    gp.player.worldX = 23 * gp.TILE_SIZE;
                 }
             } else if(gp.currentMap == 1){
                 if(col == 72 && row == 11) {
@@ -441,6 +452,16 @@ public class KeyHandler implements KeyListener, MouseListener {
                     gp.tileM.getTileImage();
                     gp.player.worldY = 18 * gp.TILE_SIZE;
                     gp.player.worldX = 28 * gp.TILE_SIZE;
+                }
+            } else if(gp.currentMap == 2){
+                if(col == 23 && row == 23) {
+                    gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                    gp.currentMap = 0;
+                    gp.animals.clear();
+                    gp.player.getPlayerImg();
+                    gp.tileM.getTileImage();
+                    gp.player.worldY = 56 * gp.TILE_SIZE;
+                    gp.player.worldX = 43 * gp.TILE_SIZE;
                 }
             }
         } 
