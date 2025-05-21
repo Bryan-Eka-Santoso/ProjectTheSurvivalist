@@ -19,10 +19,10 @@ public class Arwana extends Fish {
         super("Arwana", 0, 9, x, y, 30, "down", gp);
         setRandomDirection();
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(2, 1, 26, 40);   
-        downHitbox = new Rectangle(2, 1, 26, 40);   
-        leftHitbox = new Rectangle(4, 4, 30, 25);   
-        rightHitbox = new Rectangle(4, 4, 30, 25);
+        upHitbox = new Rectangle(8, 1, 20, 30);   
+        downHitbox = new Rectangle(8, 1, 20, 30);       
+        leftHitbox = new Rectangle(1, 6, 30, 20);   
+        rightHitbox = new Rectangle(1, 6, 30, 20);
         this.solidArea = downHitbox; 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
