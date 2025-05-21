@@ -45,7 +45,7 @@ public class TileManager {
         setup(14, "grass", false);
         setup(15, "grass", false);
         
-        if(gp.currentMap == 0){
+        if (gp.currentMap == 0){
             setup(16, "calm-water", true);
             setup(17, "sand", false);
             setup(19, "bridge1", false);
