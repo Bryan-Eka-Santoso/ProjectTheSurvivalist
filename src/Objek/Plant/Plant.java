@@ -38,8 +38,7 @@ public class Plant {
         if (worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X 
             && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
-            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
-                
+            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
             if(hp < maxHp) {
                 double oneScale = (double)gp.TILE_SIZE/100;

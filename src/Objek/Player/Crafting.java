@@ -2,15 +2,12 @@ package Objek.Player;
 import java.util.*;
 
 import Objek.Items.Item;
-import Objek.Items.StackableItem.*;
 import Objek.Items.StackableItem.Materials.Gem;
 import Objek.Items.StackableItem.Materials.MetalFrame;
 import Objek.Items.StackableItem.Materials.MetalSheet;
 import Objek.Items.StackableItem.Materials.SwordHandle;
 import Objek.Items.StackableItem.Materials.ToolHandle;
 import Objek.Items.StackableItem.Materials.Wood;
-import Objek.Items.Unstackable.*;
-import Objek.Items.Unstackable.Arsenals.*;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Items.Unstackable.Arsenals.LightweightAxe;
 import Objek.Items.Unstackable.Arsenals.FlimsyAxe;
@@ -23,7 +20,6 @@ public class Crafting {
     public Crafting() {
         smallRecipes = fillSmallRecipes();
         recipes = fillRecipes();
-
     }
 
     private LinkedHashMap<List<Item>, Item> fillSmallRecipes() {

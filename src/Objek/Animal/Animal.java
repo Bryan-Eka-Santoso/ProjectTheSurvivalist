@@ -16,7 +16,7 @@ public abstract class Animal {
     public int solidAreaDefaultX;
     public int solidAreaDefaultY;
     public boolean collisionOn;
-    GamePanel gp;
+    public GamePanel gp;
     public int hp;
 
     public Animal(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
@@ -27,8 +27,6 @@ public abstract class Animal {
         this.speed = speed;
         this.direction = direction;
         this.collisionOn = false;
-       
-
     }
 
     public void update() {
@@ -100,7 +98,6 @@ public abstract class Animal {
             && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
-
             
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
             
