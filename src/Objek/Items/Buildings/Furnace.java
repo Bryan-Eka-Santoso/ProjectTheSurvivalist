@@ -35,7 +35,6 @@ public class Furnace extends Buildings {
             if (rawMaterial[0].currentStack > 0 && fuelMaterial[0].currentStack > 0) {
                 Item tempItem = rawMaterial[0];
                 Item result = recipe.get(tempItem.name);
-                System.out.println(result);
                 if (result != null && cookedMaterial[0] == null) {
                     cookedMaterial[0] = result.clone();
                     cookedMaterial[0].currentStack = result.currentStack;
@@ -54,20 +53,26 @@ public class Furnace extends Buildings {
                     System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                 } else if (result != null && cookedMaterial[0] != null) {
                     if (result.name.equals(cookedMaterial[0].name)) {
-                        rawMaterial[0].currentStack--;
-                        fuelMaterial[0].currentStack--;
-                        cookedMaterial[0].currentStack += result.currentStack;
-                        if (rawMaterial[0].currentStack == 0) {
-                            rawMaterial[0] = null;
-                            System.out.println("No more " + cookedMaterial[0].name + " left");
+                        if (cookedMaterial[0].currentStack < cookedMaterial[0].maxStack) {
+                            rawMaterial[0].currentStack--;
+                            fuelMaterial[0].currentStack--;
+                            cookedMaterial[0].currentStack += result.currentStack;
+                            if (rawMaterial[0].currentStack == 0) {
+                                rawMaterial[0] = null;
+                                System.out.println("No more " + cookedMaterial[0].name + " left");
+                                return;
+                            }
+                            if (fuelMaterial[0].currentStack == 0) {
+                                fuelMaterial[0] = null;
+                                System.out.println("No more " + cookedMaterial[0].name + " left");
+                                return;
+                            }
+                            System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
+                        } else {
+                            System.out.println("Cannot cook " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " because it will produce " + result.name + " instead of " + cookedMaterial[0].name);
+                            System.out.println("Inventory is full, please remove some items");
                             return;
                         }
-                        if (fuelMaterial[0].currentStack == 0) {
-                            fuelMaterial[0] = null;
-                            System.out.println("No more " + cookedMaterial[0].name + " left");
-                            return;
-                        }
-                        System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                     } else {
                         System.out.println("Cannot cook " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " because it will produce " + result.name + " instead of " + cookedMaterial[0].name);
                     }

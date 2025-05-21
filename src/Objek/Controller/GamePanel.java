@@ -262,7 +262,7 @@ public class GamePanel extends JPanel implements Runnable {
         addAnimals();
         // player.inventory.addItems(new Sword("Sword", 5, 10));
         player.inventory.addItems(new GuavaSeeds(5));
-        player.inventory.addItems(new RawMutton(4));
+        player.inventory.addItems(new RawMutton(20));
         player.inventory.addItems(new CraftingTable(this, 10));
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new Torch(this, 5));
