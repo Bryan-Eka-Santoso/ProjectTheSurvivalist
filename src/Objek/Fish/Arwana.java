@@ -1,4 +1,4 @@
-package Objek.Animal.Fish;
+package Objek.Fish;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,14 +9,15 @@ import Objek.Controller.GamePanel;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 
-public class Belida extends Fish {
+public class Arwana extends Fish {
     Random random = new Random();
     public Rectangle upHitbox;
     public Rectangle downHitbox;
     public Rectangle leftHitbox;
     public Rectangle rightHitbox;
-    public Belida(String nameFish, int price, int stregth, int x, int y, GamePanel gp) {
-        super("Belida", 0, 7, x, y, 30, "down", gp);
+    
+    public Arwana(String nameFish, int price, int stregth, int x, int y, GamePanel gp) {
+        super("Arwana", 0, 9, x, y, 30, "down", gp);
         setRandomDirection();
         this.actionMoveDelay = random.nextInt(91) + 30;
         upHitbox = new Rectangle(2, 1, 26, 40);   
@@ -27,22 +28,22 @@ public class Belida extends Fish {
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/left4.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right4.png"));
+            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/up1.png"));
+            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/up2.png"));
+            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/up3.png"));
+            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/up4.png"));
+            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/down1.png"));
+            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/down2.png"));
+            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/down3.png"));
+            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/down4.png"));
+            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/left1.png"));
+            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/left2.png"));
+            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/left3.png"));
+            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/left4.png"));
+            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/right1.png"));
+            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/right2.png"));
+            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/right3.png"));
+            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -90,10 +91,9 @@ public class Belida extends Fish {
         }
         collisionOn = false;
         
-        gp.cCheck.animalCheckTile(this);    
-        gp.cCheck.animalCheckObject(this);
-        gp.cCheck.checkPlayer(this);
-        gp.cCheck.checkAnimalCollision(this);
+        gp.cCheck.fishCheckTile(this);    
+        gp.cCheck.checkFishPlayer(this);
+        gp.cCheck.checkFishCollision(this);
         
         if(!collisionOn) {
             switch(direction) {

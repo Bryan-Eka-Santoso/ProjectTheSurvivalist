@@ -2,9 +2,10 @@ package Objek.Controller;
 
 import javax.swing.*;
 import Objek.Animal.*;
-import Objek.Animal.Fish.Arwana;
-import Objek.Animal.Fish.Belida;
 import Objek.Environment.EnvironmentManager;
+import Objek.Fish.Arwana;
+import Objek.Fish.Belida;
+import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Bread;
 import Objek.Items.StackableItem.Foods.RawMutton;
@@ -71,6 +72,7 @@ public class GamePanel extends JPanel implements Runnable {
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
+    public ArrayList<Fish> fish = new ArrayList<>();
     public ArrayList<Buildings> buildings = new ArrayList<>();
     
     public GamePanel() {
@@ -223,10 +225,10 @@ public class GamePanel extends JPanel implements Runnable {
 
             switch (animalType.toLowerCase()) {
                 case "arwana":
-                    animals.add(new Arwana("arwana", 0, 9, x * TILE_SIZE, y * TILE_SIZE, this));
+                    fish.add(new Arwana("arwana", 0, 9, x * TILE_SIZE, y * TILE_SIZE, this));
                     break;
                 case "belida":
-                    animals.add(new Belida("belida", 0, 7, x * TILE_SIZE, y * TILE_SIZE, this));
+                    fish.add(new Belida("belida", 0, 7, x * TILE_SIZE, y * TILE_SIZE, this));
                     break;
             }
             
@@ -287,7 +289,9 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (delta >= 1) {
                 update();
-                checkAndRespawnAnimals();  
+                if (currentMap == 0) {
+                    checkAndRespawnAnimals();  
+                }
                 repaint();
                 delta--;
             }
@@ -296,6 +300,9 @@ public class GamePanel extends JPanel implements Runnable {
                 if (gameState != PAUSE_STATE) {
                     for (int i = 0; i < animals.size(); i++) {
                         animals.get(i).update();
+                    }
+                    for (int i = 0; i < fish.size(); i++) {
+                        fish.get(i).update();
                     }
                 }
                 lastAnimalMoveTime = currentTime;
@@ -336,6 +343,11 @@ public class GamePanel extends JPanel implements Runnable {
                 animals.get(i).draw(g2);
             }
         }
+        for (int i = 0; i < fish.size(); i++) {
+            if (fish.get(i).worldY <= player.worldY) {
+                fish.get(i).draw(g2);
+            }
+        }
         if (gameState == BUILDING_STATE) {
             ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
@@ -348,6 +360,11 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < animals.size(); i++) {
             if (animals.get(i).worldY > player.worldY) {
                 animals.get(i).draw(g2);
+            }
+        }
+        for (int i = 0; i < fish.size(); i++) {
+            if (fish.get(i).worldY > player.worldY) {
+                fish.get(i).draw(g2);
             }
         }
         for (int i = 0; i < buildings.size(); i++) {

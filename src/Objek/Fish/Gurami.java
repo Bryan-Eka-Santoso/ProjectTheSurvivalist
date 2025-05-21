@@ -1,4 +1,4 @@
-package Objek.Animal.Fish;
+package Objek.Fish;
 
 // public class Gurami extends Fish {
 //         public Gurami(){

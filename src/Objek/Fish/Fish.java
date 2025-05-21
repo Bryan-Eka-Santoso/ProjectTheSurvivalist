@@ -1,38 +1,42 @@
-package Objek.Animal.Fish;
+package Objek.Fish;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import Objek.Controller.GamePanel;
-import Objek.Animal.Animal;
 
-public class Fish extends Animal {
+public class Fish {
     public String nameFish;
     public int price, x, y;
     public int strength;
     public String direction;
     public int worldX, worldY, speed;
     public BufferedImage up1, up2, up3, up4, down1, down2, down3, down4, left1, left2, left3, left4, right1, right2, right3, right4;
+    public boolean collisionOn;
+    public Rectangle solidArea;
+    public int solidAreaDefaultX;
+    public int solidAreaDefaultY;
+    public GamePanel gp;
     public int spriteCounter = 0;
     public int spriteNum = 1;
 
     public Fish(String nameFish, int price, int strength, int worldX, int worldY, int speed, String direction, GamePanel gp) {
-            super(nameFish, worldX, worldY, speed, direction, gp);
-            this.nameFish = nameFish;
-            this.price = price;
-            this.strength = strength;
-            this.worldX = worldX;
-            this.worldY = worldY;
-            this.speed = speed;
-            this.direction = direction;
-            this.collisionOn = false;
+        this.nameFish = nameFish;
+        this.price = price;
+        this.strength = strength;
+        this.worldX = worldX;
+        this.worldY = worldY;
+        this.speed = speed;
+        this.direction = direction;
+        this.collisionOn = false;
+        this.gp = gp;
     }
 
     public void update() {
         collisionOn = false;
         int randomDirection = (int) (Math.random() * 4);
         randomDirection = 2;
-        gp.cCheck.animalCheckTile(this);
-        gp.cCheck.animalCheckObject(this);
+        gp.cCheck.fishCheckTile(this);
         if (!collisionOn) {
             switch (randomDirection) {
                 case 0:

@@ -43,7 +43,7 @@ public class Player {
     public UseItem interactObj;
     public final int SCREEN_Y;
     public final int SCREEN_X;
-    public int plantIndex, animalIndex, droppedItem, buildingIndex;
+    public int plantIndex, animalIndex, droppedItem, buildingIndex, fishIndex;
     public GamePanel gp;
     public KeyHandler keyH;
     public Boolean isCutting;
@@ -170,6 +170,7 @@ public class Player {
             animalIndex = gp.cCheck.checkAnimal(this, true);
             droppedItem = gp.cCheck.checkItemDrop(this, true);
             buildingIndex = gp.cCheck.checkBuildings(this, true);
+            fishIndex = gp.cCheck.checkFish(this, true);
             
             if (!collisionOn) {
                 switch (direction) {
