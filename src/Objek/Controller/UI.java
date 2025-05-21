@@ -263,7 +263,12 @@ public class UI {
             g2.setColor(Color.WHITE);
             g2.setStroke(new BasicStroke(3));
             g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
-        }   
+        }  
+        
+        if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0] != null 
+            && ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0] != null) {
+            ((Furnace) gp.buildings.get(gp.player.buildingIndex)).cook();
+        }
     }
 
     public void drawChest(Chest chest) {

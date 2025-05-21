@@ -3,8 +3,6 @@ package Objek.Items.Buildings;
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
 import Objek.Items.StackableItem.Foods.Bread;
-import Objek.Items.StackableItem.Foods.RawMutton;
-
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +11,7 @@ import java.util.LinkedHashMap;
 import javax.imageio.ImageIO;
 
 public class Furnace extends Buildings {
-    public LinkedHashMap<Item, Item> recipe = new LinkedHashMap<>();
+    public LinkedHashMap<String, Item> recipe = new LinkedHashMap<>();
     public Item[] rawMaterial;
     public Item[] fuelMaterial;
     public Item[] cookedMaterial;
@@ -32,29 +30,49 @@ public class Furnace extends Buildings {
         recipe = fillRecipes();
     }
 
-    public void cook(Item rawItem, Item fuel) {
-        rawMaterial[0] = rawItem;
-        fuelMaterial[0] = fuel;
-        for (int i = 0; i < rawMaterial[0].currentStack; i++) {
+    public void cook() {
+        for (int i = 0; i < fuelMaterial[0].currentStack; i++) {
             if (rawMaterial[0].currentStack > 0 && fuelMaterial[0].currentStack > 0) {
-                Item tempItem = rawMaterial[0].clone();
-                tempItem.currentStack = 1;
-                Item result = recipe.get(tempItem);
+                Item tempItem = rawMaterial[0];
+                Item result = recipe.get(tempItem.name);
+                System.out.println(result);
                 if (result != null && cookedMaterial[0] == null) {
                     cookedMaterial[0] = result.clone();
-                    cookedMaterial[0].currentStack = 1;
+                    cookedMaterial[0].currentStack = result.currentStack;
                     rawMaterial[0].currentStack--;
                     fuelMaterial[0].currentStack--;
-                    System.out.println("Cooking " + rawItem.name + " with " + fuel.name + " to make " + cookedMaterial[0].name);
+                    if (rawMaterial[0].currentStack == 0) {
+                        rawMaterial[0] = null;
+                        System.out.println("No more " + cookedMaterial[0].name + " left");
+                        return;
+                    }
+                    if (fuelMaterial[0].currentStack == 0) {
+                        fuelMaterial[0] = null;
+                        System.out.println("No more " + cookedMaterial[0].name + " left");
+                        return;
+                    }
+                    System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                 } else if (result != null && cookedMaterial[0] != null) {
                     if (result.name.equals(cookedMaterial[0].name)) {
-                        cookedMaterial[0].currentStack++;
-                        System.out.println("Cooking " + rawItem.name + " with " + fuel.name + " to make " + cookedMaterial[0].name);
+                        rawMaterial[0].currentStack--;
+                        fuelMaterial[0].currentStack--;
+                        cookedMaterial[0].currentStack += result.currentStack;
+                        if (rawMaterial[0].currentStack == 0) {
+                            rawMaterial[0] = null;
+                            System.out.println("No more " + cookedMaterial[0].name + " left");
+                            return;
+                        }
+                        if (fuelMaterial[0].currentStack == 0) {
+                            fuelMaterial[0] = null;
+                            System.out.println("No more " + cookedMaterial[0].name + " left");
+                            return;
+                        }
+                        System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                     } else {
-                        System.out.println("Cannot cook " + rawItem.name + " with " + fuel.name + " because it will produce " + result.name + " instead of " + cookedMaterial[0].name);
+                        System.out.println("Cannot cook " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " because it will produce " + result.name + " instead of " + cookedMaterial[0].name);
                     }
                 } else {
-                    System.out.println("No recipe found for " + rawItem.name);
+                    System.out.println("No recipe found for " + rawMaterial[0].name);
                 }
             } else {
                 System.out.println("Not enough fuel");
@@ -62,9 +80,9 @@ public class Furnace extends Buildings {
         }
     }
 
-    private LinkedHashMap<Item, Item> fillRecipes() {
-        LinkedHashMap<Item, Item> r = new LinkedHashMap<>();
-        r.put(new RawMutton(1), new Bread(1));
+    private LinkedHashMap<String, Item> fillRecipes() {
+        LinkedHashMap<String, Item> r = new LinkedHashMap<>();
+        r.put("Raw Mutton", new Bread(1));
         return r;
     }
 
