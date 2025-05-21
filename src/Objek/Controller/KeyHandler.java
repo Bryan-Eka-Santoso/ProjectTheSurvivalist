@@ -523,7 +523,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                 }
                 if (building.canBuild()) {
                     if (gp.player.inventory.getSelectedItem() instanceof Torch) {
-                        gp.player.isPlaceTroch = true;
+                        gp.player.isPlaceTorch = true;
                     }
                     building.worldX = gp.player.worldX;
                     building.worldY = gp.player.worldY;

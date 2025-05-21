@@ -50,12 +50,21 @@ public class TileManager {
             setup(19, "bridge1", false);
             setup(21, "ship", false);
             setup(22, "bridgesand", false);
-        } else {
+            setup(23, "cave", false);
+        } else if(gp.currentMap == 1){
             setup(16, "calm-water", false);
             setup(17, "sand", true);
             setup(19, "bridge2", true);
             setup(21, "ship", false);
             setup(22, "bridgesand", false);
+            setup(23, "cave", false);
+        } else if(gp.currentMap == 2){
+            setup(16, "calm-water", false);
+            setup(17, "sand", true);
+            setup(19, "bridge2", true);
+            setup(21, "sandcave", false);
+            setup(22, "lavacave", true);
+            setup(23, "bridgecave", false);
         }
 
         setup(18, "grass", false);

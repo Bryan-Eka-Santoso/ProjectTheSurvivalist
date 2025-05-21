@@ -185,7 +185,7 @@ public class UseItem {
                         System.out.println("Using pickaxe: " + arsenal.name);
                         arsenal.durability--;
                         System.out.println("Arsenal durability: " + arsenal.durability);
-                    } else if (selectedItem instanceof Axe && !(building instanceof Smelter)) {
+                    } else if (selectedItem instanceof Axe && !(building instanceof Furnace)) {
                         System.out.println("Using axe: " + arsenal.name);
                         arsenal.durability--;
                         System.out.println("Arsenal durability: " + arsenal.durability);
@@ -236,8 +236,8 @@ public class UseItem {
                                     }
                                 }
                             }
-                        } else if (building instanceof Campfire) {
-                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Campfire(gp, 1), gp));
+                        } else if (building instanceof Bed) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Bed(gp, 1), gp));
                         }
                         player.gp.buildings.remove(player.buildingIndex);
                         player.buildingIndex = -1; 
