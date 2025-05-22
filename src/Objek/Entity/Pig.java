@@ -1,4 +1,8 @@
 package Objek.Entity;
+
+import Objek.Items.StackableItem.Milk;
+import Objek.Player.Player;
+
 public class Pig extends Animal{
     public Pig(String name, int x, int y, String gender) {
         super(name, x, y, gender);
@@ -24,6 +28,15 @@ public class Pig extends Animal{
         }
         System.out.println("Not ready to breed yet.");
         return null;
+    }
+    public void getItem(Player player) {
+        if(readyGetItem) {
+            player.inventory.addItems(new Milk("Milk", 10, 1));
+            setReadyGetItem(false);
+            System.out.println("Got milk from " + getName());
+        } else {
+            System.out.println("This cow cannot be milked right now!");
+        }
     }
 }
 

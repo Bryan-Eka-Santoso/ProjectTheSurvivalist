@@ -1,6 +1,5 @@
 package Objek.Items.Buildings;
 
-import Objek.Player.Player;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +25,9 @@ public abstract class Kandang extends Buildings {
     }
     public abstract int getCurrentCapacity();
     public abstract int getMaxCapacity();
-    public abstract void interact(Player player, GamePanel gp);
     public abstract boolean addAnimal(TameAnimal animal);
+    
+    public String getName() {
+        return name;
+    }
 }

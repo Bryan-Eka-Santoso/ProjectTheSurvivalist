@@ -1,5 +1,6 @@
 package Objek.Controller;
 
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -7,16 +8,31 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import Objek.Animal.TameAnimal;
+import Objek.Animal.Chicken;
+import Objek.Animal.Cow;
+import Objek.Animal.Pig;
+import Objek.Animal.Sheep;
 import Objek.Items.Item;
 import Objek.Items.Buildings.Buildings;
 import Objek.Items.Buildings.Chest;
+import Objek.Items.Buildings.Kandang;
+import Objek.Items.Buildings.KandangAyam;
+import Objek.Items.Buildings.PigCage;
+import Objek.Items.Buildings.SheepCage;
+import Objek.Items.Buildings.CowCage;
+
 import Objek.Items.StackableItem.*;
 import Objek.Items.Unstackable.Arsenal;
+import Objek.Player.Player;
+
 import javax.imageio.ImageIO;
 
 public class UI {
@@ -35,14 +51,127 @@ public class UI {
     public List<Item> itemList = new ArrayList<>(); // to match index with the rectangle
     public List<List<Item>> recipeKeys = new ArrayList<>(); 
     public boolean isPointingChest;
+    private int kandangScrollPosition = 0;
+    private static final int ANIMALS_PER_PAGE = 4;
+    private Rectangle breedButton, getItemButton;
+
+    public boolean showNameInput = false;
+    private String currentInput = "";
+    private TameAnimal animalToName;
+    private Kandang targetKandang;
+    private Rectangle textField;
+    private BufferedImage woodBg;
+    private Rectangle backButton;
+    private TameAnimal selectedMale;
+    private TameAnimal selectedFemale;
+    public boolean inBreedingMenu = false;
+    public boolean inGetItemMenu = false;
+    private Rectangle getItemBackButton;
+    public int selectedBreedMaleIndex = 0;
+    public int selectedBreedFemaleIndex = 0;
+    public int selectedGetItemIndex = 0;
+    public boolean isMaleList = true;
+    private boolean showKandangFullMessage = false;
+    private long kandangFullMessageTimer = 0;
+    private final long KANDANG_FULL_MESSAGE_DURATION = 2000;
+    public boolean showWrongKandangMessage = false;
+    public long wrongKandangMessageTimer = 0;
+    public final long WRONG_KANDANG_MESSAGE_DURATION = 2000;
+    public void showKandangFullMessage() {
+        showKandangFullMessage = true;
+        kandangFullMessageTimer = System.currentTimeMillis();
+    }
+    public void showWrongKandangMessage() {
+        showWrongKandangMessage = true;
+        wrongKandangMessageTimer = System.currentTimeMillis();
+    }
+    public void drawWrongKandangMessage(Graphics2D g2) {
+        if(System.currentTimeMillis() - wrongKandangMessageTimer >= WRONG_KANDANG_MESSAGE_DURATION) {
+            showWrongKandangMessage = false;
+        } else {
+            int messageWidth = gp.TILE_SIZE * 8;
+            int messageHeight = gp.TILE_SIZE * 3;
+            int messageX = gp.SCREEN_WIDTH/2 - messageWidth/2;
+            int messageY = gp.SCREEN_HEIGHT/2 - messageHeight/2;
+
+            g2.drawImage(woodBg, messageX, messageY, messageWidth, messageHeight, null);
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 24));
+            String message = "Wrong Cage Type!";
+            int textX = messageX + (messageWidth - g2.getFontMetrics().stringWidth(message))/2;
+            g2.drawString(message, textX, messageY + messageHeight/2);
+        }
+    }
+    public void drawFullKandangMessage(Graphics2D g2){
+        if(System.currentTimeMillis() - kandangFullMessageTimer >= KANDANG_FULL_MESSAGE_DURATION) {
+            showKandangFullMessage = false;
+        } else {
+            int messageWidth = gp.TILE_SIZE * 8;
+            int messageHeight = gp.TILE_SIZE * 3;
+            int messageX = gp.SCREEN_WIDTH/2 - messageWidth/2;
+            int messageY = gp.SCREEN_HEIGHT/2 - messageHeight/2;
+
+            g2.drawImage(woodBg, messageX, messageY, messageWidth, messageHeight, null);
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 24));
+            String message = "Kandang is Full!";
+            int textX = messageX + (messageWidth - g2.getFontMetrics().stringWidth(message))/2;
+            g2.drawString(message, textX, messageY + messageHeight/2);
+        }
+    }
 
     public UI (GamePanel gp) {
         this.gp = gp;
         selectedIndex = 0;
         selectedChestIndex = 0;
         isPointingChest = true;
+        try {
+            woodBg = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
+    public void showAnimalNameInput(TameAnimal animal, Kandang kandang) {
+         if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
+            currentInput = "";
+            animalToName = null;
+            targetKandang = null;
+            return;
+        }
+        if(kandang instanceof KandangAyam && !(animal instanceof Chicken)) {
+            gp.ui.showWrongKandangMessage(); 
+            return;
+        }
+        else if(kandang instanceof CowCage && !(animal instanceof Cow)) {
+            gp.ui.showWrongKandangMessage();
+            return;
+        }
+        else if(kandang instanceof SheepCage && !(animal instanceof Sheep)) {
+            gp.ui.showWrongKandangMessage();
+            return;
+        }
+        else if(kandang instanceof PigCage && !(animal instanceof Pig)) {
+            gp.ui.showWrongKandangMessage();
+            return;
+        }
+        showNameInput = true;
+        currentInput = "";
+        animalToName = animal;
+        targetKandang = kandang;
+        textField = new Rectangle(gp.SCREEN_WIDTH/2 - 100, gp.SCREEN_HEIGHT/2 + 10, 200, 30);
+    }
+    public void resetKandangMenuState() {
+        inBreedingMenu = false;
+        inGetItemMenu = false;
+        selectedMale = null;
+        selectedFemale = null;
+        selectedBreedMaleIndex = 0;
+        selectedBreedFemaleIndex = 0;
+        selectedGetItemIndex = 0;
+        isMaleList = true;
+    }
     public void draw(Graphics2D g2) {
         this.g2 = g2;
 
@@ -67,8 +196,507 @@ public class UI {
         if (gp.gameState == gp.OPEN_CHEST_STATE) {
             drawChest((Chest) gp.buildings.get(gp.player.buildingIndex));
         }
+        if(gp.gameState == gp.KANDANG_STATE) {
+            if(inBreedingMenu) {
+                drawBreedingMenu(g2, gp.currentKandang);
+            }else if(inGetItemMenu) {
+                drawGetItemMenu(g2, gp.currentKandang);
+            }
+            else {
+                drawKandangMenu(g2, gp.currentKandang);
+            }
+        }
         if (gp.gameState != gp.OPEN_CHEST_STATE) {
             drawStats();
+        }
+        if(showNameInput) {
+            drawNameInputWindow(g2);
+        }
+        if(showKandangFullMessage) {
+            drawFullKandangMessage(g2);
+        }
+        if(showWrongKandangMessage) {
+            drawWrongKandangMessage(g2);
+        }
+        
+    }
+    public void handleBreedingKeyPress(int keyCode, Kandang kandang) {
+        ArrayList<TameAnimal> males = new ArrayList<>();
+        ArrayList<TameAnimal> females = new ArrayList<>();
+        
+        if(kandang instanceof KandangAyam) {
+            for(TameAnimal animal : ((KandangAyam)kandang).chickensInCage) {
+                if(animal.getGender().equals("Male") && animal.isReadyBreeding()) 
+                    males.add(animal);
+                else if(animal.getGender().equals("Female") && animal.isReadyBreeding())
+                    females.add(animal);
+            }
+        }else if(kandang instanceof CowCage) {
+            for(Cow cow : ((CowCage)kandang).cowsInCage) {
+                if(cow.getGender().equals("Male") && cow.isReadyBreeding()) 
+                    males.add(cow);
+                else if(cow.getGender().equals("Female") && cow.isReadyBreeding())
+                    females.add(cow);
+            }
+        }
+        else if(kandang instanceof SheepCage) {
+            for(Sheep sheep : ((SheepCage)kandang).sheepsInCage) {
+                if(sheep.getGender().equals("Male") && sheep.isReadyBreeding()) 
+                    males.add(sheep);
+                else if(sheep.getGender().equals("Female") && sheep.isReadyBreeding())
+                    females.add(sheep);
+            }
+        }
+        else if(kandang instanceof PigCage) {
+            for(Pig pig : ((PigCage)kandang).pigsInCage) {
+                if(pig.getGender().equals("Male") && pig.isReadyBreeding()) 
+                    males.add(pig);
+                else if(pig.getGender().equals("Female") && pig.isReadyBreeding())
+                    females.add(pig);
+            }
+        }
+        if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
+            inBreedingMenu = false; 
+            selectedMale = null;
+            selectedFemale = null;
+            selectedBreedMaleIndex = 0;
+            selectedBreedFemaleIndex = 0;
+            isMaleList = true;
+            return;
+        }
+        else if(keyCode == KeyEvent.VK_UP) {
+            if(isMaleList) {
+                if(selectedBreedMaleIndex > 0) selectedBreedMaleIndex--;
+            } else {
+                if(selectedBreedFemaleIndex > 0) selectedBreedFemaleIndex--;
+            }
+        }
+        else if(keyCode == KeyEvent.VK_DOWN) {
+            if(isMaleList) {
+                if(selectedBreedMaleIndex < males.size() - 1) selectedBreedMaleIndex++;
+            } else {
+                if(selectedBreedFemaleIndex < females.size() - 1) selectedBreedFemaleIndex++;
+            }
+        }
+        else if(keyCode == KeyEvent.VK_ENTER) {
+            if(isMaleList && selectedBreedMaleIndex < males.size()) {
+               
+                selectedMale = males.get(selectedBreedMaleIndex);
+                if(!females.isEmpty()) {
+                    isMaleList = false;
+                }
+            }
+             else if(!isMaleList && selectedBreedFemaleIndex < females.size()) {
+                selectedFemale = females.get(selectedBreedFemaleIndex);
+
+                if(selectedMale != null && selectedFemale != null) {
+                    TameAnimal baby = null;
+                    if(kandang instanceof KandangAyam) {
+                        baby = ((Chicken)selectedMale).breeding((Chicken)selectedFemale, gp);
+                    }
+                    else if(kandang instanceof CowCage) {
+                        baby = ((Cow)selectedMale).breeding((Cow)selectedFemale, gp);
+                    }
+                    else if(kandang instanceof SheepCage) {
+                        baby = ((Sheep)selectedMale).breeding((Sheep)selectedFemale, gp);
+                    }
+                    else if(kandang instanceof PigCage) {
+                        baby = ((Pig)selectedMale).breeding((Pig)selectedFemale, gp);
+                    }
+                    if(baby != null) {
+                        showNameInput = true;
+                        animalToName = baby;
+                        targetKandang = kandang;
+                        currentInput = "";
+                        
+                        selectedMale.setReadyBreeding(false);
+                        selectedFemale.setReadyBreeding(false);
+                        inBreedingMenu = false;
+                        selectedMale = null;
+                        selectedFemale = null;
+                        selectedBreedMaleIndex = 0;
+                        selectedBreedFemaleIndex = 0;
+                        isMaleList = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public void handleGetItemKeyPress(int keyCode, Kandang kandang, Player player) {
+        ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
+        if(kandang instanceof KandangAyam) {
+            for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+                if(chicken.isReadyGetItem()) {
+                    readyAnimals.add(chicken);
+                }
+            }
+        } else if(kandang instanceof CowCage) {
+            for(Cow cow : ((CowCage)kandang).cowsInCage) {
+                if(cow.isReadyGetItem()) {
+                    readyAnimals.add(cow);
+                }
+            }
+        }
+        else if(kandang instanceof SheepCage) {
+            for(Sheep sheep : ((SheepCage)kandang).sheepsInCage) {
+                if(sheep.isReadyGetItem()) {
+                    readyAnimals.add(sheep);
+                }
+            }
+        }
+        else if(kandang instanceof PigCage) {
+            for(Pig pig : ((PigCage)kandang).pigsInCage) {
+                if(pig.isReadyGetItem()) {
+                    readyAnimals.add(pig);
+                }
+            }
+        }
+
+        if(keyCode == KeyEvent.VK_UP) {
+            if(selectedGetItemIndex > 0) selectedGetItemIndex--;
+        }
+        else if(keyCode == KeyEvent.VK_DOWN) {
+            if(selectedGetItemIndex < readyAnimals.size() - 1) selectedGetItemIndex++;
+        }
+        else if(keyCode == KeyEvent.VK_ENTER && !readyAnimals.isEmpty()) {
+            TameAnimal animal = readyAnimals.get(selectedGetItemIndex);
+            if(animal instanceof Chicken) {
+                ((Chicken)animal).getItem(player);
+            }
+            else if(animal instanceof Cow) {
+                ((Cow)animal).getItem(player);
+            }
+            else if(animal instanceof Sheep) {
+                ((Sheep)animal).getItem(player);
+            }
+            else if(animal instanceof Pig) {
+                ((Pig)animal).getItem(player);
+            }
+            animal.setReadyGetItem(false);
+            inGetItemMenu = false;
+            selectedGetItemIndex = 0;
+        }
+    }
+   
+    
+    public void drawGetItemMenu(Graphics2D g2, Kandang kandang) {
+
+        int windowWidth = gp.TILE_SIZE * 12;
+        int windowHeight = gp.TILE_SIZE * 10;
+        int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
+        int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
+
+        g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 30));
+        String title = "Get Item Menu";
+        int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
+        g2.drawString(title, titleX, windowY + 40);
+
+        ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
+        if(kandang instanceof KandangAyam) {
+            for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+                if(chicken.isReadyGetItem()) {
+                    readyAnimals.add(chicken);
+                }
+            }
+        }else if(kandang instanceof CowCage) {
+            for(Cow cow : ((CowCage)kandang).cowsInCage) {
+                if(cow.isReadyGetItem()) readyAnimals.add(cow);
+            }
+        } else if(kandang instanceof SheepCage) {
+            for(Sheep sheep : ((SheepCage)kandang).sheepsInCage) {
+                if(sheep.isReadyGetItem()) readyAnimals.add(sheep);
+            }
+        } else if(kandang instanceof PigCage) {
+            for(Pig pig : ((PigCage)kandang).pigsInCage) {
+                if(pig.isReadyGetItem()) readyAnimals.add(pig);
+            }
+        }
+
+        int startY = windowY + 120;
+        int lineHeight = 40;
+
+        if(readyAnimals.isEmpty()) {
+            g2.drawString("No animals ready to get items!", windowX + 30, startY + 40);
+        } else {
+            for(int i = 0; i < readyAnimals.size(); i++) {
+                TameAnimal animal = readyAnimals.get(i);
+                if(i == selectedGetItemIndex) {
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(windowX + 25, startY + (i * lineHeight) - 10, windowWidth - 50,lineHeight -5);
+                }
+                g2.setColor(Color.WHITE);
+                g2.drawString(animal.getName() + " is ready!", windowX + 30, startY + (i * lineHeight) + 15);
+            }
+        }
+
+        int buttonWidth = 100;
+        int buttonHeight = 40;
+        getItemBackButton = new Rectangle(windowX + 30, windowY + windowHeight - buttonHeight - 20,buttonWidth, buttonHeight);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(getItemBackButton.x, getItemBackButton.y, getItemBackButton.width, getItemBackButton.height);
+        g2.setColor(Color.BLACK);
+        g2.drawString("Back", getItemBackButton.x + 30, getItemBackButton.y + 25);
+    }
+    public void drawBreedingMenu(Graphics2D g2, Kandang kandang) {
+
+        int windowWidth = gp.TILE_SIZE * 12;
+        int windowHeight = gp.TILE_SIZE * 10;
+        int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
+        int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
+
+        g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 30));
+        String title = "Breeding Menu";
+        int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
+        g2.drawString(title, titleX, windowY + 40);
+
+        if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
+            g2.setFont(new Font("Arial", Font.BOLD, 20));
+            String msg = "Kandang is full! Cannot breed!";
+            int msgX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(msg))/2;
+            g2.drawString(msg, msgX, windowY + 100);
+        } else {
+
+            g2.setFont(new Font("Arial", Font.BOLD, 20));
+            g2.drawString("Male Animals", windowX + 50, windowY + 80);
+            g2.drawString("Female Animals", windowX + windowWidth/2 + 50, windowY + 80);
+
+            ArrayList<TameAnimal> animals = new ArrayList<>();
+            if(kandang instanceof KandangAyam) {
+                animals.addAll(((KandangAyam)kandang).chickensInCage);
+            }else if(kandang instanceof CowCage) {
+                animals.addAll(((CowCage)kandang).cowsInCage);
+            } else if(kandang instanceof SheepCage) {
+                animals.addAll(((SheepCage)kandang).sheepsInCage);
+            } else if(kandang instanceof PigCage) {
+                animals.addAll(((PigCage)kandang).pigsInCage);
+            }
+
+            ArrayList<TameAnimal> males = new ArrayList<>();
+            ArrayList<TameAnimal> females = new ArrayList<>();
+            for(TameAnimal animal : animals) {
+                if(animal.getGender().equals("Male") && animal.isReadyBreeding()) 
+                    males.add(animal);
+                else if(animal.getGender().equals("Female") && animal.isReadyBreeding())
+                    females.add(animal);
+            }
+
+            int startY = windowY + 120;
+            int lineHeight = 30;
+            if(males.isEmpty()) {
+                g2.drawString("No male animals available!", windowX + 30, startY);
+            } else {
+                for(int i = 0; i < males.size(); i++) {
+                    TameAnimal male = males.get(i);
+                    if(i == selectedBreedMaleIndex && isMaleList) {
+                        g2.setColor(Color.BLACK);
+                        g2.drawRect(windowX + 25, startY + (i * lineHeight) - 10, windowWidth/2 - 50, lineHeight-5);
+                    }
+                    g2.setColor(Color.WHITE);
+                    g2.drawString(male.getName() + " (Ready)", windowX + 30, startY + (i * lineHeight) +15);
+                }
+            }
+
+            if(females.isEmpty()) {
+                g2.drawString("No female animals available!", windowX + windowWidth/2 + 30, startY);
+            } else {
+                for(int i = 0; i < females.size(); i++) {
+                    TameAnimal female = females.get(i);
+                    if(i == selectedBreedFemaleIndex && !isMaleList) {
+                        g2.setColor(Color.BLACK);
+                        g2.drawRect(windowX + windowWidth/2 + 25, startY + (i * lineHeight) - 10, windowWidth/2 - 50, lineHeight -5);
+                    }
+                    g2.setColor(Color.WHITE);
+                    g2.drawString(female.getName() + " (Ready)", windowX + windowWidth/2 + 30, startY + (i * lineHeight) + 15);
+                }
+            }
+
+            if(selectedMale != null) {
+                g2.setFont(new Font("Arial", Font.ITALIC, 16));
+                g2.drawString("Selected male: " + selectedMale.getName(), windowX + 30, windowY + windowHeight - 100);
+                if(!females.isEmpty()) {
+                    g2.drawString("Please select a female", windowX + (windowWidth - g2.getFontMetrics().stringWidth("Please select a female"))/2, windowY + windowHeight - 80);
+                }
+            }
+        }
+
+        int buttonWidth = 100;
+        int buttonHeight = 40;
+        backButton = new Rectangle(windowX + 30, windowY + windowHeight - buttonHeight - 20, buttonWidth, buttonHeight);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(backButton.x, backButton.y, backButton.width, backButton.height);
+        g2.setColor(Color.BLACK);
+        g2.drawString("Back", backButton.x + 30, backButton.y + 25);
+    }
+    public void drawKandangMenu(Graphics2D g2, Kandang kandang) {
+        int windowWidth = gp.TILE_SIZE * 12;
+        int windowHeight = gp.TILE_SIZE * 10;
+        int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
+        int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
+
+        g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 30));
+        String title = kandang.getName() + " (" + kandang.getCurrentCapacity() + "/" + kandang.getMaxCapacity() + ")";
+        int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
+        g2.drawString(title, titleX, windowY + 40);
+
+        g2.setFont(new Font("Arial", Font.PLAIN, 20));
+        int startY = windowY + 80;
+        int lineHeight = 30;
+        
+        ArrayList<TameAnimal> animals = new ArrayList<>();
+        if(kandang instanceof KandangAyam) {
+            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        }else if(kandang instanceof CowCage) {
+            animals.addAll(((CowCage)kandang).cowsInCage);
+        } else if(kandang instanceof SheepCage) {
+            animals.addAll(((SheepCage)kandang).sheepsInCage);
+        } else if(kandang instanceof PigCage) {
+            animals.addAll(((PigCage)kandang).pigsInCage);
+        }
+        
+        int endIndex = Math.min(kandangScrollPosition + ANIMALS_PER_PAGE, animals.size());
+        for(int i = kandangScrollPosition; i < endIndex; i++) {
+            TameAnimal animal = animals.get(i);
+            int y = startY + (i - kandangScrollPosition) * (lineHeight * 2);
+            
+            g2.setColor(Color.WHITE);
+            g2.drawString(animal.getName() + " (" + animal.getGender() + ")", windowX + 20, y);
+            g2.drawString("Breeding: " + (animal.isReadyBreeding() ? "Ready" : "Not Ready"), windowX + 20, y + lineHeight);
+            if(animal instanceof Chicken || animal instanceof Cow || animal instanceof Sheep || animal instanceof Pig) {
+                g2.drawString("Get Item: " + (((TameAnimal)animal).isReadyGetItem() ? "Ready" : "Not Ready"), windowX + windowWidth/2, y + lineHeight);
+            }
+        }
+
+        int buttonWidth = 150;
+        int buttonHeight = 50;
+        int buttonY = windowY + windowHeight - buttonHeight - 20;
+        
+        breedButton = new Rectangle(windowX + 30, buttonY, buttonWidth, buttonHeight);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(breedButton.x, breedButton.y, breedButton.width, breedButton.height);
+        g2.setColor(Color.BLACK);
+        g2.drawString("Breeding", breedButton.x + 40, breedButton.y + 30);
+
+        getItemButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, buttonY, buttonWidth, buttonHeight);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(getItemButton.x, getItemButton.y, getItemButton.width, getItemButton.height);
+        g2.setColor(Color.BLACK);
+        g2.drawString("Get Item", getItemButton.x + 40, getItemButton.y + 30);
+    }
+
+    public void handleKandangScroll(int notches) {
+        if(inBreedingMenu) {
+            if(isMaleList) {
+                selectedBreedMaleIndex = Math.max(0, selectedBreedMaleIndex - notches);
+            } else {
+                selectedBreedFemaleIndex = Math.max(0, selectedBreedFemaleIndex - notches);
+            }
+        }
+        else if(inGetItemMenu) {
+            selectedGetItemIndex = Math.max(0, selectedGetItemIndex - notches);
+        }
+        else {
+            kandangScrollPosition = Math.max(0, kandangScrollPosition + notches);
+        }
+    }
+
+    public void handleKandangClick(int x, int y, Kandang kandang, Player player) {
+        if(inGetItemMenu) {
+            if(getItemBackButton != null && getItemBackButton.contains(x, y)) {
+                inGetItemMenu = false;
+                selectedGetItemIndex = 0;
+                return;
+            }
+        }
+        else if(inBreedingMenu) {
+            if(backButton != null && backButton.contains(x, y)) {
+                inBreedingMenu = false;
+                selectedMale = null;
+                selectedFemale = null;
+                selectedBreedMaleIndex = 0;
+                selectedBreedFemaleIndex = 0;
+                isMaleList = true;
+                return;
+            }
+        }
+        else {
+            if(breedButton != null && breedButton.contains(x, y)) {
+                inBreedingMenu = true; 
+            }
+            else if(getItemButton != null && getItemButton.contains(x, y)) {
+                inGetItemMenu = true; 
+            }
+        }
+    }
+    public void drawNameInputWindow(Graphics2D g2) {
+        int windowWidth = 400;
+        int windowHeight = 200;
+        int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
+        int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
+
+       
+        g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
+
+        g2.setFont(new Font("Arial", Font.BOLD, 20));
+        g2.setColor(Color.WHITE);
+        String title = "Name your " + animalToName.getClass().getSimpleName();
+        int titleX = getXCenteredText(title);
+        g2.drawString(title, titleX, windowY + 50);
+
+        g2.setColor(Color.WHITE);
+        g2.fillRect(textField.x, textField.y, textField.width, textField.height);
+
+        g2.setColor(Color.BLACK);
+        g2.setFont(new Font("Arial", Font.PLAIN, 16));
+        g2.drawString(currentInput, textField.x + 5, textField.y + 20);
+
+        if(System.currentTimeMillis() % 1000 < 500) {
+            g2.drawString("|", textField.x + 5 + g2.getFontMetrics().stringWidth(currentInput), textField.y + 20);
+        }
+
+        g2.setFont(new Font("Arial", Font.ITALIC, 14));
+        g2.setColor(Color.WHITE);
+        g2.drawString("Press ENTER to confirm", windowX + windowWidth/2 - 70, windowY + windowHeight - 30);
+    }
+    public void handleNameInput(char c) {
+        if(showNameInput) {
+            if(c >= 32 && c <= 126) { 
+                if(currentInput.length() < 15) { 
+                    currentInput += c;
+                }
+            }
+        }
+    }
+    public void handleNameInputKey(int keyCode) {
+        if(showNameInput) {
+            if(keyCode == KeyEvent.VK_BACK_SPACE && currentInput.length() > 0) {
+                currentInput = currentInput.substring(0, currentInput.length() - 1);
+            }
+            else if(keyCode == KeyEvent.VK_ENTER && !currentInput.isEmpty()) {
+                animalToName.setName(currentInput);
+                if(targetKandang.addAnimal(animalToName)) {
+                    showNameInput = false;
+                    currentInput = "";
+                    if(gp.player.grabbedAnimal != null) {
+                        gp.gameState = gp.PLAY_STATE;
+                        gp.player.grabbedAnimal = null;
+                        gp.checkAndRespawnAnimals();
+                    } else {
+                        gp.gameState = gp.KANDANG_STATE;
+                    }
+                    animalToName = null;
+                    targetKandang = null;
+                }
+            }
         }
     }
 
@@ -258,15 +886,7 @@ public class UI {
             System.out.println("Mouse is over the button!");
         } 
     }
-    public void menuKandang(){
-        int frameX = gp.TILE_SIZE * 6;
-        int frameY = gp.TILE_SIZE * 4;
-        int frameWidth = gp.TILE_SIZE * 15;
-        int frameHeight = gp.TILE_SIZE * 7;
-
-        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
-
-    }
+    
     public void PlayerCraftMenu() {
         int frameX = gp.TILE_SIZE * 6;
         int frameY = gp.TILE_SIZE * 4;

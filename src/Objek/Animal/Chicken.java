@@ -76,6 +76,9 @@ public class Chicken extends TameAnimal {
     public boolean isReadyGetItem() {
         return readyGetItem;
     }
+    public void setReadyGetItem(boolean ready) {
+        this.readyGetItem = ready;
+    }
     @Override
     public int getHeight() {
         return CHICKEN_HEIGHT;
@@ -246,6 +249,9 @@ public class Chicken extends TameAnimal {
     }
     
     public void getItem(Player player) {
-        player.inventory.addItems(new Egg("Egg", 10, 1));
+        if(isReadyGetItem()) {
+            player.inventory.addItems(new Egg("Egg", 10, 1));
+            setReadyGetItem(false); 
+        }
     }
 }

@@ -22,7 +22,6 @@ public class Cow extends TameAnimal {
     Random random = new Random();
     String gender;
     boolean readyGetItem;
-    
     boolean readyBreeding;
     private static final int COW_WIDTH = 128;
     private static final int COW_HEIGHT = 128;
@@ -223,9 +222,14 @@ public class Cow extends TameAnimal {
             }
         }
     }
-  
+    public void setReadyGetItem(boolean ready) {
+        this.readyGetItem = ready;
+    }
     public void getItem(Player player) {
-        player.inventory.addItems(new Milk("Milk", 10, 1));
+        if(isReadyGetItem()) {
+            player.inventory.addItems(new Milk("Milk", 10, 1));
+            setReadyGetItem(false);
+        }
     }
     
     public Cow breeding(Cow pasangan, GamePanel gp) {
