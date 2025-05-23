@@ -318,8 +318,6 @@ public class GamePanel extends JPanel implements Runnable {
             timer += (currentTime - lastTime);
             lastTime = currentTime;
 
-            lastTime = currentTime;
-
             if (delta >= 1) {
                 update();
                 if (currentMap == 0) {
@@ -328,7 +326,7 @@ public class GamePanel extends JPanel implements Runnable {
                 repaint();
                 delta--;
             }
-
+            
             if (currentTime - lastAnimalMoveTime >= interval) {
                 if (gameState != PAUSE_STATE) {
                     for (int i = 0; i < animals.size(); i++) {
