@@ -32,6 +32,9 @@ import Objek.Items.Buildings.CowCage;
 import Objek.Items.StackableItem.*;
 import Objek.Items.Unstackable.Arsenal;
 import Objek.Player.Player;
+import Objek.Items.Buildings.Furnace;
+import Objek.Items.StackableItem.*;
+import Objek.Items.Unstackable.Arsenals.*;
 
 import javax.imageio.ImageIO;
 
@@ -41,6 +44,7 @@ public class UI {
     public int slotCol = 0;
     public int slotRow = 0;
     public int amountToDrop = 1;
+    public int selectedFurnace = 0;
     int mouseX = 0;
     int mouseY = 0;
     public int selectedIndex, selectedChestIndex;
@@ -124,6 +128,7 @@ public class UI {
             g2.drawString(message, textX, messageY + messageHeight/2);
         }
     }
+    public boolean canSelectInventory;
 
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -174,6 +179,7 @@ public class UI {
         selectedBreedFemaleIndex = 0;
         selectedGetItemIndex = 0;
         isMaleList = true;
+        canSelectInventory = true;
     }
     public void draw(Graphics2D g2) {
         this.g2 = g2;
@@ -181,7 +187,7 @@ public class UI {
         g2.setFont(new Font("Arial", Font.PLAIN, 40));
         g2.setColor(Color.white);
 
-        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE) {
+        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE) {
             drawSelectedItem();
         }
         if (gp.gameState == gp.PAUSE_STATE) {
@@ -190,7 +196,13 @@ public class UI {
         if (gp.gameState == gp.INVENTORY_STATE) {
             drawInventory();
         }
-        if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE){
+            gp.player.recipe.currentRecipe = gp.player.recipe.smallRecipes;
+        }
+        if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
+            gp.player.recipe.currentRecipe = gp.player.recipe.recipes;
+        }
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE || gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
             PlayerCraftMenu();
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE) {
@@ -198,6 +210,9 @@ public class UI {
         }
         if (gp.gameState == gp.OPEN_CHEST_STATE) {
             drawChest((Chest) gp.buildings.get(gp.player.buildingIndex));
+        }
+        if (gp.gameState == gp.OPEN_SMELTER_STATE) {
+            furnaceMenu();
         }
         if(gp.gameState == gp.KANDANG_STATE) {
             if(inBreedingMenu) {
@@ -706,6 +721,192 @@ public class UI {
                 }
             }
         }
+        
+    }
+
+    public void furnaceMenu() {
+        int frameX = gp.TILE_SIZE * 4;
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16);
+        int frameWidth = gp.TILE_SIZE * 7 + 15;
+        int frameHeight = gp.TILE_SIZE * 15;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        int slotXStart = frameX + 30;
+        int slotYStart = frameY + 35;
+        int slotX = slotXStart;
+        int slotY = slotYStart + 56;
+
+        g2.setFont(new Font("Arial", Font.PLAIN, 35));
+        g2.drawString("Furnace", slotX, slotYStart + 24);
+        
+        g2.setFont(new Font("Arial", Font.PLAIN, 24));
+        g2.drawString("Raw", slotX + 95, slotYStart + 80);
+
+        if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0] == null) {
+            g2.setColor(Color.GRAY);
+            g2.setStroke(new BasicStroke(1));
+            g2.drawRoundRect(slotX + 95, slotY + 30, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+        } else {
+            g2.setColor(Color.GRAY);
+            g2.setStroke(new BasicStroke(1));
+            g2.drawRoundRect(slotX + 95, slotY + 30, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+            g2.setColor(Color.WHITE);
+            g2.drawImage(((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0].img, slotX + 100, slotY + 30, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0] instanceof Stackable) {
+                Stackable stackableItem = (Stackable) ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
+                g2.setFont(font);
+                int dx = 30;
+                if (stackableItem.currentStack < 10) {
+                    dx = 40;
+                }
+                g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx + 95, slotY + 80);
+            }
+        }
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.PLAIN, 24));
+        g2.drawString("Fuel", slotX + 95, slotY + 130);
+
+        if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0] == null) {
+            g2.setColor(Color.GRAY);
+            g2.setStroke(new BasicStroke(1));
+            g2.drawRoundRect(slotX + 95, slotY + 150, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+        } else {
+            g2.setColor(Color.GRAY);
+            g2.setStroke(new BasicStroke(1));
+            g2.drawRoundRect(slotX + 95, slotY + 150, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+            g2.setColor(Color.WHITE);
+            g2.drawImage(((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0].img, slotX + 100, slotY + 150, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0] instanceof Stackable) {
+                Stackable stackableItem = (Stackable) ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
+                g2.setFont(font);
+                int dx = 30;
+                if (stackableItem.currentStack < 10) {
+                    dx = 40;
+                }
+                g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx + 95, slotY + 200);
+            }
+        }
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.PLAIN, 24));
+        g2.drawString("Cooked", slotX + 95, slotY + 245);
+
+        if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0] == null) {
+            g2.setColor(Color.GRAY);
+            g2.setStroke(new BasicStroke(1));
+            g2.drawRoundRect(slotX + 95, slotY + 270, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+        } else {
+            g2.setColor(Color.GRAY);
+            g2.setStroke(new BasicStroke(1));
+            g2.drawRoundRect(slotX + 95, slotY + 270, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+            g2.setColor(Color.WHITE);
+            g2.drawImage(((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0].img, slotX + 100, slotY + 270, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0] instanceof Stackable) {
+                Stackable stackableItem = (Stackable) ((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0];
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
+                g2.setFont(font);
+                int dx = 30;
+                if (stackableItem.currentStack < 10) {
+                    dx = 40;
+                }
+                g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx + 95, slotY + 320);
+            }
+        }
+
+        frameX = gp.TILE_SIZE * 14;
+        frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16);
+        frameWidth = gp.TILE_SIZE * 7 + 15;
+        frameHeight = gp.TILE_SIZE * 15;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+        
+        slotXStart = frameX + 30;
+        slotYStart = frameY + 35;
+        slotX = slotXStart;
+        slotY = slotYStart + 56;
+        
+        g2.setFont(new Font("Arial", Font.PLAIN, 35));
+        g2.drawString("Inventory", slotX, slotYStart + 24);
+        
+        for (int i = 0; i < gp.player.inventory.slots.length; i++) {
+            if (gp.player.inventory.slots[i] == null) {
+                g2.setColor(Color.GRAY);
+                g2.setStroke(new BasicStroke(1));
+                g2.drawRoundRect(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+                if ((i + 1) % 4 == 0) {
+                    slotX = slotXStart;
+                    slotY += (gp.TILE_SIZE + 25);
+                } else {
+                    slotX += (gp.TILE_SIZE + 25);
+                }
+                continue;
+            }
+            g2.setColor(Color.GRAY);
+            g2.setStroke(new BasicStroke(1));
+            g2.drawRoundRect(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+            g2.setColor(Color.WHITE);
+            g2.drawImage(gp.player.inventory.slots[i].img, slotX + 5, slotY + 5, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            if (gp.player.inventory.slots[i] instanceof Stackable) {
+                Stackable stackableItem = (Stackable) gp.player.inventory.slots[i];
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
+                g2.setFont(font);
+                int dx = 30;
+                if (stackableItem.currentStack < 10) {
+                    dx = 40;
+                }
+                g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
+            }
+            if (gp.player.inventory.slots[i] instanceof Buildings) {
+                Buildings stackableItem = (Buildings) gp.player.inventory.slots[i];
+                Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
+                g2.setFont(font);
+                int dx = 30;
+                if (stackableItem.currentStack < 10) {
+                    dx = 40;
+                }
+                g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
+            }
+            if ((i + 1) % 4 == 0) {
+                slotX = slotXStart;
+                slotY += (gp.TILE_SIZE + 25);
+            } else {
+                slotX += (gp.TILE_SIZE + 25);
+            }
+        }
+
+        if (canSelectInventory) {
+            slotXStart = gp.TILE_SIZE * 4 + 30;
+            slotYStart = frameY + 91;
+        } else {
+            slotXStart = gp.TILE_SIZE * 14 + 30;
+            slotYStart = frameY + 91;
+        }
+
+        
+        if (!canSelectInventory) {
+            int cursorX = slotXStart +  ((gp.TILE_SIZE + 25) * slotCol);
+            int cursorY = slotYStart + (gp.TILE_SIZE + 25) * slotRow;
+            int cursorWidth = gp.TILE_SIZE + 10;
+            int cursorHeight = gp.TILE_SIZE + 10;
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+        } else {
+            int cursorX = slotXStart + 95 +  ((gp.TILE_SIZE + 25) * slotCol);
+            int cursorY = slotYStart + (120 * selectedFurnace) + 30;
+            int cursorWidth = gp.TILE_SIZE + 10;
+            int cursorHeight = gp.TILE_SIZE + 10;
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+        }  
+        
+        if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0] != null 
+            && ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0] != null) {
+            ((Furnace) gp.buildings.get(gp.player.buildingIndex)).cook();
+        }
     }
 
     public void drawChest(Chest chest) {
@@ -918,7 +1119,7 @@ public class UI {
         g2.drawString("Materials:", frameX + frameWidth - sentenceLength("Materials:") - 250, contentY);
         contentY += 60;
 
-        for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.recipes.entrySet()) {
+        for (Map.Entry<List<Item>, Item> entry : gp.player.recipe.currentRecipe.entrySet()) {
             List<Item> ingredients = entry.getKey();
             Item result = entry.getValue();
 
@@ -952,6 +1153,7 @@ public class UI {
 
         g2.setClip(oldClip);
     }
+    
 
     public void scrollUp() {
         scrollY -= 20;
@@ -960,7 +1162,7 @@ public class UI {
     
     public void scrollDown() {
         scrollY += 20;
-        maxScroll = gp.player.recipe.recipes.size() * 60;
+        maxScroll = gp.player.recipe.currentRecipe.size() * 20;
         if (scrollY > maxScroll) scrollY = maxScroll;
     }
 

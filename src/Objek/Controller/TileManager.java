@@ -13,111 +13,79 @@ import javax.imageio.ImageIO;
 
 public class TileManager {
     GamePanel gp;
-    public Tile[] tile;
-    public int mapTile[][];
+    Tile[] tile;
+    public int mapTile[][][];
 
     public TileManager(GamePanel gp) {
         this.gp= gp;
         tile = new Tile[30];
-        mapTile = new int[gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
+        mapTile = new int[gp.maxMap][gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
-        loadMap("ProjectTheSurvivalist/res/world/map.txt");
+        loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+        loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
+        loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
         getTileImage();
     }
 
     public void getTileImage() {
-        try {
-            
-            tile[0] = new Tile();
-            tile[0].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/LKiriBawahPasir.png"));
-            tile[0].collison = false;
-            
-            tile[1] = new Tile();
-            tile[1].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/LKananBawahPasir.png"));
-            tile[1].collison = false;
-
-            tile[2] = new Tile();
-            tile[2].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/LKananAtasPasir.png"));
-            tile[2].collison = false;
-            
-            tile[3] = new Tile();
-            tile[3].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/LKiriAtasPasir.png"));
-            tile[3].collison = false;
-            
-            tile[4] = new Tile();
-            tile[4].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/BawahPasir.png"));
-            tile[4].collison = false;
-            
-            tile[5] = new Tile();
-            tile[5].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/KiriPasir.png"));
-            tile[5].collison = false;
-            
-            tile[6] = new Tile();
-            tile[6].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/KananPasir.png"));
-            tile[6].collison = false;
-            
-            tile[7] = new Tile();
-            tile[7].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/AtasPasir.png"));
-            tile[7].collison = false;
-            
-            tile[8] = new Tile();
-            tile[8].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[8].collison = false;
-            
-            tile[9] = new Tile();
-            tile[9].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[9].collison = false;
-            
-            tile[10] = new Tile();
-            tile[10].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[10].collison = false;
-            
-            tile[11] = new Tile();
-            tile[11].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[11].collison = false;
-            
-            tile[12] = new Tile();
-            tile[12].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[12].collison = false;
-
-            tile[13] = new Tile();
-            tile[13].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[13].collison = false;
-            
-            tile[14] = new Tile();
-            tile[14].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[14].collison = false;
-
-            tile[15] = new Tile();
-            tile[15].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[15].collison = false;
-            
-            tile[16] = new Tile();
-            tile[16].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/calm-water.png"));
-            tile[16].collison = true;
-
-            tile[17] = new Tile();
-            tile[17].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/sand.png"));
-            tile[17].collison = false;
-
-            tile[18] = new Tile();
-            tile[18].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[18].collison = false;
-
-            tile[19] = new Tile();
-            tile[19].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/bridge.png"));
-            tile[19].collison = false;
-
-            tile[20] = new Tile();
-            tile[20].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/grass.png"));
-            tile[20].collison = false;
-
-        } catch (IOException e) {
-            e.getStackTrace();
+        setup(0, "calm-water", true);
+        setup(1, "calm-water", true);
+        setup(2, "calm-water", true);
+        setup(3, "calm-water", true);
+        setup(4, "calm-water", true);
+        setup(5, "calm-water", true);
+        setup(6, "stone", true);
+        setup(7, "calm-water", true);
+        setup(8, "grass", false);
+        setup(9, "grass", false);
+        setup(10, "grass", false);
+        setup(11, "grass", false);
+        setup(12, "grass", false);
+        setup(13, "grass", false);
+        setup(14, "grass", false);
+        setup(15, "grass", false);
+        
+        if (gp.currentMap == 0){
+            setup(16, "calm-water", true);
+            setup(17, "sand", false);
+            setup(19, "bridge1", false);
+            setup(21, "ship", false);
+            setup(22, "bridgesand", false);
+            setup(23, "cave", false);
+        } else if(gp.currentMap == 1){
+            setup(16, "calm-water", false);
+            setup(17, "sand", true);
+            setup(19, "bridge2", true);
+            setup(21, "ship", false);
+            setup(22, "bridgesand", false);
+            setup(23, "cave", false);
+        } else if(gp.currentMap == 2){
+            setup(16, "calm-water", false);
+            setup(17, "sand", true);
+            setup(19, "bridge2", true);
+            setup(21, "sandcave", false);
+            setup(22, "lavacave", true);
+            setup(23, "bridgecave", false);
         }
+
+        setup(18, "grass", false);
+        setup(20, "grass", false);
     }
 
-    public void loadMap(String path) {
+    public void setup(int index, String imagePath, boolean collision) {
+        UtilityTool uTool = new UtilityTool();
+
+        try {
+            tile[index] = new Tile();
+            tile[index].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/" + imagePath + ".png"));
+            tile[index].image = uTool.scaleImage(tile[index].image, gp.TILE_SIZE, gp.TILE_SIZE);
+            tile[index].collison = collision;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
+    }
+
+    public void loadMap(String path, int map) {
         try {
             File file = new File(path);
             if (!file.exists()) {
@@ -151,7 +119,7 @@ public class TileManager {
             int col = 0;
             int row = 0;
             for (int num : numbers) {
-                mapTile[col][row] = num;
+                mapTile[map][col][row] = num;
                 col++;
                 if (col == gp.MAX_WORLD_COL) {
                     col = 0;
@@ -174,7 +142,7 @@ public class TileManager {
         int worldRow = 0;
         while (worldCol < gp.MAX_WORLD_COL && worldRow < gp.MAX_WORLD_ROW) {
 
-            int tileNum = mapTile[worldCol][worldRow];
+            int tileNum = mapTile[gp.currentMap][worldCol][worldRow];
 
             int worldX = worldCol * gp.TILE_SIZE;
             int worldY = worldRow * gp.TILE_SIZE;

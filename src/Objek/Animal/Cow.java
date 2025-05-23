@@ -6,7 +6,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
-import Objek.Items.StackableItem.Milk;
+import Objek.Items.StackableItem.Foods.Milk;
 import Objek.Player.Player;
 
 import java.awt.Color;
@@ -139,19 +139,9 @@ public class Cow extends TameAnimal {
                 setRandomDirection();
                 actionMoveCounter = 0;
             }
-        } else {
-            String newDirection;
-            String oldDirection = this.direction;
-
-            switch(oldDirection) {
-                case "up": newDirection = "down"; break;
-                case "down": newDirection = "up"; break;
-                case "left": newDirection = "right"; break;
-                case "right": newDirection = "left"; break;
-                default: newDirection = "down"; break;
-            }
-            this.direction = newDirection;
-            this.actionMoveDelay = this.random.nextInt(91)+30;
+        }else {
+          
+            setRandomDirection();
             switch(direction) {
                 case "up": worldY -= speed; break;
                 case "down": worldY += speed; break;

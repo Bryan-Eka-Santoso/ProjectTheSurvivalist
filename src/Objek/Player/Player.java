@@ -1,7 +1,6 @@
 package Objek.Player;
 
 import javax.imageio.ImageIO;
-
 import Objek.Animal.Animal;
 import Objek.Animal.TameAnimal;
 import Objek.Controller.GamePanel;
@@ -13,7 +12,6 @@ import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
 import Objek.Plant.Plant;
-
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -22,11 +20,11 @@ import java.io.IOException;
 
 public class Player {
     public String name;
-    public int health, thirst, hunger, exp, level; // Player stats
+    public int health, thirst, hunger, exp, level; 
     public int maxHealth = 100, maxThirst = 100, maxHunger = 100;
     public int maxExp = 100;
     public Inventory inventory;
-    public int itemIndex; // Index of the selected item in the inventory
+    public int itemIndex; 
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage cutup1, cutup2, cutdown1, cutdown2, cutleft1, cutleft2, cutright1, cutright2;
@@ -38,13 +36,14 @@ public class Player {
     public Crafting recipe;
     public int solidAreaDefaultX, solidAreaDefaultY; 
     public boolean lightUpdated = true;
+    public boolean isPlaceTroch = false;
     public Rectangle solidArea;
     public boolean collisionOn = false;
     public boolean isBuild = false; 
-    public UseItem interactObj; // Object to handle item interactions
+    public UseItem interactObj;
     public final int SCREEN_Y;
     public final int SCREEN_X;
-    public int plantIndex, animalIndex, droppedItem, buildingIndex; // Index of the selected plant in the inventory
+    public int plantIndex, animalIndex, droppedItem, buildingIndex, fishIndex;
     public GamePanel gp;
     public KeyHandler keyH;
     public Boolean isCutting;
@@ -107,14 +106,25 @@ public class Player {
 
     public void getPlayerImg() {
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
+            if(gp.currentMap == 1){
+                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater1.png"));
+                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater2.png"));
+                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater1.png"));
+                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater2.png"));
+                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater1.png"));
+                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
+                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
+                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
+            } else {
+                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
+                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
+                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
+                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
+                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
+                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
+                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
+                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -160,6 +170,7 @@ public class Player {
             animalIndex = gp.cCheck.checkAnimal(this, true);
             droppedItem = gp.cCheck.checkItemDrop(this, true);
             buildingIndex = gp.cCheck.checkBuildings(this, true);
+            fishIndex = gp.cCheck.checkFish(this, true);
             
             if (!collisionOn) {
                 switch (direction) {
@@ -380,7 +391,7 @@ public class Player {
                         System.out.println("Cannot place animal outside map bounds!");
                         return;
                 }
-                int tileNum = gp.tileM.mapTile[newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
+                int tileNum = gp.tileM.mapTile[gp.currentMap][newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
                 if (tileNum != 8 && tileNum != 9 && tileNum != 10 && tileNum != 11 && 
                     tileNum != 12 && tileNum != 13 && tileNum != 14 && tileNum != 15 && 
                     tileNum != 18 && tileNum != 20) {

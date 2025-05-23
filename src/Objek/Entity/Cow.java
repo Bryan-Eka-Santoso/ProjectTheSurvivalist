@@ -1,6 +1,6 @@
 package Objek.Entity;
 
-import Objek.Items.StackableItem.Milk;
+import Objek.Items.StackableItem.Foods.Milk;
 import Objek.Player.Player;
 
 public class Cow extends Animal {

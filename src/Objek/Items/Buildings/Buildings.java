@@ -14,6 +14,7 @@ public class Buildings extends Item {
     public Rectangle solidArea;
     public int solidAreaDefaultX; 
     public int solidAreaDefaultY;
+    public int hp = 100;
 
     public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height) {
         super(name, maxStack, currentStack);
@@ -34,7 +35,7 @@ public class Buildings extends Item {
         if (worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X 
             && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
-            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
+            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
                 
             g2.drawImage(img, screenX, screenY, width, height, null);
         }
@@ -88,7 +89,7 @@ public class Buildings extends Item {
             newY < 0 || newY >= gp.MAX_WORLD_ROW * gp.TILE_SIZE) {
             return false;
         }
-        int tileNum = gp.tileM.mapTile[newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
+        int tileNum = gp.tileM.mapTile[gp.currentMap][newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
         if (tileNum != 8 && tileNum != 9 && tileNum != 10 && tileNum != 11 && 
             tileNum != 12 && tileNum != 13 && tileNum != 14 && tileNum != 15 && 
             tileNum != 18 && tileNum != 20 && tileNum != 17) {

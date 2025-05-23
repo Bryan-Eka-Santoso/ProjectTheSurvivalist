@@ -18,7 +18,7 @@ public class Inventory {
         for (int i = 0; i < slots.length; i++) {
             if (slots[i] != null && newItem.name.equals(slots[i].name)) {
                 if (slots[i].currentStack < newItem.maxStack && (newItem instanceof Stackable || newItem instanceof Buildings)) {
-                    while(slots[i].currentStack < newItem.maxStack && newItem.currentStack > 0) {
+                    while (slots[i].currentStack < newItem.maxStack && newItem.currentStack > 0) {
                         slots[i].currentStack++;
                         newItem.currentStack--;
                     }

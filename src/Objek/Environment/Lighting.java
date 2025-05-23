@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
-
 import Objek.Controller.GamePanel;
 import Objek.Items.Buildings.Torch;
 
@@ -14,13 +13,13 @@ public class Lighting {
     BufferedImage lightFilter;
     BufferedImage darknessFilter;
     float filterAlpha = 0f;
-    int dayCounter;
+    public int dayCounter;
 
     final int DAY = 0; 
     final int DUSK = 1; 
     final int NIGHT = 2; 
     final int DAWN = 3; 
-    int dayState = DAY;
+    public int dayState = DAY;
 
     public Lighting(GamePanel gp) {
         this.gp = gp;
@@ -67,19 +66,20 @@ public class Lighting {
             gPaint = new RadialGradientPaint(centerX, centerY, 0.1f, fraction, color);
         } else {
             gPaint = new RadialGradientPaint(centerX, centerY, ((Torch) gp.player.inventory.slots[gp.ui.selectedIndex]).lightRadius, fraction, color);
-        }    
-        
+        }  
+
         g2.setPaint(gPaint);
-        
+
         g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
         
         g2.dispose();
     }
     
     public void update() {
-        if (gp.player.lightUpdated) {
+        if (gp.player.lightUpdated || gp.player.isPlaceTroch) {
             setLightSource();
             gp.player.lightUpdated = false;
+            gp.player.isPlaceTroch = false;
         }
         
         if (dayState == DAY) {
