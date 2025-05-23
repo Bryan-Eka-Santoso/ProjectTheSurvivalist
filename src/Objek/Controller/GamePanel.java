@@ -67,6 +67,7 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_PIGS = 5;
     public final int maxMap = 10;
     public int currentMap = 0;
+    public boolean isCave = false;
     
     public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();

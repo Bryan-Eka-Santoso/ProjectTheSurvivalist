@@ -110,6 +110,7 @@ public class Lighting {
                 dayState = DAY;
             }
         }
+        
     }
     
     public void draw(Graphics2D g2) {

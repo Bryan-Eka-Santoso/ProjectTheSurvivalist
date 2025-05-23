@@ -561,9 +561,6 @@ public class KeyHandler implements KeyListener, MouseListener {
             ArrayList<Point> usedPositions = new ArrayList<>();
             int col = gp.player.worldX / gp.TILE_SIZE;
             int row = gp.player.worldY / gp.TILE_SIZE;
-
-            // System.out.println(col + " " + row);
-            // System.out.println(gp.player.worldX + " " + gp.player.worldY);
             
             if(gp.currentMap == 0){
                 if((col == 27 || col == 28) && row == 17) {
@@ -584,6 +581,8 @@ public class KeyHandler implements KeyListener, MouseListener {
                     gp.tileM.getTileImage();
                     gp.player.worldY = 24 * gp.TILE_SIZE;
                     gp.player.worldX = 23 * gp.TILE_SIZE;
+                    gp.isCave = !gp.isCave;
+                    gp.eManager.lighting.setLightSource(); 
                 }
             } else if(gp.currentMap == 1){
                 if(col == 72 && row == 11) {
