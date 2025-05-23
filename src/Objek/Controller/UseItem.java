@@ -6,6 +6,7 @@ import Objek.Animal.Chicken;
 import Objek.Animal.Cow;
 import Objek.Animal.Pig;
 import Objek.Animal.Sheep;
+import Objek.Animal.Wolf;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Food;
@@ -152,6 +153,16 @@ public class UseItem {
                         cow.hp -= damage;
                         System.out.println("Hit cow: " + cow.hp + "/" + 100);
                         if(cow.hp <= 0) {
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
+                            player.gp.animals.remove(player.animalIndex);
+                            player.gainExp(rand.nextInt(10) + 9);
+                            player.animalIndex = -1;
+                        }
+                    }else if(animal instanceof Wolf) {
+                        Wolf wolf = (Wolf)animal;
+                        wolf.hp -= damage;
+                        System.out.println("Hit wolf: " + wolf.hp + "/" + 100);
+                        if(wolf.hp <= 0) {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.gainExp(rand.nextInt(10) + 9);
