@@ -1,0 +1,13 @@
+package Objek.Items.Unstackable.Arsenals;
+
+public class IcePickaxe extends Pickaxe {
+    public IcePickaxe() {
+        super("Ice Pickaxe", 20, 100);
+        try {
+            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Equipments/icepickaxe.png"));
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+}

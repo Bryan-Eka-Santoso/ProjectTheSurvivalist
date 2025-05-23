@@ -8,13 +8,13 @@ import Objek.Controller.GamePanel;
 
 public class Bush extends Plant {
     public Bush(int x, int y, GamePanel gp) {
-        super(x, y, gp, new Rectangle(12, 24, 24, 20));
-        this.hp = 30;
+        super(20, x, y, gp, new Rectangle(12, 24, 24, 20));
         try {
-            this.image = ImageIO.read(new File("ProjectTheSurvivalist/res/plant/bush.png"));
+            this.image = ImageIO.read(new File("ProjectTheSurvivalist/res/plant/bush1.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.collision = false;
     }
     
 }

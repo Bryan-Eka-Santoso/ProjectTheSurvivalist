@@ -16,7 +16,16 @@ public class EnvironmentManager {
         lighting = new Lighting(gp);
     }
 
+    public void update() {
+        lighting.update();
+    }
+
     public void draw(Graphics2D g2) {
         lighting.draw(g2);
+    }
+    
+    // Method to force a lighting update
+    public void updateLighting() {
+        lighting.setLightSource();
     }
 }

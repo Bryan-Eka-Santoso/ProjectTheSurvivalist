@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
 import Objek.Fish.Fish;
+import Objek.Plant.Bush;
 import Objek.Player.Player;
 
 public class CollisonChecker {
@@ -202,38 +203,46 @@ public class CollisonChecker {
     public int checkPlant(Player player, boolean collison) {
         int index = -1; // Default value if no collision is detected
         for (int i = 0; i < gp.plants.size(); i++) {
-                player.solidArea.x = player.worldX + player.solidArea.x;
-                player.solidArea.y = player.worldY + player.solidArea.y;
-                gp.plants.get(i).solidArea.x = gp.plants.get(i).worldX + gp.plants.get(i).solidArea.x;
-                gp.plants.get(i).solidArea.y = gp.plants.get(i).worldY + gp.plants.get(i).solidArea.y;
-                
+            player.solidArea.x = player.worldX + player.solidArea.x;
+            player.solidArea.y = player.worldY + player.solidArea.y;
+            gp.plants.get(i).solidArea.x = gp.plants.get(i).worldX + gp.plants.get(i).solidArea.x;
+            gp.plants.get(i).solidArea.y = gp.plants.get(i).worldY + gp.plants.get(i).solidArea.y;
+            
                 switch (player.direction) {
                     case "up":
                         player.solidArea.y -= player.speed;
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true; // Kalo item ini diapus aja
+                            if (!(gp.plants.get(i) instanceof Bush)) {
+                                player.collisionOn = true; // Kalo item ini diapus aja
+                            }
                         }
                         break;
                     case "down":
                         player.solidArea.y += player.speed;
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true;
+                            if (!(gp.plants.get(i) instanceof Bush)) {
+                                player.collisionOn = true; // Kalo item ini diapus aja
+                            }
                         }
                         break;
                     case "left":
                         player.solidArea.x -= player.speed;
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true;
+                            if (!(gp.plants.get(i) instanceof Bush)) {
+                                player.collisionOn = true; // Kalo item ini diapus aja
+                            }
                         }
                         break;
                     case "right":
                         player.solidArea.x += player.speed;
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true;
+                            if (!(gp.plants.get(i) instanceof Bush)) {
+                                player.collisionOn = true; // Kalo item ini diapus aja
+                            }
                         }
                         break;
                 }

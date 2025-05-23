@@ -9,8 +9,14 @@ import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Bread;
 import Objek.Items.StackableItem.Foods.RawMutton;
+import Objek.Items.StackableItem.Materials.Metal;
+import Objek.Items.StackableItem.Materials.MetalSheet;
 import Objek.Items.StackableItem.Materials.Wood;
+import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
+import Objek.Items.StackableItem.Seeds.MangoSeeds;
+import Objek.Items.Unstackable.Torch;
+import Objek.Items.Unstackable.WateringCan;
 import Objek.Items.Unstackable.Arsenals.*;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -104,8 +110,8 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
     }
     
-    public void addPlant(int x, int y) {
-        plants.add(new GuavaTree(x * TILE_SIZE, y * TILE_SIZE, this));
+    public void addPlant(Plant p) {
+        plants.add(p);
     }
     
     public void checkAndRespawnAnimals() {
@@ -289,15 +295,24 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        addPlant(40, 45);
-        addPlant(40, 49);
+        addPlant(new GuavaTree(40 * TILE_SIZE, 45 * TILE_SIZE, this));
+        addPlant(new GuavaTree(40 * TILE_SIZE, 49 * TILE_SIZE, this));
+        addPlant(new PalmTree(40 * TILE_SIZE,  54 * TILE_SIZE, this));
+        addPlant(new Bush(40 * TILE_SIZE,  57 * TILE_SIZE, this));
+        addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addAnimals();
         // player.inventory.addItems(new Sword("Sword", 5, 10));
+        player.inventory.addItems(new WateringCan());
+        player.inventory.addItems(new Torch(this));
+        player.inventory.addItems(new CoconutSeeds(5));
+        player.inventory.addItems(new MangoSeeds(5));
+        player.inventory.addItems(new Orchard(this, 5));
+        player.inventory.addItems(new LightweightPickaxe());
+        player.inventory.addItems(new IcePickaxe());
         player.inventory.addItems(new GuavaSeeds(5));
         player.inventory.addItems(new RawMutton(20));
         player.inventory.addItems(new CraftingTable(this, 10));
         player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new Torch(this, 5));
         player.inventory.addItems(new Wood(20));
         player.inventory.addItems(new Bread(10));
         player.inventory.addItems(new Chest(this, 5));
@@ -308,6 +323,8 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new SheepCage(this));
         player.inventory.addItems(new PigCage(this));
         player.inventory.addItems(new Bed(this, 1));
+        player.inventory.addItems(new MetalSheet(5));
+        player.inventory.addItems(new Metal(5));
         
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -405,8 +422,13 @@ public class GamePanel extends JPanel implements Runnable {
             if (buildings.get(i).worldY > player.worldY) {
                 buildings.get(i).draw(g2);
             }
+            if (buildings.get(i) instanceof Orchard) {
+                ((Orchard) buildings.get(i)).updateGrowth();
+            }
         }
-        eManager.lighting.update();
+        
+        // Update the lighting system before drawing it
+        eManager.update();
         eManager.draw(g2);
         ui.draw(g2);
         g2.dispose();

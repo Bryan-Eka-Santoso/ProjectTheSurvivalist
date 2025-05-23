@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Items.Unstackable.Torch;
 import Objek.Player.Inventory;
 
 public class KeyHandler implements KeyListener, MouseListener, MouseWheelListener {
@@ -60,6 +61,63 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 }
             }
         }
+        if (gp.gameState == gp.OPEN_CHEST_STATE) {
+            gp.ui.mouseX = e.getX();
+            gp.ui.mouseY = e.getY();
+            Chest chest = (Chest) gp.buildings.get(gp.player.buildingIndex);
+            Object[] result = gp.ui.getClickedInventoryOrChestSlot(gp.ui.mouseX, gp.ui.mouseY, chest);
+            if (result != null) {
+                boolean isChest = (boolean) result[0];
+                int idx = (int) result[1];
+                if (isChest) {
+                    // Move from chest to inventory
+                    if (chest.inventory.slots[idx] != null) {
+                        gp.player.inventory.addItems(chest.inventory.slots[idx]);
+                        chest.inventory.slots[idx] = null;
+                    }
+                } else {
+                    // Move from inventory to chest
+                    if (gp.player.inventory.slots[idx] != null) {
+                        chest.inventory.addItems(gp.player.inventory.slots[idx]);
+                        gp.player.inventory.slots[idx] = null;
+                    }
+                }
+            }
+        }
+        if (gp.gameState == gp.OPEN_SMELTER_STATE){
+            gp.ui.mouseX = e.getX();
+            gp.ui.mouseY = e.getY();
+            Furnace furnace = (Furnace) gp.buildings.get(gp.player.buildingIndex);
+            Object[] result = gp.ui.getClickedInventoryOrFurnaceSlot(gp.ui.mouseX, gp.ui.mouseY, furnace);
+            if (result != null) {
+                String area = (String) result[0];
+                int idx = (int) result[1];
+                if (area.equals("furnace")) {
+                    if (idx == 0 && furnace.rawMaterial[0] != null) {
+                        gp.player.inventory.addItems(furnace.rawMaterial[0]);
+                        furnace.rawMaterial[0] = null;
+                    } else if (idx == 1 && furnace.fuelMaterial[0] != null) {
+                        gp.player.inventory.addItems(furnace.fuelMaterial[0]);
+                        furnace.fuelMaterial[0] = null;
+                    } else if (idx == 2 && furnace.cookedMaterial[0] != null) {
+                        gp.player.inventory.addItems(furnace.cookedMaterial[0]);
+                        furnace.cookedMaterial[0] = null;
+                    }
+                } else if (area.equals("inventory")) {
+                    if (gp.player.inventory.slots[idx] != null) {
+                        Item item = gp.player.inventory.slots[idx];
+                        if (furnace.rawMaterial[0] == null) {
+                            furnace.rawMaterial[0] = item;
+                            gp.player.inventory.slots[idx] = null;
+                        } else if (furnace.fuelMaterial[0] == null) {
+                            furnace.fuelMaterial[0] = item;
+                            gp.player.inventory.slots[idx] = null;
+                        }
+                        // Optionally: handle cooked slot if you want to allow putting cooked items back
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -82,8 +140,19 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+        if (gp.gameState == gp.INVENTORY_STATE) {
+            int mouseX = e.getX();
+            int mouseY = e.getY();
+            Integer slotIdx = gp.ui.getClickedInventorySlot(mouseX, mouseY);
+            if (slotIdx != null && gp.player.inventory.slots[slotIdx] != null) {
+                Item item = gp.player.inventory.slots[slotIdx];
+                if (item instanceof Stackable || item instanceof Buildings) {
+                    gp.player.dropItem(item, item.currentStack);
+                } else {
+                    gp.player.dropItem(item, 1);
+                }
+            }
+        }
     }
 
     @Override
@@ -276,127 +345,78 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                         counter = 0;
                         gp.player.inventory.swapItems(temp1, temp2);
                     }
-                } else if (gp.gameState == gp.OPEN_SMELTER_STATE) {
-                    playSE(2);
-                    if (counter == 0) {
-                        if (gp.ui.selectedFurnace == -1) {
-                            temp1Furnace = gp.player.inventory.slots[gp.ui.selectedIndex];
-                            temp1 = gp.ui.selectedIndex;
-                            furnaceIdx1 = -1;
-                        } 
-                        if (gp.ui.selectedFurnace == 0) {
-                            temp1Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];
-                            temp1 = 0;
-                            furnaceIdx1 = 0;
-                        } 
-                        if (gp.ui.selectedFurnace == 1) {
-                            temp1Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];
-                            temp1 = 0;
-                            furnaceIdx1 = 1;
-                        } 
-                        if (gp.ui.selectedFurnace == 2) {
-                            temp1Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0];
-                            temp1 = 0;
-                            furnaceIdx1 = 2;
-                        }
+                    isTemp1Chest = false;
+                    isTemp2Chest = false;
+                }
+            }
+            if (code == KeyEvent.VK_C && !gp.player.isBuild) {
+                if (gp.gameState == gp.PLAY_STATE) {
+                    gp.gameState = gp.PLAYER_CRAFTING_STATE;
+                } else if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+                    gp.gameState = gp.PLAY_STATE;
+                } 
+            }
+            if (code == KeyEvent.VK_UP) {
+                if (gp.gameState == gp.DROPPED_ITEM_STATE){
+                    if (gp.ui.amountToDrop < itemStack){
+                        gp.ui.amountToDrop++;
                     }
-                    if (counter == 1) {
-                        if (gp.ui.selectedFurnace == -1) {
-                            temp2Furnace = gp.player.inventory.slots[gp.ui.selectedIndex];
-                            temp2 = gp.ui.selectedIndex;
-                            furnaceIdx2 = -1;
-                        } 
-                        if (gp.ui.selectedFurnace == 0) {
-                            temp2Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];
-                            temp2 = 0;
-                            furnaceIdx2 = 0;
-                        } 
-                        if (gp.ui.selectedFurnace == 1) {
-                            temp2Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];
-                            temp2 = 0;
-                            furnaceIdx2 = 1;
-                        } 
-                        if (gp.ui.selectedFurnace == 2) {
-                            temp2Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0];
-                            temp2 = 0;
-                            furnaceIdx2 = 2;
-                        }
+                }
+                if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
+                    if (gp.ui.selectedRecipeIndex > 0) {
+                        gp.ui.selectedRecipeIndex--; 
                     }
-                    counter++;
-                    if (counter == 2) {
-                        counter = 0;
-                        if (furnaceIdx1 == -1 && furnaceIdx2 == -1) { // inventory ke inventory
-                            Item tempItem = gp.player.inventory.slots[temp1];  
-                            gp.player.inventory.slots[temp1] = gp.player.inventory.slots[temp2];
-                            gp.player.inventory.slots[temp2] = tempItem;
-                        } 
-                        if (furnaceIdx1 == -1 && furnaceIdx2 == 0) { // inventory ke raw material
-                            Item tempItem1 = gp.player.inventory.slots[temp1];  
-                            Item tempItem2 = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];
-                            gp.player.inventory.slots[temp1] = tempItem2;
-                            ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0] = tempItem1;
-                        } 
-                        if (furnaceIdx1 == -1 && furnaceIdx2 == 1) { // inventory ke fuel material
-                            Item tempItem1 = gp.player.inventory.slots[temp1];  
-                            Item tempItem2 = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];
-                            gp.player.inventory.slots[temp1] = tempItem2;
-                            ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0] = tempItem1;
-                        } 
-                        if (furnaceIdx1 == 0 && furnaceIdx2 == -1) { // raw material ke inventory
-                            Item tempItem1 = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];  
-                            Item tempItem2 = gp.player.inventory.slots[temp2];
-                            ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0] = tempItem2;
-                            gp.player.inventory.slots[temp2] = tempItem1;
-                        } 
-                        if (furnaceIdx1 == 1 && furnaceIdx2 == -1) { // fuel material ke inventory material
-                            Item tempItem1 = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];  
-                            Item tempItem2 = gp.player.inventory.slots[temp2];
-                            ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0] = tempItem2;
-                            gp.player.inventory.slots[temp2] = tempItem1;
-                        } 
-                        temp1Furnace = null;
-                        temp2Furnace = null;;
-                    }  
-                } else {
-                    playSE(2);
-                    if (counter == 0) {
-                        if (gp.ui.isPointingChest) {
-                            temp1 = gp.ui.selectedChestIndex;
-                            isTemp1Chest = true;
-                        } else {
-                            temp1 = gp.ui.selectedIndex;
+                }
+            }
+            if (code == KeyEvent.VK_LEFT) {
+                if (gp.gameState == gp.DROPPED_ITEM_STATE){
+                    gp.gameState = gp.PLAY_STATE;
+                    gp.ui.amountToDrop = 1;
+                }
+                if (gp.player.grabbedAnimal == null && gp.gameState == gp.PLAY_STATE){
+                    if (gp.ui.slotCol > 0) {
+                        gp.ui.slotCol--;
+                    } else {
+                        playSE(2);
+                        if (counter == 0) {
+                            if (gp.ui.isPointingChest) {
+                                temp1 = gp.ui.selectedChestIndex;
+                                isTemp1Chest = true;
+                            } else {
+                                temp1 = gp.ui.selectedIndex;
+                            }
                         }
-                    }
-                    if (counter == 1) {
-                        if (gp.ui.isPointingChest) {
-                            temp2 = gp.ui.selectedChestIndex;
-                            isTemp2Chest = true;
-                        } else {
-                            temp2 = gp.ui.selectedIndex;
+                        if (counter == 1) {
+                            if (gp.ui.isPointingChest) {
+                                temp2 = gp.ui.selectedChestIndex;
+                                isTemp2Chest = true;
+                            } else {
+                                temp2 = gp.ui.selectedIndex;
+                            }
                         }
-                    }
-                    counter++;
-                    if (counter == 2) {
-                        counter = 0;
-                        if (isTemp1Chest && isTemp2Chest) {
-                            Item tempItem = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1];  
-                            ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1] = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2];
-                            ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2] = tempItem;
-                        } else if (isTemp1Chest && !isTemp2Chest) {
-                            Item tempItem1 = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1];  
-                            Item tempItem2 = gp.player.inventory.slots[temp2];
-                            ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1] = tempItem2;
-                            gp.player.inventory.slots[temp2] = tempItem1;
-                        } else if (!isTemp1Chest && isTemp2Chest) {
-                            Item tempItem1 = gp.player.inventory.slots[temp1];
-                            Item tempItem2 = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2];
-                            gp.player.inventory.slots[temp1] = tempItem2;
-                            ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2] = tempItem1;
-                        } else {
-                            gp.player.inventory.swapItems(temp1, temp2);
+                        counter++;
+                        if (counter == 2) {
+                            counter = 0;
+                            if (isTemp1Chest && isTemp2Chest) {
+                                Item tempItem = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1];  
+                                ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1] = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2];
+                                ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2] = tempItem;
+                            } else if (isTemp1Chest && !isTemp2Chest) {
+                                Item tempItem1 = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1];  
+                                Item tempItem2 = gp.player.inventory.slots[temp2];
+                                ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp1] = tempItem2;
+                                gp.player.inventory.slots[temp2] = tempItem1;
+                            } else if (!isTemp1Chest && isTemp2Chest) {
+                                Item tempItem1 = gp.player.inventory.slots[temp1];
+                                Item tempItem2 = ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2];
+                                gp.player.inventory.slots[temp1] = tempItem2;
+                                ((Chest) gp.buildings.get(gp.player.buildingIndex)).inventory.slots[temp2] = tempItem1;
+                            } else {
+                                gp.player.inventory.swapItems(temp1, temp2);
+                            }
+                            isTemp1Chest = false;
+                            isTemp2Chest = false;
                         }
-                        isTemp1Chest = false;
-                        isTemp2Chest = false;
                     }
                 }
             }
@@ -479,10 +499,59 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     }
                 }
             }
-            if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
-                if (gp.gameState == gp.DROPPED_ITEM_STATE){
+            if (code == KeyEvent.VK_G && !gp.player.isBuild) {
+                gp.player.handleGrabAction(gp.player.inventory.getSelectedItem());
+            }
+            if (code == KeyEvent.VK_SPACE) {
+                if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE || gp.gameState == gp.OPEN_SMELTER_STATE) {
                     gp.gameState = gp.PLAY_STATE;
-                    gp.ui.amountToDrop = 1;
+                    temp1Furnace = null;
+                    temp2Furnace = null;
+                    gp.ui.slotCol = 0;
+                    gp.ui.slotRow = 0;
+                    gp.ui.selectedIndex = 0;
+                    gp.ui.selectedChestIndex = 0;
+                } else if (gp.gameState == gp.OPEN_CHEST_STATE) {
+                    gp.gameState = gp.PLAY_STATE;
+                    gp.ui.slotCol = 0;
+                    gp.ui.slotRow = 0;
+                    gp.ui.selectedIndex = 0;
+                    gp.ui.selectedChestIndex = 0;
+                } else if (gp.gameState == gp.BUILDING_STATE) {
+                    Buildings building = (Buildings) gp.player.inventory.getSelectedItem().clone();
+                if (building instanceof Chest) {
+                    ((Chest) building).inventory = new Inventory(32, gp);
+                }
+                if (building instanceof Furnace) {
+                    ((Furnace) building).rawMaterial = new Item[1];
+                    ((Furnace) building).fuelMaterial = new Item[1];
+                    ((Furnace) building).cookedMaterial = new Item[1];
+                }
+                if (building.canBuild()) {
+                    if (gp.player.inventory.getSelectedItem() instanceof Torch) {
+                        // gp.player.isPlaceTorch = true;
+                    }
+                    building.worldX = gp.player.worldX;
+                    building.worldY = gp.player.worldY;
+                    gp.player.isBuild = false;
+                    gp.gameState = gp.PLAY_STATE;
+                    gp.player.inventory.removeItem(gp.player.inventory.getSelectedItem(), 1);
+                    switch (gp.player.direction) {
+                        case "up":
+                            building.worldY -= gp.TILE_SIZE;
+                        break;
+                        case "down":
+                            building.worldY += gp.TILE_SIZE;
+                        break;
+                        case "left":
+                            building.worldX -= building.width;
+                        break;
+                        case "right":
+                            building.worldX += gp.TILE_SIZE;
+                        break;
+                    }
+                    gp.buildings.add((Buildings) building);
+                }
                 }
             }
             if (code == KeyEvent.VK_Q && !gp.player.isBuild) {
@@ -571,9 +640,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                         ((Furnace) building).cookedMaterial = new Item[1];
                     }
                     if (building.canBuild()) {
-                        if (gp.player.inventory.getSelectedItem() instanceof Torch) {
-                            gp.player.isPlaceTroch = true;
-                        }
                         building.worldX = gp.player.worldX;
                         building.worldY = gp.player.worldY;
                         gp.player.isBuild = false;
