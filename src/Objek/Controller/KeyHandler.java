@@ -499,9 +499,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     }
                 }
             }
-            if (code == KeyEvent.VK_G && !gp.player.isBuild) {
-                gp.player.handleGrabAction(gp.player.inventory.getSelectedItem());
-            }
             if (code == KeyEvent.VK_SPACE) {
                 if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE || gp.gameState == gp.OPEN_SMELTER_STATE) {
                     gp.gameState = gp.PLAY_STATE;
