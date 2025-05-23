@@ -1,11 +1,11 @@
 package Objek.Animal;
 
 import java.awt.image.BufferedImage;
-
 import Objek.Controller.GamePanel;
+
 public class TameAnimal extends Animal {
     String name;
-    int x,y;
+    int x, y;
     boolean isGrab,inCage;
     boolean readyBreeding;
     boolean readyGetItem;
@@ -17,7 +17,6 @@ public class TameAnimal extends Animal {
     public int hp;
     public String gender;
     
-    
     public TameAnimal(String name, int x, int y, int speed, String direction, GamePanel gp) {
         super(name, x, y, speed, direction, gp);
         this.isGrab = false;
@@ -25,8 +24,7 @@ public class TameAnimal extends Animal {
         this.width = 0;
         this.height = 0;
         this.readyBreeding = true;
-        this.hp = 100;
-        
+        this.hp = 100;  
     }
     
     public boolean isReadyBreeding() {
@@ -100,7 +98,7 @@ public class TameAnimal extends Animal {
     public int getGrabOffsetY() {
         return grabOffsetY;
     }
-      public BufferedImage getDirectionalImage() {
+    public BufferedImage getDirectionalImage() {
         BufferedImage image = null;
         switch (direction) {
             case "up":

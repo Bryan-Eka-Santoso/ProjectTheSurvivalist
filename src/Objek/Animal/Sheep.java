@@ -21,10 +21,10 @@ public class Sheep extends TameAnimal {
     private Rectangle rightHitbox;
     String gender;
     boolean readyGetItem;
-    
     boolean readyBreeding;
     private static final int SHEEP_WIDTH = 128;
     private static final int SHEEP_HEIGHT = 128;
+    
     public Sheep(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();

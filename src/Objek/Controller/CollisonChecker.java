@@ -2,6 +2,7 @@ package Objek.Controller;
 
 import java.awt.Rectangle;
 import Objek.Animal.Animal;
+import Objek.Animal.Wolf;
 import Objek.Fish.Fish;
 import Objek.Player.Player;
 
@@ -388,6 +389,10 @@ public class CollisonChecker {
         // Check collision
         if(animal.solidArea.intersects(gp.player.solidArea)) {
             animal.collisionOn = true;
+            if (animal instanceof Wolf) {
+                System.out.println("Player is attacked by a wolf!");
+                gp.player.health -= 1; // Decrease player HP
+            }
         }
     
         // Reset hitbox positions

@@ -66,6 +66,7 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
+    private static final int MAX_WOLF = 3;
     public Kandang currentKandang;
     public final int maxMap = 10;
     public int currentMap = 0;
@@ -112,12 +113,14 @@ public class GamePanel extends JPanel implements Runnable {
         int cowCount = 0;
         int sheepCount = 0;
         int pigCount = 0;
+        int wolfCount = 0;
 
         for(Animal animal : animals) {
             if(animal instanceof Chicken) chickenCount++;
             else if(animal instanceof Cow) cowCount++;
             else if(animal instanceof Sheep) sheepCount++;
             else if(animal instanceof Pig) pigCount++;
+            else if(animal instanceof Wolf) wolfCount++;
         }
 
         ArrayList<Point> usedPositions = new ArrayList<>();
@@ -136,6 +139,9 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if(pigCount < MAX_PIGS) {
             spawnAnimal("pig", MAX_PIGS - pigCount, usedPositions);
+        }
+        if (wolfCount < MAX_WOLF) {
+            spawnAnimal("wolf", MAX_WOLF - wolfCount, usedPositions);
         }
     }
 
@@ -204,6 +210,9 @@ public class GamePanel extends JPanel implements Runnable {
                     break;
                 case "pig":
                     animals.add(new Pig("Pig", x * TILE_SIZE, y * TILE_SIZE, this));
+                    break;
+                case "wolf":
+                    animals.add(new Wolf("Wolf", x * TILE_SIZE, y * TILE_SIZE, this));
                     break;
             }
             
@@ -324,6 +333,9 @@ public class GamePanel extends JPanel implements Runnable {
                 if (gameState != PAUSE_STATE) {
                     for (int i = 0; i < animals.size(); i++) {
                         animals.get(i).update();
+                        if (animals.get(i) instanceof Wolf) {
+                            ((Wolf) animals.get(i)).chasePlayer(player);
+                        }
                     }
                     for (int i = 0; i < fish.size(); i++) {
                         fish.get(i).update();
