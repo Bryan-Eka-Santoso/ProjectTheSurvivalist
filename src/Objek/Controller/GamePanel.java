@@ -345,6 +345,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             
             if (currentTime - lastAnimalMoveTime >= interval) {
+                lastAnimalMoveTime = currentTime;
                 if (gameState != PAUSE_STATE) {
                     for (int i = 0; i < animals.size(); i++) {
                         animals.get(i).update();
@@ -356,7 +357,6 @@ public class GamePanel extends JPanel implements Runnable {
                         fish.get(i).update();
                     }
                 }
-                lastAnimalMoveTime = currentTime;
             }
 
             if (timer >= 1000000000) {

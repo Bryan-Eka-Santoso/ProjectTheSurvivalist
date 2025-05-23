@@ -136,11 +136,36 @@ public class Wolf extends WildAnimal {
             String newDirection;
             String oldDirection = this.direction;
 
+            int randomMove = random.nextInt(2) + 1;
             switch(oldDirection) {
-                case "up": newDirection = "down"; break;
-                case "down": newDirection = "up"; break;
-                case "left": newDirection = "right"; break;
-                case "right": newDirection = "left"; break;
+                case "up": 
+                    if (randomMove == 1) {
+                        newDirection = "right"; 
+                    } else {
+                        newDirection = "left"; 
+                    }
+                break;
+                case "down":
+                    if (randomMove == 1) {
+                        newDirection = "right"; 
+                    } else {
+                        newDirection = "left"; 
+                    }
+                break;
+                case "left": 
+                    if (randomMove == 1) {
+                        newDirection = "up"; 
+                    } else {
+                        newDirection = "down"; 
+                    }
+                break;
+                case "right": 
+                    if (randomMove == 1) {
+                        newDirection = "up"; 
+                    } else {
+                        newDirection = "down"; 
+                    }
+                break;
                 default: newDirection = "down"; break;
             }
             this.direction = newDirection;
