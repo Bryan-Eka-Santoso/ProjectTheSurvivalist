@@ -391,7 +391,7 @@ public class CollisonChecker {
             animal.collisionOn = true;
             if (animal instanceof Wolf) {
                 System.out.println("Player is attacked by a wolf!");
-                gp.player.health -= 1; // Decrease player HP
+                gp.player.health -= 10; // Decrease player HP
             }
         }
     

@@ -29,15 +29,15 @@ public class Wolf extends WildAnimal {
         this.readyBreeding = true;
         this.readyGetItem = true;  
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(2, 1, 26, 40);   
-        downHitbox = new Rectangle(2, 1, 26, 40);   
-        leftHitbox = new Rectangle(4, 4, 30, 25);   
-        rightHitbox = new Rectangle(4, 4, 30, 25);   // Lebih lebar di kanan
+        upHitbox = new Rectangle(17, 1, 28, 63);   
+        downHitbox = new Rectangle(18, 5, 28, 59);   
+        leftHitbox = new Rectangle(1, 16, 63, 35);   
+        rightHitbox = new Rectangle(1, 16, 63, 35);   
         this.solidArea = downHitbox; 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         readyBreeding = true;
-        this.hp = 60;
+        this.hp = 100;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/up2.png"));
@@ -201,16 +201,16 @@ public class Wolf extends WildAnimal {
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
-            g2.drawImage(image, screenX, screenY, gp.TILE_SIZE * 1, gp.TILE_SIZE * 2, null);
+            g2.drawImage(image, screenX, screenY, gp.TILE_SIZE * 2, gp.TILE_SIZE * 2, null);
             if(hp < 100) {
-                double oneScale = (double) gp.TILE_SIZE*3/100;
+                double oneScale = (double) gp.TILE_SIZE*2/100;
                 double hpBarValue = oneScale * hp;
 
                 g2.setColor(new Color(35,35,35));
-                g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE*3+2, 12);
+                g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE*2+2, 12);
 
                 g2.setColor(new Color(255,0,30));
-                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
+                g2.fillRect(screenX, screenY-15, (int)hpBarValue +10, 10);
                 
                
             }
