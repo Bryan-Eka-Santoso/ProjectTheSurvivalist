@@ -366,11 +366,13 @@ public class Player {
                         if(Math.abs(worldX - building.worldX) <= gp.TILE_SIZE && 
                         Math.abs(worldY - building.worldY) <= gp.TILE_SIZE) {   
                             Kandang kandang = (Kandang)building;
-                            if(kandang.addAnimal(grabbedAnimal)) {
-                                grabbedAnimal = null;
-                                gp.checkAndRespawnAnimals();
+                            if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
+                                // Show kandang full message
+                                gp.ui.showKandangFullMessage();
                                 return;
                             }
+                            gp.ui.showAnimalNameInput(grabbedAnimal, kandang);
+                            return;
                         }
                     }
                 }

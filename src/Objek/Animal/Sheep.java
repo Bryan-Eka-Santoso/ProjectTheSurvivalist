@@ -226,9 +226,14 @@ public class Sheep extends TameAnimal {
     }
   
     public void getItem(Player player) {
-        player.inventory.addItems(new Wool(1));
+        if(isReadyGetItem()) {
+            player.inventory.addItems(new Wool(1));
+            setReadyGetItem(false);
+        }
     }
-    
+    public void setReadyGetItem(boolean ready) {
+        this.readyGetItem = ready;
+    }
     public Sheep breeding(Sheep pasangan, GamePanel gp) {
         if (readyBreeding) {
             if (pasangan.isReadyBreeding()) {

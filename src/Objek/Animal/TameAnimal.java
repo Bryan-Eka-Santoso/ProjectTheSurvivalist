@@ -8,12 +8,15 @@ public class TameAnimal extends Animal {
     int x,y;
     boolean isGrab,inCage;
     boolean readyBreeding;
+    boolean readyGetItem;
     public String direction;
     int grabOffsetX = 0;
     int grabOffsetY = 0;
     int width;
     int height;
     public int hp;
+    public String gender;
+    
     
     public TameAnimal(String name, int x, int y, int speed, String direction, GamePanel gp) {
         super(name, x, y, speed, direction, gp);
@@ -29,8 +32,17 @@ public class TameAnimal extends Animal {
     public boolean isReadyBreeding() {
         return readyBreeding;
     }
+    public void setReadyGetItem(boolean ready) {
+        this.readyGetItem = ready;
+    }
     public void setReadyBreeding(boolean readyBreeding) {
         this.readyBreeding = readyBreeding;
+    }
+    public boolean isReadyGetItem() {
+        return readyGetItem;
+    }
+    public String getGender() {
+        return gender;
     }
     public String getName() {
         return name;

@@ -60,11 +60,13 @@ public class GamePanel extends JPanel implements Runnable {
     public final int OPEN_CRAFTINGTABLE_STATE = 8;
     public final int OPEN_SMELTER_STATE = 9;
     public final int OPEN_BED_STATE = 10;
+    public final int KANDANG_STATE = 11;
 
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
+    public Kandang currentKandang;
     public final int maxMap = 10;
     public int currentMap = 0;
     public boolean isCave = false;
@@ -82,11 +84,15 @@ public class GamePanel extends JPanel implements Runnable {
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.addMouseListener(keyH);
+        this.addMouseWheelListener(keyH);
         this.setFocusable(true);
         this.setLayout(null);
         eManager.setup();
     }
-    
+    public void handleKandangInteraction(Kandang kandang) {
+        currentKandang = kandang;
+        gameState = KANDANG_STATE;
+    }
     public void setupGame() {
         gameState = PLAY_STATE;
         playMusic(7);
@@ -154,6 +160,20 @@ public class GamePanel extends JPanel implements Runnable {
             }
             // Check if position is already used
             if (usedPositions.contains(pos)) {
+                attempts++;
+                continue;
+            }
+
+            boolean overPlant = false;
+            for (Plant plant : plants) {
+                int plantX = plant.worldX / TILE_SIZE;
+                int plantY = plant.worldY / TILE_SIZE;
+                if (Math.abs(x - plantX) < 2 && Math.abs(y - plantY) < 2) { 
+                    overPlant = true;
+                    break;
+                }
+            }
+            if (overPlant) {
                 attempts++;
                 continue;
             }
@@ -275,6 +295,9 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Furnace(this, 2));
         player.inventory.addItems(new Chest(this, 2));
         player.inventory.addItems(new KandangAyam(this));
+        player.inventory.addItems(new CowCage(this));
+        player.inventory.addItems(new SheepCage(this));
+        player.inventory.addItems(new PigCage(this));
         player.inventory.addItems(new Bed(this, 1));
         
         long interval = 500_000_000L;
