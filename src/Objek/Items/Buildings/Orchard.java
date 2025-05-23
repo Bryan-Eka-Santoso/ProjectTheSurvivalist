@@ -80,6 +80,15 @@ public class Orchard extends Buildings {
         }
     }
 
+    public void water(){
+        if (phase.equals("seed") || phase.equals("sprout")) {
+            System.out.println("Watering the orchard...");
+            
+        } else {
+            System.out.println("Cannot water: Orchard is not in a plantable state");
+        }
+    }
+
     public void updateGrowth() {
         if (phase.equals("empty") || tree == null) return;
 

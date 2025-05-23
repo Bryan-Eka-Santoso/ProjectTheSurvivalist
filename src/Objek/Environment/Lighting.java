@@ -177,6 +177,7 @@ import java.awt.image.BufferedImage;
 
 import Objek.Controller.GamePanel;
 import Objek.Items.Buildings.*;
+import Objek.Items.Unstackable.Torch;
 
 public class Lighting {
     GamePanel gp;
@@ -246,10 +247,10 @@ public class Lighting {
     }
     
     public void update() {
-        if (gp.player.lightUpdated || gp.player.isPlaceTorch) {
+        if (gp.player.lightUpdated) {
             setLightSource();
             gp.player.lightUpdated = false;
-            gp.player.isPlaceTorch = false;
+            // gp.player.isPlaceTorch = false;
         }
         
         if (dayState == DAY) {

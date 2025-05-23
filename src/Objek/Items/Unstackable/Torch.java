@@ -1,4 +1,4 @@
-package Objek.Items.Buildings;
+package Objek.Items.Unstackable;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,12 +6,12 @@ import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
 
-public class Torch extends Buildings {
+public class Torch extends Unstackable {
     GamePanel gp;
     public int lightRadius;
 
-    public Torch(GamePanel gp, int currentStack) {
-        super("Torch", 10, currentStack, gp, new java.awt.Rectangle(9, 9, 30, 30), 48, 48);
+    public Torch(GamePanel gp) {
+        super("Torch");
         this.gp = gp;
         this.lightRadius = 350;
         try {

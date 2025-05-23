@@ -3,6 +3,12 @@ package Objek.Items.Buildings;
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
 import Objek.Items.StackableItem.Foods.Bread;
+import Objek.Items.StackableItem.Materials.Gold;
+import Objek.Items.StackableItem.Materials.GoldIngot;
+import Objek.Items.StackableItem.Materials.Metal;
+import Objek.Items.StackableItem.Materials.MetalIngot;
+import Objek.Items.StackableItem.Materials.Wood;
+
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -87,9 +93,15 @@ public class Furnace extends Buildings {
 
     private LinkedHashMap<String, Item> fillRecipes() {
         LinkedHashMap<String, Item> r = new LinkedHashMap<>();
-        r.put("Raw Mutton", new Bread(1));
+
+        r.put("Raw Mutton", new Wood(1));
+
+        r.put("Raw Chicken", new Wood(1));
+
+        r.put("Metal", new MetalIngot(1));
+
+        r.put("Gold", new GoldIngot(1));
+
         return r;
     }
-
-
 }

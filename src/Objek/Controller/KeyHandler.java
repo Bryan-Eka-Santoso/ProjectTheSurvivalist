@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Items.Unstackable.Torch;
 import Objek.Player.Inventory;
 
 public class KeyHandler implements KeyListener, MouseListener {
@@ -49,6 +50,63 @@ public class KeyHandler implements KeyListener, MouseListener {
                 }
             }
         }
+        if (gp.gameState == gp.OPEN_CHEST_STATE) {
+            gp.ui.mouseX = e.getX();
+            gp.ui.mouseY = e.getY();
+            Chest chest = (Chest) gp.buildings.get(gp.player.buildingIndex);
+            Object[] result = gp.ui.getClickedInventoryOrChestSlot(gp.ui.mouseX, gp.ui.mouseY, chest);
+            if (result != null) {
+                boolean isChest = (boolean) result[0];
+                int idx = (int) result[1];
+                if (isChest) {
+                    // Move from chest to inventory
+                    if (chest.inventory.slots[idx] != null) {
+                        gp.player.inventory.addItems(chest.inventory.slots[idx]);
+                        chest.inventory.slots[idx] = null;
+                    }
+                } else {
+                    // Move from inventory to chest
+                    if (gp.player.inventory.slots[idx] != null) {
+                        chest.inventory.addItems(gp.player.inventory.slots[idx]);
+                        gp.player.inventory.slots[idx] = null;
+                    }
+                }
+            }
+        }
+        if (gp.gameState == gp.OPEN_SMELTER_STATE){
+            gp.ui.mouseX = e.getX();
+            gp.ui.mouseY = e.getY();
+            Furnace furnace = (Furnace) gp.buildings.get(gp.player.buildingIndex);
+            Object[] result = gp.ui.getClickedInventoryOrFurnaceSlot(gp.ui.mouseX, gp.ui.mouseY, furnace);
+            if (result != null) {
+                String area = (String) result[0];
+                int idx = (int) result[1];
+                if (area.equals("furnace")) {
+                    if (idx == 0 && furnace.rawMaterial[0] != null) {
+                        gp.player.inventory.addItems(furnace.rawMaterial[0]);
+                        furnace.rawMaterial[0] = null;
+                    } else if (idx == 1 && furnace.fuelMaterial[0] != null) {
+                        gp.player.inventory.addItems(furnace.fuelMaterial[0]);
+                        furnace.fuelMaterial[0] = null;
+                    } else if (idx == 2 && furnace.cookedMaterial[0] != null) {
+                        gp.player.inventory.addItems(furnace.cookedMaterial[0]);
+                        furnace.cookedMaterial[0] = null;
+                    }
+                } else if (area.equals("inventory")) {
+                    if (gp.player.inventory.slots[idx] != null) {
+                        Item item = gp.player.inventory.slots[idx];
+                        if (furnace.rawMaterial[0] == null) {
+                            furnace.rawMaterial[0] = item;
+                            gp.player.inventory.slots[idx] = null;
+                        } else if (furnace.fuelMaterial[0] == null) {
+                            furnace.fuelMaterial[0] = item;
+                            gp.player.inventory.slots[idx] = null;
+                        }
+                        // Optionally: handle cooked slot if you want to allow putting cooked items back
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -71,8 +129,19 @@ public class KeyHandler implements KeyListener, MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        
+        if (gp.gameState == gp.INVENTORY_STATE) {
+            int mouseX = e.getX();
+            int mouseY = e.getY();
+            Integer slotIdx = gp.ui.getClickedInventorySlot(mouseX, mouseY);
+            if (slotIdx != null && gp.player.inventory.slots[slotIdx] != null) {
+                Item item = gp.player.inventory.slots[slotIdx];
+                if (item instanceof Stackable || item instanceof Buildings) {
+                    gp.player.dropItem(item, item.currentStack);
+                } else {
+                    gp.player.dropItem(item, 1);
+                }
+            }
+        }
     }
 
     @Override
@@ -398,6 +467,10 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_RIGHT) {
+            if (gp.gameState == gp.DROPPED_ITEM_STATE){
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.amountToDrop = 1;
+            }
             if (gp.player.grabbedAnimal == null && gp.gameState == gp.PLAY_STATE){
                 if (gp.ui.slotCol < 8) {
                     gp.ui.slotCol++;
@@ -422,6 +495,10 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_LEFT) {
+            if (gp.gameState == gp.DROPPED_ITEM_STATE){
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.amountToDrop = 1;
+            }
             if (gp.player.grabbedAnimal == null && gp.gameState == gp.PLAY_STATE){
                 if (gp.ui.slotCol > 0) {
                     gp.ui.slotCol--;
@@ -523,7 +600,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                 }
                 if (building.canBuild()) {
                     if (gp.player.inventory.getSelectedItem() instanceof Torch) {
-                        gp.player.isPlaceTorch = true;
+                        // gp.player.isPlaceTorch = true;
                     }
                     building.worldX = gp.player.worldX;
                     building.worldY = gp.player.worldY;
@@ -545,9 +622,6 @@ public class KeyHandler implements KeyListener, MouseListener {
                         break;
                     }
                     gp.buildings.add((Buildings) building);
-                    if (building instanceof Torch) {
-                        gp.player.isPlaceTorch = true;
-                    }
                 }
             } else if (gp.buildings.size() > 0) {
                 counter = 0;
@@ -564,6 +638,9 @@ public class KeyHandler implements KeyListener, MouseListener {
             ArrayList<Point> usedPositions = new ArrayList<>();
             int col = gp.player.worldX / gp.TILE_SIZE;
             int row = gp.player.worldY / gp.TILE_SIZE;
+
+            // System.out.println(col + " " + row);
+            // System.out.println(gp.player.worldX + " " + gp.player.worldY);
             
             if(gp.currentMap == 0){
                 if((col == 27 || col == 28) && row == 17) {
@@ -576,6 +653,14 @@ public class KeyHandler implements KeyListener, MouseListener {
                     gp.player.worldX = 72 * gp.TILE_SIZE;
                     gp.spawnFish("Arwana", 100, usedPositions);
                     gp.spawnFish("Belida", 100, usedPositions);
+                } else if(col == 43 && row == 55){
+                    gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
+                    gp.currentMap = 2;
+                    gp.animals.clear();
+                    gp.player.getPlayerImg();
+                    gp.tileM.getTileImage();
+                    gp.player.worldY = 24 * gp.TILE_SIZE;
+                    gp.player.worldX = 23 * gp.TILE_SIZE;
                 }
             } else if(gp.currentMap == 1){
                 if(col == 72 && row == 11) {
@@ -586,6 +671,16 @@ public class KeyHandler implements KeyListener, MouseListener {
                     gp.tileM.getTileImage();
                     gp.player.worldY = 18 * gp.TILE_SIZE;
                     gp.player.worldX = 28 * gp.TILE_SIZE;
+                }
+            } else if(gp.currentMap == 2){
+                if(col == 23 && row == 23) {
+                    gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                    gp.currentMap = 0;
+                    gp.animals.clear();
+                    gp.player.getPlayerImg();
+                    gp.tileM.getTileImage();
+                    gp.player.worldY = 56 * gp.TILE_SIZE;
+                    gp.player.worldX = 43 * gp.TILE_SIZE;
                 }
             }
         } 

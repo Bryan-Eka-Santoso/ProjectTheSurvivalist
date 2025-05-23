@@ -2,15 +2,24 @@ package Objek.Player;
 import java.util.*;
 
 import Objek.Items.Item;
+import Objek.Items.StackableItem.Materials.Crystal;
 import Objek.Items.StackableItem.Materials.Gem;
 import Objek.Items.StackableItem.Materials.MetalFrame;
+import Objek.Items.StackableItem.Materials.MetalIngot;
+import Objek.Items.StackableItem.Materials.MetalNails;
 import Objek.Items.StackableItem.Materials.MetalSheet;
 import Objek.Items.StackableItem.Materials.SwordHandle;
 import Objek.Items.StackableItem.Materials.ToolHandle;
 import Objek.Items.StackableItem.Materials.Wood;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
+import Objek.Items.Unstackable.Arsenals.WoodenClub;
 import Objek.Items.Unstackable.Arsenals.LightweightAxe;
+import Objek.Items.Unstackable.Arsenals.LightweightPickaxe;
+import Objek.Items.Unstackable.Arsenals.MetalClub;
+import Objek.Items.Unstackable.Arsenals.SpikedMetalClub;
+import Objek.Items.Unstackable.Arsenals.SpikedWoodenClub;
 import Objek.Items.Unstackable.Arsenals.FlimsyAxe;
+import Objek.Items.Unstackable.Arsenals.IcePickaxe;
 
 public class Crafting {
     public LinkedHashMap<List<Item>, Item> currentRecipe = new LinkedHashMap<>();
@@ -31,6 +40,18 @@ public class Crafting {
         List<Item> recipe2 = Arrays.asList(new Wood(2), new MetalSheet(1));
         r.put(recipe2, new ToolHandle(1));
 
+        List<Item> recipe3 = Arrays.asList(new MetalIngot(1));
+        r.put(recipe3, new MetalNails(1));
+
+        List<Item> recipe4 = Arrays.asList(new WoodenClub(), new MetalNails(1));
+        r.put(recipe4, new SpikedWoodenClub());
+
+        List<Item> recipe5 = Arrays.asList(new MetalClub(), new MetalNails(1));
+        r.put(recipe5, new SpikedMetalClub());
+
+        List<Item> recipe6 = Arrays.asList(new MetalIngot(1));
+        r.put(recipe6, new MetalSheet(2));
+
         return r;
     }
 
@@ -39,14 +60,26 @@ public class Crafting {
 
         r.putAll(smallRecipes);
 
-        List<Item> recipe1 = Arrays.asList(new Wood(3), new Gem(2));
+        List<Item> recipe1 = Arrays.asList(new ToolHandle(1), new Gem(2));
         r.put(recipe1, new WindAxe());
 
-        List<Item> recipe2 = Arrays.asList(new Wood(3), new MetalSheet(2));
+        List<Item> recipe2 = Arrays.asList(new ToolHandle(1), new MetalSheet(2));
         r.put(recipe2, new LightweightAxe());
 
-        List<Item> recipe3 = Arrays.asList(new Wood(4));
+        List<Item> recipe3 = Arrays.asList(new ToolHandle(1), new Wood(4));
         r.put(recipe3, new FlimsyAxe());
+
+        List<Item> recipe4 = Arrays.asList(new ToolHandle(1), new MetalSheet(2));
+        r.put(recipe4, new LightweightPickaxe());
+
+        List<Item> recipe5 = Arrays.asList(new ToolHandle(1), new Crystal(1), new MetalSheet(2));
+        r.put(recipe5, new IcePickaxe());
+
+        List<Item> recipe6 = Arrays.asList(new Wood(3));
+        r.put(recipe6, new WoodenClub());
+
+        List<Item> recipe7 = Arrays.asList(new MetalIngot(3));
+        r.put(recipe7, new MetalClub());
 
         return r;
     }

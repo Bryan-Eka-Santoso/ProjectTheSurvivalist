@@ -314,6 +314,32 @@ public class UI {
                 }
                 g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
             }
+            if (chest.inventory.slots[i] instanceof Arsenal) { // Assuming ArsenalItem has durability
+                Arsenal arsenalItem = (Arsenal) chest.inventory.slots[i];
+                if (arsenalItem.durability < arsenalItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
             if (chest.inventory.slots[i] instanceof Buildings) {
                 Buildings stackableItem = (Buildings) chest.inventory.slots[i];
                 Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
@@ -373,6 +399,32 @@ public class UI {
                     dx = 40;
                 }
                 g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
+            }
+            if (gp.player.inventory.slots[i] instanceof Arsenal) { // Assuming ArsenalItem has durability
+                Arsenal arsenalItem = (Arsenal) gp.player.inventory.slots[i];
+                if (arsenalItem.durability < arsenalItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
             }
             if (gp.player.inventory.slots[i] instanceof Buildings) {
                 Buildings stackableItem = (Buildings) gp.player.inventory.slots[i];
@@ -532,7 +584,7 @@ public class UI {
     
     public void scrollDown() {
         scrollY += 20;
-        maxScroll = gp.player.recipe.currentRecipe.size() * 20;
+        maxScroll = gp.player.recipe.currentRecipe.size() * 50;
         if (scrollY > maxScroll) scrollY = maxScroll;
     }
 
@@ -826,5 +878,98 @@ public class UI {
         g2.setColor(c);
         g2.setStroke(new BasicStroke(5));
         g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
+    }
+
+    // Returns [isChest, slotIndex] or null if not found
+    public Object[] getClickedInventoryOrChestSlot(int mouseX, int mouseY, Chest chest) {
+        // Chest slots (first 32)
+        int slotXStart = gp.TILE_SIZE * 4 + 30;
+        int slotYStart = gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16) + 35 + 56;
+        int slotX = slotXStart;
+        int slotY = slotYStart;
+        for (int i = 0; i < chest.inventory.slots.length; i++) {
+            Rectangle r = new Rectangle(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
+            if (r.contains(mouseX, mouseY)) return new Object[]{true, i};
+            if ((i + 1) % 4 == 0) {
+                slotX = slotXStart;
+                slotY += (gp.TILE_SIZE + 25);
+            } else {
+                slotX += (gp.TILE_SIZE + 25);
+            }
+        }
+        // Inventory slots (next 24)
+        slotXStart = gp.TILE_SIZE * 14 + 30;
+        slotYStart = gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16) + 35 + 56;
+        slotX = slotXStart;
+        slotY = slotYStart;
+        for (int i = 0; i < gp.player.inventory.slots.length; i++) {
+            Rectangle r = new Rectangle(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
+            if (r.contains(mouseX, mouseY)) return new Object[]{false, i};
+            if ((i + 1) % 4 == 0) {
+                slotX = slotXStart;
+                slotY += (gp.TILE_SIZE + 25);
+            } else {
+                slotX += (gp.TILE_SIZE + 25);
+            }
+        }
+        return null;
+    }
+
+    public Integer getClickedInventorySlot(int mouseX, int mouseY) {
+        int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 13);
+        int slotXStart = frameX + 30;
+        int slotYStart = frameY + 35;
+        int slotX = slotXStart;
+        int slotY = slotYStart;
+        for (int i = 0; i < gp.player.inventory.slots.length; i++) {
+            Rectangle r = new Rectangle(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
+            if (r.contains(mouseX, mouseY)) return i;
+            if ((i + 1) % 9 == 0) {
+                slotX = slotXStart;
+                slotY += (gp.TILE_SIZE + 25);
+            } else {
+                slotX += (gp.TILE_SIZE + 25);
+            }
+        }
+        return null;
+    }
+
+    public Object[] getClickedInventoryOrFurnaceSlot(int mouseX, int mouseY, Furnace furnace) {
+        // Furnace slots (raw, fuel, cooked)
+        int frameX = gp.TILE_SIZE * 4;
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16);
+        int slotXStart = frameX + 30 + 95;
+        int slotYStart = frameY + 35 + 56;
+
+        // Raw slot
+        Rectangle rawRect = new Rectangle(slotXStart, slotYStart + 30, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
+        if (rawRect.contains(mouseX, mouseY)) return new Object[]{"furnace", 0}; // 0 = raw
+
+        // Fuel slot
+        Rectangle fuelRect = new Rectangle(slotXStart, slotYStart + 150, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
+        if (fuelRect.contains(mouseX, mouseY)) return new Object[]{"furnace", 1}; // 1 = fuel
+
+        // Cooked slot
+        Rectangle cookedRect = new Rectangle(slotXStart, slotYStart + 270, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
+        if (cookedRect.contains(mouseX, mouseY)) return new Object[]{"furnace", 2}; // 2 = cooked
+
+        // Inventory slots (right panel)
+        frameX = gp.TILE_SIZE * 14;
+        slotXStart = frameX + 30;
+        slotYStart = frameY + 35 + 56;
+        int slotX = slotXStart;
+        int slotY = slotYStart;
+        for (int i = 0; i < gp.player.inventory.slots.length; i++) {
+            Rectangle r = new Rectangle(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
+            if (r.contains(mouseX, mouseY)) return new Object[]{"inventory", i};
+            if ((i + 1) % 4 == 0) {
+                slotX = slotXStart;
+                slotY += (gp.TILE_SIZE + 25);
+            } else {
+                slotX += (gp.TILE_SIZE + 25);
+            }
+        }
+        return null;
     }
 }

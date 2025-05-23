@@ -104,9 +104,6 @@ public class CollisonChecker {
         if(tileNum3 == validTiles) isValid3 = true;
         if(tileNum4 == validTiles) isValid4 = true;
 
-        System.out.println(validTiles);
-        System.out.println("Tile 1: " + tileNum1 + ", Tile 2: " + tileNum2 + ", Tile 3: " + tileNum3 + ", Tile 4: " + tileNum4);
-    
         // If any corner is on invalid tile, set collision
         if(!isValid1 && !isValid2 && !isValid3 && !isValid4) {
             animal.collisionOn = true;
