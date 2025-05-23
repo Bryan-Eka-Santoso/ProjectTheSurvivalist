@@ -235,7 +235,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 } 
                 if (gp.gameState == gp.OPEN_CHEST_STATE) {
                     playSE(2);
-                    maxIndex = gp.ui.isPointingChest ? 31 : 23;
+                    int maxIndex = gp.ui.isPointingChest ? 31 : 23;
                     if (gp.ui.isPointingChest) {
                         if (gp.ui.selectedChestIndex < maxIndex) {
                             if ((gp.ui.slotCol + 1) % 4 == 0) {
@@ -261,8 +261,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     }
                 }
             }
-            if (code == KeyEvent.VK_SHIFT) {
-                shiftPressed = true;
             if (gp.gameState == gp.OPEN_SMELTER_STATE && gp.ui.selectedFurnace == -1) {
                 playSE(2);
                 if (gp.ui.selectedIndex < 23) {

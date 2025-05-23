@@ -1,6 +1,6 @@
 package Objek.Entity;
+import Objek.Items.StackableItem.Foods.Bacon;
 
-import Objek.Items.StackableItem.Milk;
 import Objek.Player.Player;
 
 public class Pig extends Animal{
@@ -31,7 +31,7 @@ public class Pig extends Animal{
     }
     public void getItem(Player player) {
         if(readyGetItem) {
-            player.inventory.addItems(new Milk("Milk", 10, 1));
+            player.inventory.addItems(new Bacon("Bacon", 10, 1));
             setReadyGetItem(false);
             System.out.println("Got milk from " + getName());
         } else {
