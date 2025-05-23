@@ -52,6 +52,9 @@ public class UI {
     public List<List<Item>> recipeKeys = new ArrayList<>(); 
     public boolean isPointingChest;
     private int kandangScrollPosition = 0;
+    private int breedingScrollPosition = 0;
+    private int getItemScrollPosition = 0;
+
     private static final int ANIMALS_PER_PAGE = 4;
     private Rectangle breedButton, getItemButton;
 
@@ -422,14 +425,17 @@ public class UI {
         if(readyAnimals.isEmpty()) {
             g2.drawString("No animals ready to get items!", windowX + 30, startY + 40);
         } else {
-            for(int i = 0; i < readyAnimals.size(); i++) {
+            int endIndex = Math.min(getItemScrollPosition + ANIMALS_PER_PAGE+2, readyAnimals.size());
+            for(int i = getItemScrollPosition; i < endIndex; i++) {
                 TameAnimal animal = readyAnimals.get(i);
+                int y = startY + (i - getItemScrollPosition) * lineHeight;
+                
                 if(i == selectedGetItemIndex) {
                     g2.setColor(Color.BLACK);
-                    g2.drawRect(windowX + 25, startY + (i * lineHeight) - 10, windowWidth - 50,lineHeight -5);
+                    g2.drawRect(windowX + 25, y - 10, windowWidth - 50, lineHeight);
                 }
                 g2.setColor(Color.WHITE);
-                g2.drawString(animal.getName() + " is ready!", windowX + 30, startY + (i * lineHeight) + 15);
+                g2.drawString(animal.getName() + " is ready!", windowX + 30, y + 15);
             }
         }
 
@@ -488,32 +494,38 @@ public class UI {
             }
 
             int startY = windowY + 120;
-            int lineHeight = 30;
+            int lineHeight = 40;
             if(males.isEmpty()) {
                 g2.drawString("No male animals available!", windowX + 30, startY);
             } else {
-                for(int i = 0; i < males.size(); i++) {
+                int endIndexMale = Math.min(breedingScrollPosition + ANIMALS_PER_PAGE+2, males.size());
+                for(int i = breedingScrollPosition; i < endIndexMale; i++) {
                     TameAnimal male = males.get(i);
+                    int y = startY + (i - breedingScrollPosition) * lineHeight;
+                    
                     if(i == selectedBreedMaleIndex && isMaleList) {
                         g2.setColor(Color.BLACK);
-                        g2.drawRect(windowX + 25, startY + (i * lineHeight) - 10, windowWidth/2 - 50, lineHeight-5);
+                        g2.drawRect(windowX + 25, y - 10, windowWidth/2 - 50, lineHeight);
                     }
                     g2.setColor(Color.WHITE);
-                    g2.drawString(male.getName() + " (Ready)", windowX + 30, startY + (i * lineHeight) +15);
-                }
+                    g2.drawString(male.getName() + " (Ready)", windowX + 30, y + 15);
+                }   
             }
 
             if(females.isEmpty()) {
                 g2.drawString("No female animals available!", windowX + windowWidth/2 + 30, startY);
             } else {
-                for(int i = 0; i < females.size(); i++) {
+                int endIndexFemale = Math.min(breedingScrollPosition + ANIMALS_PER_PAGE+2, females.size());
+                for(int i = breedingScrollPosition; i < endIndexFemale; i++) {
                     TameAnimal female = females.get(i);
+                    int y = startY + (i - breedingScrollPosition) * lineHeight;
+                    
                     if(i == selectedBreedFemaleIndex && !isMaleList) {
                         g2.setColor(Color.BLACK);
-                        g2.drawRect(windowX + windowWidth/2 + 25, startY + (i * lineHeight) - 10, windowWidth/2 - 50, lineHeight -5);
+                        g2.drawRect(windowX + windowWidth/2 + 25, y - 10, windowWidth/2 - 50, lineHeight);
                     }
                     g2.setColor(Color.WHITE);
-                    g2.drawString(female.getName() + " (Ready)", windowX + windowWidth/2 + 30, startY + (i * lineHeight) + 15);
+                    g2.drawString(female.getName() + " (Ready)", windowX + windowWidth/2 + 30, y + 15);
                 }
             }
 
@@ -595,14 +607,10 @@ public class UI {
 
     public void handleKandangScroll(int notches) {
         if(inBreedingMenu) {
-            if(isMaleList) {
-                selectedBreedMaleIndex = Math.max(0, selectedBreedMaleIndex - notches);
-            } else {
-                selectedBreedFemaleIndex = Math.max(0, selectedBreedFemaleIndex - notches);
-            }
+            breedingScrollPosition = Math.max(0, breedingScrollPosition - notches);
         }
         else if(inGetItemMenu) {
-            selectedGetItemIndex = Math.max(0, selectedGetItemIndex - notches);
+            getItemScrollPosition = Math.max(0, getItemScrollPosition - notches);
         }
         else {
             kandangScrollPosition = Math.max(0, kandangScrollPosition + notches);
