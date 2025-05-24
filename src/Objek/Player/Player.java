@@ -50,6 +50,14 @@ public class Player {
     public Boolean isSlash;
     public Rectangle cutArea = new Rectangle(0, 0, 0, 0);
     public InteractBuild interactBuild;
+    private boolean isPoisoned = false;
+    private static final long POISON_DURATION = 300; // 5 detik diitung dari framenya
+    private static final int POISON_DAMAGE = 1;
+    private int poisonCounter = 0;
+     private boolean isDehydrated = false;
+    private int dehydrationCounter = 0;
+    private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
+
 
     public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {
         this.name = name;
@@ -144,15 +152,65 @@ public class Player {
             e.printStackTrace();
         }
     }
+     private void handlePoisonEffect() {
+        if(isPoisoned) {
+            poisonCounter++;
+            
+            // Damage setiap 60 frames (1 detik)
+            if(poisonCounter % 60 == 0) {
+                if(health > 1) { // Check to prevent death
+                    health =  health - POISON_DAMAGE;
+                }
+            }
 
+            // Cek apakah efek poison selesai
+            if(poisonCounter >= POISON_DURATION) {
+                isPoisoned = false;
+                poisonCounter = 0;
+            }
+        }
+    }
+
+    public void setPoisoned() {
+        isPoisoned = true;
+        poisonCounter = 0;
+    }
+
+    public boolean isPoisoned() {
+        return isPoisoned;
+    }
+    private void handleDehydrationEffect() {
+        if(thirst < 10) {
+            isDehydrated = true;
+            dehydrationCounter++;
+            
+            // Damage every 2 seconds (120 frames)
+            if(dehydrationCounter >= DEHYDRATION_DAMAGE_INTERVAL) {
+                if(health > 1) { // Check to prevent death
+                    health -= 1;
+                }
+                dehydrationCounter = 0;
+            }
+        } else {
+            isDehydrated = false;
+            dehydrationCounter = 0;
+        }
+    }
+
+    public boolean isDehydrated() {
+        return isDehydrated;
+    }
 
     public void update() {
-        if (keyH.shiftPressed) {
+        if (keyH.shiftPressed && hunger > 20 && thirst >= 10) {
             speed = 10;
         } else {
             speed = 5;
         }
-
+        if(isPoisoned) {
+            handlePoisonEffect();
+        }
+        handleDehydrationEffect();
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
                 direction = "up";
