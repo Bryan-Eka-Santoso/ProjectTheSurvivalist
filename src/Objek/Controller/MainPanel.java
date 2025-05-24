@@ -50,7 +50,7 @@ public class MainPanel extends JPanel {
 
         ImageIcon titleIcon = new ImageIcon("ProjectTheSurvivalist/res/ui/title.png");
         JLabel titleLabel = new JLabel(titleIcon);
-        titleLabel.setBounds(450, 150, 250, 50);
+        titleLabel.setBounds(225, 50, 750, 150);
         add(titleLabel);
 
         JButton playButton = new JButton(play);

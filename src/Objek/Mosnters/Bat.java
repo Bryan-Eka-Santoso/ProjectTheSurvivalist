@@ -16,7 +16,7 @@ public class Bat extends Monster {
     }
 
     @Override
-    public void update() {
+    public void update() {  
        
     }
 
