@@ -7,7 +7,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
-
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
@@ -17,6 +16,8 @@ public class KeyHandler implements KeyListener, MouseListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
     GamePanel gp;
     int temp1, temp2, counter, itemStack;
+    int furnaceIdx1, furnaceIdx2;
+    Item temp1Furnace, temp2Furnace;
     Sound sound = new Sound();
     boolean isTemp1Chest, isTemp2Chest;
 
@@ -76,8 +77,89 @@ public class KeyHandler implements KeyListener, MouseListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // TODO Auto-generated method stub
         int code = e.getKeyCode();
+
+        if(gp.gameState == gp.FISHING_STATE) {
+            if (code == KeyEvent.VK_ENTER) {
+            long currentTime = System.currentTimeMillis();
+            
+            // Sistem penghitungan kekuatan acak
+            int fishStrength = gp.ui.caughtFish.strength;
+            int playerStrength = gp.player.strengthRod;
+            
+            // Rumus yang Anda berikan
+            int fishRandomStrength = gp.ui.random.nextInt(fishStrength) + (fishStrength / 2);
+            int playerRandomStrength = gp.ui.random.nextInt(playerStrength) + (playerStrength / 2);
+            
+            // Hitung perubahan pada progress bar
+            int strengthDifference = playerRandomStrength - fishRandomStrength;
+            gp.ui.playerFishingStrength += strengthDifference;
+            
+            // Batasi nilai agar tetap dalam rentang 0-100
+            if (gp.ui.playerFishingStrength > 100) {
+                gp.ui.playerFishingStrength = 100;
+            } else if (gp.ui.playerFishingStrength < 0) {
+                gp.ui.playerFishingStrength = 0;
+            }
+            
+            // Periksa kondisi menang
+            if (gp.ui.playerFishingStrength >= 100) {
+                // Player berhasil menangkap ikan!
+                gp.ui.fishingSuccessful = true;
+                
+                // Kurangi durability rod
+                gp.player.durabilityRod -= gp.ui.caughtFish.durabilityCost;
+                
+                // 70% peluang mendapatkan ikan
+                boolean getFish = gp.ui.random.nextInt(100) < 70;
+                if (getFish) {
+                    // Tambahkan ikan ke inventory (implementasi sesuai sistem Anda)
+                    System.out.println("Berhasil menangkap " + gp.ui.caughtFish.nameFish + "!");
+                    // gp.player.inventory.addItems(new FishItem(gp.ui.caughtFish.nameFish));
+                } else {
+                    System.out.println("Ikan terlepas saat hampir ditangkap!");
+                }
+                
+                // Hapus ikan dari dunia game
+                gp.fish.remove(gp.ui.fishIndex);
+                
+                // Kembali ke play state
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.playerFishingStrength = 50; // Reset ke tengah
+                gp.ui.caughtFish = null;
+                
+            } else if (gp.ui.playerFishingStrength <= 0) {
+                // Ikan berhasil melarikan diri
+                System.out.println("Ikan berhasil melepaskan diri!");
+                
+                // Kurangi durability rod tetapi ikan tidak dihapus
+                gp.player.durabilityRod -= 1; // Pengurangan minimal
+                
+                // Kembali ke play state
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.playerFishingStrength = 50; // Reset ke tengah
+                gp.ui.caughtFish = null;
+            }
+            
+            // Periksa jika rod rusak
+            if (gp.player.durabilityRod <= 0) {
+                System.out.println("Alat pancing rusak!");
+                // Implementasi logika rod rusak
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.playerFishingStrength = 50;
+                gp.ui.caughtFish = null;
+            }
+        }
+        
+        if (code == KeyEvent.VK_ESCAPE) {
+            // Memungkinkan pemain keluar dari minigame memancing
+            // Ikan tetap ada di dunia game
+            gp.gameState = gp.PLAY_STATE;
+            gp.ui.playerFishingStrength = 50;
+            gp.ui.caughtFish = null;
+        }
+        return; // Keluar dari method ini untuk mencegah input lain diproses saat memancing
+    }
 
         if (code == KeyEvent.VK_W) {
             if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
@@ -101,6 +183,21 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.ui.slotCol = 0;
                 gp.ui.isPointingChest = !gp.ui.isPointingChest;
             }
+            if (gp.gameState == gp.OPEN_SMELTER_STATE) {
+                gp.ui.selectedIndex = 0;
+                gp.ui.slotRow = 0;
+                gp.ui.slotCol = 0;
+                if (gp.ui.selectedFurnace < 3) {
+                    gp.ui.selectedFurnace++;
+                    gp.ui.canSelectInventory = true;
+                    if (gp.ui.selectedFurnace == 3) {
+                        gp.ui.canSelectInventory = false;
+                        gp.ui.selectedFurnace = -1;
+                    }
+                } else {
+                    gp.ui.selectedFurnace = 0;
+                }
+            }
         }
         if (code == KeyEvent.VK_A) {
             if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
@@ -117,7 +214,7 @@ public class KeyHandler implements KeyListener, MouseListener {
                             gp.ui.slotRow--;
                         }
                         gp.ui.selectedChestIndex--;
-                }
+                    }
                 } else if (gp.ui.selectedIndex > 0) {
                     if (gp.ui.selectedIndex > 0) {
                         if (gp.ui.slotCol > 0) {
@@ -128,6 +225,18 @@ public class KeyHandler implements KeyListener, MouseListener {
                         }
                         gp.ui.selectedIndex--;
                     }
+                }
+            }
+            if (gp.gameState == gp.OPEN_SMELTER_STATE && gp.ui.selectedFurnace == -1) {
+                playSE(2);
+                if (gp.ui.selectedIndex > 0) {
+                    if (gp.ui.slotCol > 0) {
+                        gp.ui.slotCol--;
+                    } else {
+                        gp.ui.slotCol = 3;
+                        gp.ui.slotRow--;
+                    }
+                    gp.ui.selectedIndex--;
                 }
             }
         }
@@ -160,6 +269,18 @@ public class KeyHandler implements KeyListener, MouseListener {
                             gp.ui.selectedIndex++;
                         }
                     }
+                }
+            }
+            if (gp.gameState == gp.OPEN_SMELTER_STATE && gp.ui.selectedFurnace == -1) {
+                playSE(2);
+                if (gp.ui.selectedIndex < 23) {
+                    if ((gp.ui.slotCol + 1) % 4 == 0) {
+                        gp.ui.slotCol = 0;
+                        gp.ui.slotRow++;
+                    } else {
+                        gp.ui.slotCol++;
+                    }
+                    gp.ui.selectedIndex++;
                 }
             }
         }
@@ -214,6 +335,87 @@ public class KeyHandler implements KeyListener, MouseListener {
                     counter = 0;
                     gp.player.inventory.swapItems(temp1, temp2);
                 }
+            } else if (gp.gameState == gp.OPEN_SMELTER_STATE) {
+                playSE(2);
+                if (counter == 0) {
+                    if (gp.ui.selectedFurnace == -1) {
+                        temp1Furnace = gp.player.inventory.slots[gp.ui.selectedIndex];
+                        temp1 = gp.ui.selectedIndex;
+                        furnaceIdx1 = -1;
+                    } 
+                    if (gp.ui.selectedFurnace == 0) {
+                        temp1Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];
+                        temp1 = 0;
+                        furnaceIdx1 = 0;
+                    } 
+                    if (gp.ui.selectedFurnace == 1) {
+                        temp1Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];
+                        temp1 = 0;
+                        furnaceIdx1 = 1;
+                    } 
+                    if (gp.ui.selectedFurnace == 2) {
+                        temp1Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0];
+                        temp1 = 0;
+                        furnaceIdx1 = 2;
+                    }
+                }
+                if (counter == 1) {
+                    if (gp.ui.selectedFurnace == -1) {
+                        temp2Furnace = gp.player.inventory.slots[gp.ui.selectedIndex];
+                        temp2 = gp.ui.selectedIndex;
+                        furnaceIdx2 = -1;
+                    } 
+                    if (gp.ui.selectedFurnace == 0) {
+                        temp2Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];
+                        temp2 = 0;
+                        furnaceIdx2 = 0;
+                    } 
+                    if (gp.ui.selectedFurnace == 1) {
+                        temp2Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];
+                        temp2 = 0;
+                        furnaceIdx2 = 1;
+                    } 
+                    if (gp.ui.selectedFurnace == 2) {
+                        temp2Furnace = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0];
+                        temp2 = 0;
+                        furnaceIdx2 = 2;
+                    }
+                }
+                counter++;
+                if (counter == 2) {
+                    counter = 0;
+                    if (furnaceIdx1 == -1 && furnaceIdx2 == -1) { // inventory ke inventory
+                        Item tempItem = gp.player.inventory.slots[temp1];  
+                        gp.player.inventory.slots[temp1] = gp.player.inventory.slots[temp2];
+                        gp.player.inventory.slots[temp2] = tempItem;
+                    } 
+                    if (furnaceIdx1 == -1 && furnaceIdx2 == 0) { // inventory ke raw material
+                        Item tempItem1 = gp.player.inventory.slots[temp1];  
+                        Item tempItem2 = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];
+                        gp.player.inventory.slots[temp1] = tempItem2;
+                        ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0] = tempItem1;
+                    } 
+                    if (furnaceIdx1 == -1 && furnaceIdx2 == 1) { // inventory ke fuel material
+                        Item tempItem1 = gp.player.inventory.slots[temp1];  
+                        Item tempItem2 = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];
+                        gp.player.inventory.slots[temp1] = tempItem2;
+                        ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0] = tempItem1;
+                    } 
+                    if (furnaceIdx1 == 0 && furnaceIdx2 == -1) { // raw material ke inventory
+                        Item tempItem1 = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0];  
+                        Item tempItem2 = gp.player.inventory.slots[temp2];
+                        ((Furnace) gp.buildings.get(gp.player.buildingIndex)).rawMaterial[0] = tempItem2;
+                        gp.player.inventory.slots[temp2] = tempItem1;
+                    } 
+                    if (furnaceIdx1 == 1 && furnaceIdx2 == -1) { // fuel material ke inventory material
+                        Item tempItem1 = ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0];  
+                        Item tempItem2 = gp.player.inventory.slots[temp2];
+                        ((Furnace) gp.buildings.get(gp.player.buildingIndex)).fuelMaterial[0] = tempItem2;
+                        gp.player.inventory.slots[temp2] = tempItem1;
+                    } 
+                    temp1Furnace = null;
+                    temp2Furnace = null;;
+                }  
             } else {
                 playSE(2);
                 if (counter == 0) {
@@ -359,6 +561,14 @@ public class KeyHandler implements KeyListener, MouseListener {
             }
         }
         if (code == KeyEvent.VK_P && !gp.player.isBuild) {
+            if (gp.gameState == gp.OPEN_SMELTER_STATE) {
+                if (gp.ui.selectedFurnace == 2) {
+                    if (((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0] != null) {
+                        gp.player.inventory.addItems(((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0]);
+                        ((Furnace) gp.buildings.get(gp.player.buildingIndex)).cookedMaterial[0] = null;
+                    }
+                }
+            }
             if (gp.player.droppedItem != -1) {
                 gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
                 gp.player.droppedItem = -1;
@@ -368,8 +578,14 @@ public class KeyHandler implements KeyListener, MouseListener {
             gp.player.handleGrabAction(gp.player.inventory.getSelectedItem());
         }
         if (code == KeyEvent.VK_SPACE) {
-            if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
+            if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE || gp.gameState == gp.OPEN_SMELTER_STATE) {
                 gp.gameState = gp.PLAY_STATE;
+                temp1Furnace = null;
+                temp2Furnace = null;
+                gp.ui.slotCol = 0;
+                gp.ui.slotRow = 0;
+                gp.ui.selectedIndex = 0;
+                gp.ui.selectedChestIndex = 0;
             } else if (gp.gameState == gp.OPEN_CHEST_STATE) {
                 gp.gameState = gp.PLAY_STATE;
                 gp.ui.slotCol = 0;
@@ -381,7 +597,15 @@ public class KeyHandler implements KeyListener, MouseListener {
                 if (building instanceof Chest) {
                     ((Chest) building).inventory = new Inventory(32, gp);
                 }
+                if (building instanceof Furnace) {
+                    ((Furnace) building).rawMaterial = new Item[1];
+                    ((Furnace) building).fuelMaterial = new Item[1];
+                    ((Furnace) building).cookedMaterial = new Item[1];
+                }
                 if (building.canBuild()) {
+                    if (gp.player.inventory.getSelectedItem() instanceof Torch) {
+                        gp.player.isPlaceTroch = true;
+                    }
                     building.worldX = gp.player.worldX;
                     building.worldY = gp.player.worldY;
                     gp.player.isBuild = false;
@@ -410,7 +634,6 @@ public class KeyHandler implements KeyListener, MouseListener {
                 gp.ui.selectedIndex = 0;
                 gp.ui.selectedChestIndex = 0;
                 if (gp.player.buildingIndex != -1 && gp.gameState == gp.PLAY_STATE) {
-                    System.out.println(gp.player.buildingIndex);
                     gp.player.interactBuild(gp.buildings.get(gp.player.buildingIndex));
                 }
             }
@@ -432,8 +655,8 @@ public class KeyHandler implements KeyListener, MouseListener {
                     gp.tileM.getTileImage();
                     gp.player.worldY = 11 * gp.TILE_SIZE;
                     gp.player.worldX = 72 * gp.TILE_SIZE;
-                    gp.spawnFish("Arwana", 100, usedPositions);
-                    gp.spawnFish("Belida", 100, usedPositions);
+                    gp.spawnFish("Arwana", 50, usedPositions);
+                    gp.spawnFish("Belida", 50, usedPositions);
                 } else if(col == 43 && row == 55){
                     gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
                     gp.currentMap = 2;

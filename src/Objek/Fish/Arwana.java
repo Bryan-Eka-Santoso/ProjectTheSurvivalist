@@ -1,4 +1,4 @@
-package Objek.Animal.Fish;
+package Objek.Fish;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,11 +15,12 @@ public class Arwana extends Fish {
     public Rectangle downHitbox;
     public Rectangle leftHitbox;
     public Rectangle rightHitbox;
+    
     public Arwana(String nameFish, int price, int stregth, int x, int y, GamePanel gp) {
-        super("Arwana", 0, 9, x, y, 30, "down", gp);
+        super("Arwana", 10, 15, x, y, 30, "down", gp, 2);
         setRandomDirection();
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(8, 1, 20, 30);   
+        upHitbox = new Rectangle(8, 1, 20, 30);
         downHitbox = new Rectangle(8, 1, 20, 30);       
         leftHitbox = new Rectangle(1, 6, 30, 20);   
         rightHitbox = new Rectangle(1, 6, 30, 20);
@@ -90,10 +91,9 @@ public class Arwana extends Fish {
         }
         collisionOn = false;
         
-        gp.cCheck.animalCheckTile(this);    
-        gp.cCheck.animalCheckObject(this);
-        gp.cCheck.checkPlayer(this);
-        gp.cCheck.checkAnimalCollision(this);
+        gp.cCheck.fishCheckTile(this);    
+        gp.cCheck.checkFishPlayer(this);
+        gp.cCheck.checkFishCollision(this);
         
         if(!collisionOn) {
             switch(direction) {

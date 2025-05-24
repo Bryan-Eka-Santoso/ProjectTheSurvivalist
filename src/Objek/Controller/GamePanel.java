@@ -2,16 +2,13 @@ package Objek.Controller;
 
 import javax.swing.*;
 import Objek.Animal.*;
-import Objek.Animal.Fish.Arwana;
-import Objek.Animal.Fish.Belida;
 import Objek.Environment.EnvironmentManager;
+import Objek.Fish.Arwana;
+import Objek.Fish.Belida;
+import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Bread;
-import Objek.Items.StackableItem.Materials.Gem;
-import Objek.Items.StackableItem.Materials.MetalFrame;
-import Objek.Items.StackableItem.Materials.MetalSheet;
-import Objek.Items.StackableItem.Materials.SwordHandle;
-import Objek.Items.StackableItem.Materials.ToolHandle;
+import Objek.Items.StackableItem.Foods.RawMutton;
 import Objek.Items.StackableItem.Materials.Wood;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.Unstackable.Arsenals.*;
@@ -26,7 +23,6 @@ import java.util.ArrayList;
 import java.awt.Point;
 
 public class GamePanel extends JPanel implements Runnable {
-
     final int ORI_TILE_SIZE = 15;
     final int scale = 3;
 
@@ -35,20 +31,21 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 60;
+    final int FPS = 30;
 
     public final int MAX_WORLD_COL = 98;
     public final int MAX_WORLD_ROW = 98;
     public final int WORLD_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
+    Crafting recipe = new Crafting();
+    KeyHandler keyH = new KeyHandler(this);
+    public Player player = new Player("Player", recipe, this, keyH);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
-    EnvironmentManager eManager = new EnvironmentManager(this);
-    KeyHandler keyH = new KeyHandler(this);
+    public EnvironmentManager eManager = new EnvironmentManager(this);
     Sound sound = new Sound();
     Thread gameThread;
-    Crafting recipe = new Crafting();
     public CollisonChecker cCheck = new CollisonChecker(this);
     
     // Game State
@@ -61,17 +58,21 @@ public class GamePanel extends JPanel implements Runnable {
     public final int BUILDING_STATE = 6;
     public final int OPEN_CHEST_STATE = 7;
     public final int OPEN_CRAFTINGTABLE_STATE = 8;
+    public final int OPEN_SMELTER_STATE = 9;
+    public final int OPEN_BED_STATE = 10;
+    public final int FISHING_STATE = 11;
+
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
-     public final int maxMap = 10;
+    public final int maxMap = 10;
     public int currentMap = 0;
     
-    public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
+    public ArrayList<Fish> fish = new ArrayList<>();
     public ArrayList<Buildings> buildings = new ArrayList<>();
     
     public GamePanel() {
@@ -88,6 +89,10 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         gameState = PLAY_STATE;
         playMusic(7);
+    }
+
+    public void reloadTile(){
+        tileM = new TileManager(this);
     }
     
     public void startgameThread() {
@@ -224,10 +229,10 @@ public class GamePanel extends JPanel implements Runnable {
 
             switch (animalType.toLowerCase()) {
                 case "arwana":
-                    animals.add(new Arwana("arwana", 0, 9, x * TILE_SIZE, y * TILE_SIZE, this));
+                    fish.add(new Arwana("arwana", 0, 9, x * TILE_SIZE, y * TILE_SIZE, this));
                     break;
                 case "belida":
-                    animals.add(new Belida("belida", 0, 7, x * TILE_SIZE, y * TILE_SIZE, this));
+                    fish.add(new Belida("belida", 0, 7, x * TILE_SIZE, y * TILE_SIZE, this));
                     break;
             }
             
@@ -263,28 +268,14 @@ public class GamePanel extends JPanel implements Runnable {
         addAnimals();
         // player.inventory.addItems(new Sword("Sword", 5, 10));
         player.inventory.addItems(new GuavaSeeds(5));
-        player.inventory.addItems(new Orchard(this, 5));
+        player.inventory.addItems(new RawMutton(20));
         player.inventory.addItems(new CraftingTable(this, 10));
         player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new LightweightAxe());
-        player.inventory.addItems(new FlimsyAxe());
-        player.inventory.addItems(new GoldSword());
-        player.inventory.addItems(new MetalSword());
-        player.inventory.addItems(new WoodenClub());
-        player.inventory.addItems(new MetalSheet(10));
-        player.inventory.addItems(new MetalFrame(10));
-        player.inventory.addItems(new Wood(10));
-        player.inventory.addItems(new SwordHandle(10));
-        player.inventory.addItems(new ToolHandle(10));
-        player.inventory.addItems(new Gem(10));
         player.inventory.addItems(new Torch(this, 5));
-        player.inventory.addItems(new WoodenClub());
-        player.inventory.addItems(new Wood(30));
+        player.inventory.addItems(new Wood(20));
         player.inventory.addItems(new Bread(10));
         player.inventory.addItems(new Chest(this, 5));
-        player.inventory.addItems(new CraftingTable(this, 10));
-        player.inventory.addItems(new Campfire(this, 10));
-        player.inventory.addItems(new Smelter(this, 1));
+        player.inventory.addItems(new Furnace(this, 2));
         player.inventory.addItems(new Chest(this, 2));
         player.inventory.addItems(new KandangAyam(this));
         player.inventory.addItems(new Bed(this, 1));
@@ -302,8 +293,8 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (delta >= 1) {
                 update();
-                if(currentMap == 0){
-                    checkAndRespawnAnimals();
+                if (currentMap == 0) {
+                    checkAndRespawnAnimals();  
                 }
                 repaint();
                 delta--;
@@ -314,21 +305,44 @@ public class GamePanel extends JPanel implements Runnable {
                     for (int i = 0; i < animals.size(); i++) {
                         animals.get(i).update();
                     }
+                    for (int i = 0; i < fish.size(); i++) {
+                        fish.get(i).update();
+                    }
                 }
                 lastAnimalMoveTime = currentTime;
             }
-
+            
             if (timer >= 1000000000) {
+                if(player.level > 14) {
+                    reloadTile();
+                }
                 timer = 0;
             }
         }
     }
 
     public void update() {
-        if (gameState != PAUSE_STATE) {
-            player.update();
-        } 
+        if (gameState == PAUSE_STATE) return;
+
+        player.update();
+
+        ui.isCanGoToSea = false;
+        ui.isNeedLevel15 = false;
+
+        if (currentMap == 0) {
+            int col = player.worldX / TILE_SIZE;
+            int row = player.worldY / TILE_SIZE;
+
+            if ((col == 27 || col == 28) && row == 17) {
+                ui.isCanGoToSea = true;
+            }
+
+            if (player.level < 15 && (col == 27 || col == 28) && row == 18) {
+                ui.isNeedLevel15 = true;
+            }
+        }
     }
+
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -353,6 +367,11 @@ public class GamePanel extends JPanel implements Runnable {
                 animals.get(i).draw(g2);
             }
         }
+        for (int i = 0; i < fish.size(); i++) {
+            if (fish.get(i).worldY <= player.worldY) {
+                fish.get(i).draw(g2);
+            }
+        }
         if (gameState == BUILDING_STATE) {
             ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
@@ -365,6 +384,11 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < animals.size(); i++) {
             if (animals.get(i).worldY > player.worldY) {
                 animals.get(i).draw(g2);
+            }
+        }
+        for (int i = 0; i < fish.size(); i++) {
+            if (fish.get(i).worldY > player.worldY) {
+                fish.get(i).draw(g2);
             }
         }
         for (int i = 0; i < buildings.size(); i++) {
@@ -383,6 +407,7 @@ public class GamePanel extends JPanel implements Runnable {
         sound.play();
         sound.loop();
     }
+    
     public void stopMusic() {
         sound.stop();
     }

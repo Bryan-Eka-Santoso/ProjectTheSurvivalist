@@ -20,7 +20,6 @@ public class Crafting {
     public Crafting() {
         smallRecipes = fillSmallRecipes();
         recipes = fillRecipes();
-
     }
 
     private LinkedHashMap<List<Item>, Item> fillSmallRecipes() {
