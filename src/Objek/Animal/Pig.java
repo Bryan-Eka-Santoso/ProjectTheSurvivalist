@@ -26,6 +26,8 @@ public class Pig extends TameAnimal{
     private Rectangle rightHitbox;
     private static final int PIG_WIDTH = 128;
     private static final int PIG_HEIGHT = 128;
+    public int actionLockCounter = 0;
+    
     public Pig(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -101,6 +103,11 @@ public class Pig extends TameAnimal{
     private int speed = 8; 
     @Override
     public void update() {
+        actionLockCounter++;
+        if(actionLockCounter < 15) {
+            return; 
+        }
+        actionLockCounter = 0; // Reset action lock counter
         if(direction == null) {
             direction = "down"; 
         }

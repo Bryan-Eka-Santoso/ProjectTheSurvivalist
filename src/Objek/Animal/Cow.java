@@ -18,13 +18,14 @@ public class Cow extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
-    
     Random random = new Random();
     String gender;
     boolean readyGetItem;
     boolean readyBreeding;
     private static final int COW_WIDTH = 128;
     private static final int COW_HEIGHT = 128;
+    public int actionLockCounter = 0;
+
     public Cow(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -101,6 +102,11 @@ public class Cow extends TameAnimal {
     private int speed = 8; 
     @Override
     public void update() {
+        actionLockCounter++;
+        if(actionLockCounter < 15) {
+            return;
+        }
+        actionLockCounter = 0;
         if(direction == null) {
             direction = "down"; 
         }
@@ -139,16 +145,26 @@ public class Cow extends TameAnimal {
                 setRandomDirection();
                 actionMoveCounter = 0;
             }
-        }else {
-          
-            setRandomDirection();
+        } else {
+            String newDirection;
+            String oldDirection = this.direction;
+
+            switch(oldDirection) {
+                case "up": newDirection = "down"; break;
+                case "down": newDirection = "up"; break;
+                case "left": newDirection = "right"; break;
+                case "right": newDirection = "left"; break;
+                default: newDirection = "down"; break;
+            }
+            this.direction = newDirection;
+            this.actionMoveDelay = this.random.nextInt(91)+30;
             switch(direction) {
                 case "up": worldY -= speed; break;
                 case "down": worldY += speed; break;
                 case "left": worldX -= speed; break;
                 case "right": worldX += speed; break;
             }
-            actionMoveCounter++; 
+            actionMoveCounter++;
         }
         spriteCounter++;
         if(spriteCounter > 0) {

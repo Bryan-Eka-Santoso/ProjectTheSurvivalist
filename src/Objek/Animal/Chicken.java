@@ -25,6 +25,7 @@ public class Chicken extends TameAnimal {
     private Rectangle rightHitbox;
     private static final int CHICKEN_WIDTH = 32;
     private static final int CHICKEN_HEIGHT = 32;
+    public int actionLockCounter = 0;
     
     public Chicken(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
@@ -107,6 +108,11 @@ public class Chicken extends TameAnimal {
 
     @Override
     public void update() {
+        actionLockCounter++;
+        if (actionLockCounter < 10) {
+            return;
+        }
+        actionLockCounter = 0;
         if(direction == null) {
             direction = "down"; 
         }
@@ -148,7 +154,7 @@ public class Chicken extends TameAnimal {
         } else {
             String newDirection;
             String oldDirection = this.direction;
-
+    
             switch(oldDirection) {
                 case "up": newDirection = "down"; break;
                 case "down": newDirection = "up"; break;
@@ -175,6 +181,7 @@ public class Chicken extends TameAnimal {
             spriteCounter = 0;
         }
     }
+
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;

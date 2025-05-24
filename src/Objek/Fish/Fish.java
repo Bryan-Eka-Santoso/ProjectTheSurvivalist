@@ -19,8 +19,11 @@ public class Fish {
     public GamePanel gp;
     public int spriteCounter = 0;
     public int spriteNum = 1;
+    public int durabilityCost;
+    public int actionLockCounter = 0;
 
-    public Fish(String nameFish, int price, int strength, int worldX, int worldY, int speed, String direction, GamePanel gp) {
+    public Fish (String nameFish, int price, int strength, int worldX, int worldY, int speed, String direction, GamePanel gp, int durabilityCost) {
+        this.durabilityCost = durabilityCost;
         this.nameFish = nameFish;
         this.price = price;
         this.strength = strength;
@@ -33,6 +36,11 @@ public class Fish {
     }
 
     public void update() {
+        actionLockCounter++;
+        if(actionLockCounter < 10) {
+            return; // Prevents the fish from moving too quickly
+        }
+        actionLockCounter = 0;
         collisionOn = false;
         int randomDirection = (int) (Math.random() * 4);
         randomDirection = 2;

@@ -17,7 +17,7 @@ public class TileManager {
     public int mapTile[][][];
 
     public TileManager(GamePanel gp) {
-        this.gp= gp;
+        this.gp = gp;
         tile = new Tile[30];
         mapTile = new int[gp.maxMap][gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
@@ -49,7 +49,11 @@ public class TileManager {
             setup(16, "calm-water", true);
             setup(17, "sand", false);
             setup(19, "bridge1", false);
-            setup(21, "ship", false);
+            if(gp.player.level < 14){
+                setup(21, "kapalrusak", true);
+            } else {
+                setup(21, "ship", false);
+            }
             setup(22, "bridgesand", false);
             setup(23, "cave", false);
         } else if(gp.currentMap == 1){
@@ -127,7 +131,7 @@ public class TileManager {
                 }
             }
 
-            System.out.println("Peta berhasil dimuat!");
+            // System.out.println("Peta berhasil dimuat!");
 
         } catch (IOException e) {
             System.err.println("Terjadi kesalahan saat membaca file: " + e.getMessage());

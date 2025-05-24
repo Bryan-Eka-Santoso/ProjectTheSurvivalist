@@ -21,6 +21,8 @@ public class Wolf extends WildAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
+    public int actionLockCounter = 0;
+    public int actionLockEnemyNearby = 15;
     
     public Wolf(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
@@ -94,6 +96,16 @@ public class Wolf extends WildAnimal {
 
     @Override
     public void update() {
+        if (isPreyNearby(gp.player)) {
+            actionLockEnemyNearby = 10;
+        } else {
+            actionLockEnemyNearby = 15;
+        }
+        actionLockCounter++;
+        if(actionLockCounter < actionLockEnemyNearby) {
+            return; 
+        }
+        actionLockCounter = 0;
         if(direction == null) {
             direction = "down"; 
         }
@@ -113,11 +125,11 @@ public class Wolf extends WildAnimal {
         }
         collisionOn = false;
         
-        gp.cCheck.animalCheckTile(this);    
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
         gp.cCheck.checkPlayer(this);        // Check collision dengan player
         gp.cCheck.checkAnimalCollision(this);
-        gp.cCheck.animalCheckBuildings(this); // Check collision dengan buildings
+        gp.cCheck.animalCheckBuildings(this); // Check collision dengan building
+        gp.cCheck.animalCheckTile(this);    
         
         // Jika tidak ada collision, boleh bergerak
         if(!collisionOn) {
@@ -243,7 +255,7 @@ public class Wolf extends WildAnimal {
     }
 
     public boolean isPreyNearby(Player player) {
-        if (Math.pow((player.worldX - this.worldX), 2) + Math.pow((player.worldY - this.worldY), 2) <= Math.pow(450, 2)) {
+        if (Math.pow((player.worldX - this.worldX), 2) + Math.pow((player.worldY - this.worldY), 2) <= Math.pow(450, 2) && !collisionOn) {
             return true;
         } else {
             return false;

@@ -1,6 +1,5 @@
 package Objek.Controller;
 
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -14,11 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import Objek.Animal.TameAnimal;
-import Objek.Animal.Chicken;
-import Objek.Animal.Cow;
-import Objek.Animal.Pig;
-import Objek.Animal.Sheep;
+import java.util.Random;
+import Objek.Animal.*;
+import Objek.Fish.Fish;
 import Objek.Items.Item;
 import Objek.Items.Buildings.Buildings;
 import Objek.Items.Buildings.Chest;
@@ -79,52 +76,28 @@ public class UI {
     public boolean showWrongKandangMessage = false;
     public long wrongKandangMessageTimer = 0;
     public final long WRONG_KANDANG_MESSAGE_DURATION = 2000;
-    public void showKandangFullMessage() {
-        showKandangFullMessage = true;
-        kandangFullMessageTimer = System.currentTimeMillis();
-    }
-    public void showWrongKandangMessage() {
-        showWrongKandangMessage = true;
-        wrongKandangMessageTimer = System.currentTimeMillis();
-    }
-    public void drawWrongKandangMessage(Graphics2D g2) {
-        if(System.currentTimeMillis() - wrongKandangMessageTimer >= WRONG_KANDANG_MESSAGE_DURATION) {
-            showWrongKandangMessage = false;
-        } else {
-            int messageWidth = gp.TILE_SIZE * 8;
-            int messageHeight = gp.TILE_SIZE * 3;
-            int messageX = gp.SCREEN_WIDTH/2 - messageWidth/2;
-            int messageY = gp.SCREEN_HEIGHT/2 - messageHeight/2;
-
-            g2.drawImage(woodBg, messageX, messageY, messageWidth, messageHeight, null);
-
-            g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial", Font.BOLD, 24));
-            String message = "Wrong Cage Type!";
-            int textX = messageX + (messageWidth - g2.getFontMetrics().stringWidth(message))/2;
-            g2.drawString(message, textX, messageY + messageHeight/2);
-        }
-    }
-    public void drawFullKandangMessage(Graphics2D g2){
-        if(System.currentTimeMillis() - kandangFullMessageTimer >= KANDANG_FULL_MESSAGE_DURATION) {
-            showKandangFullMessage = false;
-        } else {
-            int messageWidth = gp.TILE_SIZE * 8;
-            int messageHeight = gp.TILE_SIZE * 3;
-            int messageX = gp.SCREEN_WIDTH/2 - messageWidth/2;
-            int messageY = gp.SCREEN_HEIGHT/2 - messageHeight/2;
-
-            g2.drawImage(woodBg, messageX, messageY, messageWidth, messageHeight, null);
-
-            g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial", Font.BOLD, 24));
-            String message = "Kandang is Full!";
-            int textX = messageX + (messageWidth - g2.getFontMetrics().stringWidth(message))/2;
-            g2.drawString(message, textX, messageY + messageHeight/2);
-        }
-    }
+    
     public boolean canSelectInventory;
+    public boolean isCanGoToSea = false;
+    public boolean isNeedLevel15 = false;
 
+    public Fish caughtFish;
+    public int fishIndex;
+    public int playerFishingStrength = 0;
+    public int maxFishingStrength = 100;
+    public boolean fishingSuccessful = false;
+    public boolean canPressFishingButton = true;
+    public long lastFishingButtonPressTime = 0;
+    public final long FISHING_BUTTON_COOLDOWN = 800; // 800ms cooldown antara penekanan tombol
+    public Random random = new Random();
+    private boolean showRodRusak = false;
+    private boolean showDapatIkan = false;
+    private boolean showGagalDapatIkan = false;
+    private long rodRusakTimer = 0;
+    private long dapatIkanTimer = 0;
+    private long gagalDapatIkanTimer = 0;
+    private final long MESSAGE_DISPLAY_TIME = 2000;
+    
     public UI (GamePanel gp) {
         this.gp = gp;
         selectedIndex = 0;
@@ -136,6 +109,207 @@ public class UI {
             e.printStackTrace();
         }
     }
+
+    public void draw(Graphics2D g2) {
+        this.g2 = g2;
+
+        g2.setFont(new Font("Arial", Font.PLAIN, 40));
+        g2.setColor(Color.white);
+
+        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE) {
+            drawSelectedItem();
+        }
+        if (gp.gameState == gp.PAUSE_STATE) {
+            drawPauseScreen();
+        }
+        if (gp.gameState == gp.INVENTORY_STATE) {
+            drawInventory();
+        }
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE){
+            gp.player.recipe.currentRecipe = gp.player.recipe.smallRecipes;
+        }
+        if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
+            gp.player.recipe.currentRecipe = gp.player.recipe.recipes;
+        }
+        if (gp.gameState == gp.PLAYER_CRAFTING_STATE || gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
+            PlayerCraftMenu();
+        }
+        if (gp.gameState == gp.DROPPED_ITEM_STATE) {
+            drawAndGetStacks();
+        }
+        if (gp.gameState == gp.OPEN_CHEST_STATE) {
+            drawChest((Chest) gp.buildings.get(gp.player.buildingIndex));
+        }
+        if (gp.gameState == gp.OPEN_SMELTER_STATE) {
+            furnaceMenu();
+        }
+        if(gp.gameState == gp.KANDANG_STATE) {
+            if (inBreedingMenu) {
+                drawBreedingMenu(g2, gp.currentKandang);
+            } else if(inGetItemMenu) {
+                drawGetItemMenu(g2, gp.currentKandang);
+            } else if (gp.currentKandang != null) {
+                drawKandangMenu(g2, gp.currentKandang);
+            }
+        }
+        if (gp.gameState != gp.OPEN_CHEST_STATE) {
+            drawStats();
+        }
+        if (showNameInput) {
+            drawNameInputWindow(g2);
+        }
+        if (showKandangFullMessage) {
+            drawFullKandangMessage(g2);
+        }
+        if (showWrongKandangMessage) {
+            drawWrongKandangMessage(g2);
+        } 
+        if (isCanGoToSea) {
+            drawTextKeteranganKeLaut();
+        }
+        if (isNeedLevel15) {
+            drawTextButuhLevel();
+        }
+        if(gp.gameState == gp.FISHING_STATE) {
+            drawFishingMinigame();
+        }
+        if(showRodRusak) {
+            drawTextRodRusak();
+            if(System.currentTimeMillis() - rodRusakTimer > MESSAGE_DISPLAY_TIME) {
+                showRodRusak = false;
+            }
+        }
+        if(showDapatIkan) {
+            drawTextDapatIkan();
+            if(System.currentTimeMillis() - dapatIkanTimer > MESSAGE_DISPLAY_TIME) {
+                showDapatIkan = false;
+            }
+        }
+        if(showGagalDapatIkan) {
+            drawTextGagalDapatIkan();
+            if(System.currentTimeMillis() - gagalDapatIkanTimer > MESSAGE_DISPLAY_TIME) {
+                showGagalDapatIkan = false;
+            }
+        }
+    }
+
+     public void showRodRusakMessage() {
+        showRodRusak = true;
+        rodRusakTimer = System.currentTimeMillis();
+    }
+
+    public void showDapatIkanMessage(Fish fish) {
+        showDapatIkan = true;
+        dapatIkanTimer = System.currentTimeMillis();
+        caughtFish = fish;
+    }
+
+    public void showGagalDapatIkanMessage(Fish fish) {
+        showGagalDapatIkan = true;
+        gagalDapatIkanTimer = System.currentTimeMillis();
+        caughtFish = fish;
+    }
+
+    public void drawTextRodRusak() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "Your fishing rod is broken!";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.red);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.red);
+        g2.drawString(message, x, y);
+    }
+
+    public void drawTextDapatIkan() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "You successfully caught a " + caughtFish.nameFish + " fish!";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.green);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.green);
+        g2.drawString(message, x, y);
+    }
+
+    public void drawTextGagalDapatIkan() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "You failed to catch a " + caughtFish.nameFish + " fish!";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.red);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.red);
+        g2.drawString(message, x, y);
+    }
+
+    public void drawTextKeteranganKeLaut() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "Press F to go to the sea";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.blue);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.blue);
+        g2.drawString(message, x, y);
+    }
+
+    private void drawTextButuhLevel() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "Ship locked! Reach level 15 to unlock it";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.gray);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.gray);
+        g2.drawString(message, x, y);
+    }
+
     public void showAnimalNameInput(TameAnimal animal, Kandang kandang) {
          if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
             currentInput = "";
@@ -176,63 +350,134 @@ public class UI {
         isMaleList = true;
         canSelectInventory = true;
     }
-    public void draw(Graphics2D g2) {
-        this.g2 = g2;
+    
+    
+    public void showKandangFullMessage() {
+        showKandangFullMessage = true;
+        kandangFullMessageTimer = System.currentTimeMillis();
+    }
 
-        g2.setFont(new Font("Arial", Font.PLAIN, 40));
-        g2.setColor(Color.white);
+    public void showWrongKandangMessage() {
+        showWrongKandangMessage = true;
+        wrongKandangMessageTimer = System.currentTimeMillis();
+    }
 
-        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE) {
-            drawSelectedItem();
+    public void drawWrongKandangMessage(Graphics2D g2) {
+        if(System.currentTimeMillis() - wrongKandangMessageTimer >= WRONG_KANDANG_MESSAGE_DURATION) {
+            showWrongKandangMessage = false;
+        } else {
+            int messageWidth = gp.TILE_SIZE * 8;
+            int messageHeight = gp.TILE_SIZE * 3;
+            int messageX = gp.SCREEN_WIDTH/2 - messageWidth/2;
+            int messageY = gp.SCREEN_HEIGHT/2 - messageHeight/2;
+
+            g2.drawImage(woodBg, messageX, messageY, messageWidth, messageHeight, null);
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 24));
+            String message = "Wrong Cage Type!";
+            int textX = messageX + (messageWidth - g2.getFontMetrics().stringWidth(message))/2;
+            g2.drawString(message, textX, messageY + messageHeight/2);
         }
-        if (gp.gameState == gp.PAUSE_STATE) {
-            drawPauseScreen();
+    }
+
+    public void drawFullKandangMessage(Graphics2D g2){
+        if(System.currentTimeMillis() - kandangFullMessageTimer >= KANDANG_FULL_MESSAGE_DURATION) {
+            showKandangFullMessage = false;
+        } else {
+            int messageWidth = gp.TILE_SIZE * 8;
+            int messageHeight = gp.TILE_SIZE * 3;
+            int messageX = gp.SCREEN_WIDTH/2 - messageWidth/2;
+            int messageY = gp.SCREEN_HEIGHT/2 - messageHeight/2;
+
+            g2.drawImage(woodBg, messageX, messageY, messageWidth, messageHeight, null);
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 24));
+            String message = "Kandang is Full!";
+            int textX = messageX + (messageWidth - g2.getFontMetrics().stringWidth(message))/2;
+            g2.drawString(message, textX, messageY + messageHeight/2);
         }
-        if (gp.gameState == gp.INVENTORY_STATE) {
-            drawInventory();
-        }
-        if (gp.gameState == gp.PLAYER_CRAFTING_STATE){
-            gp.player.recipe.currentRecipe = gp.player.recipe.smallRecipes;
-        }
-        if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
-            gp.player.recipe.currentRecipe = gp.player.recipe.recipes;
-        }
-        if (gp.gameState == gp.PLAYER_CRAFTING_STATE || gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE) {
-            PlayerCraftMenu();
-        }
-        if (gp.gameState == gp.DROPPED_ITEM_STATE) {
-            drawAndGetStacks();
-        }
-        if (gp.gameState == gp.OPEN_CHEST_STATE) {
-            drawChest((Chest) gp.buildings.get(gp.player.buildingIndex));
-        }
-        if (gp.gameState == gp.OPEN_SMELTER_STATE) {
-            furnaceMenu();
-        }
-        if(gp.gameState == gp.KANDANG_STATE) {
-            if(inBreedingMenu) {
-                drawBreedingMenu(g2, gp.currentKandang);
-            }else if(inGetItemMenu) {
-                drawGetItemMenu(g2, gp.currentKandang);
-            }
-            else {
-                drawKandangMenu(g2, gp.currentKandang);
-            }
-        }
-        if (gp.gameState != gp.OPEN_CHEST_STATE) {
-            drawStats();
-        }
-        if(showNameInput) {
-            drawNameInputWindow(g2);
-        }
-        if(showKandangFullMessage) {
-            drawFullKandangMessage(g2);
-        }
-        if(showWrongKandangMessage) {
-            drawWrongKandangMessage(g2);
+    }
+
+    public void drawFishingMinigame() {
+        // Background semi-transparan
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
+        
+        // Panel fishing
+        int panelWidth = 400;
+        int panelHeight = 300;
+        int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
+        int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
+        
+        g2.setColor(new Color(0, 60, 90));
+        g2.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 15, 15);
+        
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(panelX+5, panelY+5, panelWidth-10, panelHeight-10, 10, 10);
+        
+        // Judul
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 28F));
+        String title = "Fishing Challenge!";
+        int titleX = getXForCenteredText(title);
+        g2.drawString(title, titleX, panelY + 50);
+        // Gambar ikan
+        BufferedImage fishImage = null;
+        int imageSize = 80;
+        
+        if (caughtFish.nameFish.equalsIgnoreCase("Arwana")) {
+            fishImage = caughtFish.right1;
+        } else if (caughtFish.nameFish.equalsIgnoreCase("Belida")) {
+            fishImage = caughtFish.right1;
         }
         
+        if (fishImage != null) {
+            g2.drawImage(fishImage, gp.SCREEN_WIDTH/2 - imageSize/2, panelY + 70, imageSize, imageSize, null);
+        }
+        
+        // Nama ikan
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
+        String fishName = caughtFish.nameFish;
+        int textX = getXForCenteredText(fishName);
+        g2.drawString(fishName, textX, panelY + 180);
+        
+        // Kekuatan ikan
+        g2.setFont(g2.getFont().deriveFont(16F));
+        g2.drawString("Fish Strength: " + caughtFish.strength, panelX + 50, panelY + 210);
+        g2.drawString("Player Rod: " + gp.player.strengthRod, panelX + 50, panelY + 235);
+        
+        // Progress bar
+        g2.setColor(Color.LIGHT_GRAY);
+        g2.fillRect(panelX + 50, panelY + 250, 300, 20);
+        // Posisi indikator pada progress bar
+        if (playerFishingStrength > 0) {
+            if (playerFishingStrength <= 33) {
+                g2.setColor(Color.RED);
+            } else if (playerFishingStrength <= 66) {
+                g2.setColor(Color.YELLOW);
+            } else {
+                g2.setColor(Color.GREEN);
+            }
+            g2.fillRect(panelX + 50, panelY + 250, playerFishingStrength * 3, 20);
+        }
+        // Border untuk progress bar
+        g2.setColor(Color.WHITE);
+        g2.drawRect(panelX + 50, panelY + 250, 300, 20);
+        
+        // Instruksi
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16F));
+        g2.drawString("Press ENTER to pull the fishing rod!", panelX + 80, panelY + 285);
     }
+
+    // Add this utility method if it doesn't exist already
+    public int getXForCenteredText(String text) {
+        int length = (int)g2.getFontMetrics().getStringBounds(text, g2).getWidth();
+        int x = gp.SCREEN_WIDTH/2 - length/2;
+        return x;
+    }
+
     public void handleBreedingKeyPress(int keyCode, Kandang kandang) {
         ArrayList<TameAnimal> males = new ArrayList<>();
         ArrayList<TameAnimal> females = new ArrayList<>();
@@ -556,6 +801,7 @@ public class UI {
         g2.setColor(Color.BLACK);
         g2.drawString("Back", backButton.x + 30, backButton.y + 25);
     }
+
     public void drawKandangMenu(Graphics2D g2, Kandang kandang) {
         int windowWidth = gp.TILE_SIZE * 12;
         int windowHeight = gp.TILE_SIZE * 10;

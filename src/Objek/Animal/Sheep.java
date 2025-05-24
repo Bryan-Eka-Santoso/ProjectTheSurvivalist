@@ -24,6 +24,7 @@ public class Sheep extends TameAnimal {
     boolean readyBreeding;
     private static final int SHEEP_WIDTH = 128;
     private static final int SHEEP_HEIGHT = 128;
+    public int actionLockCounter = 0;
     
     public Sheep(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
@@ -101,6 +102,11 @@ public class Sheep extends TameAnimal {
     private int speed = 8; 
     @Override
     public void update() {
+        actionLockCounter++;
+        if(actionLockCounter < 15) {
+            return; 
+        }
+        actionLockCounter = 0; // Reset counter
         if(direction == null) {
             direction = "down"; 
         }
