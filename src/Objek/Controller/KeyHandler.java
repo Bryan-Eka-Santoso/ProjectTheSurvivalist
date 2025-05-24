@@ -480,18 +480,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     gp.gameState = gp.PLAY_STATE;
                 } 
             }
-            if (code == KeyEvent.VK_UP) {
-                if (gp.gameState == gp.DROPPED_ITEM_STATE){
-                    if (gp.ui.amountToDrop < itemStack){
-                        gp.ui.amountToDrop++;
-                    }
-                }
-                if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
-                    if (gp.ui.selectedRecipeIndex > 0) {
-                        gp.ui.selectedRecipeIndex--; 
-                    }
-                }
-            }
             if (code == KeyEvent.VK_RIGHT) {
                 if (gp.player.grabbedAnimal == null && gp.gameState == gp.PLAY_STATE){
                     if (gp.ui.slotCol < 8) {
@@ -696,7 +684,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                         gp.isCave = !gp.isCave;
                         gp.eManager.lighting.setLightSource(); 
                     }
-                } else if(gp.currentMap == 1){
+                } else if (gp.currentMap == 1){
                     if(col == 72 && row == 11) {
                         gp.tileM.loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
                         gp.currentMap = 0;
@@ -715,6 +703,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                         gp.tileM.getTileImage();
                         gp.player.worldY = 56 * gp.TILE_SIZE;
                         gp.player.worldX = 43 * gp.TILE_SIZE;
+                        gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
                     }
                 }
             } 

@@ -7,6 +7,8 @@ import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
 import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
+import Objek.Items.Unstackable.Torch;
+import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -296,6 +298,9 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addAnimals();
         player.inventory.addItems(new KandangAyam(this));
+        player.inventory.addItems(new Torch(this));
+        player.inventory.addItems(new WindAxe());
+
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
 
@@ -315,17 +320,6 @@ public class GamePanel extends JPanel implements Runnable {
             }
             
             if (currentTime - lastAnimalMoveTime >= interval) {
-                if (gameState != PAUSE_STATE) {
-                    for (int i = 0; i < animals.size(); i++) {
-                        animals.get(i).update();
-                        if (animals.get(i) instanceof Wolf) {
-                            ((Wolf) animals.get(i)).chasePlayer(player);
-                        }
-                    }
-                    for (int i = 0; i < fish.size(); i++) {
-                        fish.get(i).update();
-                    }
-                }
                 lastAnimalMoveTime = currentTime;
             }
             
@@ -342,6 +336,18 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameState == PAUSE_STATE) return;
 
         player.update();
+
+        if (gameState != PAUSE_STATE) {
+            for (int i = 0; i < animals.size(); i++) {
+                animals.get(i).update();
+                if (animals.get(i) instanceof Wolf) {
+                    ((Wolf) animals.get(i)).chasePlayer(player);
+                }
+            }
+            for (int i = 0; i < fish.size(); i++) {
+                fish.get(i).update();
+            }
+        }
 
         ui.isCanGoToSea = false;
         ui.isNeedLevel15 = false;
@@ -366,6 +372,14 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
 
         tileM.draw(g2);
+        for (int i = 0; i < droppedItems.size(); i++) {
+            droppedItems.get(i).draw(g2);
+        }
+        for (int i = 0; i < animals.size(); i++) {
+            if (animals.get(i).worldY <= player.worldY) {
+                animals.get(i).draw(g2);
+            }
+        }
         for (int i = 0; i < buildings.size(); i++) {
             if (buildings.get(i).worldY <= player.worldY) {
                 buildings.get(i).draw(g2);
@@ -374,14 +388,6 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).worldY <= player.worldY) {
                 plants.get(i).draw(g2);
-            }
-        }
-        for (int i = 0; i < droppedItems.size(); i++) {
-            droppedItems.get(i).draw(g2);
-        }
-        for (int i = 0; i < animals.size(); i++) {
-            if (animals.get(i).worldY <= player.worldY) {
-                animals.get(i).draw(g2);
             }
         }
         for (int i = 0; i < fish.size(); i++) {
@@ -393,11 +399,6 @@ public class GamePanel extends JPanel implements Runnable {
             ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
         player.draw(g2);
-        for (int i = 0; i < plants.size(); i++) {
-            if (plants.get(i).worldY > player.worldY) {
-                plants.get(i).draw(g2);
-            }
-        }
         for (int i = 0; i < animals.size(); i++) {
             if (animals.get(i).worldY > player.worldY) {
                 animals.get(i).draw(g2);
@@ -414,6 +415,11 @@ public class GamePanel extends JPanel implements Runnable {
             }
             if (buildings.get(i) instanceof Orchard) {
                 ((Orchard) buildings.get(i)).updateGrowth();
+            }
+        }
+        for (int i = 0; i < plants.size(); i++) {
+            if (plants.get(i).worldY > player.worldY) {
+                plants.get(i).draw(g2);
             }
         }
         

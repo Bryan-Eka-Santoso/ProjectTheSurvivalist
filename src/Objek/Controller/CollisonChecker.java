@@ -416,7 +416,7 @@ public class CollisonChecker {
             int fishIndex = gp.fish.indexOf(animal);
             System.out.println("Player bertemu ikan: " + animal.nameFish + " (strength: " + animal.strength + ")");
             
-            if (gp.player.durabilityRod > 0) {
+            if (gp.player.durabilityRod > 0 && gp.currentMap == 1) {
                 // Start fishing minigame
                 gp.ui.caughtFish = animal;
                 gp.ui.fishIndex = fishIndex;

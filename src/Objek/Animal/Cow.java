@@ -18,13 +18,14 @@ public class Cow extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
-    
     Random random = new Random();
     String gender;
     boolean readyGetItem;
     boolean readyBreeding;
     private static final int COW_WIDTH = 128;
     private static final int COW_HEIGHT = 128;
+    public int actionLockCounter = 0;
+
     public Cow(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -101,6 +102,11 @@ public class Cow extends TameAnimal {
     private int speed = 8; 
     @Override
     public void update() {
+        actionLockCounter++;
+        if(actionLockCounter < 15) {
+            return;
+        }
+        actionLockCounter = 0;
         if(direction == null) {
             direction = "down"; 
         }

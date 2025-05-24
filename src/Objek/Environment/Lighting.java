@@ -181,8 +181,9 @@ public class Lighting {
     GamePanel gp;
     BufferedImage lightFilter;
     BufferedImage darknessFilter;
-    float filterAlpha = 0f;
+    public float filterAlpha = 0f;
     public int dayCounter;
+    public float filterAlphaTemp = 0f;
 
     final int DAY = 0; 
     final int DUSK = 1; 
@@ -248,7 +249,6 @@ public class Lighting {
         if (gp.player.lightUpdated) {
             setLightSource();
             gp.player.lightUpdated = false;
-            // gp.player.isPlaceTorch = false;
         }
         
         if (dayState == DAY) {
@@ -260,8 +260,10 @@ public class Lighting {
         } 
         if (dayState == DUSK) {
             filterAlpha += 0.001f;
-            if (filterAlpha > 0.8f) {
+            filterAlphaTemp += 0.001f;
+            if (filterAlphaTemp > 0.8f) {
                 filterAlpha = 0.8f;
+                filterAlphaTemp = 0.8f;
                 dayState = NIGHT;
             }
         } 
@@ -274,12 +276,16 @@ public class Lighting {
         } 
         if (dayState == DAWN) {
             filterAlpha -= 0.01f;
-            if (filterAlpha < 0f) {
+            filterAlphaTemp -= 0.01f;
+            if (filterAlphaTemp < 0f) {
                 filterAlpha = 0f;
+                filterAlphaTemp = 0f;
                 dayState = DAY;
             }
         }
-        
+        if (gp.currentMap == 2) {
+            filterAlpha = 0.8f;
+        }
     }
     
     public void draw(Graphics2D g2) {
