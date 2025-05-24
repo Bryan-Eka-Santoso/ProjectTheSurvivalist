@@ -3,7 +3,7 @@ package Objek.Animal;
 import java.awt.image.BufferedImage;
 import Objek.Controller.GamePanel;
 
-public class TameAnimal extends Animal {
+public abstract class TameAnimal extends Animal {
     String name;
     int x, y;
     boolean isGrab,inCage;
