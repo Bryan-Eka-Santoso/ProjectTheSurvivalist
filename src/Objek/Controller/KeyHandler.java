@@ -83,82 +83,55 @@ public class KeyHandler implements KeyListener, MouseListener {
             if (code == KeyEvent.VK_ENTER) {
             long currentTime = System.currentTimeMillis();
             
-            // Sistem penghitungan kekuatan acak
             int fishStrength = gp.ui.caughtFish.strength;
             int playerStrength = gp.player.strengthRod;
             
-            // Rumus yang Anda berikan
             int fishRandomStrength = gp.ui.random.nextInt(fishStrength) + (fishStrength / 2);
             int playerRandomStrength = gp.ui.random.nextInt(playerStrength) + (playerStrength / 2);
             
-            // Hitung perubahan pada progress bar
             int strengthDifference = playerRandomStrength - fishRandomStrength;
             gp.ui.playerFishingStrength += strengthDifference;
             
-            // Batasi nilai agar tetap dalam rentang 0-100
             if (gp.ui.playerFishingStrength > 100) {
                 gp.ui.playerFishingStrength = 100;
             } else if (gp.ui.playerFishingStrength < 0) {
                 gp.ui.playerFishingStrength = 0;
             }
             
-            // Periksa kondisi menang
             if (gp.ui.playerFishingStrength >= 100) {
-                // Player berhasil menangkap ikan!
                 gp.ui.fishingSuccessful = true;
                 
-                // Kurangi durability rod
                 gp.player.durabilityRod -= gp.ui.caughtFish.durabilityCost;
                 
-                // 70% peluang mendapatkan ikan
-                boolean getFish = gp.ui.random.nextInt(100) < 70;
-                if (getFish) {
-                    // Tambahkan ikan ke inventory (implementasi sesuai sistem Anda)
-                    System.out.println("Berhasil menangkap " + gp.ui.caughtFish.nameFish + "!");
-                    // gp.player.inventory.addItems(new FishItem(gp.ui.caughtFish.nameFish));
-                } else {
-                    System.out.println("Ikan terlepas saat hampir ditangkap!");
-                }
+                gp.ui.showDapatIkanMessage(gp.ui.caughtFish);
+                // gp.player.inventory.addItems(new FishItem(gp.ui.caughtFish.nameFish));
                 
-                // Hapus ikan dari dunia game
                 gp.fish.remove(gp.ui.fishIndex);
                 
-                // Kembali ke play state
-                gp.gameState = gp.PLAY_STATE;
-                gp.ui.playerFishingStrength = 50; // Reset ke tengah
-                gp.ui.caughtFish = null;
-                
-            } else if (gp.ui.playerFishingStrength <= 0) {
-                // Ikan berhasil melarikan diri
-                System.out.println("Ikan berhasil melepaskan diri!");
-                
-                // Kurangi durability rod tetapi ikan tidak dihapus
-                gp.player.durabilityRod -= 1; // Pengurangan minimal
-                
-                // Kembali ke play state
-                gp.gameState = gp.PLAY_STATE;
-                gp.ui.playerFishingStrength = 50; // Reset ke tengah
-                gp.ui.caughtFish = null;
-            }
-            
-            // Periksa jika rod rusak
-            if (gp.player.durabilityRod <= 0) {
-                System.out.println("Alat pancing rusak!");
-                // Implementasi logika rod rusak
                 gp.gameState = gp.PLAY_STATE;
                 gp.ui.playerFishingStrength = 50;
-                gp.ui.caughtFish = null;
+                
+            } else if (gp.ui.playerFishingStrength <= 0) {
+                gp.ui.showGagalDapatIkanMessage(gp.ui.caughtFish);
+                
+                gp.player.durabilityRod -= 1;
+                
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.playerFishingStrength = 50;
+            }
+            
+            if (gp.player.durabilityRod <= 0) {
+                gp.ui.showRodRusakMessage();
+                gp.gameState = gp.PLAY_STATE;
+                gp.ui.playerFishingStrength = 50;
             }
         }
         
         if (code == KeyEvent.VK_ESCAPE) {
-            // Memungkinkan pemain keluar dari minigame memancing
-            // Ikan tetap ada di dunia game
             gp.gameState = gp.PLAY_STATE;
             gp.ui.playerFishingStrength = 50;
-            gp.ui.caughtFish = null;
         }
-        return; // Keluar dari method ini untuk mencegah input lain diproses saat memancing
+        return;
     }
 
         if (code == KeyEvent.VK_W) {

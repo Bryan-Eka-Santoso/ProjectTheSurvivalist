@@ -50,7 +50,7 @@ public class Player {
     public Boolean isSlash;
     public Rectangle cutArea = new Rectangle(0, 0, 0, 0);
     public InteractBuild interactBuild;
-    public int strengthRod = 15;
+    public int strengthRod = 30;
     public int durabilityRod = 10;
 
     public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {

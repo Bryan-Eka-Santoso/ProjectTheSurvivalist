@@ -62,6 +62,13 @@ public class UI {
     public long lastFishingButtonPressTime = 0;
     public final long FISHING_BUTTON_COOLDOWN = 800; // 800ms cooldown antara penekanan tombol
     public Random random = new Random();
+    private boolean showRodRusak = false;
+    private boolean showDapatIkan = false;
+    private boolean showGagalDapatIkan = false;
+    private long rodRusakTimer = 0;
+    private long dapatIkanTimer = 0;
+    private long gagalDapatIkanTimer = 0;
+    private final long MESSAGE_DISPLAY_TIME = 2000;
 
     public void drawFishingMinigame() {
         // Background semi-transparan
@@ -187,12 +194,67 @@ public class UI {
         if(gp.gameState == gp.FISHING_STATE) {
             drawFishingMinigame();
         }
+        if(showRodRusak) {
+            drawTextRodRusak();
+            if(System.currentTimeMillis() - rodRusakTimer > MESSAGE_DISPLAY_TIME) {
+                showRodRusak = false;
+            }
+        }
+        if(showDapatIkan) {
+            drawTextDapatIkan();
+            if(System.currentTimeMillis() - dapatIkanTimer > MESSAGE_DISPLAY_TIME) {
+                showDapatIkan = false;
+            }
+        }
+        if(showGagalDapatIkan) {
+            drawTextGagalDapatIkan();
+            if(System.currentTimeMillis() - gagalDapatIkanTimer > MESSAGE_DISPLAY_TIME) {
+                showGagalDapatIkan = false;
+            }
+        }
     }
 
-    public void drawTextKeteranganKeLaut() {
+    public void showRodRusakMessage() {
+        showRodRusak = true;
+        rodRusakTimer = System.currentTimeMillis();
+    }
+
+    public void showDapatIkanMessage(Fish fish) {
+        showDapatIkan = true;
+        dapatIkanTimer = System.currentTimeMillis();
+        caughtFish = fish;
+    }
+
+    public void showGagalDapatIkanMessage(Fish fish) {
+        showGagalDapatIkan = true;
+        gagalDapatIkanTimer = System.currentTimeMillis();
+        caughtFish = fish;
+    }
+
+    public void drawTextRodRusak() {
         g2.setFont(new Font("Arial", Font.BOLD, 25));
         
-        String message = "Press F to go to the sea";
+        String message = "Your fishing rod is broken!";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.red);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.red);
+        g2.drawString(message, x, y);
+    }
+
+    public void drawTextDapatIkan() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "You successfully caught a " + caughtFish.nameFish + " fish!";
         int x = getXCenteredText(message);
         int y = gp.SCREEN_HEIGHT - 595;
         
@@ -209,10 +271,10 @@ public class UI {
         g2.drawString(message, x, y);
     }
 
-    private void drawTextButuhLevel() {
+    public void drawTextGagalDapatIkan() {
         g2.setFont(new Font("Arial", Font.BOLD, 25));
         
-        String message = "Ship locked! Reach level 15 to unlock it";
+        String message = "You failed to catch a " + caughtFish.nameFish + " fish!";
         int x = getXCenteredText(message);
         int y = gp.SCREEN_HEIGHT - 595;
         
@@ -226,6 +288,46 @@ public class UI {
         g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
         
         g2.setColor(Color.red);
+        g2.drawString(message, x, y);
+    }
+
+    public void drawTextKeteranganKeLaut() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "Press F to go to the sea";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.blue);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.blue);
+        g2.drawString(message, x, y);
+    }
+
+    private void drawTextButuhLevel() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "Ship locked! Reach level 15 to unlock it";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.gray);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.gray);
         g2.drawString(message, x, y);
     }
 
