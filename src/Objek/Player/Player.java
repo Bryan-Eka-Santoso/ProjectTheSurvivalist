@@ -20,7 +20,7 @@ import java.io.IOException;
 
 public class Player {
     public String name;
-    public int health, thirst, hunger, exp, level; 
+    public int health, thirst, hunger, exp, level;
     public int maxHealth = 100, maxThirst = 100, maxHunger = 100;
     public int maxExp = 100;
     public Inventory inventory;
@@ -49,6 +49,8 @@ public class Player {
     public Boolean isSlash;
     public Rectangle cutArea = new Rectangle(0, 0, 0, 0);
     public InteractBuild interactBuild;
+    public int strengthRod = 30;
+    public int durabilityRod = 10;
 
     public Player(String name, Crafting recipe, GamePanel gp, KeyHandler keyH) {
         this.name = name;
@@ -58,7 +60,7 @@ public class Player {
         this.thirst = 100;
         this.hunger = 100;
         this.exp = 0;
-        this.level = 1;
+        this.level = 15;
         this.speed = 5;
         this.inventory = new Inventory(24, gp);
         this.gp = gp;
@@ -245,7 +247,6 @@ public class Player {
                 BufferedImage animalImg = grabbedAnimal.getDirectionalImage();
                 int animalDrawX = SCREEN_X + grabbedAnimal.getGrabOffsetX();
                 int animalDrawY = SCREEN_Y + grabbedAnimal.getGrabOffsetY();
-                
                 
                 g2.drawImage(animalImg, animalDrawX, animalDrawY,grabbedAnimal.getWidth(), grabbedAnimal.getHeight(), null);
                 

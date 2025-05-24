@@ -7,20 +7,8 @@ import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
 import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.Foods.Bread;
-import Objek.Items.StackableItem.Foods.RawMutton;
-import Objek.Items.StackableItem.Materials.Metal;
-import Objek.Items.StackableItem.Materials.MetalSheet;
-import Objek.Items.StackableItem.Materials.Wood;
-import Objek.Items.StackableItem.Seeds.CoconutSeeds;
-import Objek.Items.StackableItem.Seeds.GuavaSeeds;
-import Objek.Items.StackableItem.Seeds.MangoSeeds;
-import Objek.Items.Unstackable.Torch;
-import Objek.Items.Unstackable.WateringCan;
-import Objek.Items.Unstackable.Arsenals.*;
 import Objek.Plant.*;
 import Objek.Player.*;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -29,7 +17,6 @@ import java.util.ArrayList;
 import java.awt.Point;
 
 public class GamePanel extends JPanel implements Runnable {
-
     final int ORI_TILE_SIZE = 15;
     final int scale = 3;
 
@@ -45,13 +32,14 @@ public class GamePanel extends JPanel implements Runnable {
     public final int WORLD_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
+    Crafting recipe = new Crafting();
+    KeyHandler keyH = new KeyHandler(this);
+    public Player player = new Player("Player", recipe, this, keyH);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     public EnvironmentManager eManager = new EnvironmentManager(this);
-    KeyHandler keyH = new KeyHandler(this);
     Sound sound = new Sound();
     Thread gameThread;
-    Crafting recipe = new Crafting();
     public CollisonChecker cCheck = new CollisonChecker(this);
     
     // Game State
@@ -67,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int OPEN_SMELTER_STATE = 9;
     public final int OPEN_BED_STATE = 10;
     public final int KANDANG_STATE = 11;
+    public final int FISHING_STATE = 12;
 
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
@@ -78,7 +67,6 @@ public class GamePanel extends JPanel implements Runnable {
     public int currentMap = 0;
     public boolean isCave = false;
     
-    public Player player = new Player("Player", recipe, this, keyH);
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
     public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
@@ -96,13 +84,19 @@ public class GamePanel extends JPanel implements Runnable {
         this.setLayout(null);
         eManager.setup();
     }
+
     public void handleKandangInteraction(Kandang kandang) {
         currentKandang = kandang;
         gameState = KANDANG_STATE;
     }
+
     public void setupGame() {
         gameState = PLAY_STATE;
         playMusic(7);
+    }
+
+    public void reloadTile(){
+        tileM = new TileManager(this);
     }
     
     public void startgameThread() {
@@ -301,31 +295,7 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant(new Bush(40 * TILE_SIZE,  57 * TILE_SIZE, this));
         addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addAnimals();
-        // player.inventory.addItems(new Sword("Sword", 5, 10));
-        player.inventory.addItems(new WateringCan());
-        player.inventory.addItems(new Torch(this));
-        player.inventory.addItems(new CoconutSeeds(5));
-        player.inventory.addItems(new MangoSeeds(5));
-        player.inventory.addItems(new Orchard(this, 5));
-        player.inventory.addItems(new LightweightPickaxe());
-        player.inventory.addItems(new IcePickaxe());
-        player.inventory.addItems(new GuavaSeeds(5));
-        player.inventory.addItems(new RawMutton(20));
-        player.inventory.addItems(new CraftingTable(this, 10));
-        player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new Wood(20));
-        player.inventory.addItems(new Bread(10));
-        player.inventory.addItems(new Chest(this, 5));
-        player.inventory.addItems(new Furnace(this, 2));
-        player.inventory.addItems(new Chest(this, 2));
         player.inventory.addItems(new KandangAyam(this));
-        player.inventory.addItems(new CowCage(this));
-        player.inventory.addItems(new SheepCage(this));
-        player.inventory.addItems(new PigCage(this));
-        player.inventory.addItems(new Bed(this, 1));
-        player.inventory.addItems(new MetalSheet(5));
-        player.inventory.addItems(new Metal(5));
-        
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
 
@@ -358,18 +328,38 @@ public class GamePanel extends JPanel implements Runnable {
                 }
                 lastAnimalMoveTime = currentTime;
             }
-
+            
             if (timer >= 1000000000) {
+                if(player.level > 14) {
+                    reloadTile();
+                }
                 timer = 0;
             }
         }
     }
 
     public void update() {
-        if (gameState != PAUSE_STATE) {
-            player.update();
-        } 
+        if (gameState == PAUSE_STATE) return;
+
+        player.update();
+
+        ui.isCanGoToSea = false;
+        ui.isNeedLevel15 = false;
+
+        if (currentMap == 0) {
+            int col = player.worldX / TILE_SIZE;
+            int row = player.worldY / TILE_SIZE;
+
+            if ((col == 27 || col == 28) && row == 17) {
+                ui.isCanGoToSea = true;
+            }
+
+            if (player.level < 15 && (col == 27 || col == 28) && row == 18) {
+                ui.isNeedLevel15 = true;
+            }
+        }
     }
+
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

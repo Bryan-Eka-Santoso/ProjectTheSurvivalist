@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
-import Objek.Items.Unstackable.Torch;
 import Objek.Player.Inventory;
 
 public class KeyHandler implements KeyListener, MouseListener, MouseWheelListener {
@@ -171,6 +170,60 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.handleNameInputKey(code);
             return; 
         } else {
+            if (gp.gameState == gp.FISHING_STATE) {
+                if (code == KeyEvent.VK_ENTER) {
+                    
+                    int fishStrength = gp.ui.caughtFish.strength;
+                    int playerStrength = gp.player.strengthRod;
+                    
+                    int fishRandomStrength = gp.ui.random.nextInt(fishStrength) + (fishStrength / 2);
+                    int playerRandomStrength = gp.ui.random.nextInt(playerStrength) + (playerStrength / 2);
+                    
+                    int strengthDifference = playerRandomStrength - fishRandomStrength;
+                    gp.ui.playerFishingStrength += strengthDifference;
+                    
+                    if (gp.ui.playerFishingStrength > 100) {
+                        gp.ui.playerFishingStrength = 100;
+                    } else if (gp.ui.playerFishingStrength < 0) {
+                        gp.ui.playerFishingStrength = 0;
+                    }
+                    
+                    if (gp.ui.playerFishingStrength >= 100) {
+                        gp.ui.fishingSuccessful = true;
+                        
+                        gp.player.durabilityRod -= gp.ui.caughtFish.durabilityCost;
+                        
+                        gp.ui.showDapatIkanMessage(gp.ui.caughtFish);
+                        // gp.player.inventory.addItems(new FishItem(gp.ui.caughtFish.nameFish));
+                        
+                        gp.fish.remove(gp.ui.fishIndex);
+                        
+                        gp.gameState = gp.PLAY_STATE;
+                        gp.ui.playerFishingStrength = 50;
+                        
+                    } else if (gp.ui.playerFishingStrength <= 0) {
+                        gp.ui.showGagalDapatIkanMessage(gp.ui.caughtFish);
+                        
+                        gp.player.durabilityRod -= 1;
+                        
+                        gp.gameState = gp.PLAY_STATE;
+                        gp.ui.playerFishingStrength = 50;
+                    }
+                    
+                    if (gp.player.durabilityRod <= 0) {
+                        gp.ui.showRodRusakMessage();
+                        gp.gameState = gp.PLAY_STATE;
+                        gp.ui.playerFishingStrength = 50;
+                    }
+                }
+                
+                if (code == KeyEvent.VK_ESCAPE) {
+                    gp.gameState = gp.PLAY_STATE;
+                    gp.ui.playerFishingStrength = 50;
+                }
+                return;
+            }
+
             if (code == KeyEvent.VK_W) {
                 if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
                     upPressed = true;
@@ -499,58 +552,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     }
                 }
             }
-            if (code == KeyEvent.VK_SPACE) {
-                if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE || gp.gameState == gp.OPEN_SMELTER_STATE) {
-                    gp.gameState = gp.PLAY_STATE;
-                    temp1Furnace = null;
-                    temp2Furnace = null;
-                    gp.ui.slotCol = 0;
-                    gp.ui.slotRow = 0;
-                    gp.ui.selectedIndex = 0;
-                    gp.ui.selectedChestIndex = 0;
-                } else if (gp.gameState == gp.OPEN_CHEST_STATE) {
-                    gp.gameState = gp.PLAY_STATE;
-                    gp.ui.slotCol = 0;
-                    gp.ui.slotRow = 0;
-                    gp.ui.selectedIndex = 0;
-                    gp.ui.selectedChestIndex = 0;
-                } else if (gp.gameState == gp.BUILDING_STATE) {
-                    Buildings building = (Buildings) gp.player.inventory.getSelectedItem().clone();
-                if (building instanceof Chest) {
-                    ((Chest) building).inventory = new Inventory(32, gp);
-                }
-                if (building instanceof Furnace) {
-                    ((Furnace) building).rawMaterial = new Item[1];
-                    ((Furnace) building).fuelMaterial = new Item[1];
-                    ((Furnace) building).cookedMaterial = new Item[1];
-                }
-                if (building.canBuild()) {
-                    if (gp.player.inventory.getSelectedItem() instanceof Torch) {
-                        // gp.player.isPlaceTorch = true;
-                    }
-                    building.worldX = gp.player.worldX;
-                    building.worldY = gp.player.worldY;
-                    gp.player.isBuild = false;
-                    gp.gameState = gp.PLAY_STATE;
-                    gp.player.inventory.removeItem(gp.player.inventory.getSelectedItem(), 1);
-                    switch (gp.player.direction) {
-                        case "up":
-                            building.worldY -= gp.TILE_SIZE;
-                        break;
-                        case "down":
-                            building.worldY += gp.TILE_SIZE;
-                        break;
-                        case "left":
-                            building.worldX -= building.width;
-                        break;
-                        case "right":
-                            building.worldX += gp.TILE_SIZE;
-                        break;
-                    }
-                    gp.buildings.add((Buildings) building);
-                }
-                }
-            }
             if (code == KeyEvent.VK_Q && !gp.player.isBuild) {
                 if (gp.gameState == gp.DROPPED_ITEM_STATE){
                     gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], gp.ui.amountToDrop);
@@ -596,8 +597,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                             }
                         }
                     }
-                }
-                else if (gp.gameState == gp.KANDANG_STATE) {
+                } else if (gp.gameState == gp.KANDANG_STATE) {
                     gp.gameState = gp.PLAY_STATE;
                     gp.currentKandang = null;
                     gp.ui.resetKandangMenuState();

@@ -19,8 +19,10 @@ public class Fish {
     public GamePanel gp;
     public int spriteCounter = 0;
     public int spriteNum = 1;
+    public int durabilityCost;
 
-    public Fish(String nameFish, int price, int strength, int worldX, int worldY, int speed, String direction, GamePanel gp) {
+    public Fish (String nameFish, int price, int strength, int worldX, int worldY, int speed, String direction, GamePanel gp, int durabilityCost) {
+        this.durabilityCost = durabilityCost;
         this.nameFish = nameFish;
         this.price = price;
         this.strength = strength;

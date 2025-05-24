@@ -139,16 +139,26 @@ public class Cow extends TameAnimal {
                 setRandomDirection();
                 actionMoveCounter = 0;
             }
-        }else {
-          
-            setRandomDirection();
+        } else {
+            String newDirection;
+            String oldDirection = this.direction;
+
+            switch(oldDirection) {
+                case "up": newDirection = "down"; break;
+                case "down": newDirection = "up"; break;
+                case "left": newDirection = "right"; break;
+                case "right": newDirection = "left"; break;
+                default: newDirection = "down"; break;
+            }
+            this.direction = newDirection;
+            this.actionMoveDelay = this.random.nextInt(91)+30;
             switch(direction) {
                 case "up": worldY -= speed; break;
                 case "down": worldY += speed; break;
                 case "left": worldX -= speed; break;
                 case "right": worldX += speed; break;
             }
-            actionMoveCounter++; 
+            actionMoveCounter++;
         }
         spriteCounter++;
         if(spriteCounter > 0) {
