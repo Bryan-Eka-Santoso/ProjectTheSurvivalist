@@ -24,8 +24,9 @@ public class Pig extends TameAnimal{
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
-    private static final int PIG_WIDTH = 128;
-    private static final int PIG_HEIGHT = 128;
+    private int actionMoveCounter = 0;
+    private int actionMoveDelay;
+    private int speed = 8; 
     public int actionLockCounter = 0;
     
     public Pig(String name, int x, int y, GamePanel gp) {
@@ -66,20 +67,7 @@ public class Pig extends TameAnimal{
             e.printStackTrace();
         }
     }
-    @Override
-    public int getWidth() {
-        return PIG_WIDTH;
-    }
-    public String getGender() {
-        return gender;
-    }
-    public boolean isReadyGetItem() {
-        return readyGetItem;
-    }
-    @Override
-    public int getHeight() {
-        return PIG_HEIGHT;
-    }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
@@ -98,9 +86,7 @@ public class Pig extends TameAnimal{
         this.actionMoveDelay = this.random.nextInt(91) + 30;
         gp.player.collisionOn = false;
     }
-    private int actionMoveCounter = 0;
-    private int actionMoveDelay;
-    private int speed = 8; 
+
     @Override
     public void update() {
         actionLockCounter++;
@@ -248,9 +234,11 @@ public class Pig extends TameAnimal{
             return null;
         }
     }
+
     public void setReadyGetItem(boolean ready) {
         this.readyGetItem = ready;
     }
+
     public void getItem(Player player) {
         if(isReadyGetItem()) {
             player.inventory.addItems(new Bacon("Bacon",10,1));

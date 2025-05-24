@@ -23,8 +23,9 @@ public class Chicken extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
-    private static final int CHICKEN_WIDTH = 32;
-    private static final int CHICKEN_HEIGHT = 32;
+    private int actionMoveCounter = 0;
+    private int actionMoveDelay;
+    private int speed = 8; 
     public int actionLockCounter = 0;
     
     public Chicken(String name, int x, int y, GamePanel gp) {
@@ -33,7 +34,6 @@ public class Chicken extends TameAnimal {
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
         this.readyBreeding = true;
         this.readyGetItem = true;
-        
         this.actionMoveDelay = random.nextInt(91) + 30;
         upHitbox = new Rectangle(2, 1, 26, 40);   
         downHitbox = new Rectangle(2, 1, 26, 40);   
@@ -67,23 +67,7 @@ public class Chicken extends TameAnimal {
             e.printStackTrace();
         }
     }
-    @Override
-    public int getWidth() {
-        return CHICKEN_WIDTH;
-    }
-    public String getGender() {
-        return gender;
-    }
-    public boolean isReadyGetItem() {
-        return readyGetItem;
-    }
-    public void setReadyGetItem(boolean ready) {
-        this.readyGetItem = ready;
-    }
-    @Override
-    public int getHeight() {
-        return CHICKEN_HEIGHT;
-    }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
@@ -101,10 +85,6 @@ public class Chicken extends TameAnimal {
         this.actionMoveDelay = this.random.nextInt(91) + 30;
         gp.player.collisionOn = false;
     }
-
-    private int actionMoveCounter = 0;
-    private int actionMoveDelay;
-    private int speed = 8; 
 
     @Override
     public void update() {

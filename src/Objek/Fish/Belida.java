@@ -16,6 +16,8 @@ public class Belida extends Fish {
     public Rectangle leftHitbox;
     public Rectangle rightHitbox;
     public int actionLockCounter = 0;
+    public int actionMoveCounter = 0;
+    public int speed = 8; 
 
     public Belida(String nameFish, int price, int stregth, int x, int y, GamePanel gp) {
         super("Belida", 15, 20, x, y, 30, "down", gp, 2);
@@ -70,8 +72,6 @@ public class Belida extends Fish {
         gp.player.collisionOn = false;
     }
 
-    public int actionMoveCounter = 0;
-    public int speed = 8; 
     @Override
     public void update() {
         actionLockCounter++;

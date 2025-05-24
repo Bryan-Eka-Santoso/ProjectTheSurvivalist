@@ -18,12 +18,14 @@ public class Cow extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
+    private int actionMoveCounter = 0;
+    private  int actionMoveDelay;
+    private int speed = 8; 
+
     Random random = new Random();
     String gender;
     boolean readyGetItem;
     boolean readyBreeding;
-    private static final int COW_WIDTH = 128;
-    private static final int COW_HEIGHT = 128;
     public int actionLockCounter = 0;
 
     public Cow(String name, int x, int y, GamePanel gp) {
@@ -64,20 +66,7 @@ public class Cow extends TameAnimal {
             e.printStackTrace();
         }
     }
-    @Override
-    public int getWidth() {
-        return COW_WIDTH;
-    }
-    public String getGender() {
-        return gender;
-    }
-    public boolean isReadyGetItem() {
-        return readyGetItem;
-    }
-    @Override
-    public int getHeight() {
-        return COW_HEIGHT;
-    }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
@@ -89,7 +78,6 @@ public class Cow extends TameAnimal {
                 case 1: newDirection = "down"; break;
                 case 2: newDirection = "left"; break;
                 case 3: newDirection = "right"; break;
-               
             }
         } while (newDirection.equals(oldDirection));
         this.direction = newDirection;
@@ -97,9 +85,6 @@ public class Cow extends TameAnimal {
         gp.player.collisionOn = false;
     }
 
-    private int actionMoveCounter = 0;
-    private  int actionMoveDelay;
-    private int speed = 8; 
     @Override
     public void update() {
         actionLockCounter++;
@@ -175,6 +160,7 @@ public class Cow extends TameAnimal {
             spriteCounter = 0;
         }
     }
+
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
@@ -228,9 +214,11 @@ public class Cow extends TameAnimal {
             }
         }
     }
+
     public void setReadyGetItem(boolean ready) {
         this.readyGetItem = ready;
     }
+    
     public void getItem(Player player) {
         if(isReadyGetItem()) {
             player.inventory.addItems(new Milk("Milk", 10, 1));

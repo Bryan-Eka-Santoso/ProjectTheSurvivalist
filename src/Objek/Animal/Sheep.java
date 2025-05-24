@@ -22,8 +22,9 @@ public class Sheep extends TameAnimal {
     String gender;
     boolean readyGetItem;
     boolean readyBreeding;
-    private static final int SHEEP_WIDTH = 128;
-    private static final int SHEEP_HEIGHT = 128;
+    private int actionMoveCounter = 0;
+    private int actionMoveDelay;
+    private int speed = 8; 
     public int actionLockCounter = 0;
     
     public Sheep(String name, int x, int y, GamePanel gp) {
@@ -65,20 +66,7 @@ public class Sheep extends TameAnimal {
             e.printStackTrace();
         }
     }
-    @Override
-    public int getWidth() {
-        return SHEEP_WIDTH;
-    }
-    @Override
-    public int getHeight() {
-        return SHEEP_HEIGHT;
-    }
-    public String getGender() {
-        return gender;
-    }
-    public boolean isReadyGetItem() {
-        return readyGetItem;
-    }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
@@ -97,9 +85,6 @@ public class Sheep extends TameAnimal {
         gp.player.collisionOn = false;
     }
 
-    private int actionMoveCounter = 0;
-    private int actionMoveDelay;
-    private int speed = 8; 
     @Override
     public void update() {
         actionLockCounter++;
@@ -237,9 +222,11 @@ public class Sheep extends TameAnimal {
             setReadyGetItem(false);
         }
     }
+
     public void setReadyGetItem(boolean ready) {
         this.readyGetItem = ready;
     }
+
     public Sheep breeding(Sheep pasangan, GamePanel gp) {
         if (readyBreeding) {
             if (pasangan.isReadyBreeding()) {
@@ -258,35 +245,4 @@ public class Sheep extends TameAnimal {
         }
     }
 
-    // public Sheep(String name, int x, int y, String gender) {
-    //     super(name, x, y, gender);
-    // }
-    
-    // public void getItem(Player player) {
-    //     if(readyGetItem) {
-    //         player.inventory.addItems(new Wool("Wool", 10, 1));
-    //         setReadyGetItem(false);
-    //         System.out.println("Got wool from " + getName());
-    //     } else {
-    //         System.out.println("This sheep cannot be sheared right now!");
-    //     }
-    // }
-    
-    // public Sheep breeding(Sheep pasangan) {
-    //     if(readyBreeding) {
-    //         if(pasangan.isReadyBreeding()) {
-    //             if(!this.getGender().equals(pasangan.getGender())) {
-    //                 System.out.println("Breeding sheep with " + pasangan.getName());
-    //                 String babyGender = (Math.random() < 0.5) ? "Male" : "Female";
-                    
-    //                 this.readyBreeding = false;
-    //                 pasangan.setReadyBreeding(false);
-    //                 Sheep babySheep = new Sheep("Baby Sheep", this.x, this.y, babyGender);
-    //                 System.out.println("Baby sheep is born!");
-    //                 return babySheep;
-    //             }
-    //         }
-    //     }
-    //     return null;
-    // }
 }

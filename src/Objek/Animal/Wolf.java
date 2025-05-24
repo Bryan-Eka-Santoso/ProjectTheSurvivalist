@@ -23,6 +23,9 @@ public class Wolf extends WildAnimal {
     private Rectangle rightHitbox;
     public int actionLockCounter = 0;
     public int actionLockEnemyNearby = 15;
+    private int actionMoveCounter = 0;
+    private int actionMoveDelay;
+    private int speed = 15; 
     
     public Wolf(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
@@ -89,10 +92,6 @@ public class Wolf extends WildAnimal {
         this.actionMoveDelay = this.random.nextInt(91) + 30;
         gp.player.collisionOn = false;
     }
-
-    private int actionMoveCounter = 0;
-    private int actionMoveDelay;
-    private int speed = 15; 
 
     @Override
     public void update() {
