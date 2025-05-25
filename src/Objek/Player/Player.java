@@ -42,7 +42,7 @@ public class Player {
     public UseItem interactObj;
     public final int SCREEN_Y;
     public final int SCREEN_X;
-    public int plantIndex, animalIndex, droppedItem, buildingIndex, fishIndex;
+    public int plantIndex, animalIndex, droppedItem, buildingIndex, fishIndex, monsterIndex;
     public GamePanel gp;
     public KeyHandler keyH;
     public Boolean isCutting;
@@ -146,7 +146,6 @@ public class Player {
         }
     }
 
-
     public void update() {
         if (keyH.shiftPressed) {
             speed = 10;
@@ -170,8 +169,8 @@ public class Player {
             if (gp.currentMap == 1) {
                 fishIndex = gp.cCheck.checkFish(this, true);
             } else if (gp.currentMap == 2) {
-                
             } else {
+                monsterIndex = gp.cCheck.checkMonsters(this, true);
                 droppedItem = gp.cCheck.checkItemDrop(this, true);
                 animalIndex = gp.cCheck.checkAnimal(this, true);
                 buildingIndex = gp.cCheck.checkBuildings(this, true);
