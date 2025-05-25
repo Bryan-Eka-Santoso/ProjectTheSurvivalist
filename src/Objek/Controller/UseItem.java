@@ -52,7 +52,6 @@ public class UseItem {
                         if (orchard.seed != null) {
                             System.out.println("Watering the seed: " + orchard.seed.name);
                             orchard.water();
-                            player.inventory.removeItem(selectedItem, 1); // Remove item from inventory
                         } else {
                             System.out.println("No seed planted in the orchard!");
                         }
@@ -63,7 +62,7 @@ public class UseItem {
             } else if (selectedItem instanceof Torch) {
                 Torch torch = (Torch) selectedItem;
                 System.out.println("Using torch: " + torch.name);
-                // gp.player.lightUpdated = true;
+                
             }
             if (selectedItem instanceof Seeds && gp.buildings.get(gp.player.buildingIndex) instanceof Orchard) {
                 Seeds seed = (Seeds) selectedItem;
