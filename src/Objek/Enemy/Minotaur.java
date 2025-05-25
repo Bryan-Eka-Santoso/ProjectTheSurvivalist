@@ -1,4 +1,4 @@
-package Objek.Monsters;
+package Objek.Enemy;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;

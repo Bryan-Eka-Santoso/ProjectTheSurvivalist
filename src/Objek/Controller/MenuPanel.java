@@ -12,13 +12,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class MainPanel extends JPanel {
+public class MenuPanel extends JPanel {
     JFrame window;
     JLabel backgroundLabel;
     Image img;
     ImageIcon play, guide, exit;
     
-    public MainPanel(JFrame window) {
+    public MenuPanel(JFrame window) {
         try {
             img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/play.png"));
             Image scaledImage = img.getScaledInstance(250, 50, Image.SCALE_SMOOTH);

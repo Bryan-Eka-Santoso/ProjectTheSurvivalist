@@ -2,6 +2,8 @@ package Objek.Controller;
 
 import javax.swing.*;
 import Objek.Animal.*;
+import Objek.Enemy.Bat;
+import Objek.Enemy.Monster;
 import Objek.Environment.EnvironmentManager;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
@@ -9,8 +11,6 @@ import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
 import Objek.Items.Unstackable.Torch;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
-import Objek.Monsters.Bat;
-import Objek.Monsters.Monster;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -40,7 +40,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     Crafting recipe = new Crafting();
     KeyHandler keyH = new KeyHandler(this);
-    public Player player = new Player("Player", 15, recipe, this, keyH);
+    public Player player = new Player("Player", 14, recipe, this, keyH);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     public EnvironmentManager eManager = new EnvironmentManager(this);
@@ -74,6 +74,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxMap = 10;
     public int currentMap = 0;
     public boolean isCave = false;
+    public boolean isAfterUnlockShip = false;
     
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
@@ -350,7 +351,11 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new KandangAyam(this));
         player.inventory.addItems(new Torch(this));
         player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new Bed(this, 2));
+        player.inventory.addItems(new Bed(this, 1));
+        Buildings shop = new Shop(this, 1);
+        shop.worldX = 40 * TILE_SIZE;
+        shop.worldY = 40 * TILE_SIZE;
+        buildings.add(shop);
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -375,8 +380,10 @@ public class GamePanel extends JPanel implements Runnable {
             }
             
             if (timer >= 1000000000) {
-                if(player.level > 14) {
+                if(player.level == 15 && !isAfterUnlockShip) {
+                    isAfterUnlockShip = true;
                     reloadTile();
+                    ui.showCongratsUnlockShip();
                 }
                 timer = 0;
             }

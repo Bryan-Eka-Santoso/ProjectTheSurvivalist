@@ -18,6 +18,7 @@ import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
 import Objek.Player.Inventory;
 import Objek.Player.Player;
+import Objek.Controller.MenuPanel;
 
 public class KeyHandler implements KeyListener, MouseListener, MouseWheelListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
@@ -550,7 +551,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             }
         } else if (gp.gameState == gp.GAME_OVER_STATE) {
             JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(gp);
-            topFrame.setContentPane(new MainPanel(topFrame));
+            topFrame.setContentPane(new MenuPanel(topFrame));
             topFrame.revalidate(); // Memaksa refresh layout
             topFrame.repaint();
         }

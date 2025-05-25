@@ -1,6 +1,6 @@
 import javax.swing.JFrame;
 
-import Objek.Controller.MainPanel;
+import Objek.Controller.MenuPanel;
 
 public class App {
     public static void main(String[] args) {
@@ -10,7 +10,7 @@ public class App {
         window.setTitle("The Survivalists");
 
         // Buat panel menu utama
-        MainPanel mainMenu = new MainPanel(window);
+        MenuPanel mainMenu = new MenuPanel(window);
         window.setContentPane(mainMenu);
 
         window.pack();

@@ -81,6 +81,7 @@ public class UI {
     public boolean isCanGoToSea = false;
     public boolean isNeedLevel15 = false;
     public boolean isCanGoToLand = false;
+    public boolean isShowUnlockShip = false;
 
     public Fish caughtFish;
     public int fishIndex;
@@ -97,7 +98,8 @@ public class UI {
     private long rodRusakTimer = 0;
     private long dapatIkanTimer = 0;
     private long gagalDapatIkanTimer = 0;
-    private final long MESSAGE_DISPLAY_TIME = 2000;
+    private long messageUnlock = 0;
+    private final long MESSAGE_DISPLAY_TIME = 3000;
     
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -198,6 +200,12 @@ public class UI {
                 showGagalDapatIkan = false;
             }
         }
+        if(isShowUnlockShip) {
+            drawTextUnlockShip();
+            if(System.currentTimeMillis() - messageUnlock > MESSAGE_DISPLAY_TIME) {
+                isShowUnlockShip = false;
+            }
+        }
     }
 
     public void respawnMenu() {
@@ -224,6 +232,11 @@ public class UI {
         rodRusakTimer = System.currentTimeMillis();
     }
 
+    public void showCongratsUnlockShip() {
+        isShowUnlockShip = true;
+        messageUnlock = System.currentTimeMillis();
+    }
+
     public void showDapatIkanMessage(Fish fish) {
         showDapatIkan = true;
         dapatIkanTimer = System.currentTimeMillis();
@@ -234,6 +247,26 @@ public class UI {
         showGagalDapatIkan = true;
         gagalDapatIkanTimer = System.currentTimeMillis();
         caughtFish = fish;
+    }
+
+    public void drawTextUnlockShip() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "Congrats!! You have unlocked the ship!";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.green);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.green);
+        g2.drawString(message, x, y);
     }
 
     public void drawTextRodRusak() {
