@@ -2,14 +2,14 @@ package Objek.Items.Unstackable.Armor;
 
 import Objek.Items.Unstackable.Unstackable;
 
-public class Armor extends Unstackable {
+public class Leggings extends Unstackable {
 
-    public Armor(String name, String description, int durability, int defense) {
+    private int defense;
+
+    public Leggings(String name, String description, int durability, int defense) {
         super(name);
         this.defense = defense;
     }
-
-    private int defense;
 
     public int getDefense() {
         return defense;
@@ -18,4 +18,5 @@ public class Armor extends Unstackable {
     public void setDefense(int defense) {
         this.defense = defense;
     }
+    
 }
