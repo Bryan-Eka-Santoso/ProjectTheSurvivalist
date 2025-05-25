@@ -1661,8 +1661,8 @@ public class UI {
     }
 
     public void drawStats() {
-        int frameX = gp.TILE_SIZE;
-        int frameY = gp.TILE_SIZE;
+        int frameX = gp.TILE_SIZE - 35;
+        int frameY = gp.TILE_SIZE - 35;
         int frameWidth = gp.TILE_SIZE * 6;
         int frameHeight = gp.TILE_SIZE * 3;
         Color c = new Color(255,255,255, 255);
@@ -1677,9 +1677,11 @@ public class UI {
 
         // Bar dimensions
         int barX = frameX + gp.TILE_SIZE / 2;
-        int barY = frameY + gp.TILE_SIZE / 2;
+        int barY = frameY + gp.TILE_SIZE - 15;
         int barWidth = frameWidth - gp.TILE_SIZE;
         int barHeight = gp.TILE_SIZE / 4;
+
+        g2.setFont(new Font("Arial", Font.BOLD, 16));
 
         // Health bar
         g2.setColor(Color.RED);
@@ -1690,17 +1692,17 @@ public class UI {
 
         // Hunger bar
         g2.setColor(Color.ORANGE);
-        g2.fillRect(barX, barY + gp.TILE_SIZE / 2, (int) (barWidth * (gp.player.hunger / 100.0)), barHeight);
+        g2.fillRect(barX, barY + gp.TILE_SIZE - 5, (int) (barWidth * (gp.player.hunger / 100.0)), barHeight);
         g2.setColor(Color.BLACK);
-        g2.drawRect(barX, barY + gp.TILE_SIZE / 2, barWidth, barHeight);
-        g2.drawString("Hunger: " + gp.player.hunger + "/100", barX, barY + gp.TILE_SIZE / 2 - 5);
+        g2.drawRect(barX, barY + gp.TILE_SIZE - 5, barWidth, barHeight);
+        g2.drawString("Hunger: " + gp.player.hunger + "/100", barX, barY + gp.TILE_SIZE - 10);
 
         // Thirst bar
         g2.setColor(Color.BLUE);
-        g2.fillRect(barX, barY + gp.TILE_SIZE, (int) (barWidth * (gp.player.thirst / 100.0)), barHeight);
+        g2.fillRect(barX, barY + gp.TILE_SIZE * 2 - 10, (int) (barWidth * (gp.player.thirst / 100.0)), barHeight);
         g2.setColor(Color.BLACK);
-        g2.drawRect(barX, barY + gp.TILE_SIZE, barWidth, barHeight);
-        g2.drawString("Thirst: " + gp.player.thirst + "/100", barX, barY + gp.TILE_SIZE - 5);
+        g2.drawRect(barX, barY + gp.TILE_SIZE * 2 - 10, barWidth, barHeight);
+        g2.drawString("Thirst: " + gp.player.thirst + "/100", barX, barY + gp.TILE_SIZE * 2 - 20);
 
         // Level bar
         int levelBarY = frameY + gp.TILE_SIZE * 4;
@@ -1720,8 +1722,8 @@ public class UI {
 
         // Draw the level and exp text
         g2.setColor(Color.WHITE);
-        g2.drawString("Level: " + gp.player.level, barX, levelBarY - 5);
-        g2.drawString("EXP: " + gp.player.exp + "/" + gp.player.maxExp, barX, levelBarY + barHeight + 15);
+        g2.drawString("Level: " + gp.player.level, barX, levelBarY - 10);
+        g2.drawString("EXP: " + gp.player.exp + "/" + gp.player.maxExp, barX, levelBarY + barHeight + 20);
     }
 
     public void drawPauseScreen() {

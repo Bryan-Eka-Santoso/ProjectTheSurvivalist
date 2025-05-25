@@ -205,16 +205,44 @@ public class Wolf extends WildAnimal {
         
         switch(direction) {
             case "up":
-                if(spriteNum == 1) image = up1;
-                if(spriteNum == 2) image = up2;
-                if(spriteNum == 3) image = up3;
-                if(spriteNum == 4) image = up4;
+                if (!isPreyNearby(gp.player)) {
+                    if(spriteNum == 1) image = up1;
+                    if(spriteNum == 2) image = up2;
+                    if(spriteNum == 3) image = up3;
+                    if(spriteNum == 4) image = up4;
+                } else {
+                    if (gp.player.worldX > this.worldX) {
+                        if(spriteNum == 1) image = right1;
+                        if(spriteNum == 2) image = right2;
+                        if(spriteNum == 3) image = right3;
+                        if(spriteNum == 4) image = right4;
+                    } else {
+                        if(spriteNum == 1) image = left1;
+                        if(spriteNum == 2) image = left2;
+                        if(spriteNum == 3) image = left3;
+                        if(spriteNum == 4) image = left4;
+                    }
+                }
                 break;
             case "down":
-                if(spriteNum == 1) image = down1;
-                if(spriteNum == 2) image = down2;
-                if(spriteNum == 3) image = down3;
-                if(spriteNum == 4) image = down4;
+                if (!isPreyNearby(gp.player)) {
+                    if(spriteNum == 1) image = down1;
+                    if(spriteNum == 2) image = down2;
+                    if(spriteNum == 3) image = down3;
+                    if(spriteNum == 4) image = down4;
+                } else {
+                    if (gp.player.worldX > this.worldX) {
+                        if(spriteNum == 1) image = right1;
+                        if(spriteNum == 2) image = right2;
+                        if(spriteNum == 3) image = right3;
+                        if(spriteNum == 4) image = right4;
+                    } else {
+                        if(spriteNum == 1) image = left1;
+                        if(spriteNum == 2) image = left2;
+                        if(spriteNum == 3) image = left3;
+                        if(spriteNum == 4) image = left4;
+                    }
+                }
                 break;
             case "left":
                 if(spriteNum == 1) image = left1;

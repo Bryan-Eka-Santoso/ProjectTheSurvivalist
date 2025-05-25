@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
 import Objek.Fish.Fish;
+import Objek.Monsters.Monster;
 import Objek.Plant.Bush;
 import Objek.Player.Player;
 
@@ -623,4 +624,136 @@ public class CollisonChecker {
             }
         return index;
     }
+
+    public int checkMonsters(Player player, boolean collison) {
+        int index = -1; // Default value if no collision is detected
+        for (int i = 0; i < gp.monsters.size(); i++) {
+                player.solidArea.x = player.worldX + player.solidArea.x;
+                player.solidArea.y = player.worldY + player.solidArea.y;
+                gp.monsters.get(i).solidArea.x = gp.monsters.get(i).worldX + gp.monsters.get(i).solidArea.x;
+                gp.monsters.get(i).solidArea.y = gp.monsters.get(i).worldY + gp.monsters.get(i).solidArea.y;
+                
+                switch (player.direction) {
+                    case "up":
+                        player.solidArea.y -= player.speed;
+                        if (player.solidArea.intersects(gp.monsters.get(i).solidArea)) {
+                            index = i; 
+                            player.collisionOn = true;
+                            gp.monsters.get(i).collisionOn = true;
+                        }
+                        break;
+                    case "down":
+                        player.solidArea.y += player.speed;
+                        if (player.solidArea.intersects(gp.monsters.get(i).solidArea)) {
+                            index = i; 
+                            player.collisionOn = true;
+                            gp.monsters.get(i).collisionOn = true;
+                        }
+                        break;
+                    case "left":
+                        player.solidArea.x -= player.speed;
+                        if (player.solidArea.intersects(gp.monsters.get(i).solidArea)) {
+                            index = i; 
+                            player.collisionOn = true;
+                            gp.monsters.get(i).collisionOn = true;
+                        }
+                        break;
+                    case "right":
+                        player.solidArea.x += player.speed;
+                        if (player.solidArea.intersects(gp.monsters.get(i).solidArea)) {
+                            index = i; 
+                            player.collisionOn = true;
+                            gp.monsters.get(i).collisionOn = true;
+                        }
+                        break;
+                }
+                player.solidArea.x = player.solidAreaDefaultX;
+                player.solidArea.y = player.solidAreaDefaultY;
+                gp.monsters.get(i).solidArea.x = gp.monsters.get(i).solidAreaDefaultX;
+                gp.monsters.get(i).solidArea.y = gp.monsters.get(i).solidAreaDefaultY;
+
+            }
+        return index;
+    }
+
+    public void checkMonsterPlayer(Monster monster) {
+        // Get hitbox areas
+        monster.solidArea.x = monster.worldX + monster.solidArea.x;
+        monster.solidArea.y = monster.worldY + monster.solidArea.y;
+        gp.player.solidArea.x = gp.player.worldX + gp.player.solidArea.x;
+        gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
+    
+        // Check collision
+        if(monster.solidArea.intersects(gp.player.solidArea)) {
+            gp.player.health -= 10; // Decrease player HP
+            monster.collisionOn = true;
+        }
+    
+        // Reset hitbox positions
+        monster.solidArea.x = monster.solidAreaDefaultX;
+        monster.solidArea.y = monster.solidAreaDefaultY;
+        gp.player.solidArea.x = gp.player.solidAreaDefaultX;
+        gp.player.solidArea.y = gp.player.solidAreaDefaultY;
+    }
+    
+    public void checkMonstersCollision(Monster monster) {
+        int nextX = monster.worldX;
+        int nextY = monster.worldY;
+        
+        switch (monster.direction) {
+            case "up": nextY -= monster.speed; break;
+            case "down": nextY += monster.speed; break;
+            case "left": nextX -= monster.speed; break;
+            case "right": nextX += monster.speed; break;
+        }
+    
+        for (int i = 0; i < gp.monsters.size(); i++) {
+            if (monster == gp.monsters.get(i)) continue;
+            
+            // Create predicted collision box
+            Rectangle predictedArea = new Rectangle(
+                nextX + monster.solidArea.x,
+                nextY + monster.solidArea.y,
+                monster.solidArea.width,
+                monster.solidArea.height
+            );
+            
+            // Get other animal's area
+            Rectangle otherArea = new Rectangle(
+                gp.monsters.get(i).worldX + gp.monsters.get(i).solidArea.x,
+                gp.monsters.get(i).worldY + gp.monsters.get(i).solidArea.y,
+                gp.monsters.get(i).solidArea.width,
+                gp.monsters.get(i).solidArea.height
+            );
+            
+            // Check collision with predicted position
+            if (predictedArea.intersects(otherArea)) {
+                monster.collisionOn = true;
+                // Add separation force
+                int pushDistance = 2;
+                switch (monster.direction) {
+                    case "up": 
+                        monster.worldY += pushDistance;
+                        gp.monsters.get(i).worldY -= pushDistance;
+                        break;
+                    case "down": 
+                        monster.worldY -= pushDistance;
+                        gp.monsters.get(i).worldY += pushDistance;
+                        break;
+                    case "left": 
+                        monster.worldX += pushDistance;
+                        gp.monsters.get(i).worldX -= pushDistance;
+                        break;
+                    case "right": 
+                        monster.worldX -= pushDistance;
+                        gp.monsters.get(i).worldX += pushDistance;
+                        break;
+                }
+                // Force direction change for both animals
+                monster.direction = getOppositeDirection(monster.direction);
+                gp.monsters.get(i).direction = getOppositeDirection(gp.monsters.get(i).direction);
+            }
+        }
+    }
+
 }

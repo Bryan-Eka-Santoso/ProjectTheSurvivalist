@@ -9,6 +9,8 @@ import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
 import Objek.Items.Unstackable.Torch;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
+import Objek.Monsters.Bat;
+import Objek.Monsters.Monster;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -71,8 +73,9 @@ public class GamePanel extends JPanel implements Runnable {
     
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
-    public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
     public ArrayList<Fish> fish = new ArrayList<>();
+    public ArrayList<Monster> monsters = new ArrayList<>();
+    public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
     public ArrayList<Buildings> buildings = new ArrayList<>();
     
     public GamePanel() {
@@ -270,6 +273,47 @@ public class GamePanel extends JPanel implements Runnable {
         }
     }
 
+    public void spawnMonster(String animalType, int count, ArrayList<Point> usedPositions) {
+        int attempts = 0;
+        int maxAttempts = 1000;
+        int spawnedCount = 0;
+        int validTiles = 18;
+        
+        while (spawnedCount < count && attempts < maxAttempts) {
+        
+            int x = (int)(Math.random() * (MAX_WORLD_COL -8));
+            int y = (int)(Math.random() * (MAX_WORLD_ROW -8));
+            Point pos = new Point(x, y);
+            
+            if (usedPositions.contains(pos)) {
+                attempts++;
+                continue;
+            }
+            
+            int tileNum = tileM.mapTile[currentMap][x][y];
+            boolean isValidTile = false;
+            
+            if (tileNum == validTiles) {
+                isValidTile = true;
+            }
+            
+            if (!isValidTile) {
+                attempts++;
+                continue;
+            }
+
+            switch (animalType.toLowerCase()) {
+                case "bat":
+                    monsters.add(new Bat("Bat", x * TILE_SIZE, y * TILE_SIZE, 8, "down", this));
+                    break;
+            }
+            
+            usedPositions.add(pos);
+            spawnedCount++;
+            attempts = 0;
+        }
+    }
+
     public void addAnimals() {
        
         ArrayList<Point> usedPositions = new ArrayList<>();
@@ -281,6 +325,8 @@ public class GamePanel extends JPanel implements Runnable {
         spawnAnimal("sheep", 5, usedPositions);
         
         spawnAnimal("pig", 5, usedPositions);
+
+        spawnMonster("bat", 4, usedPositions);
     }
     
     @Override
@@ -347,6 +393,12 @@ public class GamePanel extends JPanel implements Runnable {
             for (int i = 0; i < fish.size(); i++) {
                 fish.get(i).update();
             }
+            for (int i = 0; i < monsters.size(); i++) {
+                monsters.get(i).update();
+                if (monsters.get(i) instanceof Bat) {
+                    ((Bat) monsters.get(i)).chasePlayer();
+                }
+            }
         }
 
         ui.isCanGoToSea = false;
@@ -390,6 +442,11 @@ public class GamePanel extends JPanel implements Runnable {
                 plants.get(i).draw(g2);
             }
         }
+        for (int i = 0; i < monsters.size(); i++) {
+            if (monsters.get(i).worldY <= player.worldY) {
+                monsters.get(i).draw(g2);
+            }
+        }
         for (int i = 0; i < fish.size(); i++) {
             if (fish.get(i).worldY <= player.worldY) {
                 fish.get(i).draw(g2);
@@ -420,6 +477,11 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).worldY > player.worldY) {
                 plants.get(i).draw(g2);
+            }
+        }
+        for (int i = 0; i < monsters.size(); i++) {
+            if (monsters.get(i).worldY > player.worldY) {
+                monsters.get(i).draw(g2);
             }
         }
         
