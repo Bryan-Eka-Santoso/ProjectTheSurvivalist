@@ -283,6 +283,9 @@ public class Wolf extends WildAnimal {
 
     public boolean isPreyNearby(Player player) {
         if (Math.pow((player.worldX - this.worldX), 2) + Math.pow((player.worldY - this.worldY), 2) <= Math.pow(450, 2) && !collisionOn) {
+            if (gp.player.isSleeping || gp.player.health <= 0) {
+                return false; // Tidak mengejar jika player sedang tidur
+            }
             return true;
         } else {
             return false;

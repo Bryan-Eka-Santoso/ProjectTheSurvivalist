@@ -1,5 +1,10 @@
 package Objek.Controller;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import Objek.Items.Buildings.*;
 
 public class InteractBuild {
@@ -24,6 +29,15 @@ public class InteractBuild {
         if (building instanceof Bed) {
             if (gp.eManager.lighting.dayState == 2) {
                 gp.eManager.lighting.dayCounter = 580;
+                gp.player.isSleeping = true;
+                gp.SpawnX = gp.player.worldX / gp.TILE_SIZE;
+                gp.SpawnY = gp.player.worldY / gp.TILE_SIZE;
+                try {
+                    gp.buildings.get(gp.player.buildingIndex).img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/SleepingPlayer.png"));
+                    gp.player.isSleeping = true;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("Selamat pagi");
             } else {
                 System.out.println("Masih pagi kerja");

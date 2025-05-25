@@ -27,6 +27,7 @@ public class ItemDrop {
         this.solidAreaDefaultY = solidArea.y;
         this.droppedItem.currentStack = amount;
     }
+    
     public ItemDrop(int x, int y, Item item, GamePanel gp) {
         this.worldX = x;
         this.worldY = y;

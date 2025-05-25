@@ -174,6 +174,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import Objek.Controller.GamePanel;
 import Objek.Items.Unstackable.Torch;
 
@@ -280,6 +285,14 @@ public class Lighting {
             if (filterAlphaTemp < 0f) {
                 filterAlpha = 0f;
                 filterAlphaTemp = 0f;
+                if (gp.player.isSleeping) {
+                    try {
+                        gp.buildings.get(gp.player.buildingIndex).img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/bed.png"));
+                        gp.player.isSleeping = false;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 dayState = DAY;
             }
         }

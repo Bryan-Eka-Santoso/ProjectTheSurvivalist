@@ -4,13 +4,6 @@ import javax.swing.*;
 
 public class Game { 
 
-    char key = ' ';
-    final int HEIGHT = 1080;
-    final int WIDTH = 2160;
-    final int SPEED = 50;
-    int posX = 0;
-    int posY = 0;
-
     public Game() {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
