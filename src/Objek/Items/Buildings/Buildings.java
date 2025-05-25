@@ -15,6 +15,7 @@ public class Buildings extends Item {
     public int solidAreaDefaultX; 
     public int solidAreaDefaultY;
     public int hp = 100;
+    public boolean isAllowCollison;
 
     public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height) {
         super(name, maxStack, currentStack);
@@ -26,6 +27,7 @@ public class Buildings extends Item {
         this.solidAreaDefaultY = solidArea.y;
         this.width = width;
         this.height = height;
+        this.isAllowCollison = true;  // Defaultnya true, bisa diubah di subclass
     }
 
     public void draw(Graphics2D g2) {  // Bisa dipake utk dropped item

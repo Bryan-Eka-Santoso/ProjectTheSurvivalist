@@ -116,6 +116,9 @@ public class UI {
         g2.setFont(new Font("Arial", Font.PLAIN, 40));
         g2.setColor(Color.white);
 
+        if (gp.gameState == gp.GAME_OVER_STATE) {
+            respawnMenu();
+        }
         if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE) {
             drawSelectedItem();
         }
@@ -191,6 +194,25 @@ public class UI {
                 showGagalDapatIkan = false;
             }
         }
+    }
+
+    public void respawnMenu() {
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
+        
+        g2.setFont(new Font("Arial", Font.BOLD, 50));
+        String message = "You have died!";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT / 2 - 50;
+        
+        g2.setColor(Color.WHITE);
+        g2.drawString(message, x, y);
+        
+        String respawnMessage = "Press R to respawn or Q to quit";
+        int respawnX = getXCenteredText(respawnMessage);
+        int respawnY = y + 60;
+        
+        g2.drawString(respawnMessage, respawnX, respawnY);
     }
 
      public void showRodRusakMessage() {

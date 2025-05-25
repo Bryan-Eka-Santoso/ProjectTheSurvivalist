@@ -114,7 +114,6 @@ public class CollisonChecker {
     }
     
     public void animalCheckObject(Animal animal) {
-        
         for (int i = 0; i < gp.plants.size(); i++) {
             animal.solidArea.x = animal.worldX + animal.solidArea.x;
             animal.solidArea.y = animal.worldY + animal.solidArea.y;
@@ -184,7 +183,7 @@ public class CollisonChecker {
 
             if (animal.solidArea.intersects(gp.buildings.get(i).solidArea)) {
                 if (animal instanceof Animal) {
-                    animal.collisionOn = true;
+                    animal.collisionOn = gp.buildings.get(i).isAllowCollison;
                 }
             }
             animal.solidArea.x = animal.solidAreaDefaultX;
@@ -262,28 +261,28 @@ public class CollisonChecker {
                         player.solidArea.y -= player.speed;
                         if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true; // Kalo item ini diapus aja
+                            player.collisionOn = gp.buildings.get(i).isAllowCollison; // Kalo item ini diapus aja
                         }
                         break;
                     case "down":
                         player.solidArea.y += player.speed;
                         if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true;
+                            player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }
                         break;
                     case "left":
                         player.solidArea.x -= player.speed;
                         if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true;
+                            player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }
                         break;
                     case "right":
                         player.solidArea.x += player.speed;
                         if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
                             index = i; 
-                            player.collisionOn = true;
+                            player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }
                         break;
                 }
@@ -403,6 +402,9 @@ public class CollisonChecker {
             if (animal instanceof Wolf) {
                 System.out.println("Player is attacked by a wolf!");
                 gp.player.health -= 10; // Decrease player HP
+                if (gp.player.health <= 0) {
+                    gp.player.health = 0; // Prevent negative health
+                }
             }
         }
     
@@ -686,6 +688,9 @@ public class CollisonChecker {
         // Check collision
         if(monster.solidArea.intersects(gp.player.solidArea)) {
             gp.player.health -= 10; // Decrease player HP
+            if (gp.player.health <= 0) {
+                gp.player.health = 0; // Prevent negative health
+            } 
             monster.collisionOn = true;
         }
     

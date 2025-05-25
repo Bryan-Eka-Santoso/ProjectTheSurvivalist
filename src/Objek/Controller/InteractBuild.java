@@ -24,6 +24,9 @@ public class InteractBuild {
         if (building instanceof Bed) {
             if (gp.eManager.lighting.dayState == 2) {
                 gp.eManager.lighting.dayCounter = 580;
+                gp.player.isSleeping = true;
+                gp.SpawnX = gp.player.worldX / gp.TILE_SIZE;
+                gp.SpawnY = gp.player.worldY / gp.TILE_SIZE;
                 System.out.println("Selamat pagi");
             } else {
                 System.out.println("Masih pagi kerja");

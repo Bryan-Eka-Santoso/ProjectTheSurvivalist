@@ -36,9 +36,11 @@ public class GamePanel extends JPanel implements Runnable {
     public final int WORLD_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int WORLD_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
     
+    public int SpawnX = 40, SpawnY = 44;
+    
     Crafting recipe = new Crafting();
     KeyHandler keyH = new KeyHandler(this);
-    public Player player = new Player("Player", recipe, this, keyH);
+    public Player player = new Player("Player", 10, recipe, this, keyH);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     public EnvironmentManager eManager = new EnvironmentManager(this);
@@ -60,12 +62,14 @@ public class GamePanel extends JPanel implements Runnable {
     public final int OPEN_BED_STATE = 10;
     public final int KANDANG_STATE = 11;
     public final int FISHING_STATE = 12;
+    public final int GAME_OVER_STATE = 13;
 
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
     private static final int MAX_WOLF = 3;
+
     public Kandang currentKandang;
     public final int maxMap = 10;
     public int currentMap = 0;
@@ -346,6 +350,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new KandangAyam(this));
         player.inventory.addItems(new Torch(this));
         player.inventory.addItems(new WindAxe());
+        player.inventory.addItems(new Bed(this, 2));
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -381,7 +386,16 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         if (gameState == PAUSE_STATE) return;
         
-        player.update();
+        if (player.health <= 0) {
+            if (!player.inventory.isEmpty()) 
+                player.dropAllItems();
+
+            gameState = GAME_OVER_STATE;
+            player.health = 0;
+            
+        } else {
+            player.update();
+        }
         
         if (gameState != PAUSE_STATE) {
             for (int i = 0; i < animals.size(); i++) {
@@ -432,14 +446,14 @@ public class GamePanel extends JPanel implements Runnable {
                 animals.get(i).draw(g2);
             }
         }
-        for (int i = 0; i < buildings.size(); i++) {
-            if (buildings.get(i).worldY <= player.worldY) {
-                buildings.get(i).draw(g2);
-            }
-        }
         for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).worldY <= player.worldY) {
                 plants.get(i).draw(g2);
+            }
+        }
+        for (int i = 0; i < buildings.size(); i++) {
+            if (buildings.get(i).worldY <= player.worldY || !buildings.get(i).isAllowCollison) {
+                buildings.get(i).draw(g2);
             }
         }
         for (int i = 0; i < monsters.size(); i++) {
@@ -456,6 +470,14 @@ public class GamePanel extends JPanel implements Runnable {
             ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
         player.draw(g2);
+        for (int i = 0; i < buildings.size(); i++) {
+            if (buildings.get(i).worldY > player.worldY && buildings.get(i).isAllowCollison) {
+                buildings.get(i).draw(g2);
+            }
+            if (buildings.get(i) instanceof Orchard) {
+                ((Orchard) buildings.get(i)).updateGrowth();
+            }
+        }
         for (int i = 0; i < animals.size(); i++) {
             if (animals.get(i).worldY > player.worldY) {
                 animals.get(i).draw(g2);
@@ -464,14 +486,6 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < fish.size(); i++) {
             if (fish.get(i).worldY > player.worldY) {
                 fish.get(i).draw(g2);
-            }
-        }
-        for (int i = 0; i < buildings.size(); i++) {
-            if (buildings.get(i).worldY > player.worldY) {
-                buildings.get(i).draw(g2);
-            }
-            if (buildings.get(i) instanceof Orchard) {
-                ((Orchard) buildings.get(i)).updateGrowth();
             }
         }
         for (int i = 0; i < plants.size(); i++) {
@@ -489,6 +503,7 @@ public class GamePanel extends JPanel implements Runnable {
         eManager.update();
         eManager.draw(g2);
         ui.draw(g2);
+        this.paintChildren(g);
         g2.dispose();
     }
 

@@ -9,10 +9,15 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
 import Objek.Player.Inventory;
+import Objek.Player.Player;
 
 public class KeyHandler implements KeyListener, MouseListener, MouseWheelListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed, shiftPressed;
@@ -158,6 +163,11 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     public void keyPressed(KeyEvent e) {
         // TODO Auto-generated method stub
         int code = e.getKeyCode();
+        if (gp.gameState == gp.GAME_OVER_STATE) {
+            if (code == KeyEvent.VK_R) RPressed();
+            if (code == KeyEvent.VK_Q) QPressed();
+            return; // Do nothing if game is overs
+        }
         if (gp.gameState == gp.KANDANG_STATE) {
             if(gp.ui.inBreedingMenu) {
                 gp.ui.handleBreedingKeyPress(code, gp.currentKandang);
@@ -440,6 +450,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             isTemp1Chest = false;
             isTemp2Chest = false;
         }
+        if (gp.gameState == gp.GAME_OVER_STATE) {
+            gp.player = new Player("Player", gp.player.level, gp.recipe, gp, gp.keyH);
+            gp.gameState = gp.PLAY_STATE;
+        }
     }
 
     public void FPressed() {
@@ -527,6 +541,11 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], 1);
                 }
             }
+        } else if (gp.gameState == gp.GAME_OVER_STATE) {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(gp);
+            topFrame.setContentPane(new MainPanel(topFrame));
+            topFrame.revalidate(); // Memaksa refresh layout
+            topFrame.repaint();
         }
     }
 

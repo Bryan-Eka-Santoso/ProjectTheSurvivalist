@@ -280,6 +280,7 @@ public class Lighting {
             if (filterAlphaTemp < 0f) {
                 filterAlpha = 0f;
                 filterAlphaTemp = 0f;
+                gp.player.isSleeping = false;
                 dayState = DAY;
             }
         }
