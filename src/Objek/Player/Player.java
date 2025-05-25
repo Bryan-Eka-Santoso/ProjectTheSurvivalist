@@ -120,6 +120,7 @@ public class Player {
                 up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
                 down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
                 down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
+                sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
                 // dead = ImageIO.read(new File("ProjectTheSurvivalist/res/player/deadwater.png"));
             } else {
                 left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
@@ -174,6 +175,7 @@ public class Player {
             if (gp.currentMap == 1) {
                 fishIndex = gp.cCheck.checkFish(this, true);
             } else if (gp.currentMap == 2) {
+
             } else {
                 monsterIndex = gp.cCheck.checkMonsters(this, true);
                 droppedItem = gp.cCheck.checkItemDrop(this, true);
@@ -246,6 +248,10 @@ public class Player {
                     break;
             }
         }
+        if (isSleeping) {
+            image = sleep;
+        }
+        
         g2.drawImage(image, SCREEN_X, SCREEN_Y, gp.TILE_SIZE, gp.TILE_SIZE + 8, null);
         if (grabbedAnimal != null) {
             
