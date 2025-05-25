@@ -661,6 +661,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 ArrayList<Point> usedPositions = new ArrayList<>();
                 int col = gp.player.worldX / gp.TILE_SIZE;
                 int row = gp.player.worldY / gp.TILE_SIZE;
+
+                System.out.println(col + " " + row);
                 
                 if(gp.currentMap == 0){
                     if((col == 27 || col == 28) && row == 17) {
@@ -669,10 +671,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                         gp.animals.clear();
                         gp.player.getPlayerImg();
                         gp.tileM.getTileImage();
-                        gp.player.worldY = 11 * gp.TILE_SIZE;
-                        gp.player.worldX = 72 * gp.TILE_SIZE;
-                        gp.spawnFish("Arwana", 100, usedPositions);
-                        gp.spawnFish("Belida", 100, usedPositions);
+                        gp.player.worldY = 25 * gp.TILE_SIZE;
+                        gp.player.worldX = 60 * gp.TILE_SIZE;
+                        gp.spawnFish("Arwana", 20, usedPositions);
+                        gp.spawnFish("Belida", 20, usedPositions);
                     } else if(col == 43 && row == 55){
                         gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
                         gp.currentMap = 2;
@@ -685,10 +687,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                         gp.eManager.lighting.setLightSource(); 
                     }
                 } else if (gp.currentMap == 1){
-                    if(col == 72 && row == 11) {
+                    if(col == 60 && row == 25) {
                         gp.tileM.loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
                         gp.currentMap = 0;
-                        gp.animals.clear();
+                        gp.fish.clear();
                         gp.player.getPlayerImg();
                         gp.tileM.getTileImage();
                         gp.player.worldY = 18 * gp.TILE_SIZE;

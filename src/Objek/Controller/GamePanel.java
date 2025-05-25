@@ -350,18 +350,22 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         ui.isCanGoToSea = false;
+        ui.isCanGoToLand = false;
         ui.isNeedLevel15 = false;
+        int col = player.worldX / TILE_SIZE;
+        int row = player.worldY / TILE_SIZE;
 
         if (currentMap == 0) {
-            int col = player.worldX / TILE_SIZE;
-            int row = player.worldY / TILE_SIZE;
-
             if ((col == 27 || col == 28) && row == 17) {
                 ui.isCanGoToSea = true;
             }
 
             if (player.level < 15 && (col == 27 || col == 28) && row == 18) {
                 ui.isNeedLevel15 = true;
+            }
+        } else if(currentMap == 1){
+            if (col == 60 && row == 25) {
+                ui.isCanGoToLand = true;
             }
         }
     }

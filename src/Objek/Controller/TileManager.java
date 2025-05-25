@@ -62,7 +62,7 @@ public class TileManager {
             setup(19, "bridge2", true);
             setup(21, "ship", false);
             setup(22, "bridgesand", false);
-            setup(23, "cave", false);
+            setup(23, "stone", true);
         } else if(gp.currentMap == 2){
             setup(16, "calm-water", false);
             setup(17, "sand", true);
@@ -74,6 +74,7 @@ public class TileManager {
 
         setup(18, "grass", false);
         setup(20, "grass", false);
+        setup(24, "calm-water", false);
     }
 
     public void setup(int index, String imagePath, boolean collision) {

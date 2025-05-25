@@ -80,6 +80,7 @@ public class UI {
     public boolean canSelectInventory;
     public boolean isCanGoToSea = false;
     public boolean isNeedLevel15 = false;
+    public boolean isCanGoToLand = false;
 
     public Fish caughtFish;
     public int fishIndex;
@@ -166,6 +167,9 @@ public class UI {
         } 
         if (isCanGoToSea) {
             drawTextKeteranganKeLaut();
+        }
+        if (isCanGoToLand) {
+            drawTextKeteranganKeDarat();
         }
         if (isNeedLevel15) {
             drawTextButuhLevel();
@@ -267,6 +271,26 @@ public class UI {
         g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
         
         g2.setColor(Color.red);
+        g2.drawString(message, x, y);
+    }
+
+    public void drawTextKeteranganKeDarat() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "Press F to go to the land";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.blue);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.blue);
         g2.drawString(message, x, y);
     }
 
