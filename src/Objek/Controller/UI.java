@@ -492,7 +492,7 @@ public class UI {
         
         // Instruksi
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16F));
-        g2.drawString("Press ENTER to pull the fishing rod!", panelX + 80, panelY + 285);
+        g2.drawString("Press ENTER to pull the fishing rod!", panelX + 65, panelY + 285);
     }
 
     // Add this utility method if it doesn't exist already

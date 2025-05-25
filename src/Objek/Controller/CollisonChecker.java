@@ -423,8 +423,7 @@ public class CollisonChecker {
 
             int fishIndex = gp.fish.indexOf(animal);
             if (gp.currentMap == 1) {
-                System.out.println("Player bertemu ikan: " + animal.nameFish + " (strength: " + animal.strength + ")");
-                
+                // System.out.println("Player bertemu ikan: " + animal.nameFish + " (strength: " + animal.strength + ")");
                 if (gp.player.durabilityRod > 0) {
                     // Start fishing minigame
                     gp.ui.caughtFish = animal;
@@ -432,7 +431,7 @@ public class CollisonChecker {
                     gp.ui.playerFishingStrength = 50;
                     gp.gameState = gp.FISHING_STATE;
                 } else {
-                    System.out.println("Alat pancing rusak! Anda tidak bisa memancing.");
+                    gp.ui.showRodRusakMessage();
                 }
             }
         }
