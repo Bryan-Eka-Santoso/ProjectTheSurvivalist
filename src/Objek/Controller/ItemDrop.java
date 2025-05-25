@@ -47,7 +47,7 @@ public class ItemDrop {
         if (worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X 
             && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
-            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
+            && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             
             g2.drawImage(droppedItem.img, screenX, screenY, 35, 35, null);
             if (droppedItem instanceof Stackable || droppedItem instanceof Buildings) {

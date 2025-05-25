@@ -465,8 +465,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         ArrayList<Point> usedPositions = new ArrayList<>();
         int col = gp.player.worldX / gp.TILE_SIZE;
         int row = gp.player.worldY / gp.TILE_SIZE;
-
-        System.out.println(col + " " + row);
         
         if(gp.currentMap == 0){
             if((col == 27 || col == 28) && row == 17) {
