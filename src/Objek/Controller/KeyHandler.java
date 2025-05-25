@@ -255,6 +255,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         if (code == KeyEvent.VK_W) {
             upPressed = false;
         }
+        
         if (code == KeyEvent.VK_S) {
             downPressed = false;
         }
