@@ -492,8 +492,8 @@ public class Player {
         }
     }
 
-    public void dropItem(Item selectedItem, int amount){
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount));
+    public void dropItem(Item selectedItem, int amount, int mapIndex){
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount, mapIndex));
         gp.player.inventory.removeItem(selectedItem, amount);
     }
 
@@ -511,7 +511,7 @@ public class Player {
     public void dropAllItems() {
         for (int i = 0; i < inventory.slots.length; i++) {
             if (inventory.slots[i] != null) {
-                dropItem(inventory.slots[i], inventory.slots[i].currentStack);
+                dropItem(inventory.slots[i], inventory.slots[i].currentStack, gp.currentMap);
             }
         }
         System.out.println("Dropped all items.");

@@ -16,11 +16,13 @@ public class ItemDrop {
     public int solidAreaDefaultX; 
     public int solidAreaDefaultY;
     public GamePanel gp;
+    public int mapIndex;
 
-    public ItemDrop(int x, int y, Item item, GamePanel gp, int amount) {
+    public ItemDrop(int x, int y, Item item, GamePanel gp, int amount, int mapIndex) {
         this.worldX = x;
         this.worldY = y;
         this.droppedItem = item;
+        this.mapIndex = mapIndex;
         this.gp = gp;
         this.solidArea = new Rectangle(8, 8, 32, 32 );
         this.solidAreaDefaultX = solidArea.x;

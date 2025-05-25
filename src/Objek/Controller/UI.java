@@ -80,6 +80,7 @@ public class UI {
     public boolean canSelectInventory;
     public boolean isCanGoToSea = false;
     public boolean isNeedLevel15 = false;
+    public boolean isCanGoToLand = false;
 
     public Fish caughtFish;
     public int fishIndex;
@@ -169,6 +170,9 @@ public class UI {
         } 
         if (isCanGoToSea) {
             drawTextKeteranganKeLaut();
+        }
+        if (isCanGoToLand) {
+            drawTextKeteranganKeDarat();
         }
         if (isNeedLevel15) {
             drawTextButuhLevel();
@@ -289,6 +293,26 @@ public class UI {
         g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
         
         g2.setColor(Color.red);
+        g2.drawString(message, x, y);
+    }
+
+    public void drawTextKeteranganKeDarat() {
+        g2.setFont(new Font("Arial", Font.BOLD, 25));
+        
+        String message = "Press F to go to the land";
+        int x = getXCenteredText(message);
+        int y = gp.SCREEN_HEIGHT - 595;
+        
+        g2.setColor(new Color(0, 0, 0, 180));
+        int padding = 10;
+        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
+        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
+        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.blue);
+        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
+        
+        g2.setColor(Color.blue);
         g2.drawString(message, x, y);
     }
 
@@ -490,7 +514,7 @@ public class UI {
         
         // Instruksi
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 16F));
-        g2.drawString("Press ENTER to pull the fishing rod!", panelX + 80, panelY + 285);
+        g2.drawString("Press ENTER to pull the fishing rod!", panelX + 65, panelY + 285);
     }
 
     // Add this utility method if it doesn't exist already
@@ -511,23 +535,21 @@ public class UI {
                 else if(animal.getGender().equals("Female") && animal.isReadyBreeding())
                     females.add(animal);
             }
-        }else if(kandang instanceof CowCage) {
+        } else if(kandang instanceof CowCage) {
             for(Cow cow : ((CowCage)kandang).cowsInCage) {
                 if(cow.getGender().equals("Male") && cow.isReadyBreeding()) 
                     males.add(cow);
                 else if(cow.getGender().equals("Female") && cow.isReadyBreeding())
                     females.add(cow);
             }
-        }
-        else if(kandang instanceof SheepCage) {
+        } else if(kandang instanceof SheepCage) {
             for(Sheep sheep : ((SheepCage)kandang).sheepsInCage) {
                 if(sheep.getGender().equals("Male") && sheep.isReadyBreeding()) 
                     males.add(sheep);
                 else if(sheep.getGender().equals("Female") && sheep.isReadyBreeding())
                     females.add(sheep);
             }
-        }
-        else if(kandang instanceof PigCage) {
+        } else if(kandang instanceof PigCage) {
             for(Pig pig : ((PigCage)kandang).pigsInCage) {
                 if(pig.getGender().equals("Male") && pig.isReadyBreeding()) 
                     males.add(pig);
@@ -1148,7 +1170,6 @@ public class UI {
             slotYStart = frameY + 91;
         }
 
-        
         if (!canSelectInventory) {
             int cursorX = slotXStart +  ((gp.TILE_SIZE + 25) * slotCol);
             int cursorY = slotYStart + (gp.TILE_SIZE + 25) * slotRow;

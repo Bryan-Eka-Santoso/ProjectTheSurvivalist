@@ -40,7 +40,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     Crafting recipe = new Crafting();
     KeyHandler keyH = new KeyHandler(this);
-    public Player player = new Player("Player", 10, recipe, this, keyH);
+    public Player player = new Player("Player", 15, recipe, this, keyH);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     public EnvironmentManager eManager = new EnvironmentManager(this);
@@ -398,36 +398,38 @@ public class GamePanel extends JPanel implements Runnable {
         }
         
         if (gameState != PAUSE_STATE) {
-            for (int i = 0; i < animals.size(); i++) {
-                animals.get(i).update();
-                if (animals.get(i) instanceof Wolf) {
-                    ((Wolf) animals.get(i)).chasePlayer(player);
+            if (currentMap == 0) {
+                for (int i = 0; i < animals.size(); i++) {
+                    animals.get(i).update();
+                    if (animals.get(i) instanceof Wolf) {
+                        ((Wolf) animals.get(i)).chasePlayer(player);
+                    }
                 }
             }
-            for (int i = 0; i < fish.size(); i++) {
-                fish.get(i).update();
-            }
-            for (int i = 0; i < monsters.size(); i++) {
-                monsters.get(i).update();
-                if (monsters.get(i) instanceof Bat) {
-                    ((Bat) monsters.get(i)).chasePlayer();
+            if (currentMap == 1) {
+                for (int i = 0; i < fish.size(); i++) {
+                    fish.get(i).update();
                 }
             }
         }
 
         ui.isCanGoToSea = false;
+        ui.isCanGoToLand = false;
         ui.isNeedLevel15 = false;
+        int col = player.worldX / TILE_SIZE;
+        int row = player.worldY / TILE_SIZE;
 
         if (currentMap == 0) {
-            int col = player.worldX / TILE_SIZE;
-            int row = player.worldY / TILE_SIZE;
-
             if ((col == 27 || col == 28) && row == 17) {
                 ui.isCanGoToSea = true;
             }
 
             if (player.level < 15 && (col == 27 || col == 28) && row == 18) {
                 ui.isNeedLevel15 = true;
+            }
+        } else if(currentMap == 1){
+            if (col == 60 && row == 25) {
+                ui.isCanGoToLand = true;
             }
         }
     }
@@ -439,7 +441,9 @@ public class GamePanel extends JPanel implements Runnable {
 
         tileM.draw(g2);
         for (int i = 0; i < droppedItems.size(); i++) {
-            droppedItems.get(i).draw(g2);
+            if (droppedItems.get(i).mapIndex == currentMap) {
+                droppedItems.get(i).draw(g2);
+            }
         }
         for (int i = 0; i < animals.size(); i++) {
             if (animals.get(i).worldY <= player.worldY) {
@@ -454,11 +458,6 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < buildings.size(); i++) {
             if (buildings.get(i).worldY <= player.worldY || !buildings.get(i).isAllowCollison) {
                 buildings.get(i).draw(g2);
-            }
-        }
-        for (int i = 0; i < monsters.size(); i++) {
-            if (monsters.get(i).worldY <= player.worldY) {
-                monsters.get(i).draw(g2);
             }
         }
         for (int i = 0; i < fish.size(); i++) {
@@ -491,11 +490,6 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).worldY > player.worldY) {
                 plants.get(i).draw(g2);
-            }
-        }
-        for (int i = 0; i < monsters.size(); i++) {
-            if (monsters.get(i).worldY > player.worldY) {
-                monsters.get(i).draw(g2);
             }
         }
         
