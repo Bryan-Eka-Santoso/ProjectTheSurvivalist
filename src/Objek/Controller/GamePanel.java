@@ -8,6 +8,7 @@ import Objek.Fish.Belida;
 import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
 import Objek.Items.Unstackable.Torch;
+import Objek.Items.Unstackable.Armor.Helmet.IronHelmet;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Monsters.Bat;
 import Objek.Monsters.Monster;
@@ -353,6 +354,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Bed(this, 2));
         player.inventory.addItems(new Furnace(this, 2));
         player.inventory.addItems(new Chest(this, 2));
+        player.inventory.addItems(new IronHelmet());
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();

@@ -11,10 +11,10 @@ import Objek.Controller.UseItem;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
-import Objek.Items.Unstackable.Armor.Boots;
-import Objek.Items.Unstackable.Armor.Chestplate;
-import Objek.Items.Unstackable.Armor.Helmet;
-import Objek.Items.Unstackable.Armor.Leggings;
+import Objek.Items.Unstackable.Armor.Boots.Boots;
+import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
+import Objek.Items.Unstackable.Armor.Helmet.Helmet;
+import Objek.Items.Unstackable.Armor.Leggings.Leggings;
 import Objek.Plant.Plant;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -110,6 +110,10 @@ public class Player {
         this.chestplates = new Chestplate[1]; // Initialize chestplate array
         this.leggings = new Leggings[1]; // Initialize leggings array
         this.boots = new Boots[1]; // Initialize boots array
+        helmets[0] = null; // Set default helmet to null
+        chestplates[0] = null; // Set default chestplate to null
+        leggings[0] = null; // Set default leggings to null
+        boots[0] = null; // Set default boots to null
         cutArea.width = 36;
         cutArea.height = 36;
     }

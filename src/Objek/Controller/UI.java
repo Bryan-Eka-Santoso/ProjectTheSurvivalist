@@ -27,6 +27,7 @@ import Objek.Items.Buildings.CowCage;
 import Objek.Items.StackableItem.*;
 import Objek.Player.Player;
 import Objek.Items.Buildings.Furnace;
+import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Items.Unstackable.Arsenals.*;
 import javax.imageio.ImageIO;
 
@@ -99,6 +100,7 @@ public class UI {
     private boolean showRodRusak = false;
     private boolean showDapatIkan = false;
     private boolean showGagalDapatIkan = false;
+    public boolean isSelectInventory = false;
     private long rodRusakTimer = 0;
     private long dapatIkanTimer = 0;
     private long gagalDapatIkanTimer = 0;
@@ -1693,6 +1695,32 @@ public class UI {
                     g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
                 }
             }
+            if (gp.player.inventory.slots[i] instanceof Armor) {
+                Armor arsenalItem = (Armor) gp.player.inventory.slots[i];
+                if (arsenalItem.durability < arsenalItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
             if (gp.player.inventory.slots[i] instanceof Stackable) {
                 Stackable stackableItem = (Stackable) gp.player.inventory.slots[i];
                 Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI KECIL
@@ -1744,6 +1772,19 @@ public class UI {
         g2.drawRoundRect(frameX + 130, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
         g2.drawRoundRect(frameX + 205, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
         g2.drawRoundRect(frameX + 280, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+
+        if (gp.player.helmets[0] != null) {
+            g2.drawImage(gp.player.helmets[0].img, frameX + 60, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        }
+        if (gp.player.chestplates[0] != null) {
+            g2.drawImage(gp.player.chestplates[0].img, frameX + 135, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        }
+        if (gp.player.leggings[0] != null) {
+            g2.drawImage(gp.player.leggings[0].img, frameX + 210, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        }
+        if (gp.player.boots[0] != null) {
+            g2.drawImage(gp.player.boots[0].img, frameX + 285, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        }
 
         g2.drawImage(gp.player.stay, frameX + 65, frameY + 200, 250, 300, null);
         g2.setFont(new Font("Arial", Font.PLAIN, 24));
@@ -1816,14 +1857,51 @@ public class UI {
         }
 
         slotYStart = frameY + 91;
-        int cursorX = slotXStart +  ((gp.TILE_SIZE + 25) * slotCol);
-        int cursorY = slotYStart + (gp.TILE_SIZE + 25) * slotRow;
-        int cursorWidth = gp.TILE_SIZE + 10;
-        int cursorHeight = gp.TILE_SIZE + 10;
-        
-        g2.setColor(Color.WHITE);
-        g2.setStroke(new BasicStroke(3));
-        g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+        frameX = gp.TILE_SIZE * 4;
+        frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16);
+
+        if (gp.keyH.selectCounter == 0) {
+            int cursorX = slotXStart +  ((gp.TILE_SIZE + 25) * slotCol);
+            int cursorY = slotYStart + (gp.TILE_SIZE + 25) * slotRow;
+            int cursorWidth = gp.TILE_SIZE + 10;
+            int cursorHeight = gp.TILE_SIZE + 10;
+            
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
+        }
+        if (gp.keyH.selectCounter == 1) {
+            int cursorWidth = gp.TILE_SIZE + 10;
+            int cursorHeight = gp.TILE_SIZE + 10;
+            
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(frameX + 55, frameY + 45, cursorWidth, cursorHeight, 10, 10);
+        }
+        if (gp.keyH.selectCounter == 2) {
+            int cursorWidth = gp.TILE_SIZE + 10;
+            int cursorHeight = gp.TILE_SIZE + 10;
+            
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(frameX + 130, frameY + 45 , cursorWidth, cursorHeight, 10, 10);
+        }
+        if (gp.keyH.selectCounter == 3) {
+            int cursorWidth = gp.TILE_SIZE + 10;
+            int cursorHeight = gp.TILE_SIZE + 10;
+            
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(frameX + 205, frameY + 45, cursorWidth, cursorHeight, 10, 10);
+        }
+        if (gp.keyH.selectCounter == 4) {
+            int cursorWidth = gp.TILE_SIZE + 10;
+            int cursorHeight = gp.TILE_SIZE + 10;
+            
+            g2.setColor(Color.WHITE);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(frameX + 280, frameY + 45, cursorWidth, cursorHeight, 10, 10);
+        }
     }
 
     public void drawStats() {
