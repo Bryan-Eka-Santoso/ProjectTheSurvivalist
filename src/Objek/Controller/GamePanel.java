@@ -281,14 +281,14 @@ public class GamePanel extends JPanel implements Runnable {
         int attempts = 0;
         int maxAttempts = 1000;
         int spawnedCount = 0;
-        int validTiles = 18;
+        int validTiles = 21;
         
         while (spawnedCount < count && attempts < maxAttempts) {
         
             int x = (int)(Math.random() * (MAX_WORLD_COL -8));
             int y = (int)(Math.random() * (MAX_WORLD_ROW -8));
             Point pos = new Point(x, y);
-            
+            System.out.println("Trying to spawn at x:" + x + " y:" + y);
             if (usedPositions.contains(pos)) {
                 attempts++;
                 continue;
@@ -296,6 +296,7 @@ public class GamePanel extends JPanel implements Runnable {
             
             int tileNum = tileM.mapTile[currentMap][x][y];
             boolean isValidTile = false;
+            System.out.println("Tile number at position: " + tileNum);
             
             if (tileNum == validTiles) {
                 isValidTile = true;
@@ -316,6 +317,7 @@ public class GamePanel extends JPanel implements Runnable {
             spawnedCount++;
             attempts = 0;
         }
+        System.out.println("Final monster count: " + monsters.size());
     }
 
     public void addAnimals() {
@@ -330,7 +332,6 @@ public class GamePanel extends JPanel implements Runnable {
         
         spawnAnimal("pig", 5, usedPositions);
 
-        spawnMonster("bat", 4, usedPositions);
     }
     
     @Override
@@ -386,6 +387,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void update() {
+        
         if (gameState == PAUSE_STATE) return;
         
         if (player.health <= 0) {
@@ -411,6 +413,15 @@ public class GamePanel extends JPanel implements Runnable {
             if (currentMap == 1) {
                 for (int i = 0; i < fish.size(); i++) {
                     fish.get(i).update();
+                }
+            }
+            if (currentMap == 2) {
+                for (int i = 0; i < monsters.size(); i++) {
+                    monsters.get(i).update();
+                    if (monsters.get(i) instanceof Bat) {
+                        ((Bat) monsters.get(i)).chasePlayer();
+                    }
+                        
                 }
             }
         }
@@ -467,6 +478,11 @@ public class GamePanel extends JPanel implements Runnable {
                 fish.get(i).draw(g2);
             }
         }
+        for(Monster monster : monsters) {
+            if(monster.worldY <= player.worldY) {
+                monster.draw(g2);
+            }
+        }
         if (gameState == BUILDING_STATE) {
             ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
@@ -492,6 +508,11 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).worldY > player.worldY) {
                 plants.get(i).draw(g2);
+            }
+        }
+        for(Monster monster : monsters) {
+            if(monster.worldY <= player.worldY) {
+                monster.draw(g2);
             }
         }
         

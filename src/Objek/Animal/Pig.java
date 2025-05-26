@@ -27,6 +27,8 @@ public class Pig extends TameAnimal{
     private int actionMoveDelay;
     private int speed = 8; 
     public int actionLockCounter = 0;
+    private static final int PIG_WIDTH = 128;
+    private static final int PIG_HEIGHT = 128;
     
     public Pig(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
@@ -66,7 +68,15 @@ public class Pig extends TameAnimal{
             e.printStackTrace();
         }
     }
-
+    
+    @Override
+    public int getWidth() {
+        return PIG_WIDTH;
+    }
+    @Override
+    public int getHeight() {
+        return PIG_HEIGHT;
+    }
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;

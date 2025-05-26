@@ -26,6 +26,8 @@ public class Chicken extends TameAnimal {
     private int actionMoveDelay;
     private int speed = 8; 
     public int actionLockCounter = 0;
+    private static final int CHICKEN_WIDTH = 32;
+    private static final int CHICKEN_HEIGHT = 32;
     
     public Chicken(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
@@ -65,6 +67,14 @@ public class Chicken extends TameAnimal {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    @Override
+    public int getWidth() {
+        return CHICKEN_WIDTH;
+    }
+    @Override
+    public int getHeight() {
+        return CHICKEN_HEIGHT;
     }
 
     private void setRandomDirection() {

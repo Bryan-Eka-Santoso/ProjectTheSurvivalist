@@ -155,6 +155,8 @@ public class UI {
         if(gp.gameState == gp.KANDANG_STATE) {
             if (inBreedingMenu) {
                 drawBreedingMenu(g2, gp.currentKandang);
+            }  else if(inRemoveMenu) { 
+                 drawRemoveMenu(g2, gp.currentKandang);
             } else if(inGetItemMenu) {
                 drawGetItemMenu(g2, gp.currentKandang);
             } else if (gp.currentKandang != null) {

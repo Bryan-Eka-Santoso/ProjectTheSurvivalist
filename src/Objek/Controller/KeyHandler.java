@@ -519,6 +519,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.worldX = 23 * gp.TILE_SIZE;
                 gp.isCave = !gp.isCave;
                 gp.eManager.lighting.setLightSource(); 
+                gp.spawnMonster("Bat", 10, usedPositions);
             }
         } else if (gp.currentMap == 1){
             if(col == 60 && row == 25) {

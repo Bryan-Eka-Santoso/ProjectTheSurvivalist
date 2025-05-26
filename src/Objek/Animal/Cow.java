@@ -26,7 +26,8 @@ public class Cow extends TameAnimal {
     boolean readyGetItem;
     boolean readyBreeding;
     public int actionLockCounter = 0;
-
+    private static final int COW_WIDTH = 128;
+    private static final int COW_HEIGHT = 128;
     public Cow(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
@@ -65,7 +66,14 @@ public class Cow extends TameAnimal {
             e.printStackTrace();
         }
     }
-
+    @Override
+    public int getWidth() {
+        return COW_WIDTH;
+    }
+    @Override
+    public int getHeight() {
+        return COW_HEIGHT;
+    }
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
@@ -224,6 +232,7 @@ public class Cow extends TameAnimal {
             setReadyGetItem(false);
         }
     }
+
     
     public Cow breeding(Cow pasangan, GamePanel gp) {
         if (readyBreeding) {
