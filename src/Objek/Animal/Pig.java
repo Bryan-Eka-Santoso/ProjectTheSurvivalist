@@ -17,7 +17,6 @@ import java.awt.Color;
 
 public class Pig extends TameAnimal{
     Random random = new Random();
-    String gender;
     boolean readyGetItem;
     boolean readyBreeding;
     private Rectangle upHitbox;

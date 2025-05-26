@@ -16,7 +16,6 @@ import java.awt.Color;
 
 public class Chicken extends TameAnimal {
     Random random = new Random();
-    String gender;
     boolean readyGetItem;
     boolean readyBreeding;
     private Rectangle upHitbox;

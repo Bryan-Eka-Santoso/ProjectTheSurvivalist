@@ -19,7 +19,6 @@ public class Sheep extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
-    String gender;
     boolean readyGetItem;
     boolean readyBreeding;
     private int actionMoveCounter = 0;

@@ -66,6 +66,11 @@ public class UI {
     public boolean inBreedingMenu = false;
     public boolean inGetItemMenu = false;
     private Rectangle getItemBackButton;
+    public Rectangle removeButton;
+    public Rectangle removeBackButton;
+    public boolean inRemoveMenu = false;
+    public int selectedRemoveIndex = 0;
+    private int removeScrollPosition = 0;
     public int selectedBreedMaleIndex = 0;
     public int selectedBreedFemaleIndex = 0;
     public int selectedGetItemIndex = 0;
@@ -398,7 +403,6 @@ public class UI {
         canSelectInventory = true;
     }
     
-    
     public void showKandangFullMessage() {
         showKandangFullMessage = true;
         kandangFullMessageTimer = System.currentTimeMillis();
@@ -625,7 +629,41 @@ public class UI {
             }
         }
     }
+    public void handleRemoveKeyPress(int keyCode, Kandang kandang, Player player) {
+        ArrayList<TameAnimal> animals = new ArrayList<>();
+        if(kandang instanceof KandangAyam) {
+            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        } else if(kandang instanceof CowCage) {
+            animals.addAll(((CowCage)kandang).cowsInCage);
+        } else if(kandang instanceof SheepCage) {
+            animals.addAll(((SheepCage)kandang).sheepsInCage);
+        } else if(kandang instanceof PigCage) {
+            animals.addAll(((PigCage)kandang).pigsInCage);
+        }
 
+        if(keyCode == KeyEvent.VK_UP) {
+            if(selectedRemoveIndex > 0) selectedRemoveIndex--;
+        }
+        else if(keyCode == KeyEvent.VK_DOWN) {
+            if(selectedRemoveIndex < animals.size() - 1) selectedRemoveIndex++;
+        }
+        else if(keyCode == KeyEvent.VK_ENTER && !animals.isEmpty()) {
+            TameAnimal animal = animals.get(selectedRemoveIndex);
+            if(kandang instanceof KandangAyam) {
+                ((KandangAyam)kandang).chickensInCage.remove(animal);
+            } else if(kandang instanceof CowCage) {
+                ((CowCage)kandang).cowsInCage.remove(animal);
+            } else if(kandang instanceof SheepCage) {
+                ((SheepCage)kandang).sheepsInCage.remove(animal);
+            } else if(kandang instanceof PigCage) {
+                ((PigCage)kandang).pigsInCage.remove(animal);
+            }
+            player.grabbedAnimal = animal;
+            gp.gameState = gp.PLAY_STATE;
+            inRemoveMenu = false;
+            selectedRemoveIndex = 0;
+        }
+    }
     public void handleGetItemKeyPress(int keyCode, Kandang kandang, Player player) {
         ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
         if(kandang instanceof KandangAyam) {
@@ -695,7 +733,7 @@ public class UI {
         g2.setFont(new Font("Arial", Font.BOLD, 30));
         String title = "Get Item Menu";
         int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
-        g2.drawString(title, titleX, windowY + 40);
+        g2.drawString(title, titleX, windowY + 60);
 
         ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
         if(kandang instanceof KandangAyam) {
@@ -738,13 +776,18 @@ public class UI {
             }
         }
 
+        
         int buttonWidth = 100;
         int buttonHeight = 40;
         getItemBackButton = new Rectangle(windowX + 30, windowY + windowHeight - buttonHeight - 20,buttonWidth, buttonHeight);
         g2.setColor(Color.WHITE);
         g2.fillRect(getItemBackButton.x, getItemBackButton.y, getItemBackButton.width, getItemBackButton.height);
         g2.setColor(Color.BLACK);
-        g2.drawString("Back", getItemBackButton.x + 30, getItemBackButton.y + 25);
+        g2.setFont(new Font("Arial", Font.BOLD, 16)); 
+        String text = "Back";
+        int textX = getItemBackButton.x + (buttonWidth - g2.getFontMetrics().stringWidth(text))/2;
+        int textY = getItemBackButton.y + (buttonHeight + g2.getFontMetrics().getHeight())/2 - 2;
+        g2.drawString(text, textX, textY);
     }
 
     public void drawBreedingMenu(Graphics2D g2, Kandang kandang) {
@@ -759,7 +802,7 @@ public class UI {
         g2.setFont(new Font("Arial", Font.BOLD, 30));
         String title = "Breeding Menu";
         int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
-        g2.drawString(title, titleX, windowY + 40);
+        g2.drawString(title, titleX, windowY + 60);
 
         if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
             g2.setFont(new Font("Arial", Font.BOLD, 20));
@@ -795,6 +838,7 @@ public class UI {
             int startY = windowY + 120;
             int lineHeight = 40;
             if(males.isEmpty()) {
+                g2.setFont(new Font("Arial", Font.PLAIN, 16));
                 g2.drawString("No male animals available!", windowX + 30, startY);
             } else {
                 int endIndexMale = Math.min(breedingScrollPosition + ANIMALS_PER_PAGE+2, males.size());
@@ -812,6 +856,7 @@ public class UI {
             }
 
             if(females.isEmpty()) {
+                g2.setFont(new Font("Arial", Font.PLAIN, 16));
                 g2.drawString("No female animals available!", windowX + windowWidth/2 + 30, startY);
             } else {
                 int endIndexFemale = Math.min(breedingScrollPosition + ANIMALS_PER_PAGE+2, females.size());
@@ -845,7 +890,65 @@ public class UI {
         g2.setColor(Color.BLACK);
         g2.drawString("Back", backButton.x + 30, backButton.y + 25);
     }
+    
+    public void drawRemoveMenu(Graphics2D g2, Kandang kandang) {
+        int windowWidth = gp.TILE_SIZE * 12;
+        int windowHeight = gp.TILE_SIZE * 10;
+        int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
+        int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
 
+        g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
+
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 30));
+        String title = "Remove Animal";
+        int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
+        g2.drawString(title, titleX, windowY + 60);
+
+        ArrayList<TameAnimal> animals = new ArrayList<>();
+        if(kandang instanceof KandangAyam) {
+            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        } else if(kandang instanceof CowCage) {
+            animals.addAll(((CowCage)kandang).cowsInCage);
+        } else if(kandang instanceof SheepCage) {
+            animals.addAll(((SheepCage)kandang).sheepsInCage);
+        } else if(kandang instanceof PigCage) {
+            animals.addAll(((PigCage)kandang).pigsInCage);
+        }
+
+        int startY = windowY + 120;
+        int lineHeight = 40;
+
+        if(animals.isEmpty()) {
+            g2.drawString("No animals in cage!", windowX + 30, startY + 40);
+        } else {
+            int endIndex = Math.min(removeScrollPosition + ANIMALS_PER_PAGE + 2, animals.size());
+            for(int i = removeScrollPosition; i < endIndex; i++) {
+                TameAnimal animal = animals.get(i);
+                int y = startY + (i - removeScrollPosition) * lineHeight;
+                
+                if(i == selectedRemoveIndex) {
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(windowX + 25, y - 10, windowWidth - 50, lineHeight);
+                }
+                g2.setColor(Color.WHITE);
+                g2.drawString(animal.getName(), windowX + 30, y + 15);
+            }
+        }
+
+        // Back button
+        int buttonWidth = 100;
+        int buttonHeight = 40;
+        removeBackButton = new Rectangle(windowX + 30, windowY + windowHeight - buttonHeight - 20, buttonWidth, buttonHeight);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(removeBackButton.x, removeBackButton.y, removeBackButton.width, removeBackButton.height);
+        g2.setColor(Color.BLACK);
+         g2.setFont(new Font("Arial", Font.BOLD, 16)); 
+        String text = "Back";
+        int textX = removeBackButton.x + (buttonWidth - g2.getFontMetrics().stringWidth(text))/2;
+        int textY = removeBackButton.y + (buttonHeight + g2.getFontMetrics().getHeight())/2 - 2;
+        g2.drawString(text, textX, textY);
+    }
     public void drawKandangMenu(Graphics2D g2, Kandang kandang) {
         int windowWidth = gp.TILE_SIZE * 12;
         int windowHeight = gp.TILE_SIZE * 10;
@@ -858,7 +961,7 @@ public class UI {
         g2.setFont(new Font("Arial", Font.BOLD, 30));
         String title = kandang.getName() + " (" + kandang.getCurrentCapacity() + "/" + kandang.getMaxCapacity() + ")";
         int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
-        g2.drawString(title, titleX, windowY + 40);
+        g2.drawString(title, titleX, windowY + 60);
 
         g2.setFont(new Font("Arial", Font.PLAIN, 20));
         int startY = windowY + 80;
@@ -898,6 +1001,12 @@ public class UI {
         g2.setColor(Color.BLACK);
         g2.drawString("Breeding", breedButton.x + 40, breedButton.y + 30);
 
+        removeButton = new Rectangle(windowX + (windowWidth - buttonWidth)/2, buttonY, buttonWidth, buttonHeight);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(removeButton.x, removeButton.y, removeButton.width, removeButton.height);
+        g2.setColor(Color.BLACK);
+        g2.drawString("Remove", removeButton.x + 40, removeButton.y + 30);
+
         getItemButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, buttonY, buttonWidth, buttonHeight);
         g2.setColor(Color.WHITE);
         g2.fillRect(getItemButton.x, getItemButton.y, getItemButton.width, getItemButton.height);
@@ -912,13 +1021,23 @@ public class UI {
         else if(inGetItemMenu) {
             getItemScrollPosition = Math.max(0, getItemScrollPosition - notches);
         }
+        else if(inRemoveMenu) {
+            removeScrollPosition = Math.max(0, removeScrollPosition - notches);
+        }
         else {
             kandangScrollPosition = Math.max(0, kandangScrollPosition + notches);
         }
     }
 
     public void handleKandangClick(int x, int y, Kandang kandang, Player player) {
-        if(inGetItemMenu) {
+        if(inRemoveMenu) {
+            if(removeBackButton != null && removeBackButton.contains(x, y)) {
+                inRemoveMenu = false;
+                selectedRemoveIndex = 0;
+                return;
+            }
+        }
+        else if(inGetItemMenu) {
             if(getItemBackButton != null && getItemBackButton.contains(x, y)) {
                 inGetItemMenu = false;
                 selectedGetItemIndex = 0;
@@ -939,6 +1058,9 @@ public class UI {
         else {
             if(breedButton != null && breedButton.contains(x, y)) {
                 inBreedingMenu = true; 
+            }
+            else if(removeButton != null && removeButton.contains(x, y)) {
+                inRemoveMenu = true;
             }
             else if(getItemButton != null && getItemButton.contains(x, y)) {
                 inGetItemMenu = true; 
@@ -1768,6 +1890,27 @@ public class UI {
         g2.setColor(Color.WHITE);
         g2.drawString("Level: " + gp.player.level, barX, levelBarY - 10);
         g2.drawString("EXP: " + gp.player.exp + "/" + gp.player.maxExp, barX, levelBarY + barHeight + 20);
+        // draw status effects
+        int effectY = levelBarY + barHeight + 40; // Position effects below EXP text
+        g2.setFont(new Font("Arial", Font.BOLD, 20));
+         // Poison effect
+        if(gp.player.isPoisoned()) {
+            g2.setColor(new Color(124, 252, 0)); // Light green color
+            g2.drawString("POISONED", barX, effectY);
+            effectY += 25; // Space between effects
+        }
+
+        // Starving effect 
+        if(gp.player.hunger <= 20) {
+            g2.setColor(new Color(255, 69, 0)); // Red-orange color
+            g2.drawString("STARVING", barX, effectY);
+            effectY += 25;
+        }
+        // Dehydration effect
+        if(gp.player.isDehydrated()) {
+            g2.setColor(new Color(0, 191, 255)); // Deep sky blue
+            g2.drawString("DEHYDRATED", barX, effectY);
+        }
     }
 
     public void drawPauseScreen() {

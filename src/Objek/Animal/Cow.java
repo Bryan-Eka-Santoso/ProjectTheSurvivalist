@@ -23,7 +23,6 @@ public class Cow extends TameAnimal {
     private int speed = 8; 
 
     Random random = new Random();
-    String gender;
     boolean readyGetItem;
     boolean readyBreeding;
     public int actionLockCounter = 0;
