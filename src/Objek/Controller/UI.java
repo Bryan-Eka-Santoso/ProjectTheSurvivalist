@@ -81,7 +81,7 @@ public class UI {
     public boolean showWrongKandangMessage = false;
     public long wrongKandangMessageTimer = 0;
     public final long WRONG_KANDANG_MESSAGE_DURATION = 2000;
-    
+
     public boolean canSelectInventory;
     public boolean isCanGoToSea = false;
     public boolean isNeedLevel15 = false;
