@@ -11,6 +11,10 @@ import Objek.Controller.UseItem;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Items.Unstackable.Armor.Boots;
+import Objek.Items.Unstackable.Armor.Chestplate;
+import Objek.Items.Unstackable.Armor.Helmet;
+import Objek.Items.Unstackable.Armor.Leggings;
 import Objek.Plant.Plant;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -28,7 +32,7 @@ public class Player {
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage cutup1, cutup2, cutdown1, cutdown2, cutleft1, cutleft2, cutright1, cutright2;
-    BufferedImage dead, sleep;
+    public BufferedImage dead, sleep, stay;
     public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -53,6 +57,18 @@ public class Player {
     public InteractBuild interactBuild;
     public int strengthRod = 30;
     public int durabilityRod = 10;
+    public Helmet[] helmets; // Array to hold helmets
+    public Chestplate[] chestplates; // Array to hold chestplates
+    public Leggings[] leggings; // Array to hold leggings
+    public Boots[] boots; // Array to hold boots
+    private boolean isPoisoned = false;
+    private static final long POISON_DURATION = 300; // 5 detik diitung dari framenya
+    private static final int POISON_DAMAGE = 1;
+    private int poisonCounter = 0;
+     private boolean isDehydrated = false;
+    private int dehydrationCounter = 0;
+    private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
+
 
     public Player(String name, int level, Crafting recipe, GamePanel gp, KeyHandler keyH) {
         this.name = name;
@@ -90,6 +106,10 @@ public class Player {
         this.isSleeping = false;
         getPlayerImg();
         getPlayerCutImg();
+        this.helmets = new Helmet[1]; // Initialize helmet array
+        this.chestplates = new Chestplate[1]; // Initialize chestplate array
+        this.leggings = new Leggings[1]; // Initialize leggings array
+        this.boots = new Boots[1]; // Initialize boots array
         cutArea.width = 36;
         cutArea.height = 36;
     }
@@ -109,6 +129,23 @@ public class Player {
         }
     }
 
+    public int getDefense() {
+        int defense = 0;
+        if (helmets[0] != null) {
+            defense += helmets[0].defense;
+        }
+        if (chestplates[0] != null) {
+            defense += chestplates[0].defense;
+        }
+        if (leggings[0] != null) {
+            defense += leggings[0].defense;
+        }
+        if (boots[0] != null) {
+            defense += boots[0].defense;
+        }
+        return defense;
+    }
+
     public void getPlayerImg() {
         try {
             if(gp.currentMap == 1){
@@ -120,7 +157,6 @@ public class Player {
                 up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
                 down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
                 down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
-                sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
                 // dead = ImageIO.read(new File("ProjectTheSurvivalist/res/player/deadwater.png"));
             } else {
                 left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
@@ -132,6 +168,8 @@ public class Player {
                 down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
                 down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
             }
+            sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
+            stay = ImageIO.read(new File("ProjectTheSurvivalist/res/player/stay.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -151,14 +189,65 @@ public class Player {
             e.printStackTrace();
         }
     }
+     private void handlePoisonEffect() {
+        if(isPoisoned) {
+            poisonCounter++;
+            
+            // Damage setiap 60 frames (1 detik)
+            if(poisonCounter % 60 == 0) {
+                if(health > 1) { // Check to prevent death
+                    health =  health - POISON_DAMAGE;
+                }
+            }
+
+            // Cek apakah efek poison selesai
+            if(poisonCounter >= POISON_DURATION) {
+                isPoisoned = false;
+                poisonCounter = 0;
+            }
+        }
+    }
+
+    public void setPoisoned() {
+        isPoisoned = true;
+        poisonCounter = 0;
+    }
+
+    public boolean isPoisoned() {
+        return isPoisoned;
+    }
+    private void handleDehydrationEffect() {
+        if(thirst < 10) {
+            isDehydrated = true;
+            dehydrationCounter++;
+            
+            // Damage every 2 seconds (120 frames)
+            if(dehydrationCounter >= DEHYDRATION_DAMAGE_INTERVAL) {
+                if(health > 1) { // Check to prevent death
+                    health -= 1;
+                }
+                dehydrationCounter = 0;
+            }
+        } else {
+            isDehydrated = false;
+            dehydrationCounter = 0;
+        }
+    }
+
+    public boolean isDehydrated() {
+        return isDehydrated;
+    }
 
     public void update() {
-        if (keyH.shiftPressed) {
+        if (keyH.shiftPressed && hunger > 20 && thirst >= 10) {
             speed = 10;
         } else {
             speed = 5;
         }
-
+        if(isPoisoned) {
+            handlePoisonEffect();
+        }
+        handleDehydrationEffect();
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
                 direction = "up";
@@ -492,8 +581,8 @@ public class Player {
         }
     }
 
-    public void dropItem(Item selectedItem, int amount){
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount));
+    public void dropItem(Item selectedItem, int amount, int mapIndex){
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount, mapIndex));
         gp.player.inventory.removeItem(selectedItem, amount);
     }
 
@@ -511,7 +600,7 @@ public class Player {
     public void dropAllItems() {
         for (int i = 0; i < inventory.slots.length; i++) {
             if (inventory.slots[i] != null) {
-                dropItem(inventory.slots[i], inventory.slots[i].currentStack);
+                dropItem(inventory.slots[i], inventory.slots[i].currentStack, gp.currentMap);
             }
         }
         System.out.println("Dropped all items.");
