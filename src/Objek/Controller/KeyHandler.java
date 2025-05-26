@@ -343,6 +343,18 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.ui.selectedIndex--;
             }
         }
+        if (gp.gameState == gp.INVENTORY_STATE) {
+            playSE(2);
+            if (gp.ui.selectedIndex > 0) {
+                if (gp.ui.slotCol > 0) {
+                    gp.ui.slotCol--;
+                } else {
+                    gp.ui.slotCol = 3;
+                    gp.ui.slotRow--;
+                }
+                gp.ui.selectedIndex--;
+            }
+        }
     }
     
     public void SPressed() {
@@ -373,6 +385,12 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             } else {
                 gp.ui.selectedFurnace = 0;
             }
+        }
+        if (gp.gameState == gp.INVENTORY_STATE) {
+            playSE(2);
+            gp.ui.selectedIndex = 0;
+            gp.ui.slotRow = 0;
+            gp.ui.slotCol = 0;
         }
     }
 
@@ -408,6 +426,18 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             }
         }
         if (gp.gameState == gp.OPEN_SMELTER_STATE && gp.ui.selectedFurnace == -1) {
+            playSE(2);
+            if (gp.ui.selectedIndex < 23) {
+                if ((gp.ui.slotCol + 1) % 4 == 0) {
+                    gp.ui.slotCol = 0;
+                    gp.ui.slotRow++;
+                } else {
+                    gp.ui.slotCol++;
+                }
+                gp.ui.selectedIndex++;
+            }
+        }
+        if (gp.gameState == gp.INVENTORY_STATE) {
             playSE(2);
             if (gp.ui.selectedIndex < 23) {
                 if ((gp.ui.slotCol + 1) % 4 == 0) {
@@ -574,18 +604,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void LeftPressed() {
-        if (gp.gameState == gp.INVENTORY_STATE) {
-            playSE(2);
-            if (gp.ui.selectedIndex > 0) {
-                if (gp.ui.slotCol > 0) {
-                    gp.ui.slotCol--;
-                } else {
-                    gp.ui.slotCol = 8;
-                    gp.ui.slotRow--;
-                }
-                gp.ui.selectedIndex--;
-            }
-        }
         if (gp.gameState == gp.DROPPED_ITEM_STATE){
             gp.gameState = gp.PLAY_STATE;
             gp.ui.amountToDrop = 1;
@@ -648,18 +666,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.selectedIndex = gp.ui.slotCol;
             gp.player.lightUpdated = true;
             playSE(2);
-        }
-        if (gp.gameState == gp.INVENTORY_STATE) {
-            playSE(2);
-            if (gp.ui.selectedIndex < 23) {
-                if ((gp.ui.slotCol + 1) % 9 == 0) {
-                    gp.ui.slotCol = 0;
-                    gp.ui.slotRow++;
-                } else {
-                    gp.ui.slotCol++;
-                }
-                gp.ui.selectedIndex++;
-            }
         }
     }
 

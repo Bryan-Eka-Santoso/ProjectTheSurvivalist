@@ -11,6 +11,10 @@ import Objek.Controller.UseItem;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Items.Unstackable.Armor.Boots;
+import Objek.Items.Unstackable.Armor.Chestplate;
+import Objek.Items.Unstackable.Armor.Helmet;
+import Objek.Items.Unstackable.Armor.Leggings;
 import Objek.Plant.Plant;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -28,7 +32,7 @@ public class Player {
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage cutup1, cutup2, cutdown1, cutdown2, cutleft1, cutleft2, cutright1, cutright2;
-    BufferedImage dead, sleep;
+    public BufferedImage dead, sleep, stay;
     public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -53,6 +57,10 @@ public class Player {
     public InteractBuild interactBuild;
     public int strengthRod = 30;
     public int durabilityRod = 10;
+    public Helmet[] helmets; // Array to hold helmets
+    public Chestplate[] chestplates; // Array to hold chestplates
+    public Leggings[] leggings; // Array to hold leggings
+    public Boots[] boots; // Array to hold boots
 
     public Player(String name, int level, Crafting recipe, GamePanel gp, KeyHandler keyH) {
         this.name = name;
@@ -90,6 +98,10 @@ public class Player {
         this.isSleeping = false;
         getPlayerImg();
         getPlayerCutImg();
+        this.helmets = new Helmet[1]; // Initialize helmet array
+        this.chestplates = new Chestplate[1]; // Initialize chestplate array
+        this.leggings = new Leggings[1]; // Initialize leggings array
+        this.boots = new Boots[1]; // Initialize boots array
         cutArea.width = 36;
         cutArea.height = 36;
     }
@@ -109,6 +121,23 @@ public class Player {
         }
     }
 
+    public int getDefense() {
+        int defense = 0;
+        if (helmets[0] != null) {
+            defense += helmets[0].defense;
+        }
+        if (chestplates[0] != null) {
+            defense += chestplates[0].defense;
+        }
+        if (leggings[0] != null) {
+            defense += leggings[0].defense;
+        }
+        if (boots[0] != null) {
+            defense += boots[0].defense;
+        }
+        return defense;
+    }
+
     public void getPlayerImg() {
         try {
             if(gp.currentMap == 1){
@@ -120,7 +149,6 @@ public class Player {
                 up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
                 down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
                 down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
-                sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
                 // dead = ImageIO.read(new File("ProjectTheSurvivalist/res/player/deadwater.png"));
             } else {
                 left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
@@ -132,6 +160,8 @@ public class Player {
                 down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
                 down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
             }
+            sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
+            stay = ImageIO.read(new File("ProjectTheSurvivalist/res/player/stay.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

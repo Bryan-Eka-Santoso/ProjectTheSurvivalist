@@ -351,6 +351,8 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Torch(this));
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new Bed(this, 2));
+        player.inventory.addItems(new Furnace(this, 2));
+        player.inventory.addItems(new Chest(this, 2));
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();

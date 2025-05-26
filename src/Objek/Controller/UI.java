@@ -156,7 +156,8 @@ public class UI {
                 drawKandangMenu(g2, gp.currentKandang);
             }
         }
-        if (gp.gameState != gp.OPEN_CHEST_STATE) {
+        if (gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE 
+            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE) {
             drawStats();
         }
         if (showNameInput) {
@@ -683,7 +684,6 @@ public class UI {
    
     
     public void drawGetItemMenu(Graphics2D g2, Kandang kandang) {
-
         int windowWidth = gp.TILE_SIZE * 12;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
@@ -746,8 +746,8 @@ public class UI {
         g2.setColor(Color.BLACK);
         g2.drawString("Back", getItemBackButton.x + 30, getItemBackButton.y + 25);
     }
-    public void drawBreedingMenu(Graphics2D g2, Kandang kandang) {
 
+    public void drawBreedingMenu(Graphics2D g2, Kandang kandang) {
         int windowWidth = gp.TILE_SIZE * 12;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
@@ -1610,23 +1610,49 @@ public class UI {
     }
 
     public void drawInventory() {
-        int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
-        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 13);
-        int frameWidth = gp.TILE_SIZE * 15;
-        int frameHeight = gp.TILE_SIZE * 8;
+        int frameX = gp.TILE_SIZE * 4;
+        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16);
+        int frameWidth = gp.TILE_SIZE * 8 + 15;
+        int frameHeight = gp.TILE_SIZE * 15;
         drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+
+        g2.setColor(Color.GRAY);
+        g2.setStroke(new BasicStroke(1));
+        g2.drawRoundRect(frameX + 55, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+        g2.drawRoundRect(frameX + 130, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+        g2.drawRoundRect(frameX + 205, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+        g2.drawRoundRect(frameX + 280, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
+
+        g2.drawImage(gp.player.stay, frameX + 65, frameY + 200, 250, 300, null);
+        g2.setFont(new Font("Arial", Font.PLAIN, 24));
+        g2.setColor(Color.WHITE);
+        g2.drawString("Defense: 50", frameX + 75, frameY + 530);
 
         int slotXStart = frameX + 30;
         int slotYStart = frameY + 35;
         int slotX = slotXStart;
-        int slotY = slotYStart;
+        int slotY = slotYStart + 56;
 
+        frameX = gp.TILE_SIZE * 15;
+        frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16);
+        frameWidth = gp.TILE_SIZE * 7 + 15;
+        frameHeight = gp.TILE_SIZE * 15;
+        drawSubWindow(frameX, frameY, frameWidth, frameHeight);
+        
+        slotXStart = frameX + 30;
+        slotYStart = frameY + 35;
+        slotX = slotXStart;
+        slotY = slotYStart + 56;
+        
+        g2.setFont(new Font("Arial", Font.PLAIN, 35));
+        g2.drawString("Inventory", slotX, slotYStart + 24);
+        
         for (int i = 0; i < gp.player.inventory.slots.length; i++) {
             if (gp.player.inventory.slots[i] == null) {
                 g2.setColor(Color.GRAY);
                 g2.setStroke(new BasicStroke(1));
                 g2.drawRoundRect(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
-                if ((i + 1) % 9 == 0) {
+                if ((i + 1) % 4 == 0) {
                     slotX = slotXStart;
                     slotY += (gp.TILE_SIZE + 25);
                 } else {
@@ -1659,33 +1685,7 @@ public class UI {
                 }
                 g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
             }
-            if (gp.player.inventory.slots[i] instanceof Arsenal) { // Assuming ArsenalItem has durability
-                Arsenal arsenalItem = (Arsenal) gp.player.inventory.slots[i];
-                if (arsenalItem.durability < arsenalItem.maxDurability) {
-                    int durabilityBarWidth = gp.TILE_SIZE + 10;
-                    int durabilityBarHeight = 5;
-                    int durabilityBarX = slotX;
-                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
-
-                    // Calculate durability percentage
-                    float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
-
-                    // Set color based on durability
-                    if (durabilityPercentage > 0.5) {
-                        g2.setColor(Color.GREEN);
-                    } else {
-                        g2.setColor(Color.RED);
-                    }
-
-                    // Draw the durability bar
-                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
-
-                    // Draw the border of the durability bar
-                    g2.setColor(Color.BLACK);
-                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
-                }
-            }
-            if ((i + 1) % 9 == 0) {
+            if ((i + 1) % 4 == 0) {
                 slotX = slotXStart;
                 slotY += (gp.TILE_SIZE + 25);
             } else {
@@ -1693,11 +1693,12 @@ public class UI {
             }
         }
 
-        int cursorX = slotXStart + ((gp.TILE_SIZE + 25) * slotCol);
-        int cursorY = slotYStart + ((gp.TILE_SIZE + 25) * slotRow);
+        slotYStart = frameY + 91;
+        int cursorX = slotXStart +  ((gp.TILE_SIZE + 25) * slotCol);
+        int cursorY = slotYStart + (gp.TILE_SIZE + 25) * slotRow;
         int cursorWidth = gp.TILE_SIZE + 10;
         int cursorHeight = gp.TILE_SIZE + 10;
-
+        
         g2.setColor(Color.WHITE);
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
