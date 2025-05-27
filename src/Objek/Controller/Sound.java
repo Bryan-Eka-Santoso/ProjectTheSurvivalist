@@ -21,6 +21,29 @@ public class Sound {
             soundURL[5] = new File("ProjectTheSurvivalist/res/sound/walk_grass_SE.wav").toURI().toURL();
             soundURL[6] = new File("ProjectTheSurvivalist/res/sound/chop _sound_effect.wav").toURI().toURL();
             soundURL[7] = new File("ProjectTheSurvivalist/res/sound/happy-relaxing-loop-275487.wav").toURI().toURL();
+            soundURL[8] = new File("ProjectTheSurvivalist/res/sound/armor-equip.mp3").toURI().toURL();
+            soundURL[9] = new File("ProjectTheSurvivalist/res/sound/attacked.mp3").toURI().toURL();
+            soundURL[10] = new File("ProjectTheSurvivalist/res/sound/breath-out.mp3").toURI().toURL();
+            soundURL[11] = new File("ProjectTheSurvivalist/res/sound/build.place.mp3").toURI().toURL();
+            soundURL[12] = new File("ProjectTheSurvivalist/res/sound/caged.mp3").toURI().toURL();
+            soundURL[13] = new File("ProjectTheSurvivalist/res/sound/chased.mp3").toURI().toURL();
+            soundURL[14] = new File("ProjectTheSurvivalist/res/sound/chest-close.mp3").toURI().toURL();
+            soundURL[15] = new File("ProjectTheSurvivalist/res/sound/chest-open.mp3").toURI().toURL();
+            soundURL[16] = new File("ProjectTheSurvivalist/res/sound/craft.mp3").toURI().toURL();
+            soundURL[17] = new File("ProjectTheSurvivalist/res/sound/drink.mp3").toURI().toURL();
+            soundURL[18] = new File("ProjectTheSurvivalist/res/sound/fishing-theme.mp3").toURI().toURL();
+            soundURL[19] = new File("ProjectTheSurvivalist/res/sound/grab.mp3").toURI().toURL();
+            soundURL[20] = new File("ProjectTheSurvivalist/res/sound/grass-step.mp3").toURI().toURL();
+            soundURL[21] = new File("ProjectTheSurvivalist/res/sound/levelup.mp3").toURI().toURL();
+            soundURL[22] = new File("ProjectTheSurvivalist/res/sound/pickup.mp3").toURI().toURL();
+            soundURL[23] = new File("ProjectTheSurvivalist/res/sound/plant.mp3").toURI().toURL();
+            soundURL[24] = new File("ProjectTheSurvivalist/res/sound/poisoned.mp3").toURI().toURL();
+            soundURL[25] = new File("ProjectTheSurvivalist/res/sound/rowing.mp3").toURI().toURL();
+            soundURL[26] = new File("ProjectTheSurvivalist/res/sound/sand-step.mp3").toURI().toURL();
+
+           
+
+           
         }  catch (Exception e) {
             e.printStackTrace();
         }

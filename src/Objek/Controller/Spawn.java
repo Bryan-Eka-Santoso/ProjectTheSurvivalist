@@ -10,6 +10,7 @@ import Objek.Animal.Wolf;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
 import Objek.Enemy.Bat;
+import Objek.Enemy.Golem;
 import Objek.Plant.Plant;
 
 public class Spawn {
@@ -108,7 +109,6 @@ public class Spawn {
             int x = (int)(Math.random() * (gp.MAX_WORLD_COL -8));
             int y = (int)(Math.random() * (gp.MAX_WORLD_ROW -8));
             Point pos = new Point(x, y);
-            System.out.println("Trying to spawn at x:" + x + " y:" + y);
             if (usedPositions.contains(pos)) {
                 attempts++;
                 continue;
@@ -130,6 +130,9 @@ public class Spawn {
             switch (animalType.toLowerCase()) {
                 case "bat":
                     gp.monsters.add(new Bat("Bat", x * gp.TILE_SIZE, y * gp.TILE_SIZE, 8, "down", gp));
+                    break;
+                case "golem":
+                    gp.monsters.add(new Golem("Golem", x * gp.TILE_SIZE, y * gp.TILE_SIZE, 6, "down", gp));
                     break;
             }
             

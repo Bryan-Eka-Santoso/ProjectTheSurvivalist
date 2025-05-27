@@ -7,4 +7,5 @@ public class Chestplate extends Armor {
     public Chestplate(String name, int durability, int defense, int maxDurability) {
         super(name, durability, defense, maxDurability);
     }
+    
 }

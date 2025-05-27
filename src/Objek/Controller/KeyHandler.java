@@ -628,6 +628,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.isCave = !gp.isCave;
                 gp.eManager.lighting.setLightSource(); 
                 sp.spawnMonster("Bat", 10, usedPositions);
+                sp.spawnMonster("Golem", 10, usedPositions);
             }
         } else if (gp.currentMap == 1){
             if(col == 60 && row == 25) {

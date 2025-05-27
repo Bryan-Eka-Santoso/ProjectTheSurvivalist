@@ -18,24 +18,14 @@ public class Food extends Stackable {
     public void eat(Player player) {
         // Implement the logic for eating food here
         System.out.println("Eating " + name + "..."); // Eating action
-       
-        poisonChance = random.nextInt(100); 
-        if (poisonChance < 10) { // 10% chance to poison
-            System.out.println("You've been poisoned!");
-            player.setPoisoned();
-            player.hunger += 10;
-            if(player.hunger >= 100){
-                player.hunger = 100; 
-            }
-        }else{
-            player.hunger += 10;
-            if(player.hunger >= 100){
-                player.hunger = 100; 
-            }
-            player.health += 5;
-            if(player.health >= 100){
-                player.health = 100; 
-            }
+        
+        player.hunger += 10;
+        if(player.hunger >= 100){
+            player.hunger = 100; 
+        }
+        player.health += 5;
+        if(player.health >= 100){
+            player.health = 100; 
         }
         System.out.println("Health: " + player.health + ", Hunger: " + player.hunger); // Display updated stats
     }

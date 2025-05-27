@@ -35,7 +35,7 @@ import Objek.Items.Unstackable.Arsenals.Club;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
 import Objek.Enemy.Bat;
-import Objek.Enemy.Minotaur;
+import Objek.Enemy.Golem;
 import Objek.Plant.*;
 import Objek.Player.Player;
 
@@ -257,11 +257,11 @@ public class UseItem {
                             player.gainExp(rand.nextInt(10) + 9);
                             player.monsterIndex = -1;
                         }
-                    }else if (monster instanceof Minotaur){
-                        Minotaur minotaur = (Minotaur)monster;
-                        minotaur.hp -= damage;
-                        System.out.println("Hit minotaur: " + minotaur.hp + "/" + 150);
-                        if(minotaur.hp <= 0) {
+                    }else if (monster instanceof Golem){
+                        Golem golem = (Golem)monster;
+                        golem.hp -= damage;
+                        System.out.println("Hit minotaur: " + golem.hp + "/" + 200);
+                        if(golem.hp <= 0) {
                             player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
                             player.gp.monsters.remove(player.monsterIndex);
                             player.gainExp(rand.nextInt(10) + 15);
