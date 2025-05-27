@@ -7,7 +7,9 @@ import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
 import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.Unstackable.Torch;
+import Objek.Items.Unstackable.WateringCan;
 import Objek.Items.Unstackable.Armor.Helmet.IronHelmet;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Monsters.Bat;
@@ -39,8 +41,8 @@ public class GamePanel extends JPanel implements Runnable {
     
     public int SpawnX = 40, SpawnY = 44;
     
-    Crafting recipe = new Crafting();
     KeyHandler keyH = new KeyHandler(this);
+    Crafting recipe = new Crafting(this);
     public Player player = new Player("Player", 15, recipe, this, keyH);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
@@ -355,6 +357,9 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Furnace(this, 2));
         player.inventory.addItems(new Chest(this, 2));
         player.inventory.addItems(new IronHelmet());
+        player.inventory.addItems(new WateringCan());
+        player.inventory.addItems(new Orchard(this, 1));
+        player.inventory.addItems(new CoconutSeeds(2));
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -494,6 +499,16 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < plants.size(); i++) {
             if (plants.get(i).worldY > player.worldY) {
                 plants.get(i).draw(g2);
+            }
+        }
+        for (int i = 0; i < buildings.size(); i++) {
+            if (buildings.get(i).worldY > player.worldY) {
+                buildings.get(i).draw(g2);
+            }
+            if (buildings.get(i) instanceof Orchard) {
+                if (((Orchard) buildings.get(i)).phase.equals("seed") || ((Orchard) buildings.get(i)).phase.equals("sprout")) {
+                    ((Orchard) buildings.get(i)).updateGrowth();
+                }
             }
         }
         

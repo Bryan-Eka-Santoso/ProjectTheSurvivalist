@@ -20,8 +20,6 @@ public class Buildings extends Item {
     public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height) {
         super(name, maxStack, currentStack);
         this.gp = gp;
-        this.worldX = gp.player.worldX;
-        this.worldY = gp.player.worldY;
         this.solidArea = solidArea;
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;

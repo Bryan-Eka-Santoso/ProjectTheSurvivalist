@@ -1,16 +1,22 @@
 package Objek.Player;
-import java.util.*;
 
+import java.util.*;
+import Objek.Controller.GamePanel;
 import Objek.Items.Item;
+import Objek.Items.Buildings.Bed;
+import Objek.Items.Buildings.Chest;
+import Objek.Items.Buildings.Furnace;
 import Objek.Items.StackableItem.Materials.Crystal;
 import Objek.Items.StackableItem.Materials.Gem;
 import Objek.Items.StackableItem.Materials.MetalFrame;
 import Objek.Items.StackableItem.Materials.MetalIngot;
 import Objek.Items.StackableItem.Materials.MetalNails;
 import Objek.Items.StackableItem.Materials.MetalSheet;
+import Objek.Items.StackableItem.Materials.Stone;
 import Objek.Items.StackableItem.Materials.SwordHandle;
 import Objek.Items.StackableItem.Materials.ToolHandle;
 import Objek.Items.StackableItem.Materials.Wood;
+import Objek.Items.StackableItem.Materials.Wool;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Items.Unstackable.Arsenals.WoodenClub;
 import Objek.Items.Unstackable.Arsenals.LightweightAxe;
@@ -25,10 +31,12 @@ public class Crafting {
     public LinkedHashMap<List<Item>, Item> currentRecipe = new LinkedHashMap<>();
     public LinkedHashMap<List<Item>, Item> smallRecipes = new LinkedHashMap<>();
     public LinkedHashMap<List<Item>, Item> recipes = new LinkedHashMap<>();
+    public GamePanel gp;
 
-    public Crafting() {
+    public Crafting(GamePanel gp) {
         smallRecipes = fillSmallRecipes();
         recipes = fillRecipes();
+        this.gp = gp;
     }
 
     private LinkedHashMap<List<Item>, Item> fillSmallRecipes() {
@@ -51,6 +59,9 @@ public class Crafting {
 
         List<Item> recipe6 = Arrays.asList(new MetalIngot(1));
         r.put(recipe6, new MetalSheet(2));
+
+        List<Item> recipe9 = Arrays.asList(new MetalIngot(1), new MetalNails(2));
+        r.put(recipe9, new MetalFrame(1));
 
         return r;
     }
@@ -80,6 +91,15 @@ public class Crafting {
 
         List<Item> recipe7 = Arrays.asList(new MetalIngot(3));
         r.put(recipe7, new MetalClub());
+
+        List<Item> recipe8 = Arrays.asList(new Wood(3), new Wool(3));
+        r.put(recipe8, new Bed(gp, 1));
+
+        List<Item> recipe9 = Arrays.asList(new Stone(8));
+        r.put(recipe9, new Furnace(gp, 1));
+
+        List<Item> recipe10 = Arrays.asList(new Wood(8));
+        r.put(recipe10, new Chest(gp, 1));
 
         return r;
     }
