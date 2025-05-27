@@ -22,6 +22,7 @@ import Objek.Items.StackableItem.Foods.RawMutton;
 import Objek.Items.StackableItem.Foods.RawPork;
 import Objek.Items.StackableItem.Materials.Feather;
 import Objek.Items.StackableItem.Materials.Material;
+import Objek.Items.StackableItem.Materials.Wheat;
 import Objek.Items.StackableItem.Materials.Wood;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
@@ -77,9 +78,18 @@ public class UseItem {
                 Torch torch = (Torch) selectedItem;
                 System.out.println("Using torch: " + torch.name);
                 
-            }
-            if (selectedItem instanceof Seeds || selectedItem instanceof Carrot || selectedItem instanceof Potato) {
-                if (gp.buildings.get(gp.player.buildingIndex) instanceof GardenPatch){ 
+            } else if (selectedItem instanceof Seeds && gp.player.buildingIndex != -1 && gp.buildings.get(gp.player.buildingIndex) instanceof Orchard) {
+                Seeds seed = (Seeds) selectedItem;
+                Orchard orchard = (Orchard) gp.buildings.get(gp.player.buildingIndex);
+                if (orchard.seed != null) {
+                    System.out.println("Orchard already has a seed planted!");
+                    return;
+                }
+                orchard.plant(seed);
+                System.out.println("Using seed: " + seed.name);
+                gp.player.inventory.removeItem(seed, 1); // Remove seed from inventory
+            } else if (selectedItem instanceof Seeds || selectedItem instanceof Carrot || selectedItem instanceof Potato && gp.player.buildingIndex != -1) {
+                if (gp.buildings.get(gp.player.buildingIndex) instanceof GardenPatch){
                     Item seed = selectedItem;
                     GardenPatch gardenPatch = (GardenPatch) gp.buildings.get(gp.player.buildingIndex);
                     if (gardenPatch.seed != null) {
@@ -90,19 +100,7 @@ public class UseItem {
                     System.out.println("Using seed: " + seed.name);
                     gp.player.inventory.removeItem(seed, 1); // Remove seed from inventory
                 }
-            }
-            if (selectedItem instanceof Seeds && gp.buildings.get(gp.player.buildingIndex) instanceof Orchard) {
-                Seeds seed = (Seeds) selectedItem;
-                Orchard orchard = (Orchard) gp.buildings.get(gp.player.buildingIndex);
-                if (orchard.seed != null) {
-                    System.out.println("Orchard already has a seed planted!");
-                    return;
-                }
-                orchard.plant(seed);
-                System.out.println("Using seed: " + seed.name);
-                gp.player.inventory.removeItem(seed, 1); // Remove seed from inventory
-            }
-            if (selectedItem instanceof Material) {
+            } else if (selectedItem instanceof Material) {
                 Material material = (Material) selectedItem;
                 System.out.println("Using material: " + material.name);
             } else if (selectedItem instanceof Buildings) {
@@ -326,6 +324,34 @@ public class UseItem {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
                                     } else {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new MangoSeeds(rand.nextInt(1) + 1), gp));
+                                    }
+                                }
+                            }
+                        } else if (building instanceof GardenPatch) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new GardenPatch(gp, 1), gp));
+                            GardenPatch gardenPatch = (GardenPatch) building;
+                            if (gardenPatch.seed != null) {
+                                if (gardenPatch.seed instanceof Seeds){
+                                    if (gardenPatch.phase.equals("crops")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Wheat(rand.nextInt(1) + 1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(rand.nextInt(2)), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(1), gp));
+                                    }
+                                } else if (gardenPatch.seed instanceof Potato){
+                                    if (gardenPatch.phase.equals("crops")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Potato(rand.nextInt(2) + 2), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Potato(1), gp));
+                                    }
+                                } else if (gardenPatch.seed instanceof Carrot){
+                                    if (gardenPatch.phase.equals("crops")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Carrot(rand.nextInt(2) + 2), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Carrot(1), gp));
                                     }
                                 }
                             }

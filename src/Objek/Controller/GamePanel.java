@@ -167,6 +167,12 @@ public class GamePanel extends JPanel implements Runnable {
         sp.spawnAnimal("sheep", 5, usedPositions);
         sp.spawnAnimal("pig", 5, usedPositions);
     }
+    public void addPlant() {
+        ArrayList<Point> usedPositions = new ArrayList<>();
+        sp.spawnPlant("guava", 20, usedPositions);
+        sp.spawnPlant("mango", 20, usedPositions);
+        sp.spawnPlant("berrybush", 10, usedPositions);
+    }
     
     @Override
     public void run() {
@@ -182,10 +188,14 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant(new Bush(40 * TILE_SIZE,  57 * TILE_SIZE, this));
         addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addAnimals();
+        addPlant();
+        player.inventory.addItems(new WateringCan());
         player.inventory.addItems(new Seeds(5));
         player.inventory.addItems(new Potato(5));
         player.inventory.addItems(new Carrot(5));
         player.inventory.addItems(new GardenPatch(this, 5));
+        player.inventory.addItems(new Orchard(this, 1));
+        player.inventory.addItems(new CoconutSeeds(2));
         player.inventory.addItems(new KandangAyam(this));
         player.inventory.addItems(new Torch(this));
         player.inventory.addItems(new WindAxe());
@@ -194,8 +204,6 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Chest(this, 2));
         player.inventory.addItems(new IronHelmet());
         player.inventory.addItems(new WateringCan());
-        player.inventory.addItems(new Orchard(this, 1));
-        player.inventory.addItems(new CoconutSeeds(2));
         Buildings shop = new Shop(this, 1);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
@@ -342,6 +350,9 @@ public class GamePanel extends JPanel implements Runnable {
             }
             if (buildings.get(i) instanceof Orchard) {
                 ((Orchard) buildings.get(i)).updateGrowth();
+            }
+            if (buildings.get(i) instanceof GardenPatch) {
+                ((GardenPatch) buildings.get(i)).updateGrowth();
             }
         }
         for (int i = 0; i < animals.size(); i++) {

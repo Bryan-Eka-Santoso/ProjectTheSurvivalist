@@ -10,6 +10,9 @@ import Objek.Animal.Wolf;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
 import Objek.Enemy.Bat;
+import Objek.Plant.BerryBush;
+import Objek.Plant.GuavaTree;
+import Objek.Plant.MangoTree;
 import Objek.Plant.Plant;
 
 public class Spawn {
@@ -17,6 +20,55 @@ public class Spawn {
 
     public Spawn(GamePanel gp) {
         this.gp = gp;
+    }
+
+    public void spawnPlant(String plantType, int count, ArrayList<Point> usedPositions) {
+        int attempts = 0;
+        int maxAttempts = 1000; // Prevent infinite loop
+        int spawnedCount = 0;
+        int validTiles = 18; // Assuming grass tile number is 18
+        
+        while (spawnedCount < count && attempts < maxAttempts) {
+        
+            int x = (int)(Math.random() * (gp.MAX_WORLD_COL -5));
+            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW -5));
+            Point pos = new Point(x, y);
+
+            // Check if position is already used
+            if (usedPositions.contains(pos)) {
+                attempts++;
+                continue;
+            }
+            // Check if tile is grass
+            int tileNum = gp.tileM.mapTile[gp.currentMap][x][y];
+            boolean isValidTile = false;
+            
+            if (tileNum == validTiles) {
+                isValidTile = true;
+            }
+            
+            if (!isValidTile) {
+                attempts++;
+                continue;
+            }
+            
+            // Spawn the plant based on type
+            switch (plantType.toLowerCase()) {
+                case "guava":
+                    gp.plants.add(new GuavaTree(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    break;
+                case "mango":
+                    gp.plants.add(new MangoTree(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    break;
+                case "berrybush":
+                    gp.plants.add(new BerryBush(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    break;
+            }
+            // Mark position as used
+            usedPositions.add(pos);
+            spawnedCount++;
+            attempts = 0;           
+        }
     }
 
     public void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
