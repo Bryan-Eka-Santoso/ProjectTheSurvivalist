@@ -101,7 +101,7 @@ public class UseItem {
                 orchard.plant(seed);
                 System.out.println("Using seed: " + seed.name);
                 gp.player.inventory.removeItem(seed, 1); // Remove seed from inventory
-            } else if (selectedItem instanceof Seeds || selectedItem instanceof Carrot || selectedItem instanceof Potato && gp.player.buildingIndex != -1) {
+            } else if ((selectedItem instanceof Seeds || selectedItem instanceof Carrot || selectedItem instanceof Potato) && gp.player.buildingIndex != -1) {
                 if (gp.buildings.get(gp.player.buildingIndex) instanceof GardenPatch){
                     Item seed = selectedItem;
                     GardenPatch gardenPatch = (GardenPatch) gp.buildings.get(gp.player.buildingIndex);
