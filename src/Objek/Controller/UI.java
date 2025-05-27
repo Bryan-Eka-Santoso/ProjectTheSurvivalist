@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.net.http.HttpClient.Redirect;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -171,37 +172,37 @@ public class UI {
             drawWrongKandangMessage(g2);
         } 
         if (isCanGoToSea) {
-            drawTextKeteranganKeLaut();
+            drawText("Press F to go to the sea", Color.BLUE);
         }
         if (isCanGoToLand) {
-            drawTextKeteranganKeDarat();
+            drawText("Press F to go to the land", Color.BLUE);
         }
         if (isNeedLevel15) {
-            drawTextButuhLevel();
+            drawText("Ship locked! Reach level 15 to unlock it", Color.GRAY);
         }
         if(gp.gameState == gp.FISHING_STATE) {
             drawFishingMinigame();
         }
         if(showRodRusak) {
-            drawTextRodRusak();
+            drawText("Your fishing rod is broken!", Color.RED);
             if(System.currentTimeMillis() - rodRusakTimer > MESSAGE_DISPLAY_TIME) {
                 showRodRusak = false;
             }
         }
         if(showDapatIkan) {
-            drawTextDapatIkan();
+            drawText("You successfully caught a " + caughtFish.nameFish + " fish!", Color.GREEN);
             if(System.currentTimeMillis() - dapatIkanTimer > MESSAGE_DISPLAY_TIME) {
                 showDapatIkan = false;
             }
         }
         if(showGagalDapatIkan) {
-            drawTextGagalDapatIkan();
+            drawText("You failed to catch a " + caughtFish.nameFish + " fish!", Color.RED);
             if(System.currentTimeMillis() - gagalDapatIkanTimer > MESSAGE_DISPLAY_TIME) {
                 showGagalDapatIkan = false;
             }
         }
         if(isShowUnlockShip) {
-            drawTextUnlockShip();
+            drawText("Congrats!! You have unlocked the ship!", Color.GREEN);
             if(System.currentTimeMillis() - messageUnlock > MESSAGE_DISPLAY_TIME) {
                 isShowUnlockShip = false;
             }
@@ -249,143 +250,22 @@ public class UI {
         caughtFish = fish;
     }
 
-    public void drawTextUnlockShip() {
-        g2.setFont(new Font("Arial", Font.BOLD, 25));
+    public void drawText(String message, Color Color) {
+        g2.setFont(new Font("Arial", Font.BOLD, 20));
         
-        String message = "Congrats!! You have unlocked the ship!";
         int x = getXCenteredText(message);
-        int y = gp.SCREEN_HEIGHT - 595;
+        int y = gp.SCREEN_HEIGHT - 600;
         
         g2.setColor(new Color(0, 0, 0, 180));
-        int padding = 10;
+        int padding = 15;
         int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
         int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
         g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
         
-        g2.setColor(Color.green);
+        g2.setColor(Color);
         g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
         
-        g2.setColor(Color.green);
-        g2.drawString(message, x, y);
-    }
-
-    public void drawTextRodRusak() {
-        g2.setFont(new Font("Arial", Font.BOLD, 25));
-        
-        String message = "Your fishing rod is broken!";
-        int x = getXCenteredText(message);
-        int y = gp.SCREEN_HEIGHT - 595;
-        
-        g2.setColor(new Color(0, 0, 0, 180));
-        int padding = 10;
-        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
-        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
-        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.red);
-        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.red);
-        g2.drawString(message, x, y);
-    }
-
-    public void drawTextDapatIkan() {
-        g2.setFont(new Font("Arial", Font.BOLD, 25));
-        
-        String message = "You successfully caught a " + caughtFish.nameFish + " fish!";
-        int x = getXCenteredText(message);
-        int y = gp.SCREEN_HEIGHT - 595;
-        
-        g2.setColor(new Color(0, 0, 0, 180));
-        int padding = 10;
-        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
-        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
-        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.green);
-        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.green);
-        g2.drawString(message, x, y);
-    }
-
-    public void drawTextGagalDapatIkan() {
-        g2.setFont(new Font("Arial", Font.BOLD, 25));
-        
-        String message = "You failed to catch a " + caughtFish.nameFish + " fish!";
-        int x = getXCenteredText(message);
-        int y = gp.SCREEN_HEIGHT - 595;
-        
-        g2.setColor(new Color(0, 0, 0, 180));
-        int padding = 10;
-        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
-        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
-        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.red);
-        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.red);
-        g2.drawString(message, x, y);
-    }
-
-    public void drawTextKeteranganKeDarat() {
-        g2.setFont(new Font("Arial", Font.BOLD, 25));
-        
-        String message = "Press F to go to the land";
-        int x = getXCenteredText(message);
-        int y = gp.SCREEN_HEIGHT - 595;
-        
-        g2.setColor(new Color(0, 0, 0, 180));
-        int padding = 10;
-        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
-        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
-        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.blue);
-        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.blue);
-        g2.drawString(message, x, y);
-    }
-
-    public void drawTextKeteranganKeLaut() {
-        g2.setFont(new Font("Arial", Font.BOLD, 25));
-        
-        String message = "Press F to go to the sea";
-        int x = getXCenteredText(message);
-        int y = gp.SCREEN_HEIGHT - 595;
-        
-        g2.setColor(new Color(0, 0, 0, 180));
-        int padding = 10;
-        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
-        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
-        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.blue);
-        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.blue);
-        g2.drawString(message, x, y);
-    }
-
-    private void drawTextButuhLevel() {
-        g2.setFont(new Font("Arial", Font.BOLD, 25));
-        
-        String message = "Ship locked! Reach level 15 to unlock it";
-        int x = getXCenteredText(message);
-        int y = gp.SCREEN_HEIGHT - 595;
-        
-        g2.setColor(new Color(0, 0, 0, 180));
-        int padding = 10;
-        int messageWidth = (int)g2.getFontMetrics().getStringBounds(message, g2).getWidth() + padding * 2;
-        int messageHeight = (int)g2.getFontMetrics().getStringBounds(message, g2).getHeight() + padding * 2;
-        g2.fillRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.gray);
-        g2.drawRoundRect(x - padding, y - messageHeight + padding, messageWidth, messageHeight, 10, 10);
-        
-        g2.setColor(Color.gray);
+        g2.setColor(Color);
         g2.drawString(message, x, y);
     }
 
