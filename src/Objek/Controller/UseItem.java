@@ -31,6 +31,8 @@ import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
+import Objek.Monsters.Bat;
+import Objek.Monsters.Minotaur;
 import Objek.Monsters.Monster;
 import Objek.Plant.*;
 import Objek.Player.Player;
@@ -206,8 +208,43 @@ public class UseItem {
                             player.gainExp(rand.nextInt(10) + 9);
                             player.animalIndex = -1;
                         }
-                    }
+                    } 
                     playSE(4);
+                } else if (player.monsterIndex != -1){
+                    Monster monster = player.gp.monsters.get(player.monsterIndex);
+                    monster.hp -= arsenal.damage;
+                    int damage = arsenal.damage;
+
+                    if (selectedItem instanceof Axe || selectedItem instanceof Pickaxe){
+                        System.out.println("Using axe/pickaxe: " + arsenal.name);
+                        arsenal.durability -= 3;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    } else {
+                        System.out.println("Using sword/club: " + arsenal.name);
+                        arsenal.durability--;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    }
+                    if(monster instanceof Bat){
+                        Bat bat = (Bat)monster;
+                        bat.hp -= damage;
+                        System.out.println("Hit bat: " + bat.hp + "/" + 30);
+                        if(bat.hp <= 0) {
+                            player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
+                            player.gp.monsters.remove(player.monsterIndex);
+                            player.gainExp(rand.nextInt(10) + 9);
+                            player.monsterIndex = -1;
+                        }
+                    }else if (monster instanceof Minotaur){
+                        Minotaur minotaur = (Minotaur)monster;
+                        minotaur.hp -= damage;
+                        System.out.println("Hit minotaur: " + minotaur.hp + "/" + 150);
+                        if(minotaur.hp <= 0) {
+                            player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
+                            player.gp.monsters.remove(player.monsterIndex);
+                            player.gainExp(rand.nextInt(10) + 15);
+                            player.monsterIndex = -1;
+                        }
+                    }
                 } else if (player.buildingIndex != -1) {
                     Buildings building = player.gp.buildings.get(player.buildingIndex);
                     building.hp -= arsenal.damage;

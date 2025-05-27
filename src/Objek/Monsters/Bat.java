@@ -25,15 +25,15 @@ public class Bat extends Monster {
 
     public Bat(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
         super(name, worldX, worldY, speed, direction, gp);
-        this.hp = 50;
-        this.solidArea = new Rectangle(8, 16, 32, 32); 
+        this.hp = 100;
         this.actionMoveDelay = random.nextInt(91) + 30;
-        this.solidAreaDefaultX = this.solidArea.x;
-        this.solidAreaDefaultY = this.solidArea.y;
         upHitbox = new Rectangle(1, 4, 28,21 );   
         downHitbox = new Rectangle(1, 2, 28, 24);   
         leftHitbox = new Rectangle(3 ,1, 30, 16);   
-        rightHitbox = new Rectangle(2, 1, 18, 21);   // Lebih lebar di kanan
+        rightHitbox = new Rectangle(2, 1, 18, 21);  
+        this.solidArea = downHitbox;
+        this.solidAreaDefaultX = this.solidArea.x;
+        this.solidAreaDefaultY = this.solidArea.y;
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/up2.png"));
@@ -217,8 +217,8 @@ public class Bat extends Monster {
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
-            if(hp < 60) {
-                double oneScale = (double)gp.TILE_SIZE/60;
+            if(hp < 100) {
+                double oneScale = (double)gp.TILE_SIZE/100;
                 double hpBarValue = oneScale * hp;
 
                 g2.setColor(new Color(35,35,35));

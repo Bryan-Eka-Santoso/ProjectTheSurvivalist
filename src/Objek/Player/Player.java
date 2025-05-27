@@ -266,13 +266,13 @@ public class Player {
             
             collisionOn = false;
             gp.cCheck.checkTile(this);
+            droppedItem = gp.cCheck.checkItemDrop(this, true);
             if (gp.currentMap == 1) {
                 fishIndex = gp.cCheck.checkFish(this, true);
             } else if (gp.currentMap == 2) {
-
+                monsterIndex = gp.cCheck.checkMonsters(this, true);
             } else {
                 monsterIndex = gp.cCheck.checkMonsters(this, true);
-                droppedItem = gp.cCheck.checkItemDrop(this, true);
                 animalIndex = gp.cCheck.checkAnimal(this, true);
                 buildingIndex = gp.cCheck.checkBuildings(this, true);
                 plantIndex = gp.cCheck.checkPlant(this, true);

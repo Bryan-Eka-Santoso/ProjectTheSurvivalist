@@ -492,6 +492,12 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             isTemp2Chest = false;
         }
         if (gp.gameState == gp.GAME_OVER_STATE) {
+            if (gp.currentMap == 2) {
+                gp.monsters.clear();
+            }
+            if (gp.currentMap == 1) {
+                gp.fish.clear();
+            }
             gp.player = new Player("Player", gp.player.level, gp.recipe, gp, gp.keyH);
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
             gp.currentMap = 0;
@@ -637,7 +643,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             if(col == 23 && row == 23) {
                 gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
                 gp.currentMap = 0;
-                gp.animals.clear();
+                gp.monsters.clear();
                 gp.player.getPlayerImg();
                 gp.tileM.getTileImage();
                 gp.player.worldY = 56 * gp.TILE_SIZE;
@@ -716,9 +722,11 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 }
             }
         }
-        if (gp.player.droppedItem != -1 && gp.currentMap == gp.droppedItems.get(gp.player.droppedItem).mapIndex) {
-            gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
-            gp.player.droppedItem = -1;
+        if (gp.player.droppedItem != -1) {
+            if (gp.currentMap == gp.droppedItems.get(gp.player.droppedItem).mapIndex) {
+                gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
+                gp.player.droppedItem = -1;
+            }
         }
     }
 
