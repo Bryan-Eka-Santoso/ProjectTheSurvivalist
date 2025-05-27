@@ -28,6 +28,7 @@ public class Cow extends TameAnimal {
     public int actionLockCounter = 0;
     private static final int COW_WIDTH = 128;
     private static final int COW_HEIGHT = 128;
+    
     public Cow(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();

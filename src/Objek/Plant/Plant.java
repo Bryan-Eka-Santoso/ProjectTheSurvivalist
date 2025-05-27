@@ -47,7 +47,6 @@ public class Plant {
                 } else {
                     g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
                 }
-                g2.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
             if(hp < maxHp) {
                 double oneScale = (double)gp.TILE_SIZE/100;
                 double hpBarValue = oneScale * hp;

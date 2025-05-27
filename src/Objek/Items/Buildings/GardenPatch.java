@@ -44,6 +44,7 @@ public class GardenPatch extends Buildings {
 
     public void plant(Item seed) {
         if (phase.equals("empty")) {
+            this.seed = seed;
             if (seed instanceof Seeds){
                 try {
                     this.phaseSprites[1] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/wheatcrop1.png"));
