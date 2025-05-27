@@ -4,9 +4,11 @@ import javax.swing.*;
 import Objek.Animal.*;
 import Objek.Enemy.Bat;
 import Objek.Enemy.Monster;
+import Objek.Enemy.Golem;
 import Objek.Environment.EnvironmentManager;
 import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Foods.Bread;
 import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Potato;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
@@ -204,6 +206,10 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Chest(this, 2));
         player.inventory.addItems(new IronHelmet());
         player.inventory.addItems(new WateringCan());
+        player.inventory.addItems(new Orchard(this, 1));
+        player.inventory.addItems(new CoconutSeeds(2));
+        player.inventory.addItems(new Bread());
+        
         Buildings shop = new Shop(this, 1);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
@@ -230,13 +236,14 @@ public class GamePanel extends JPanel implements Runnable {
             if (currentTime - lastAnimalMoveTime >= interval) {
                 lastAnimalMoveTime = currentTime;
             }
-            
+
             if (timer >= 1000000000) {
                 if(player.level == 15 && !isAfterUnlockShip) {
                     isAfterUnlockShip = true;
                     reloadTile();
                     ui.showCongratsUnlockShip();
                 }
+
                 timer = 0;
             }
         }
@@ -277,6 +284,13 @@ public class GamePanel extends JPanel implements Runnable {
                     monsters.get(i).update();
                     if (monsters.get(i) instanceof Bat) {
                         ((Bat) monsters.get(i)).chasePlayer();
+                    }
+                        
+                }
+                for (int i = 0; i < monsters.size(); i++) {
+                    monsters.get(i).update();
+                    if (monsters.get(i) instanceof Golem) {
+                        ((Golem) monsters.get(i)).chasePlayer();
                     }
                         
                 }

@@ -399,9 +399,15 @@ public class CollisonChecker {
         // Check collision
         if(animal.solidArea.intersects(gp.player.solidArea)) {
             animal.collisionOn = true;
+            int def = gp.player.getDefense();
             if (animal instanceof Wolf) {
                 System.out.println("Player is attacked by a wolf!");
-                gp.player.health -= 10; // Decrease player HP
+                if(10 - def <= 0){
+                    gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
+                }else {
+
+                    gp.player.health -= (10-def); // Decrease player HP
+                }
                 if (gp.player.health <= 0) {
                     gp.player.health = 0; // Prevent negative health
                 }
@@ -686,7 +692,13 @@ public class CollisonChecker {
     
         // Check collision
         if(monster.solidArea.intersects(gp.player.solidArea)) {
-            gp.player.health -= 10; // Decrease player HP
+            int def = gp.player.getDefense();
+            if(10-def < 0){
+                gp.player.health -= 1; 
+            }else{
+
+                gp.player.health -= (10- def); // Decrease player HP
+            }
             if (gp.player.health <= 0) {
                 gp.player.health = 0; // Prevent negative health
             } 

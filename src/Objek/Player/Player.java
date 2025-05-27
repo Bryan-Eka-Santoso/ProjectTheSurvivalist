@@ -64,6 +64,10 @@ public class Player {
     private boolean isPoisoned = false;
     private static final long POISON_DURATION = 300; // 5 detik diitung dari framenya
     private static final int POISON_DAMAGE = 1;
+    private static final long HUNGER_DECREASE_INTERVAL = 420; // 7 detik diitung dari frame
+    private static final long THIRST_DECREASE_INTERVAL = 300; // 5 detik diitung dari frame
+    int hungerCounter = 0;
+    int thirstCounter = 0;
     private int poisonCounter = 0;
      private boolean isDehydrated = false;
     private int dehydrationCounter = 0;
@@ -248,6 +252,20 @@ public class Player {
             speed = 10;
         } else {
             speed = 5;
+        }
+        hungerCounter++;
+        if(hungerCounter >= HUNGER_DECREASE_INTERVAL) {
+            if(hunger > 0) {
+                hunger--;
+            }
+            hungerCounter = 0;
+        }
+        thirstCounter++;
+        if(thirstCounter >= THIRST_DECREASE_INTERVAL) {
+            if(thirst > 0) {
+                thirst--;
+            }
+            thirstCounter = 0;
         }
         if(isPoisoned) {
             handlePoisonEffect();
