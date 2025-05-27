@@ -200,6 +200,10 @@ public class GamePanel extends JPanel implements Runnable {
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
         buildings.add(shop);
+        Buildings cave = new Cave(this, 1);
+        cave.worldX = 50 * TILE_SIZE;
+        cave.worldY = 50 * TILE_SIZE;
+        buildings.add(cave);
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -278,6 +282,7 @@ public class GamePanel extends JPanel implements Runnable {
         ui.isCanGoToSea = false;
         ui.isCanGoToLand = false;
         ui.isNeedLevel15 = false;
+        ui.isCanGoToCave = false;
         int col = player.worldX / TILE_SIZE;
         int row = player.worldY / TILE_SIZE;
 
@@ -285,12 +290,18 @@ public class GamePanel extends JPanel implements Runnable {
             if ((col == 27 || col == 28) && row == 17) {
                 ui.isCanGoToSea = true;
             }
-
             if (player.level < 15 && (col == 27 || col == 28) && row == 18) {
                 ui.isNeedLevel15 = true;
             }
+            if ((col == 50 || col == 51) && row == 51) {
+                ui.isCanGoToCave = true;
+            }
         } else if(currentMap == 1){
             if (col == 60 && row == 25) {
+                ui.isCanGoToLand = true;
+            }
+        } else if(currentMap == 2){
+            if((col == 22 || col == 23) && row == 23) {
                 ui.isCanGoToLand = true;
             }
         }

@@ -24,6 +24,7 @@ public class TileManager {
         loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
         loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
         loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
+        loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);
         getTileImage();
     }
 
@@ -55,7 +56,7 @@ public class TileManager {
                 setup(21, "ship", false);
             }
             setup(22, "bridgesand", false);
-            setup(23, "cave", false);
+            setup(23, "grass", false);
         } else if(gp.currentMap == 1){
             setup(16, "calm-water", false);
             setup(17, "sand", true);
@@ -75,6 +76,8 @@ public class TileManager {
         setup(18, "grass", false);
         setup(20, "grass", false);
         setup(24, "calm-water", false);
+        setup(25, "lantaishop", false);
+        setup(26, "blank", true);
     }
 
     public void setup(int index, String imagePath, boolean collision) {

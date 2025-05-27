@@ -2,6 +2,8 @@ package Objek.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.awt.Point;
 
 import javax.imageio.ImageIO;
 
@@ -42,6 +44,29 @@ public class InteractBuild {
             } else {
                 System.out.println("Masih pagi kerja");
             }
+        }
+        if(building instanceof Cave) {
+            ArrayList<Point> usedPositions = new ArrayList<>();
+            gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
+            gp.currentMap = 2;
+            gp.animals.clear();
+            gp.player.getPlayerImg();
+            gp.tileM.getTileImage();
+            gp.player.worldY = 24 * gp.TILE_SIZE;
+            gp.player.worldX = 23 * gp.TILE_SIZE;
+            gp.isCave = !gp.isCave;
+            gp.eManager.lighting.setLightSource(); 
+            gp.sp.spawnMonster("Bat", 10, usedPositions);
+            gp.player.buildingIndex = -1;
+        }
+        if(building instanceof Shop) {
+            gp.tileM.loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);
+            gp.currentMap = 3;
+            gp.animals.clear();
+            gp.player.getPlayerImg();
+            gp.tileM.getTileImage();
+            gp.player.worldY = 53 * gp.TILE_SIZE;
+            gp.player.worldX = 52 * gp.TILE_SIZE;
         }
     }
 }

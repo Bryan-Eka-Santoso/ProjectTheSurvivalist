@@ -88,6 +88,7 @@ public class UI {
     public boolean isNeedLevel15 = false;
     public boolean isCanGoToLand = false;
     public boolean isShowUnlockShip = false;
+    public boolean isCanGoToCave = false;
 
     public Fish caughtFish;
     public int fishIndex;
@@ -181,10 +182,14 @@ public class UI {
             drawWrongKandangMessage(g2);
         } 
         if (isCanGoToSea) {
-            drawText("Press F to go to the sea", Color.BLUE);
+            drawText("Press F to go to the sea", Color.GREEN);
         }
         if (isCanGoToLand) {
-            drawText("Press F to go to the land", Color.BLUE);
+            if(gp.currentMap == 2) {
+                drawText("Press space to go to the land", Color.GREEN);
+            } else {
+                drawText("Press F to go to the land", Color.GREEN);
+            }
         }
         if (isNeedLevel15) {
             drawText("Ship locked! Reach level 15 to unlock it", Color.GRAY);
@@ -215,6 +220,9 @@ public class UI {
             if(System.currentTimeMillis() - messageUnlock > MESSAGE_DISPLAY_TIME) {
                 isShowUnlockShip = false;
             }
+        }
+        if(isCanGoToCave) {
+            drawText("Press space to go to the cave", Color.GREEN);
         }
     }
 

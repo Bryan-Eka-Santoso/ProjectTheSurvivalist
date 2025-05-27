@@ -605,6 +605,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         ArrayList<Point> usedPositions = new ArrayList<>();
         int col = gp.player.worldX / gp.TILE_SIZE;
         int row = gp.player.worldY / gp.TILE_SIZE;
+
+        System.out.println(col + " " + row);
         
         if(gp.currentMap == 0){
             if((col == 27 || col == 28) && row == 17) {
@@ -617,17 +619,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.worldX = 60 * gp.TILE_SIZE;
                 sp.spawnFish("Arwana", 20, usedPositions);
                 sp.spawnFish("Belida", 20, usedPositions);
-            } else if(col == 43 && row == 55){
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
-                gp.currentMap = 2;
-                gp.animals.clear();
-                gp.player.getPlayerImg();
-                gp.tileM.getTileImage();
-                gp.player.worldY = 24 * gp.TILE_SIZE;
-                gp.player.worldX = 23 * gp.TILE_SIZE;
-                gp.isCave = !gp.isCave;
-                gp.eManager.lighting.setLightSource(); 
-                sp.spawnMonster("Bat", 10, usedPositions);
             }
         } else if (gp.currentMap == 1){
             if(col == 60 && row == 25) {
@@ -638,17 +629,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.tileM.getTileImage();
                 gp.player.worldY = 18 * gp.TILE_SIZE;
                 gp.player.worldX = 28 * gp.TILE_SIZE;
-            }
-        } else if(gp.currentMap == 2){
-            if(col == 23 && row == 23) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
-                gp.currentMap = 0;
-                gp.monsters.clear();
-                gp.player.getPlayerImg();
-                gp.tileM.getTileImage();
-                gp.player.worldY = 56 * gp.TILE_SIZE;
-                gp.player.worldX = 43 * gp.TILE_SIZE;
-                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
         }
     }
@@ -914,6 +894,22 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void SpacePressed() {
+        int col = gp.player.worldX / gp.TILE_SIZE;
+        int row = gp.player.worldY / gp.TILE_SIZE;
+
+        if(gp.currentMap == 2){
+            if((col == 22 || col == 23) && row == 23) {
+                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.currentMap = 0;
+                gp.monsters.clear();
+                gp.player.getPlayerImg();
+                gp.tileM.getTileImage();
+                gp.player.worldY = 51 * gp.TILE_SIZE;
+                gp.player.worldX = 51 * gp.TILE_SIZE;
+                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
+            }
+        }
+
         if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE || gp.gameState == gp.OPEN_SMELTER_STATE) {
             gp.gameState = gp.PLAY_STATE;
             temp1Furnace = null;

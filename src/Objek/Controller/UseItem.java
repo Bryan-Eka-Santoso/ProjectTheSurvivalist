@@ -257,7 +257,7 @@ public class UseItem {
                             player.gainExp(rand.nextInt(10) + 9);
                             player.monsterIndex = -1;
                         }
-                    }else if (monster instanceof Minotaur){
+                    } else if (monster instanceof Minotaur){
                         Minotaur minotaur = (Minotaur)monster;
                         minotaur.hp -= damage;
                         System.out.println("Hit minotaur: " + minotaur.hp + "/" + 150);
@@ -268,7 +268,7 @@ public class UseItem {
                             player.monsterIndex = -1;
                         }
                     }
-                } else if (player.buildingIndex != -1 && !(player.gp.buildings.get(player.buildingIndex) instanceof Shop)) {
+                } else if (player.buildingIndex != -1 && !(player.gp.buildings.get(player.buildingIndex) instanceof Shop) && !(player.gp.buildings.get(player.buildingIndex) instanceof Cave)) {
                     Buildings building = player.gp.buildings.get(player.buildingIndex);
                     building.hp -= arsenal.damage;
                     System.out.println("Using arsenal on building: " + arsenal.name);
