@@ -9,10 +9,12 @@ import Objek.Animal.Sheep;
 import Objek.Animal.Wolf;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Coconut;
 import Objek.Items.StackableItem.Foods.Food;
 import Objek.Items.StackableItem.Foods.Guava;
 import Objek.Items.StackableItem.Foods.Mango;
+import Objek.Items.StackableItem.Foods.Potato;
 import Objek.Items.StackableItem.Foods.RawChicken;
 import Objek.Items.StackableItem.Foods.RawMeat;
 import Objek.Items.StackableItem.Foods.RawMutton;
@@ -57,14 +59,35 @@ public class UseItem {
                         } else {
                             System.out.println("No seed planted in the orchard!");
                         }
+                    } else if (player.gp.buildings.get(player.buildingIndex) instanceof GardenPatch) {
+                        GardenPatch gardenPatch = (GardenPatch) player.gp.buildings.get(player.buildingIndex);
+                        if (gardenPatch.seed != null) {
+                            System.out.println("Watering the seed: " + gardenPatch.seed.name);
+                            gardenPatch.water();
+                        } else {
+                            System.out.println("No seed planted in the garden patch!");
+                        }
                     } else {
-                        System.out.println("No orchard selected to use the watering can on!");
+                        System.out.println("No orchard/garden patch selected to use the watering can on!");
                     }
                 }
             } else if (selectedItem instanceof Torch) {
                 Torch torch = (Torch) selectedItem;
                 System.out.println("Using torch: " + torch.name);
                 
+            }
+            if (selectedItem instanceof Seeds || selectedItem instanceof Carrot || selectedItem instanceof Potato) {
+                if (gp.buildings.get(gp.player.buildingIndex) instanceof GardenPatch){ 
+                    Item seed = selectedItem;
+                    GardenPatch gardenPatch = (GardenPatch) gp.buildings.get(gp.player.buildingIndex);
+                    if (gardenPatch.seed != null) {
+                        System.out.println("Garden patch already has a seed planted!");
+                        return;
+                    }
+                    gardenPatch.plant(seed);
+                    System.out.println("Using seed: " + seed.name);
+                    gp.player.inventory.removeItem(seed, 1); // Remove seed from inventory
+                }
             }
             if (selectedItem instanceof Seeds && gp.buildings.get(gp.player.buildingIndex) instanceof Orchard) {
                 Seeds seed = (Seeds) selectedItem;
