@@ -302,9 +302,15 @@ public class Lighting {
     }
     
     public void draw(Graphics2D g2) {
+        if (filterAlpha < 0f) {
+            filterAlpha = 0f;
+        }
+        if (filterAlpha > 1f) {
+            filterAlpha = 1f;
+        }
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
         g2.drawImage(darknessFilter, 0, 0, null);
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));   
     }
 }
 

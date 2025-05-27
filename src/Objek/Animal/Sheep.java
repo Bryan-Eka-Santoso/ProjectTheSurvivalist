@@ -25,6 +25,8 @@ public class Sheep extends TameAnimal {
     private int actionMoveDelay;
     private int speed = 8; 
     public int actionLockCounter = 0;
+    private static final int SHEEP_WIDTH = 128;
+    private static final int SHEEP_HEIGHT = 128;
     
     public Sheep(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
@@ -65,6 +67,14 @@ public class Sheep extends TameAnimal {
             e.printStackTrace();
         }
     }
+    @Override
+    public int getWidth() {
+        return SHEEP_WIDTH;
+    }
+    @Override
+    public int getHeight() {
+        return SHEEP_HEIGHT;
+    }
 
     private void setRandomDirection() {
         String newDirection= null;
@@ -76,7 +86,7 @@ public class Sheep extends TameAnimal {
                 case 1: newDirection = "down"; break;
                 case 2: newDirection = "left"; break;
                 case 3: newDirection = "right"; break;
-               
+                
             }
         } while (newDirection.equals(oldDirection));
         this.direction = newDirection;

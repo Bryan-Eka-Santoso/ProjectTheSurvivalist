@@ -30,10 +30,10 @@ public class Bat extends Monster {
         this.actionMoveDelay = random.nextInt(91) + 30;
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
-        upHitbox = new Rectangle(2, 1, 26, 40);   
-        downHitbox = new Rectangle(2, 1, 26, 40);   
-        leftHitbox = new Rectangle(4, 4, 30, 25);   
-        rightHitbox = new Rectangle(4, 4, 30, 25);   // Lebih lebar di kanan
+        upHitbox = new Rectangle(1, 4, 28,21 );   
+        downHitbox = new Rectangle(1, 2, 28, 24);   
+        leftHitbox = new Rectangle(3 ,1, 30, 16);   
+        rightHitbox = new Rectangle(2, 1, 18, 21);   // Lebih lebar di kanan
         try {
             up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/up1.png"));
             up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/up2.png"));

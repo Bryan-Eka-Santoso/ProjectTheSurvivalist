@@ -243,6 +243,7 @@ public class Player {
     }
 
     public void update() {
+        
         if (keyH.shiftPressed && hunger > 20 && thirst >= 10) {
             speed = 10;
         } else {
