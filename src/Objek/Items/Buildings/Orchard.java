@@ -1,9 +1,7 @@
 package Objek.Items.Buildings;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
@@ -17,42 +15,40 @@ public class Orchard extends Buildings {
     public Seeds seed;
     public Tree tree;
     public BufferedImage treeImg;
-    public String phase; // e.g., "seed", "sprout", "grown", "tree"
-    public long plantedTime;
-    private BufferedImage[] phaseSprites; // Or BufferedImage[]
-    // Increase durations to make changes more noticeable
-    private static final long[] PHASE_DURATIONS = {10_000, 20_000}; // 10 seconds for seed, 20 seconds for sprout
+    public String phase; // "empty", "seed", "sprout", "tree"
+    public long[] phaseStartTimes; // When each phase started
+    private BufferedImage[] phaseSprites;
+    private static final long[] PHASE_DURATIONS = {10_000, 20_000}; // ms for each phase
+    private int currentPhaseIndex;
+    private boolean watered; // Has the current phase been watered?
+    private long lastWateredTime;
 
     public Orchard(GamePanel gp, int currentStack) {
         super("Orchard", 15, currentStack, gp, new java.awt.Rectangle(9, 9, 30, 30), 48, 48);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/orchard.png"));
-            System.out.println("Orchard base image loaded successfully");
         } catch (Exception e) {
             System.err.println("Error loading orchard image: " + e.getMessage());
-            e.printStackTrace();
         }
         this.seed = null;
         this.tree = null;
         this.treeImg = null;
         this.phase = "empty";
-        this.phaseSprites = new BufferedImage[2]; // Adjust size as needed
-        
-        // Load your sprites here (placeholder for now)
+        this.phaseSprites = new BufferedImage[2];
         try {
             phaseSprites[0] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/phase1.png"));
-            System.out.println("Phase 1 image loaded successfully");
         } catch (Exception e) {
             System.err.println("Error loading phase1 image: " + e.getMessage());
-            e.printStackTrace();
         }
         try {
             phaseSprites[1] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/phase2.png"));
-            System.out.println("Phase 2 image loaded successfully");
         } catch (Exception e) {
             System.err.println("Error loading phase2 image: " + e.getMessage());
-            e.printStackTrace();
         }
+        this.phaseStartTimes = new long[]{0, 0};
+        this.currentPhaseIndex = -1;
+        this.watered = false;
+        this.lastWateredTime = 0;
     }
 
     public void plant(Seeds seed) {
@@ -67,74 +63,54 @@ public class Orchard extends Buildings {
                 this.seed = (MangoSeeds) seed;
                 this.tree = new MangoTree(0, 0, this.gp);
             }
-            
             if (this.seed != null) {
                 this.phase = "seed";
-                this.plantedTime = System.currentTimeMillis();
-                System.out.println("Successful! Seed will soon grow into a " + this.tree.getClass().getSimpleName());
-            } else {
-                System.out.println("Failed to plant: Unknown seed type");
+                this.currentPhaseIndex = 0;
+                this.phaseStartTimes[0] = 0; // Not started yet
+                this.watered = false;
+                this.lastWateredTime = 0;
+                this.img = phaseSprites[0];
+                System.out.println("Planted " + this.tree.getClass().getSimpleName() + ". Water to start growing!");
             }
         } else {
             System.out.println("Cannot plant: Orchard is not empty");
         }
     }
 
-    public void water(){
+    public void water() {
         if (phase.equals("seed") || phase.equals("sprout")) {
-            System.out.println("Watering the orchard...");
-            
-        } else {
+            if (!watered) {
+                watered = true;
+                lastWateredTime = System.currentTimeMillis();
+                phaseStartTimes[currentPhaseIndex] = lastWateredTime;
+                System.out.println("Watered! Growth for phase '" + phase + "' started.");
+            } else {
+                System.out.println("Already watered for this phase. Wait for growth.");
+            }
+        } else {    
             System.out.println("Cannot water: Orchard is not in a plantable state");
         }
     }
 
     public void updateGrowth() {
-        if (phase.equals("empty") || tree == null) return;
+        if (phase.equals("empty") || tree == null || !watered) return;
 
-        long elapsed = System.currentTimeMillis() - plantedTime;
+        long now = System.currentTimeMillis();
+        long elapsed = now - phaseStartTimes[currentPhaseIndex];
 
-        if (elapsed < PHASE_DURATIONS[0]) {
-            // Seed phase
-            phase = "seed";
-            img = phaseSprites[0];
-        } else if (elapsed < PHASE_DURATIONS[0] + PHASE_DURATIONS[1]) {
-            // Sprout phase
+        if (currentPhaseIndex == 0 && elapsed >= PHASE_DURATIONS[0]) {
+            // Move to sprout phase, but require watering again
             phase = "sprout";
             img = phaseSprites[1];
-        } else {
-            // Fully grown tree
+            currentPhaseIndex = 1;
+            watered = false;
+            System.out.println("Phase changed to sprout! Water again to continue growth.");
+        } else if (currentPhaseIndex == 1 && elapsed >= PHASE_DURATIONS[1]) {
+            // Move to tree phase
             phase = "tree";
-            this.img = this.tree.image;
-            // You may want to cache this image instead of loading every frame!
+            img = this.tree.image;
+            watered = false;
+            System.out.println("Tree fully grown!");
         }
-        System.out.println("Current phase: " + phase);
-
     }
-
-    // public void drawTree(Graphics2D g2) {
-    //     // Draw orchard base
-    //     if (img != null) {
-    //         g2.drawImage(img, worldX, worldY, null);
-    //     }
-        
-    //     if (phase.equals("empty")) {
-    //         // Just show the empty orchard
-    //     } else if (phase.equals("seed") || phase.equals("sprout")) {
-    //         // Draw growth phase sprite
-    //         if (currentPhaseIndex < phaseSprites.length && phaseSprites[currentPhaseIndex] != null) {
-    //             g2.drawImage(phaseSprites[currentPhaseIndex], worldX, worldY, null);
-    //         } else {
-    //             System.out.println("Warning: Missing phase sprite for index " + currentPhaseIndex);
-    //         }
-    //     } else if (phase.equals("tree")) {
-    //         // Draw the mature tree on top of the orchard
-    //         if (tree != null && tree.image != null) {
-    //             // Adjust tree position as needed - may need tuning
-    //             g2.drawImage(tree.image, worldX, worldY - 24, null);
-    //         } else {
-    //             System.out.println("Warning: Tree image is null");
-    //         }
-    //     }
-    // }
 }

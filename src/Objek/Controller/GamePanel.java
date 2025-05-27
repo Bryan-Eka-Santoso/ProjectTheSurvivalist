@@ -51,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler(this);
     Sound sound = new Sound();
     Thread gameThread;
-    Crafting recipe = new Crafting();
+    Crafting recipe = new Crafting(this);
     public CollisonChecker cCheck = new CollisonChecker(this);
     
     // Game State
@@ -389,7 +389,9 @@ public class GamePanel extends JPanel implements Runnable {
                 buildings.get(i).draw(g2);
             }
             if (buildings.get(i) instanceof Orchard orchard) {
-                orchard.updateGrowth();
+                if (orchard.phase.equals("seed") || orchard.phase.equals("sprout")) {
+                    orchard.updateGrowth();
+                }
             }
         }
         
