@@ -171,6 +171,7 @@ public class GamePanel extends JPanel implements Runnable {
         ArrayList<Point> usedPositions = new ArrayList<>();
         sp.spawnPlant("guava", 20, usedPositions);
         sp.spawnPlant("mango", 20, usedPositions);
+        sp.spawnPlant("bush", 200, usedPositions);
         sp.spawnPlant("berrybush", 10, usedPositions);
     }
     

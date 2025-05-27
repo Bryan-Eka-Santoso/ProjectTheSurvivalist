@@ -11,6 +11,7 @@ import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
 import Objek.Enemy.Bat;
 import Objek.Plant.BerryBush;
+import Objek.Plant.Bush;
 import Objek.Plant.GuavaTree;
 import Objek.Plant.MangoTree;
 import Objek.Plant.Plant;
@@ -62,6 +63,9 @@ public class Spawn {
                     break;
                 case "berrybush":
                     gp.plants.add(new BerryBush(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    break;
+                case "bush":
+                    gp.plants.add(new Bush(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
                     break;
             }
             // Mark position as used
