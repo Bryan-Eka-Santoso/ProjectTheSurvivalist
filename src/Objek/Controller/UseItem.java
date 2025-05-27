@@ -14,6 +14,7 @@ import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Foods.Berries;
 import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Coconut;
 import Objek.Items.StackableItem.Foods.Food;
@@ -168,8 +169,15 @@ public class UseItem {
                             player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Mango(rand.nextInt(2) + 1), gp));
                         } else if (plant instanceof PalmTree) {
                             player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Coconut(rand.nextInt(2) + 1), gp));
+                        } else if (plant instanceof BerryBush) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, Berries.createBerries(rand.nextInt(3) + 1, rand.nextInt(2) + 1), gp));
                         }
-                        player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Wood(rand.nextInt(4) + 4), gp));
+
+                        if (plant instanceof Tree) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                        } else if (plant instanceof Bush) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Seeds(rand.nextInt(2)), gp));
+                        }
                         player.gp.plants.remove(player.plantIndex);
                         player.plantIndex = -1; 
                     }
