@@ -6,16 +6,18 @@ import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
 
-public class Torch extends Unstackable {
+public class Lantern extends Unstackable {
     GamePanel gp;
     public int lightRadius;
+    public boolean isLit;
 
-    public Torch(GamePanel gp) {
-        super("Torch");
+    public Lantern(GamePanel gp) {
+        super("Lantern");
         this.gp = gp;
         this.lightRadius = 350;
+        this.isLit = false; // Torch is lit by default
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/lightItems/torch1.png")); 
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/lightItems/lanternoff.png")); 
         } catch (IOException e) {
             e.printStackTrace();
         } 

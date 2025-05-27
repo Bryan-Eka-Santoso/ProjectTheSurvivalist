@@ -11,7 +11,7 @@ import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Potato;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.Seeds;
-import Objek.Items.Unstackable.Torch;
+import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WateringCan;
 import Objek.Items.Unstackable.Armor.Helmet.IronHelmet;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
@@ -187,7 +187,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Carrot(5));
         player.inventory.addItems(new GardenPatch(this, 5));
         player.inventory.addItems(new KandangAyam(this));
-        player.inventory.addItems(new Torch(this));
+        player.inventory.addItems(new Lantern(this));
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new Bed(this, 2));
         player.inventory.addItems(new Furnace(this, 2));

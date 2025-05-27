@@ -18,11 +18,14 @@ public class Plant {
     public boolean collision;
     public int hp;
     public int maxHp;
+    public int width, height;
     Graphics2D g2;
 
-    public Plant(int hp, int x, int y, GamePanel gp, Rectangle solidArea) {
+    public Plant(int hp, int x, int y, int width, int height, GamePanel gp, Rectangle solidArea) {
         this.worldX = x;
         this.worldY = y;
+        this.width = width;
+        this.height = height;
         this.gp = gp;
         this.solidArea = solidArea;
         this.solidAreaDefaultX = solidArea.x;
@@ -39,7 +42,12 @@ public class Plant {
             && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
-            g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+                if (this instanceof Tree) {
+                    g2.drawImage(image, screenX - 20, screenY - gp.TILE_SIZE + 5, width, height, null);
+                } else {
+                    g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+                }
+                g2.fillRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
             if(hp < maxHp) {
                 double oneScale = (double)gp.TILE_SIZE/100;
                 double hpBarValue = oneScale * hp;

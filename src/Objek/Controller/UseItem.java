@@ -1,6 +1,10 @@
 package Objek.Controller;
 
+import java.io.File;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
+
 import Objek.Animal.Animal;
 import Objek.Animal.Chicken;
 import Objek.Animal.Cow;
@@ -27,7 +31,7 @@ import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.StackableItem.Seeds.MangoSeeds;
 import Objek.Items.StackableItem.Seeds.Seeds;
-import Objek.Items.Unstackable.Torch;
+import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WateringCan;
 import Objek.Items.Unstackable.Arsenals.Arsenal;
 import Objek.Items.Unstackable.Arsenals.Axe;
@@ -73,9 +77,17 @@ public class UseItem {
                         System.out.println("No orchard/garden patch selected to use the watering can on!");
                     }
                 }
-            } else if (selectedItem instanceof Torch) {
-                Torch torch = (Torch) selectedItem;
+            } else if (selectedItem instanceof Lantern) {
+                Lantern torch = (Lantern) selectedItem;
                 System.out.println("Using torch: " + torch.name);
+                torch.isLit = !torch.isLit; // Toggle the torch state
+                try {
+                    torch.img = torch.isLit 
+                        ? ImageIO.read(new File("ProjectTheSurvivalist/res/Items/lightItems/lanternon.png")) 
+                        : ImageIO.read(new File("ProjectTheSurvivalist/res/Items/lightItems/lanternoff.png"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 
             }
             if (selectedItem instanceof Seeds || selectedItem instanceof Carrot || selectedItem instanceof Potato) {

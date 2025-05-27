@@ -167,6 +167,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     public void keyPressed(KeyEvent e) {
         // TODO Auto-generated method stub
         int code = e.getKeyCode();
+        gp.player.lightUpdated = true;
         if (gp.gameState == gp.GAME_OVER_STATE) {
             if (code == KeyEvent.VK_R) RPressed();
             if (code == KeyEvent.VK_Q) QPressed();
@@ -795,7 +796,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.ui.slotCol = 0;
             }
             gp.ui.selectedIndex = gp.ui.slotCol;
-            gp.player.lightUpdated = true;
             playSE(2);
         }
     }
@@ -844,7 +844,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             } 
             temp1 = 0;
             temp2 = 0;
-            gp.player.lightUpdated = true;
         }
     }
 
@@ -853,7 +852,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
             playSE(2);
             gp.ui.selectedIndex = gp.ui.slotCol;
-            gp.player.lightUpdated = true;
         }
     }
 
