@@ -269,7 +269,7 @@ public class Player {
             if (gp.currentMap == 1) {
                 fishIndex = gp.cCheck.checkFish(this, true);
             } else if (gp.currentMap == 2) {
-
+                monsterIndex = gp.cCheck.checkMonsters(this, true);
             } else {
                 monsterIndex = gp.cCheck.checkMonsters(this, true);
                 droppedItem = gp.cCheck.checkItemDrop(this, true);
