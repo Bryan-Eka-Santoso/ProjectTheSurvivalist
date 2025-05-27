@@ -18,16 +18,16 @@ public class ItemDrop {
     public GamePanel gp;
     public int mapIndex;
 
-    public ItemDrop(int x, int y, Item item, GamePanel gp, int amount, int mapIndex) {
+    public ItemDrop(int x, int y, Item item, GamePanel gp, int amount) {
         this.worldX = x;
         this.worldY = y;
         this.droppedItem = item;
-        this.mapIndex = mapIndex;
         this.gp = gp;
         this.solidArea = new Rectangle(8, 8, 32, 32 );
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         this.droppedItem.currentStack = amount;
+        this.mapIndex = gp.currentMap; // Menyimpan indeks peta saat ini
     }
     
     public ItemDrop(int x, int y, Item item, GamePanel gp) {
@@ -38,6 +38,7 @@ public class ItemDrop {
         this.solidArea = new Rectangle(8, 8, 32, 32);
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
+        this.mapIndex = gp.currentMap;
     }
     
     public void draw(Graphics2D g2) {  // Bisa dipake utk dropped item

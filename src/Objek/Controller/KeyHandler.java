@@ -28,10 +28,12 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     int furnaceIdx1, furnaceIdx2;
     Item temp1Furnace, temp2Furnace;
     Sound sound = new Sound();
+    Spawn sp;
     boolean isTemp1Chest, isTemp2Chest;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
+        this.sp = new Spawn(gp);
         temp1 = 0;
         temp2 = 0;
         counter = 0;
@@ -607,8 +609,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.tileM.getTileImage();
                 gp.player.worldY = 25 * gp.TILE_SIZE;
                 gp.player.worldX = 60 * gp.TILE_SIZE;
-                gp.spawnFish("Arwana", 20, usedPositions);
-                gp.spawnFish("Belida", 20, usedPositions);
+                sp.spawnFish("Arwana", 20, usedPositions);
+                sp.spawnFish("Belida", 20, usedPositions);
             } else if(col == 43 && row == 55){
                 gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
                 gp.currentMap = 2;
@@ -619,7 +621,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.worldX = 23 * gp.TILE_SIZE;
                 gp.isCave = !gp.isCave;
                 gp.eManager.lighting.setLightSource(); 
-                gp.spawnMonster("Bat", 10, usedPositions);
+                sp.spawnMonster("Bat", 10, usedPositions);
             }
         } else if (gp.currentMap == 1){
             if(col == 60 && row == 25) {
@@ -686,7 +688,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             topFrame.repaint();
         } 
         if (gp.gameState == gp.INVENTORY_STATE) {
-            System.out.println(selectCounter);
             if (selectCounter == 1 && gp.player.helmets[0] != null) {
                 gp.player.inventory.addItems(gp.player.helmets[0].clone());
                 gp.player.helmets[0] = null;

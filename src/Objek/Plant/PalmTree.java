@@ -1,5 +1,7 @@
 package Objek.Plant;
 
+import java.io.File;
+import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 
 public class PalmTree extends Tree {
@@ -7,7 +9,7 @@ public class PalmTree extends Tree {
         super(x, y, gp);
         this.hp = 100;
         try {
-            this.image = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/plant/palmtree.png"));
+            this.image = ImageIO.read(new File("ProjectTheSurvivalist/res/plant/palmtree.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }

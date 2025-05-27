@@ -587,7 +587,7 @@ public class Player {
     }
 
     public void dropItem(Item selectedItem, int amount, int mapIndex){
-        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount, mapIndex));
+        gp.droppedItems.add(new ItemDrop(worldX, worldY, selectedItem.clone(), gp, amount));
         gp.player.inventory.removeItem(selectedItem, amount);
     }
 

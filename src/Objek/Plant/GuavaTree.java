@@ -2,9 +2,7 @@ package Objek.Plant;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import Objek.Controller.GamePanel;
 
 public class GuavaTree extends Tree {

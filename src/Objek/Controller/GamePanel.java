@@ -3,8 +3,6 @@ package Objek.Controller;
 import javax.swing.*;
 import Objek.Animal.*;
 import Objek.Environment.EnvironmentManager;
-import Objek.Fish.Arwana;
-import Objek.Fish.Belida;
 import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
@@ -49,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
     public EnvironmentManager eManager = new EnvironmentManager(this);
     Sound sound = new Sound();
     Thread gameThread;
+    Spawn sp = new Spawn(this);
     public CollisonChecker cCheck = new CollisonChecker(this);
     
     // Game State
@@ -141,200 +140,28 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if(chickenCount < MAX_CHICKENS) {
-            spawnAnimal("chicken", MAX_CHICKENS - chickenCount, usedPositions);
+            sp.spawnAnimal("chicken", MAX_CHICKENS - chickenCount, usedPositions);
         }
         if(cowCount < MAX_COWS) {
-            spawnAnimal("cow", MAX_COWS - cowCount, usedPositions);
+            sp.spawnAnimal("cow", MAX_COWS - cowCount, usedPositions);
         }
         if(sheepCount < MAX_SHEEP) {
-            spawnAnimal("sheep", MAX_SHEEP - sheepCount, usedPositions);
+            sp.spawnAnimal("sheep", MAX_SHEEP - sheepCount, usedPositions);
         }
         if(pigCount < MAX_PIGS) {
-            spawnAnimal("pig", MAX_PIGS - pigCount, usedPositions);
+            sp.spawnAnimal("pig", MAX_PIGS - pigCount, usedPositions);
         }
         if (wolfCount < MAX_WOLF) {
-            spawnAnimal("wolf", MAX_WOLF - wolfCount, usedPositions);
+            sp.spawnAnimal("wolf", MAX_WOLF - wolfCount, usedPositions);
         }
-    }
-
-    private void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
-        int attempts = 0;
-        int maxAttempts = 1000; // Prevent infinite loop
-        int spawnedCount = 0;
-        int validTiles = 18;
-        
-        int playerSpawnX = 40; 
-        int playerSpawnY = 44; 
-        int safeZoneRadius = 5;
-        while (spawnedCount < count && attempts < maxAttempts) {
-        
-            int x = (int)(Math.random() * (MAX_WORLD_COL -5));
-            int y = (int)(Math.random() * (MAX_WORLD_ROW -5));
-            Point pos = new Point(x, y);
-
-            if (Math.abs(x - playerSpawnX) < safeZoneRadius && Math.abs(y - playerSpawnY) < safeZoneRadius) {
-                attempts++;
-                continue;
-            }
-            // Check if position is already used
-            if (usedPositions.contains(pos)) {
-                attempts++;
-                continue;
-            }
-
-            boolean overPlant = false;
-            for (Plant plant : plants) {
-                int plantX = plant.worldX / TILE_SIZE;
-                int plantY = plant.worldY / TILE_SIZE;
-                if (Math.abs(x - plantX) < 2 && Math.abs(y - plantY) < 2) { 
-                    overPlant = true;
-                    break;
-                }
-            }
-            if (overPlant) {
-                attempts++;
-                continue;
-            }
-            
-            // Check if tile is grass
-            int tileNum = tileM.mapTile[currentMap][x][y];
-            boolean isValidTile = false;
-            
-            if (tileNum == validTiles) {
-                isValidTile = true;
-            }
-            
-            if (!isValidTile) {
-                attempts++;
-                continue;
-            }
-            
-            // Spawn the animal based on type
-            switch (animalType.toLowerCase()) {
-                case "chicken":
-                    animals.add(new Chicken("Chicken", x * TILE_SIZE, y * TILE_SIZE, this));
-                    break;
-                case "cow":
-                    animals.add(new Cow("Cow", x * TILE_SIZE, y * TILE_SIZE, this));
-                    break;
-                case "sheep":
-                    animals.add(new Sheep("Sheep", x * TILE_SIZE, y * TILE_SIZE, this));
-                    break;
-                case "pig":
-                    animals.add(new Pig("Pig", x * TILE_SIZE, y * TILE_SIZE, this));
-                    break;
-                case "wolf":
-                    animals.add(new Wolf("Wolf", x * TILE_SIZE, y * TILE_SIZE, this));
-                    break;
-            }
-            
-            // Mark position as used
-            usedPositions.add(pos);
-            spawnedCount++;
-            attempts = 0;
-        }
-    }
-
-    public void spawnFish(String animalType, int count, ArrayList<Point> usedPositions) {
-        int attempts = 0;
-        int maxAttempts = 1000;
-        int spawnedCount = 0;
-        int validTiles = 16;
-        
-        while (spawnedCount < count && attempts < maxAttempts) {
-        
-            int x = (int)(Math.random() * (MAX_WORLD_COL -8));
-            int y = (int)(Math.random() * (MAX_WORLD_ROW -8));
-            Point pos = new Point(x, y);
-            
-            if (usedPositions.contains(pos)) {
-                attempts++;
-                continue;
-            }
-            
-            int tileNum = tileM.mapTile[currentMap][x][y];
-            boolean isValidTile = false;
-            
-            if (tileNum == validTiles) {
-                isValidTile = true;
-            }
-            
-            
-            if (!isValidTile) {
-                attempts++;
-                continue;
-            }
-
-            switch (animalType.toLowerCase()) {
-                case "arwana":
-                    fish.add(new Arwana("arwana", 0, 9, x * TILE_SIZE, y * TILE_SIZE, this));
-                    break;
-                case "belida":
-                    fish.add(new Belida("belida", 0, 7, x * TILE_SIZE, y * TILE_SIZE, this));
-                    break;
-            }
-            
-            usedPositions.add(pos);
-            spawnedCount++;
-            attempts = 0;
-        }
-    }
-
-    public void spawnMonster(String animalType, int count, ArrayList<Point> usedPositions) {
-        int attempts = 0;
-        int maxAttempts = 1000;
-        int spawnedCount = 0;
-        int validTiles = 21;
-        
-        while (spawnedCount < count && attempts < maxAttempts) {
-        
-            int x = (int)(Math.random() * (MAX_WORLD_COL -8));
-            int y = (int)(Math.random() * (MAX_WORLD_ROW -8));
-            Point pos = new Point(x, y);
-            System.out.println("Trying to spawn at x:" + x + " y:" + y);
-            if (usedPositions.contains(pos)) {
-                attempts++;
-                continue;
-            }
-            
-            int tileNum = tileM.mapTile[currentMap][x][y];
-            boolean isValidTile = false;
-            System.out.println("Tile number at position: " + tileNum);
-            
-            if (tileNum == validTiles) {
-                isValidTile = true;
-            }
-            
-            if (!isValidTile) {
-                attempts++;
-                continue;
-            }
-
-            switch (animalType.toLowerCase()) {
-                case "bat":
-                    monsters.add(new Bat("Bat", x * TILE_SIZE, y * TILE_SIZE, 8, "down", this));
-                    break;
-            }
-            
-            usedPositions.add(pos);
-            spawnedCount++;
-            attempts = 0;
-        }
-        System.out.println("Final monster count: " + monsters.size());
     }
 
     public void addAnimals() {
-       
         ArrayList<Point> usedPositions = new ArrayList<>();
-        
-        spawnAnimal("chicken", 5, usedPositions);
-        
-        spawnAnimal("cow", 5, usedPositions);
-        
-        spawnAnimal("sheep", 5, usedPositions);
-        
-        spawnAnimal("pig", 5, usedPositions);
-
+        sp.spawnAnimal("chicken", 5, usedPositions);
+        sp.spawnAnimal("cow", 5, usedPositions);
+        sp.spawnAnimal("sheep", 5, usedPositions);
+        sp.spawnAnimal("pig", 5, usedPositions);
     }
     
     @Override
