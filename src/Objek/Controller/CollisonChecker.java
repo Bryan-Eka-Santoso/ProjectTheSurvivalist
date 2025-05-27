@@ -3,8 +3,8 @@ package Objek.Controller;
 import java.awt.Rectangle;
 import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
+import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
-import Objek.Monsters.Monster;
 import Objek.Plant.Bush;
 import Objek.Player.Player;
 

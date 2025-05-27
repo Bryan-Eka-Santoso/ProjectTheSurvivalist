@@ -2,6 +2,8 @@ package Objek.Controller;
 
 import javax.swing.*;
 import Objek.Animal.*;
+import Objek.Enemy.Bat;
+import Objek.Enemy.Monster;
 import Objek.Environment.EnvironmentManager;
 import Objek.Fish.Fish;
 import Objek.Items.Buildings.*;
@@ -10,8 +12,6 @@ import Objek.Items.Unstackable.Torch;
 import Objek.Items.Unstackable.WateringCan;
 import Objek.Items.Unstackable.Armor.Helmet.IronHelmet;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
-import Objek.Monsters.Bat;
-import Objek.Monsters.Monster;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 60;
+    final int FPS = 30;
 
     public final int MAX_WORLD_COL = 98;
     public final int MAX_WORLD_ROW = 98;
@@ -76,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int maxMap = 10;
     public int currentMap = 0;
     public boolean isCave = false;
+    public boolean isAfterUnlockShip = false;
     
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
@@ -188,6 +189,10 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new WateringCan());
         player.inventory.addItems(new Orchard(this, 1));
         player.inventory.addItems(new CoconutSeeds(2));
+        Buildings shop = new Shop(this, 1);
+        shop.worldX = 40 * TILE_SIZE;
+        shop.worldY = 40 * TILE_SIZE;
+        buildings.add(shop);
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -212,8 +217,10 @@ public class GamePanel extends JPanel implements Runnable {
             }
             
             if (timer >= 1000000000) {
-                if(player.level > 14) {
+                if(player.level == 15 && !isAfterUnlockShip) {
+                    isAfterUnlockShip = true;
                     reloadTile();
+                    ui.showCongratsUnlockShip();
                 }
                 timer = 0;
             }

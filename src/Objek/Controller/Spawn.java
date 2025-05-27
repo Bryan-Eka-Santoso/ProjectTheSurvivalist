@@ -9,7 +9,7 @@ import Objek.Animal.Sheep;
 import Objek.Animal.Wolf;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
-import Objek.Monsters.Bat;
+import Objek.Enemy.Bat;
 import Objek.Plant.Plant;
 
 public class Spawn {

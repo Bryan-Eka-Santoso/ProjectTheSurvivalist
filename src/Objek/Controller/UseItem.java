@@ -7,6 +7,7 @@ import Objek.Animal.Cow;
 import Objek.Animal.Pig;
 import Objek.Animal.Sheep;
 import Objek.Animal.Wolf;
+import Objek.Enemy.Monster;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Coconut;
@@ -31,9 +32,8 @@ import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
-import Objek.Monsters.Bat;
-import Objek.Monsters.Minotaur;
-import Objek.Monsters.Monster;
+import Objek.Enemy.Bat;
+import Objek.Enemy.Minotaur;
 import Objek.Plant.*;
 import Objek.Player.Player;
 
@@ -245,7 +245,7 @@ public class UseItem {
                             player.monsterIndex = -1;
                         }
                     }
-                } else if (player.buildingIndex != -1) {
+                } else if (player.buildingIndex != -1 && !(player.gp.buildings.get(player.buildingIndex) instanceof Shop)) {
                     Buildings building = player.gp.buildings.get(player.buildingIndex);
                     building.hp -= arsenal.damage;
                     System.out.println("Using arsenal on building: " + arsenal.name);

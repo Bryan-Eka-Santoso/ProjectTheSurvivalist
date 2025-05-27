@@ -49,7 +49,7 @@ public class TileManager {
             setup(16, "calm-water", true);
             setup(17, "sand", false);
             setup(19, "bridge1", false);
-            if(gp.player.level < 14){
+            if(gp.player.level < 15){
                 setup(21, "kapalrusak", true);
             } else {
                 setup(21, "ship", false);
