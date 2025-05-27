@@ -501,7 +501,7 @@ public class GamePanel extends JPanel implements Runnable {
         eManager.update();
         eManager.draw(g2);
         ui.draw(g2);
-        this.paintChildren(g);
+        paintChildren(g);
         g2.dispose();
     }
 

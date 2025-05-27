@@ -9,10 +9,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
@@ -685,6 +683,25 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             topFrame.setContentPane(new MainPanel(topFrame));
             topFrame.revalidate(); // Memaksa refresh layout
             topFrame.repaint();
+        } 
+        if (gp.gameState == gp.INVENTORY_STATE) {
+            System.out.println(selectCounter);
+            if (selectCounter == 1 && gp.player.helmets[0] != null) {
+                gp.player.inventory.addItems(gp.player.helmets[0].clone());
+                gp.player.helmets[0] = null;
+            }
+            if (selectCounter == 2 && gp.player.chestplates[0] != null) {
+                gp.player.inventory.addItems(gp.player.chestplates[0].clone());
+                gp.player.chestplates[0] = null;
+            }
+            if (selectCounter == 3 && gp.player.leggings[0] != null) {
+                gp.player.inventory.addItems(gp.player.leggings[0].clone());
+                gp.player.leggings[0] = null;
+            }
+            if (selectCounter == 4 && gp.player.boots[0] != null) {
+                gp.player.inventory.addItems(gp.player.boots[0].clone());
+                gp.player.boots[0] = null;
+            }
         }
     }
 
