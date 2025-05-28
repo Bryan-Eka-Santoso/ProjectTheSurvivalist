@@ -139,7 +139,7 @@ public class UseItem {
                 Arsenal arsenal = (Arsenal) selectedItem;
                 player.isCutting = true;
                 player.cutting();
-                if (player.plantIndex != -1) {
+                if (player.plantIndex != -1 && gp.currentMap == 0) {
                     Plant plant = player.gp.plants.get(player.plantIndex);
 
                     plant.hp -= arsenal.damage;
@@ -278,7 +278,7 @@ public class UseItem {
                     }else if (monster instanceof Golem){
                         Golem golem = (Golem)monster;
                         golem.hp -= damage;
-                        System.out.println("Hit minotaur: " + golem.hp + "/" + 200);
+                        System.out.println("Hit golem: " + golem.hp + "/" + 200);
                         if(golem.hp <= 0) {
                             player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
                             player.gp.monsters.remove(player.monsterIndex);

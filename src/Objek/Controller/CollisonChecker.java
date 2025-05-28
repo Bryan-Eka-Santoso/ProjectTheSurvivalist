@@ -712,6 +712,48 @@ public class CollisonChecker {
         gp.player.solidArea.y = gp.player.solidAreaDefaultY;
     }
     
+    public void monsterCheckTile(Monster monster) {
+        int entityLeftX = monster.worldX + monster.solidArea.x;
+        int entityRightX = monster.worldX + monster.solidArea.x + monster.solidArea.width;
+        int entityTopY = monster.worldY + monster.solidArea.y;
+        int entityBottomY = monster.worldY + monster.solidArea.y + monster.solidArea.height;
+
+        int nextLeftX = entityLeftX;
+        int nextRightX = entityRightX;
+        int nextTopY = entityTopY;
+        int nextBottomY = entityBottomY;
+
+        switch(monster.direction) {
+            case "up": nextTopY -= monster.speed; break;
+            case "down": nextBottomY += monster.speed; break;
+            case "left": nextLeftX -= monster.speed; break;
+            case "right": nextRightX += monster.speed; break;
+        }
+
+        int nextLeftCol = nextLeftX / gp.TILE_SIZE;
+        int nextRightCol = nextRightX / gp.TILE_SIZE;
+        int nextTopRow = nextTopY / gp.TILE_SIZE;
+        int nextBottomRow = nextBottomY / gp.TILE_SIZE;
+        
+        if(nextLeftCol < 0 || nextRightCol >= gp.MAX_WORLD_COL || 
+        nextTopRow < 0 || nextBottomRow >= gp.MAX_WORLD_ROW) {
+            monster.collisionOn = true;
+            return;
+        }
+
+        int validTile = 21;
+        
+        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];     // Top left
+        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];    // Top right
+        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];  // Bottom left
+        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow]; // Bottom right
+        
+        if(tileNum1 != validTile || tileNum2 != validTile || 
+        tileNum3 != validTile || tileNum4 != validTile) {
+            monster.collisionOn = true;
+        }
+    }
+
     public void checkMonstersCollision(Monster monster) {
         int nextX = monster.worldX;
         int nextY = monster.worldY;

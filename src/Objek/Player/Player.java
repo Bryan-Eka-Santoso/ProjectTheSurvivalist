@@ -289,7 +289,7 @@ public class Player {
                 fishIndex = gp.cCheck.checkFish(this, true);
             } else if (gp.currentMap == 2) {
                 monsterIndex = gp.cCheck.checkMonsters(this, true);
-            } else {
+            } else if (gp.currentMap == 0) {
                 monsterIndex = gp.cCheck.checkMonsters(this, true);
                 animalIndex = gp.cCheck.checkAnimal(this, true);
                 buildingIndex = gp.cCheck.checkBuildings(this, true);
