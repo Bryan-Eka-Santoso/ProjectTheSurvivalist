@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import Objek.Controller.GamePanel;
-
+import Objek.Player.Player;
 public abstract class Monster {
     public String name, direction;
     public int worldX, worldY, speed;
@@ -30,6 +30,6 @@ public abstract class Monster {
 
     abstract public void update();
     abstract public void draw(Graphics2D g2d);
-    abstract public boolean isPlayerNearby();
+    abstract public boolean isPreyNearby(Player player);
 
 }
