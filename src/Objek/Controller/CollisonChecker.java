@@ -5,6 +5,7 @@ import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
+import Objek.Items.Unstackable.FishingRod;
 import Objek.Plant.Bush;
 import Objek.Plant.Tree;
 import Objek.Player.Player;
@@ -456,15 +457,14 @@ public class CollisonChecker {
 
             int fishIndex = gp.fish.indexOf(animal);
             if (gp.currentMap == 1) {
-                // System.out.println("Player bertemu ikan: " + animal.nameFish + " (strength: " + animal.strength + ")");
-                if (gp.player.durabilityRod > 0) {
-                    // Start fishing minigame
-                    gp.ui.caughtFish = animal;
-                    gp.ui.fishIndex = fishIndex;
-                    gp.ui.playerFishingStrength = 50;
-                    gp.gameState = gp.FISHING_STATE;
-                } else {
-                    gp.ui.showRodRusakMessage();
+                if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof FishingRod) {
+                    if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability > 0) {
+                        gp.ui.caughtFish = animal;
+                        gp.ui.fishIndex = fishIndex;
+                        gp.gameState = gp.FISHING_STATE;
+                    } else {
+                        gp.ui.showRodRusakMessage();
+                    }
                 }
             }
         }

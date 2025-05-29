@@ -2,9 +2,7 @@ package Objek.Items.StackableItem.Foods;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import Objek.Player.Player;
 
 public class RawBelida extends Food {
@@ -13,18 +11,17 @@ public class RawBelida extends Food {
 
     public RawBelida(int currentStack) {
         super("Raw Belida", 10, currentStack);
-            try {
-                this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Foods/Chicken.png")); 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } 
+        try {
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right1.png")); 
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
     }
 
     @Override
     public void eat(Player player) {
         // Implement the logic for eating food here
         System.out.println("Eating " + name + "..."); // Eating action
-
         System.out.println("You've been poisoned!");
         player.setPoisoned();
         player.hunger += 10;

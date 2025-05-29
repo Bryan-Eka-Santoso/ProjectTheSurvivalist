@@ -32,7 +32,7 @@ public class Player {
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage cutup1, cutup2, cutdown1, cutdown2, cutleft1, cutleft2, cutright1, cutright2;
-    public BufferedImage dead, sleep, stay;
+    public BufferedImage sleep, stay;
     public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -56,7 +56,6 @@ public class Player {
     public Rectangle cutArea = new Rectangle(0, 0, 0, 0);
     public InteractBuild interactBuild;
     public int strengthRod = 30;
-    public int durabilityRod = 10;
     public Helmet helmet; // Array to hold helmets
     public Chestplate chestplate; // Array to hold chestplates
     public Leggings leggings; // Array to hold leggings
@@ -117,6 +116,49 @@ public class Player {
         cutArea.width = 36;
         cutArea.height = 36;
     }
+    
+    public void getPlayerImg() {
+        try {
+            if(gp.currentMap == 1){
+                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater1.png"));
+                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater2.png"));
+                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater1.png"));
+                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater2.png"));
+                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater1.png"));
+                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
+                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
+                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
+            } else {
+                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
+                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
+                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
+                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
+                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
+                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
+                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
+                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
+            }
+            sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
+            stay = ImageIO.read(new File("ProjectTheSurvivalist/res/player/stay.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void getPlayerCutImg() {
+        try {
+            cutup1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
+            cutup2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
+            cutdown1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutdown.png"));
+            cutdown2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutdown.png"));
+            cutleft1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutleft.png"));
+            cutleft2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutleft.png"));
+            cutright1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutright.png"));
+            cutright2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutright.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void gainExp(int amount) {
         exp += amount;
@@ -149,51 +191,7 @@ public class Player {
         }
         return defense;
     }
-
-    public void getPlayerImg() {
-        try {
-            if(gp.currentMap == 1){
-                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater1.png"));
-                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater2.png"));
-                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater1.png"));
-                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater2.png"));
-                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater1.png"));
-                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
-                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
-                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
-                // dead = ImageIO.read(new File("ProjectTheSurvivalist/res/player/deadwater.png"));
-            } else {
-                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
-                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
-                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
-                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
-                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
-                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
-                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
-                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
-            }
-            sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
-            stay = ImageIO.read(new File("ProjectTheSurvivalist/res/player/stay.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void getPlayerCutImg() {
-        try {
-            cutup1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
-            cutup2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
-            cutdown1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutdown.png"));
-            cutdown2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutdown.png"));
-            cutleft1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutleft.png"));
-            cutleft2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutleft.png"));
-            cutright1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutright.png"));
-            cutright2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutright.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-     private void handlePoisonEffect() {
+    private void handlePoisonEffect() {
         if(isPoisoned) {
             poisonCounter++;
             
@@ -203,7 +201,7 @@ public class Player {
                     health =  health - POISON_DAMAGE;
                 }
             }
-
+            
             // Cek apakah efek poison selesai
             if(poisonCounter >= POISON_DURATION) {
                 isPoisoned = false;
@@ -244,7 +242,7 @@ public class Player {
 
     public void update() {
         
-        if (keyH.shiftPressed && hunger > 20 && thirst >= 10) {
+        if (keyH.shiftPressed && hunger > 20 && thirst >= 10 && gp.currentMap != 1) {
             speed = 10;
         } else {
             speed = 5;

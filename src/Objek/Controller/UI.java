@@ -27,6 +27,7 @@ import Objek.Items.Buildings.CowCage;
 import Objek.Items.StackableItem.*;
 import Objek.Player.Player;
 import Objek.Items.Buildings.Furnace;
+import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Items.Unstackable.Arsenals.*;
 import javax.imageio.ImageIO;
@@ -92,7 +93,6 @@ public class UI {
 
     public Fish caughtFish;
     public int fishIndex;
-    public int playerFishingStrength = 0;
     public int maxFishingStrength = 100;
     public boolean fishingSuccessful = false;
     public boolean canPressFishingButton = true;
@@ -426,16 +426,18 @@ public class UI {
         // Progress bar
         g2.setColor(Color.LIGHT_GRAY);
         g2.fillRect(panelX + 50, panelY + 250, 300, 20);
-        // Posisi indikator pada progress bar
-        if (playerFishingStrength > 0) {
-            if (playerFishingStrength <= 33) {
-                g2.setColor(Color.RED);
-            } else if (playerFishingStrength <= 66) {
-                g2.setColor(Color.YELLOW);
-            } else {
-                g2.setColor(Color.GREEN);
+
+        if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof FishingRod) {
+            if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength > 0) {
+                if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength <= 33) {
+                    g2.setColor(Color.RED);
+                } else if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength <= 66) {
+                    g2.setColor(Color.YELLOW);
+                } else {
+                    g2.setColor(Color.GREEN);
+                }
+                g2.fillRect(panelX + 50, panelY + 250, ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength * 3, 20);
             }
-            g2.fillRect(panelX + 50, panelY + 250, playerFishingStrength * 3, 20);
         }
         // Border untuk progress bar
         g2.setColor(Color.WHITE);
@@ -1335,6 +1337,32 @@ public class UI {
                     g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
                 }
             }
+            if (chest.inventory.slots[i] instanceof FishingRod) {
+                FishingRod fishingRod = (FishingRod) chest.inventory.slots[i];
+                if (fishingRod.durability <fishingRod.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float)fishingRod.durability /fishingRod.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
             if (chest.inventory.slots[i] instanceof Buildings) {
                 Buildings stackableItem = (Buildings) chest.inventory.slots[i];
                 Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
@@ -1431,6 +1459,32 @@ public class UI {
 
                     // Calculate durability percentage
                     float durabilityPercentage = (float) armorItem.durability / armorItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
+            if (chest.inventory.slots[i] instanceof FishingRod) {
+                FishingRod fishingRod = (FishingRod) chest.inventory.slots[i];
+                if (fishingRod.durability <fishingRod.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float)fishingRod.durability /fishingRod.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {
@@ -1679,6 +1733,32 @@ public class UI {
 
                     // Calculate durability percentage
                     float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
+            if (gp.player.inventory.slots[i] instanceof FishingRod) {
+                FishingRod fishingRod = (FishingRod) gp.player.inventory.slots[i];
+                if (fishingRod.durability <fishingRod.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float)fishingRod.durability /fishingRod.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {
@@ -1962,6 +2042,32 @@ public class UI {
 
                     // Calculate durability percentage
                     float durabilityPercentage = (float) armorItem.durability / armorItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
+            if (gp.player.inventory.slots[i] instanceof FishingRod) {
+                FishingRod fishingRod = (FishingRod) gp.player.inventory.slots[i];
+                if (fishingRod.durability <fishingRod.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float)fishingRod.durability /fishingRod.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {
