@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class MetalChestplate extends Chestplate {
     public MetalChestplate() {
-        super("Metal Chestplate", 100, 10);
+        super("Metal Chestplate", 100, 1);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png"));
         } catch (IOException e) {

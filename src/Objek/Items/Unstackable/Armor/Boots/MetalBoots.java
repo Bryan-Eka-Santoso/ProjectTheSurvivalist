@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class MetalBoots extends Boots {
     public MetalBoots(){
-        super("Metal Boots", 100, 15);
+        super("Metal Boots", 80, 1);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/metalboots.png"));
         } catch (IOException e) {

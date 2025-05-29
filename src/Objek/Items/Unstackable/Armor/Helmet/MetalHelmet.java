@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 public class MetalHelmet extends Helmet {
 
     public MetalHelmet() {
-        super("Metal Helmet", 100, 20);
+        super("Metal Helmet", 80, 2);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/metalhelmet.png"));
         } catch (IOException e) {

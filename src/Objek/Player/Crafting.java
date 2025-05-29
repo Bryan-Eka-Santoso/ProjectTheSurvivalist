@@ -101,6 +101,8 @@ public class Crafting {
         List<Item> recipe7 = Arrays.asList(new MetalIngot(3));
         r.put(recipe7, new MetalClub());
 
+        r.put(Arrays.asList(new Wheat(3)), new Bread(1));
+
         List<Item> recipe8 = Arrays.asList(new Wood(3), new Wool(3));
         r.put(recipe8, new Bed(gp, 1));
 
