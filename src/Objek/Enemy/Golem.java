@@ -20,16 +20,19 @@ public class Golem extends Monster {
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
     private int actionMoveDelay;
+    int spriteDisplaySize = gp.TILE_SIZE * 2;
+    int originalSpriteSize = 64;
+    double scaleFactor = (double)spriteDisplaySize / originalSpriteSize;
 
     Random random = new Random();
     public Golem(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
         super(name, worldX, worldY, speed, direction, gp);
         this.hp = 200; // Set Golem's HP
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(10, 0, 44,62 );   
-        downHitbox = new Rectangle(10, 0, 44,62 );   
-        leftHitbox = new Rectangle(25 ,2, 30, 59);   
-        rightHitbox = new Rectangle(5, 2, 30, 59);  
+        upHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(62*scaleFactor) );   
+        downHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(62*scaleFactor) );   
+        leftHitbox = new Rectangle((int)(20*scaleFactor) ,(int)(2*scaleFactor), (int)(40*scaleFactor), (int)(59*scaleFactor));   
+        rightHitbox = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));  
         this.solidArea = downHitbox;
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
@@ -215,6 +218,8 @@ public class Golem extends Monster {
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE*2, gp.TILE_SIZE*2, null);
+            g2.setColor(Color.RED);
+            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
             if(hp < 200) {
                 double oneScale = (double)gp.TILE_SIZE/200;
                 double hpBarValue = oneScale * hp;

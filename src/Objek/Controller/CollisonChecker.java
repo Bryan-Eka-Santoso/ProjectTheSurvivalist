@@ -6,6 +6,7 @@ import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
 import Objek.Plant.Bush;
+import Objek.Plant.Tree;
 import Objek.Player.Player;
 
 public class CollisonChecker {
@@ -25,9 +26,8 @@ public class CollisonChecker {
         int playerRightCol = entityRightX / gp.TILE_SIZE;
         int playerTopRow = entityTopY / gp.TILE_SIZE;
         int playerBottomRow = entityBottomY / gp.TILE_SIZE;
-
+        
         int tileNum1 = 0, tileNum2 = 0;
-
         switch (player.direction) {
             case "up":
                 playerTopRow = (entityTopY - player.speed) / gp.TILE_SIZE;
@@ -119,10 +119,9 @@ public class CollisonChecker {
             animal.solidArea.y = animal.worldY + animal.solidArea.y;
             gp.plants.get(i).solidArea.x = gp.plants.get(i).worldX + gp.plants.get(i).solidArea.x;
             gp.plants.get(i).solidArea.y = gp.plants.get(i).worldY + gp.plants.get(i).solidArea.y;
-
             if (animal.solidArea.intersects(gp.plants.get(i).solidArea)) {
-                if (animal instanceof Animal) {
-                    animal.collisionOn = true;
+                if (gp.plants.get(i) instanceof Tree) {
+                        animal.collisionOn = true;
                 }
             }
             animal.solidArea.x = animal.solidAreaDefaultX;
@@ -718,38 +717,36 @@ public class CollisonChecker {
         int entityTopY = monster.worldY + monster.solidArea.y;
         int entityBottomY = monster.worldY + monster.solidArea.y + monster.solidArea.height;
 
-        int nextLeftX = entityLeftX;
-        int nextRightX = entityRightX;
-        int nextTopY = entityTopY;
-        int nextBottomY = entityBottomY;
-
         switch(monster.direction) {
-            case "up": nextTopY -= monster.speed; break;
-            case "down": nextBottomY += monster.speed; break;
-            case "left": nextLeftX -= monster.speed; break;
-            case "right": nextRightX += monster.speed; break;
+            case "up": entityTopY -= monster.speed; break;
+            case "down": entityBottomY += monster.speed; break;
+            case "left": entityLeftX -= monster.speed; break;
+            case "right": entityRightX += monster.speed; break;
         }
 
-        int nextLeftCol = nextLeftX / gp.TILE_SIZE;
-        int nextRightCol = nextRightX / gp.TILE_SIZE;
-        int nextTopRow = nextTopY / gp.TILE_SIZE;
-        int nextBottomRow = nextBottomY / gp.TILE_SIZE;
-        
+        int nextLeftCol = entityLeftX / gp.TILE_SIZE;
+        int nextRightCol = entityRightX / gp.TILE_SIZE;
+        int nextTopRow = entityTopY / gp.TILE_SIZE;
+        int nextBottomRow = entityBottomY / gp.TILE_SIZE;
+
+        // Boundary check
         if(nextLeftCol < 0 || nextRightCol >= gp.MAX_WORLD_COL || 
         nextTopRow < 0 || nextBottomRow >= gp.MAX_WORLD_ROW) {
             monster.collisionOn = true;
             return;
         }
 
-        int validTile = 21;
-        
-        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];     // Top left
-        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];    // Top right
-        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];  // Bottom left
-        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow]; // Bottom right
-        
-        if(tileNum1 != validTile || tileNum2 != validTile || 
-        tileNum3 != validTile || tileNum4 != validTile) {
+        // Get tile numbers
+        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];
+        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];
+        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];
+        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow];
+
+        // Check collision property dari tiles
+        if(gp.tileM.tile[tileNum1].collison || 
+        gp.tileM.tile[tileNum2].collison || 
+        gp.tileM.tile[tileNum3].collison || 
+        gp.tileM.tile[tileNum4].collison) {
             monster.collisionOn = true;
         }
     }

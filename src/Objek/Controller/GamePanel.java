@@ -161,14 +161,6 @@ public class GamePanel extends JPanel implements Runnable {
             sp.spawnAnimal("wolf", MAX_WOLF - wolfCount, usedPositions);
         }
     }
-
-    public void addAnimals() {
-        ArrayList<Point> usedPositions = new ArrayList<>();
-        sp.spawnAnimal("chicken", 5, usedPositions);
-        sp.spawnAnimal("cow", 5, usedPositions);
-        sp.spawnAnimal("sheep", 5, usedPositions);
-        sp.spawnAnimal("pig", 5, usedPositions);
-    }
     public void addPlant() {
         ArrayList<Point> usedPositions = new ArrayList<>();
         sp.spawnPlant("guava", 20, usedPositions);
@@ -190,7 +182,6 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant(new PalmTree(40 * TILE_SIZE,  54 * TILE_SIZE, this));
         addPlant(new Bush(40 * TILE_SIZE,  57 * TILE_SIZE, this));
         addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
-        addAnimals();
         addPlant();
         player.inventory.addItems(new WateringCan());
         player.inventory.addItems(new Seeds(5));
@@ -210,6 +201,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Orchard(this, 1));
         player.inventory.addItems(new CoconutSeeds(2));
         player.inventory.addItems(new Bread());
+   
         
         Buildings shop = new Shop(this, 1);
         shop.worldX = 40 * TILE_SIZE;

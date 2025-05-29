@@ -84,28 +84,46 @@ public class Spawn {
         
         int playerSpawnX = 40; 
         int playerSpawnY = 44; 
-        int safeZoneRadius = 5;
-        while (spawnedCount < count && attempts < maxAttempts) {
         
-            int x = (int)(Math.random() * (gp.MAX_WORLD_COL -5));
-            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW -5));
+        while (spawnedCount < count && attempts < maxAttempts) {
+
+            int x = (int)(Math.random() * (gp.MAX_WORLD_COL));
+            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW));
             Point pos = new Point(x, y);
 
-            if (Math.abs(x - playerSpawnX) < safeZoneRadius && Math.abs(y - playerSpawnY) < safeZoneRadius) {
+            if (Math.abs(x - playerSpawnX) < 3 && Math.abs(y - playerSpawnY) < 3) {
                 attempts++;
                 continue;
             }
-            // Check if position is already used
-            if (usedPositions.contains(pos)) {
+            Boolean isCloseAnimal = false;
+            for (Point usedPos : usedPositions) {
+                if (Math.abs(usedPos.x - x) < 3 && Math.abs(usedPos.y - y) < 3) {
+                    isCloseAnimal = true;
+                    break;
+                }
+            }
+            if (isCloseAnimal) {
                 attempts++;
                 continue;
             }
-
+            boolean overBuilding = false;
+            for (int i = 0; i < gp.buildings.size(); i++) {
+                int buildingX = gp.buildings.get(i).worldX / gp.TILE_SIZE;
+                int buildingY = gp.buildings.get(i).worldY / gp.TILE_SIZE;
+                if (Math.abs(x - buildingX) < 3 && Math.abs(y - buildingY) < 3) { 
+                    overBuilding = true;
+                    break;
+                }
+            }
+            if (overBuilding) {
+                attempts++;
+                continue;
+            }
             boolean overPlant = false;
             for (Plant plant : gp.plants) {
                 int plantX = plant.worldX / gp.TILE_SIZE;
                 int plantY = plant.worldY / gp.TILE_SIZE;
-                if (Math.abs(x - plantX) < 2 && Math.abs(y - plantY) < 2) { 
+                if (Math.abs(x - plantX) < 3 && Math.abs(y - plantY) < 3) { 
                     overPlant = true;
                     break;
                 }
@@ -116,14 +134,21 @@ public class Spawn {
             }
             
             // Check if tile is grass
-            int tileNum = gp.tileM.mapTile[gp.currentMap][x][y];
-            boolean isValidTile = false;
-            
-            if (tileNum == validTiles) {
-                isValidTile = true;
+            boolean nearInvalidTile = false;
+            for(int checkX = x-2; checkX <= x+2; checkX++) {
+                for(int checkY = y-2; checkY <= y+2; checkY++) {
+                    if(checkX >= 0 && checkX < gp.MAX_WORLD_COL && 
+                    checkY >= 0 && checkY < gp.MAX_WORLD_ROW) {
+                        int tileNum = gp.tileM.mapTile[gp.currentMap][checkX][checkY];
+                        if(tileNum != validTiles) {
+                            nearInvalidTile = true;
+                            break;
+                        }
+                    }
+                }
+                if(nearInvalidTile) break;
             }
-            
-            if (!isValidTile) {
+            if(nearInvalidTile) {
                 attempts++;
                 continue;
             }
@@ -162,22 +187,37 @@ public class Spawn {
         
         while (spawnedCount < count && attempts < maxAttempts) {
         
-            int x = (int)(Math.random() * (gp.MAX_WORLD_COL -8));
-            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW -8));
+            int x = (int)(Math.random() * (gp.MAX_WORLD_COL ));
+            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW ));
             Point pos = new Point(x, y);
-            if (usedPositions.contains(pos)) {
+             Boolean isCloseMonster = false;
+            for (Point usedPos : usedPositions) {
+                if (Math.abs(usedPos.x - x) < 3 && Math.abs(usedPos.y - y) < 3) {
+                    isCloseMonster = true;
+                    break;
+                }
+            }
+            if (isCloseMonster) {
                 attempts++;
                 continue;
             }
+
             
-            int tileNum = gp.tileM.mapTile[gp.currentMap][x][y];
-            boolean isValidTile = false;
-            
-            if (tileNum == validTiles) {
-                isValidTile = true;
+            boolean nearInvalidTile = false;
+            for(int checkX = x-2; checkX <= x+2; checkX++) {
+                for(int checkY = y-2; checkY <= y+2; checkY++) {
+                    if(checkX >= 0 && checkX < gp.MAX_WORLD_COL && 
+                    checkY >= 0 && checkY < gp.MAX_WORLD_ROW) {
+                        int tileNum = gp.tileM.mapTile[gp.currentMap][checkX][checkY];
+                        if(tileNum != validTiles) {
+                            nearInvalidTile = true;
+                            break;
+                        }
+                    }
+                }
+                if(nearInvalidTile) break;
             }
-            
-            if (!isValidTile) {
+            if(nearInvalidTile) {
                 attempts++;
                 continue;
             }

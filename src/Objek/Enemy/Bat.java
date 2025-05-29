@@ -20,6 +20,10 @@ public class Bat extends Monster {
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
     private int actionMoveDelay;
+    int spriteDisplaySize = gp.TILE_SIZE * 2;
+    int originalSpriteSize = 32;
+    double scaleFactor = (double)spriteDisplaySize / originalSpriteSize;
+
 
     Random random = new Random();
 
@@ -27,10 +31,14 @@ public class Bat extends Monster {
         super(name, worldX, worldY, speed, direction, gp);
         this.hp = 100;
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(1, 4, 28,21 );   
-        downHitbox = new Rectangle(1, 2, 28, 24);   
-        leftHitbox = new Rectangle(3 ,1, 30, 16);   
-        rightHitbox = new Rectangle(2, 1, 18, 21);  
+        // upHitbox = new Rectangle(1, 4, 28,21 );   
+        // downHitbox = new Rectangle(1, 2, 28, 24);   
+        // leftHitbox = new Rectangle(3 ,1, 30, 16);   
+        // rightHitbox = new Rectangle(2, 1, 18, 21);  
+        upHitbox = new Rectangle((int)(1*scaleFactor), (int)(4*scaleFactor), (int)(16*scaleFactor),(int)(16*scaleFactor) );   
+        downHitbox = new Rectangle((int)(1*scaleFactor), (int)(2*scaleFactor), (int)(20*scaleFactor),(int)(15*scaleFactor) );   
+        leftHitbox = new Rectangle((int)(3*scaleFactor) ,(int)(1*scaleFactor), (int)(17*scaleFactor), (int)(16*scaleFactor));   
+        rightHitbox = new Rectangle((int)(2*scaleFactor), (int)(1*scaleFactor), (int)(18*scaleFactor), (int)(21*scaleFactor));  
         this.solidArea = downHitbox;
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
@@ -108,6 +116,7 @@ public class Bat extends Monster {
         gp.cCheck.checkMonsterPlayer(this);        // Check collision dengan player
         gp.cCheck.checkMonstersCollision(this);
         gp.cCheck.monsterCheckTile(this); //   
+        
         
         // Jika tidak ada collision, boleh bergerak
         if(!collisionOn) {
@@ -217,6 +226,9 @@ public class Bat extends Monster {
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+            g2.setColor(Color.RED);
+            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+            
             if(hp < 100) {
                 double oneScale = (double)gp.TILE_SIZE/100;
                 double hpBarValue = oneScale * hp;

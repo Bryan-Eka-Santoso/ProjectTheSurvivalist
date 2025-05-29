@@ -250,23 +250,35 @@ public class Player {
         
         if (keyH.shiftPressed && hunger > 20 && thirst >= 10) {
             speed = 10;
+            if(hungerCounter >= HUNGER_DECREASE_INTERVAL/4) {
+                if(hunger > 0) {
+                    hunger--;
+                }
+                hungerCounter = 0;
+            }
+            if(thirstCounter >= THIRST_DECREASE_INTERVAL/4) {
+                if(thirst > 0) {
+                    thirst--;
+                }
+                thirstCounter = 0;
+            }
         } else {
             speed = 5;
-        }
-        hungerCounter++;
-        if(hungerCounter >= HUNGER_DECREASE_INTERVAL) {
-            if(hunger > 0) {
-                hunger--;
+            if(hungerCounter >= HUNGER_DECREASE_INTERVAL) {
+                if(hunger > 0) {
+                    hunger--;
+                }
+                hungerCounter = 0;
             }
-            hungerCounter = 0;
+            if(thirstCounter >= THIRST_DECREASE_INTERVAL) {
+                thirst--;
+                if(thirst > 0) {
+                }
+                thirstCounter = 0;
+            }
         }
         thirstCounter++;
-        if(thirstCounter >= THIRST_DECREASE_INTERVAL) {
-            if(thirst > 0) {
-                thirst--;
-            }
-            thirstCounter = 0;
-        }
+        hungerCounter++;
         if(isPoisoned) {
             handlePoisonEffect();
         }
