@@ -907,6 +907,16 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
         }
+        if(gp.currentMap == 3){
+            if(col == 52 && row == 53) {
+                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.currentMap = 0;
+                gp.player.getPlayerImg();
+                gp.tileM.getTileImage();
+                gp.player.worldY = 55 * gp.TILE_SIZE;
+                gp.player.worldX = 55 * gp.TILE_SIZE;
+            }
+        }
 
         if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE || gp.gameState == gp.OPEN_SMELTER_STATE) {
             gp.gameState = gp.PLAY_STATE;

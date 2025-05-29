@@ -219,6 +219,26 @@ public class GamePanel extends JPanel implements Runnable {
         cave.worldX = 50 * TILE_SIZE;
         cave.worldY = 50 * TILE_SIZE;
         buildings.add(cave);
+        Buildings lemariAtas = new LemariAtas(this, 1);
+        lemariAtas.worldX = 44 * TILE_SIZE;
+        lemariAtas.worldY = 44 * TILE_SIZE;
+        buildings.add(lemariAtas);
+        Buildings lemariKanan = new LemariKanan(this, 1);
+        lemariKanan.worldX = 53 * TILE_SIZE;
+        lemariKanan.worldY = 45 * TILE_SIZE;
+        buildings.add(lemariKanan);
+        Buildings lemariKiri = new LemariKiri(this, 1);
+        lemariKiri.worldX = 44 * TILE_SIZE;
+        lemariKiri.worldY = 45 * TILE_SIZE;
+        buildings.add(lemariKiri);
+        Buildings table = new Table(this, 1);
+        table.worldX = 48 * TILE_SIZE;
+        table.worldY = 48 * TILE_SIZE;
+        buildings.add(table);
+        Buildings charsell = new Charsell(this, 1);
+        charsell.worldX = 48 * TILE_SIZE;
+        charsell.worldY = 47 * TILE_SIZE;
+        buildings.add(charsell);
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();

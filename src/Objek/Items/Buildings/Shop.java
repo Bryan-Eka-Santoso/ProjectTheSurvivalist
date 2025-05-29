@@ -8,7 +8,7 @@ import Objek.Controller.GamePanel;
 
 public class Shop extends Buildings {
     public Shop(GamePanel gp, int currentStack) {
-        super("Shop", 10, currentStack, gp, new Rectangle(12, 8, 42, 56), 68, 68);
+        super("Shop", 10, currentStack, gp, new Rectangle(0, 0, 74, 80), 74, 80);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/shop.png"));
         } catch (IOException e) {

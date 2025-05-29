@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 import Objek.Player.Player;
 
-public class RawPork extends Food{
+public class RawPork extends Food {
     public RawPork(int currentStack) {
         super("Raw Pork", 10, currentStack);
             try {
