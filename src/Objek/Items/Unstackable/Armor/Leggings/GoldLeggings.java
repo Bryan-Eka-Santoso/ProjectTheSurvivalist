@@ -1,0 +1,18 @@
+package Objek.Items.Unstackable.Armor.Leggings;
+
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
+public class GoldLeggings extends Leggings {
+    
+    public GoldLeggings() {
+        super("Gold Leggings", 250, 5);
+        try {
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/goldpants.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+}

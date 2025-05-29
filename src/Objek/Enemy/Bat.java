@@ -107,7 +107,7 @@ public class Bat extends Monster {
         
         gp.cCheck.checkMonsterPlayer(this);        // Check collision dengan player
         gp.cCheck.checkMonstersCollision(this);
-        // gp.cCheck.animalCheckTile(this);    
+        gp.cCheck.monsterCheckTile(this); //   
         
         // Jika tidak ada collision, boleh bergerak
         if(!collisionOn) {

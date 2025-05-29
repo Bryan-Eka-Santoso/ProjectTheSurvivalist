@@ -13,9 +13,12 @@ import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Potato;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.Seeds;
+import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WateringCan;
-import Objek.Items.Unstackable.Armor.Helmet.IronHelmet;
+import Objek.Items.Unstackable.Armor.Boots.MetalBoots;
+import Objek.Items.Unstackable.Armor.Chestplate.MetalChestplate;
+import Objek.Items.Unstackable.Armor.Leggings.MetalLeggings;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -168,6 +171,7 @@ public class GamePanel extends JPanel implements Runnable {
         sp.spawnAnimal("cow", 5, usedPositions);
         sp.spawnAnimal("sheep", 5, usedPositions);
         sp.spawnAnimal("pig", 5, usedPositions);
+        sp.spawnAnimal("wolf", 3, usedPositions);
     }
     public void addPlant() {
         ArrayList<Point> usedPositions = new ArrayList<>();
@@ -192,6 +196,10 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addAnimals();
         addPlant();
+        player.inventory.addItems(new FishingRod());
+        player.inventory.addItems(new MetalChestplate());
+        player.inventory.addItems(new MetalLeggings());
+        player.inventory.addItems(new MetalBoots());
         player.inventory.addItems(new WateringCan());
         player.inventory.addItems(new Seeds(5));
         player.inventory.addItems(new Potato(5));
@@ -205,7 +213,6 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Bed(this, 2));
         player.inventory.addItems(new Furnace(this, 2));
         player.inventory.addItems(new Chest(this, 2));
-        player.inventory.addItems(new IronHelmet());
         player.inventory.addItems(new WateringCan());
         player.inventory.addItems(new Orchard(this, 1));
         player.inventory.addItems(new CoconutSeeds(2));
@@ -274,9 +281,6 @@ public class GamePanel extends JPanel implements Runnable {
             if (currentMap == 0) {
                 for (int i = 0; i < animals.size(); i++) {
                     animals.get(i).update();
-                    if (animals.get(i) instanceof Wolf) {
-                        ((Wolf) animals.get(i)).chasePlayer(player);
-                    }
                 }
             }
             if (currentMap == 1) {
@@ -290,7 +294,6 @@ public class GamePanel extends JPanel implements Runnable {
                     if (monsters.get(i) instanceof Bat) {
                         ((Bat) monsters.get(i)).chasePlayer();
                     }
-                        
                 }
                 for (int i = 0; i < monsters.size(); i++) {
                     monsters.get(i).update();

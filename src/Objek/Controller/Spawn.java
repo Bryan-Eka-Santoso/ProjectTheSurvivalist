@@ -172,7 +172,6 @@ public class Spawn {
             
             int tileNum = gp.tileM.mapTile[gp.currentMap][x][y];
             boolean isValidTile = false;
-            System.out.println("Tile number at position: " + tileNum);
             
             if (tileNum == validTiles) {
                 isValidTile = true;

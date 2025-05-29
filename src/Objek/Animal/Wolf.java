@@ -6,7 +6,6 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 import Objek.Player.*;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -37,7 +36,7 @@ public class Wolf extends WildAnimal {
         upHitbox = new Rectangle(17, 1, 28, 63);   
         downHitbox = new Rectangle(18, 5, 28, 59);   
         leftHitbox = new Rectangle(1, 16, 63, 35);   
-        rightHitbox = new Rectangle(1, 16, 63, 35);   
+        rightHitbox = new Rectangle(1, 16, 63, 35);  
         this.solidArea = downHitbox; 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
@@ -97,6 +96,7 @@ public class Wolf extends WildAnimal {
     public void update() {
         if (isPreyNearby(gp.player)) {
             actionLockEnemyNearby = 10;
+            chasePlayer(gp.player);
         } else {
             actionLockEnemyNearby = 15;
         }
@@ -123,14 +123,97 @@ public class Wolf extends WildAnimal {
                 break;
         }
         collisionOn = false;
-        
-        gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
-        gp.cCheck.checkPlayer(this);        // Check collision dengan player
-        gp.cCheck.checkAnimalCollision(this);
-        gp.cCheck.animalCheckBuildings(this); // Check collision dengan building
-        gp.cCheck.animalCheckTile(this);    
-        
+        isCollision(this);
+
         // Jika tidak ada collision, boleh bergerak
+        if (!isPreyNearby(gp.player)) {
+            moveNormally();
+        } else {
+            moveTowardsPlayer();
+        }
+    }
+
+    public void moveTowardsPlayer() {
+        String nextDirection = chasePlayer(gp.player);
+        direction = nextDirection;
+        switch(nextDirection) {
+            case "up": 
+                solidArea = upHitbox;
+            break;
+            case "down": 
+                solidArea = downHitbox;
+            break;
+            case "left": 
+                solidArea = leftHitbox;
+            break;
+            case "right": 
+                solidArea = rightHitbox;
+            break;
+        }
+        collisionOn = false;
+        isCollision(this);
+        if (!collisionOn) {
+            this.direction = nextDirection;
+            switch(this.direction) {
+                case "up": worldY -= speed; break;
+                case "down": worldY += speed; break;
+                case "left": worldX -= speed; break;
+                case "right": worldX += speed; break;
+            }
+        } else {
+            if (nextDirection.equals("up")) {
+                if (gp.player.worldX < this.worldX) {
+                    nextDirection = "left";
+                } else {
+                    nextDirection = "right";
+                }
+            } else if (nextDirection.equals("down")) {
+                if (gp.player.worldX < this.worldX) {
+                    nextDirection = "left";
+                } else {
+                    nextDirection = "right";
+                }
+            } else if (nextDirection.equals("left")) {
+                if (gp.player.worldY < this.worldY) {
+                    nextDirection = "up";
+                } else {
+                    nextDirection = "down";
+                }
+            } else if (nextDirection.equals("right")) {
+                if (gp.player.worldY < this.worldY) {
+                    nextDirection = "up";
+                } else {
+                    nextDirection = "down";
+                }
+            }
+            this.direction = nextDirection;
+            switch (direction) {
+                case "up":
+                worldY -= speed;
+                break;
+                case "down":
+                worldY += speed;
+                    break;
+                case "left":
+                    worldX -= speed;
+                    break;
+                case "right":
+                    worldX += speed;
+                    break;
+            }
+        }
+        actionMoveCounter++;
+        spriteCounter++;
+        if(spriteCounter > 0) {
+            spriteNum++;
+            if(spriteNum > 4) {
+                spriteNum = 1;
+            }
+            spriteCounter = 0;
+        }
+    }
+
+    public void moveNormally() {
         if(!collisionOn) {
             switch(direction) {
                 case "up": worldY -= speed; break;
@@ -145,43 +228,19 @@ public class Wolf extends WildAnimal {
             }
         } else {
             String newDirection;
-            String oldDirection = this.direction;
-
-            int randomMove = random.nextInt(2) + 1;
+            String oldDirection = direction;
+    
             switch(oldDirection) {
-                case "up": 
-                    if (randomMove == 1) {
-                        newDirection = "right"; 
-                    } else {
-                        newDirection = "left"; 
-                    }
-                break;
-                case "down":
-                    if (randomMove == 1) {
-                        newDirection = "right"; 
-                    } else {
-                        newDirection = "left"; 
-                    }
-                break;
-                case "left": 
-                    if (randomMove == 1) {
-                        newDirection = "up"; 
-                    } else {
-                        newDirection = "down"; 
-                    }
-                break;
-                case "right": 
-                    if (randomMove == 1) {
-                        newDirection = "up"; 
-                    } else {
-                        newDirection = "down"; 
-                    }
-                break;
+                case "up": newDirection = "down"; break;
+                case "down": newDirection = "up"; break;
+                case "left": newDirection = "right"; break;
+                case "right": newDirection = "left"; break;
                 default: newDirection = "down"; break;
             }
+    
             this.direction = newDirection;
-            this.actionMoveDelay = this.random.nextInt(91)+30;
-            switch(direction) {
+            this.actionMoveDelay = this.random.nextInt(91) + 30;
+            switch(newDirection) {
                 case "up": worldY -= speed; break;
                 case "down": worldY += speed; break;
                 case "left": worldX -= speed; break;
@@ -202,47 +261,19 @@ public class Wolf extends WildAnimal {
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        
+
         switch(direction) {
             case "up":
-                if (!isPreyNearby(gp.player)) {
-                    if(spriteNum == 1) image = up1;
-                    if(spriteNum == 2) image = up2;
-                    if(spriteNum == 3) image = up3;
-                    if(spriteNum == 4) image = up4;
-                } else {
-                    if (gp.player.worldX > this.worldX) {
-                        if(spriteNum == 1) image = right1;
-                        if(spriteNum == 2) image = right2;
-                        if(spriteNum == 3) image = right3;
-                        if(spriteNum == 4) image = right4;
-                    } else {
-                        if(spriteNum == 1) image = left1;
-                        if(spriteNum == 2) image = left2;
-                        if(spriteNum == 3) image = left3;
-                        if(spriteNum == 4) image = left4;
-                    }
-                }
+                if(spriteNum == 1) image = up1;
+                if(spriteNum == 2) image = up2;
+                if(spriteNum == 3) image = up3;
+                if(spriteNum == 4) image = up4;
                 break;
             case "down":
-                if (!isPreyNearby(gp.player)) {
-                    if(spriteNum == 1) image = down1;
-                    if(spriteNum == 2) image = down2;
-                    if(spriteNum == 3) image = down3;
-                    if(spriteNum == 4) image = down4;
-                } else {
-                    if (gp.player.worldX > this.worldX) {
-                        if(spriteNum == 1) image = right1;
-                        if(spriteNum == 2) image = right2;
-                        if(spriteNum == 3) image = right3;
-                        if(spriteNum == 4) image = right4;
-                    } else {
-                        if(spriteNum == 1) image = left1;
-                        if(spriteNum == 2) image = left2;
-                        if(spriteNum == 3) image = left3;
-                        if(spriteNum == 4) image = left4;
-                    }
-                }
+                if(spriteNum == 1) image = down1;
+                if(spriteNum == 2) image = down2;
+                if(spriteNum == 3) image = down3;
+                if(spriteNum == 4) image = down4;
                 break;
             case "left":
                 if(spriteNum == 1) image = left1;
@@ -275,14 +306,54 @@ public class Wolf extends WildAnimal {
 
                 g2.setColor(new Color(255,0,30));
                 g2.fillRect(screenX, screenY-15, (int)hpBarValue +10, 10);
-                
-               
             }
         }
     }
 
+    public void isCollision(WildAnimal wolf) { 
+        gp.cCheck.animalCheckObject(wolf);   // Check collision dengan object/plant
+        gp.cCheck.checkPlayer(wolf);        // Check collision dengan player
+        gp.cCheck.checkAnimalCollision(wolf);
+        gp.cCheck.animalCheckBuildings(wolf); // Check collision dengan building
+        gp.cCheck.animalCheckTile(wolf);
+    }
+
     public boolean isPreyNearby(Player player) {
-        if (Math.pow((player.worldX - this.worldX), 2) + Math.pow((player.worldY - this.worldY), 2) <= Math.pow(450, 2) && !collisionOn) {
+        int entityLeftX = player.worldX + player.solidArea.x;
+        int entityRightX = player.worldX + player.solidArea.x + player.solidArea.width;
+        int entityTopY = player.worldY + player.solidArea.y;
+        int entityBottomY = player.worldY + player.solidArea.y + player.solidArea.height;
+
+        int nextLeftX = entityLeftX;
+        int nextRightX = entityRightX;
+        int nextTopY = entityTopY;
+        int nextBottomY = entityBottomY;
+
+        switch(direction) {
+            case "up": nextTopY -= speed; break;
+            case "down": nextBottomY += speed; break;
+            case "left": nextLeftX -= speed; break;
+            case "right": nextRightX += speed; break;
+        }
+
+        int nextLeftCol = nextLeftX / gp.TILE_SIZE;
+        int nextRightCol = nextRightX / gp.TILE_SIZE;
+        int nextTopRow = nextTopY / gp.TILE_SIZE;
+        int nextBottomRow = nextBottomY / gp.TILE_SIZE;
+
+        int validTile = 18;
+        
+        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];     // Top left
+        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];    // Top right
+        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];  // Bottom left
+        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow]; // Bottom right
+        
+        if(tileNum1 != validTile || tileNum2 != validTile || 
+        tileNum3 != validTile || tileNum4 != validTile) {
+            return false; // Tidak bisa bergerak jika ada tile yang bukan air
+        }
+
+        if (Math.pow((player.worldX - this.worldX), 2) + Math.pow((player.worldY - this.worldY), 2) <= Math.pow(450, 2)) {
             if (gp.player.isSleeping || gp.player.health <= 0) {
                 return false; // Tidak mengejar jika player sedang tidur
             }
@@ -292,21 +363,22 @@ public class Wolf extends WildAnimal {
         }
     }
 
-    public void chasePlayer(Player player) {
-        if (isPreyNearby(player)) {
-            if (Math.abs(player.worldX - this.worldX) > Math.abs(player.worldY - this.worldY)) {
-                if (player.worldX > this.worldX) {
-                    this.direction = "right";
-                } else {
-                    this.direction = "left";
-                }
+    public String chasePlayer(Player player) {
+        String nextDirection = "down";
+        if (Math.abs(player.worldX - this.worldX) > Math.abs(player.worldY - this.worldY)) {
+            if (player.worldX > this.worldX) {
+                nextDirection = "right";
             } else {
-                if (player.worldY > this.worldY) {
-                    this.direction = "down";
-                } else {
-                    this.direction = "up";
-                }
+                nextDirection = "left";
+            }
+        } else {
+            if (player.worldY > this.worldY) {
+                nextDirection = "down";
+            } else {
+                nextDirection = "up";
             }
         }
+        return nextDirection;
     }
+
 }

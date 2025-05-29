@@ -1,22 +1,26 @@
-package Objek.Items.StackableItem.Foods;
+package Objek.Items.StackableItem.Materials.RawMaterials;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import Objek.Items.StackableItem.Foods.Food;
 import Objek.Player.Player;
 
-public class RawPork extends Food{
-    public RawPork(int currentStack) {
-        super("Raw Pork", 10, currentStack);
-            try {
-                this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Foods/null.png")); 
-            } catch (IOException e) {
-                e.printStackTrace();
-            } 
+public class RawArwana extends Food {
+    final int HP_INCREASE = 5; // Health points increase
+    final int HUNGER_INCREASE = 10; // Hunger points increase
+
+    public RawArwana(int currentStack) {
+        super("Raw Arwana", 10, currentStack);
+        try {
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/right1.png")); 
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
-     @Override
+    
+    @Override
     public void eat(Player player) {
         // Implement the logic for eating food here
         System.out.println("Eating " + name + "..."); // Eating action
@@ -30,4 +34,5 @@ public class RawPork extends Food{
         
         System.out.println("Health: " + player.health + ", Hunger: " + player.hunger); // Display updated stats
     }
+
 }
