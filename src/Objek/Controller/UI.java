@@ -1475,16 +1475,16 @@ public class UI {
                     g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
                 }
             }
-            if (chest.inventory.slots[i] instanceof FishingRod) {
-                FishingRod fishingRod = (FishingRod) chest.inventory.slots[i];
-                if (fishingRod.durability <fishingRod.maxDurability) {
+            if (gp.player.inventory.slots[i] instanceof FishingRod) {
+                FishingRod fishingRod = (FishingRod) gp.player.inventory.slots[i];
+                if (fishingRod.durability < fishingRod.maxDurability) {
                     int durabilityBarWidth = gp.TILE_SIZE + 10;
                     int durabilityBarHeight = 5;
                     int durabilityBarX = slotX;
                     int durabilityBarY = slotY + gp.TILE_SIZE + 5;
 
                     // Calculate durability percentage
-                    float durabilityPercentage = (float)fishingRod.durability /fishingRod.maxDurability;
+                    float durabilityPercentage = (float) fishingRod.durability / fishingRod.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {

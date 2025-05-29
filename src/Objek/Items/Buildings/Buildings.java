@@ -39,7 +39,7 @@ public class Buildings extends Item {
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
 
-            g2.drawRect(screenX, screenY, width, height);
+            g2.drawImage(img, screenX, screenY, width, height, null);
             
             if(hp < 100) {
                 double oneScale = (double)gp.TILE_SIZE/100;
