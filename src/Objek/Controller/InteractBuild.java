@@ -57,13 +57,10 @@ public class InteractBuild {
             gp.isCave = !gp.isCave;
             gp.eManager.lighting.setLightSource(); 
             gp.player.buildingIndex = -1;
-            gp.sp.spawnMonster("bat", 10, usedPositions);
-            gp.sp.spawnMonster("golem", 10, usedPositions);
-            for (int i = 0; i < gp.monsters.size(); i++) {
-                System.out.println("Monster " + i + ": " + gp.monsters.get(i)+ " at (" + 
-                                   gp.monsters.get(i).worldX/gp.TILE_SIZE + ", " + 
-                                   gp.monsters.get(i).worldY/gp.TILE_SIZE + ")");
-            }
+            gp.sp.spawnMonster("bat", 5, usedPositions);
+            gp.sp.spawnMonster("golem",3, usedPositions);
+            gp.checkAndRespawnOres();
+            
         }
         if(building instanceof Shop) {
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);

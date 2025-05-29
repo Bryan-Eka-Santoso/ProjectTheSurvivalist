@@ -2,11 +2,13 @@ package Objek.Controller;
 
 import javax.swing.*;
 import Objek.Animal.*;
-import Objek.Enemy.Bat;
 import Objek.Enemy.Monster;
-import Objek.Enemy.Golem;
 import Objek.Environment.EnvironmentManager;
 import Objek.Fish.Fish;
+import Objek.Ore.GoldOre;
+import Objek.Ore.IronOre;
+import Objek.Ore.Ore;
+import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Bread;
 import Objek.Items.StackableItem.Foods.Carrot;
@@ -19,6 +21,7 @@ import Objek.Items.Unstackable.Armor.Boots.MetalBoots;
 import Objek.Items.Unstackable.Armor.Chestplate.MetalChestplate;
 import Objek.Items.Unstackable.Armor.Helmet.MetalHelmet;
 import Objek.Items.Unstackable.Armor.Leggings.MetalLeggings;
+import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -79,6 +82,10 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
     private static final int MAX_WOLF = 3;
+    private static final int MAX_GOLD = 5;
+    private static final int MAX_IRON = 10;
+    private static final int MAX_ROCK = 20;
+
 
     public Kandang currentKandang;
     public final int maxMap = 10;
@@ -92,6 +99,7 @@ public class GamePanel extends JPanel implements Runnable {
     public ArrayList<Monster> monsters = new ArrayList<>();
     public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
     public ArrayList<Buildings> buildings = new ArrayList<>();
+    public ArrayList<Ore> ores = new ArrayList<>();
     
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -127,7 +135,33 @@ public class GamePanel extends JPanel implements Runnable {
     public void addPlant(Plant p) {
         plants.add(p);
     }
-    
+     public void checkAndRespawnOres() {
+        int goldCount = 0;
+        int ironCount = 0;
+        int rockCount = 0;
+
+        for(Ore ore : ores) {
+            if(ore instanceof GoldOre) goldCount++;
+            else if(ore instanceof IronOre) ironCount++;
+            else if(ore instanceof Rock) rockCount++;
+        }
+
+        ArrayList<Point> usedPositions = new ArrayList<>();
+        for(Ore ore : ores) {
+            usedPositions.add(new Point(ore.worldX/TILE_SIZE, ore.worldY/TILE_SIZE));
+        }
+
+        if(goldCount < MAX_GOLD) {
+            sp.spawnOre("gold", MAX_CHICKENS - MAX_GOLD, usedPositions);
+        }
+        if(ironCount < MAX_IRON) {
+            sp.spawnOre("iron", MAX_IRON - ironCount, usedPositions);
+        }
+        if(rockCount < MAX_ROCK) {
+            sp.spawnOre("rock", MAX_ROCK - rockCount, usedPositions);
+        }
+
+    }
     public void checkAndRespawnAnimals() {
         int chickenCount = 0;
         int cowCount = 0;
@@ -207,6 +241,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Orchard(this, 1));
         player.inventory.addItems(new CoconutSeeds(2));
         player.inventory.addItems(new Bread());
+        player.inventory.addItems(new Pickaxe("pickaxe", 50, 20));
    
         
         Buildings shop = new Shop(this, 1);
@@ -232,6 +267,9 @@ public class GamePanel extends JPanel implements Runnable {
                 if (currentMap == 0) {
                     checkAndRespawnAnimals();  
                 }
+                // if (currentMap == 2){
+                //     checkAndRespawnOres();
+                // }
                 repaint();
                 delta--;
             }
@@ -282,16 +320,6 @@ public class GamePanel extends JPanel implements Runnable {
             if (currentMap == 2) {
                 for (int i = 0; i < monsters.size(); i++) {
                     monsters.get(i).update();
-                    if (monsters.get(i) instanceof Bat) {
-                        ((Bat) monsters.get(i)).chasePlayer();
-                    }
-                }
-                for (int i = 0; i < monsters.size(); i++) {
-                    monsters.get(i).update();
-                    if (monsters.get(i) instanceof Golem) {
-                        ((Golem) monsters.get(i)).chasePlayer();
-                    }
-                        
                 }
             }
         }
@@ -360,6 +388,11 @@ public class GamePanel extends JPanel implements Runnable {
                 monster.draw(g2);
             }
         }
+        for (int i = 0; i < ores.size(); i++) {
+            if (ores.get(i).worldY <= player.worldY) {
+                ores.get(i).draw(g2);
+            }
+        }
         if (gameState == BUILDING_STATE) {
             ((Buildings) player.inventory.getSelectedItem()).Build(g2);
         }
@@ -403,6 +436,11 @@ public class GamePanel extends JPanel implements Runnable {
         for(Monster monster : monsters) {
             if(monster.worldY > player.worldY) {
                 monster.draw(g2);
+            }
+        }
+        for (int i = 0; i < ores.size(); i++) {
+            if (ores.get(i).worldY > player.worldY) {
+                ores.get(i).draw(g2);
             }
         }
         

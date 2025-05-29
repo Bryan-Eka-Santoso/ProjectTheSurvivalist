@@ -26,7 +26,10 @@ import Objek.Items.StackableItem.Foods.RawMeat;
 import Objek.Items.StackableItem.Foods.RawMutton;
 import Objek.Items.StackableItem.Foods.RawPork;
 import Objek.Items.StackableItem.Materials.Feather;
+import Objek.Items.StackableItem.Materials.GoldIngot;
 import Objek.Items.StackableItem.Materials.Material;
+import Objek.Items.StackableItem.Materials.MetalIngot;
+import Objek.Items.StackableItem.Materials.Stone;
 import Objek.Items.StackableItem.Materials.Wheat;
 import Objek.Items.StackableItem.Materials.Wood;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
@@ -44,6 +47,10 @@ import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
+import Objek.Ore.GoldOre;
+import Objek.Ore.IronOre;
+import Objek.Ore.Ore;
+import Objek.Ore.Rock;
 import Objek.Enemy.Bat;
 import Objek.Enemy.Golem;
 import Objek.Plant.*;
@@ -415,20 +422,36 @@ public class UseItem {
                         player.buildingIndex = -1; 
                     } 
                     playSE(6);
-                } else if (player.monsterIndex != -1) { 
-                    Monster monster = player.gp.monsters.get(player.monsterIndex);
-                    monster.hp -= arsenal.damage;
-                    if (monster.hp <= 0) {
-                        System.out.println("Monster defeated: " + monster.name);
-                        player.gp.monsters.remove(player.monsterIndex);
-                        player.gainExp(rand.nextInt(10) + 5);
-                        player.monsterIndex = -1;
+                } else if (gp.player.oreIndex != -1){
+                    if(player.inventory.getSelectedItem() instanceof Pickaxe) {
+                        Pickaxe pickaxe = (Pickaxe)player.inventory.getSelectedItem();
+                        Ore ore = gp.ores.get(player.oreIndex);
                         
-                    } else {
-                        System.out.println("Using arsenal on monster: " + arsenal.name);
-                        System.out.println("Monster HP: " + monster.hp);
+                        ore.hp -= pickaxe.damage;
+                        pickaxe.durability--;
+                        
+                        if(pickaxe.durability <= 0) {
+                            player.inventory.removeItem(pickaxe, 1);
+                        }
+                        
+                        if(ore.hp <= 0) {
+                            if(ore instanceof GoldOre) {
+                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new GoldIngot(1), gp));
+                            } else if(ore instanceof IronOre) {
+                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new MetalIngot(1), gp));
+                            } else if(ore instanceof Rock) {
+                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Stone(1), gp));
+                            }
+                            gp.ores.remove(player.oreIndex);
+                            player.oreIndex = -1;
+                        }
                     }
-                    playSE(4);
+                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Shop) {
+                    System.out.println("Using arsenal on shop is not allowed!");
+                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Shop) {
+                    System.out.println("Using arsenal on shop is not allowed!");
+                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Cave) {
+                    System.out.println("Using arsenal on cave is not allowed!");
                 } else {
                     System.out.println("No plant or animal selected to use the arsenal on!");
                 }
