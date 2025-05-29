@@ -261,28 +261,28 @@ public class CollisonChecker {
                 switch (player.direction) {
                     case "up":
                         player.solidArea.y -= player.speed;
-                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.currentMap == gp.buildings.get(i).buildingMap) {
                             index = i; 
                             player.collisionOn = gp.buildings.get(i).isAllowCollison; // Kalo item ini diapus aja
                         }
                         break;
                     case "down":
                         player.solidArea.y += player.speed;
-                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.currentMap == gp.buildings.get(i).buildingMap) {
                             index = i; 
                             player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }
                         break;
                     case "left":
                         player.solidArea.x -= player.speed;
-                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.currentMap == gp.buildings.get(i).buildingMap) {
                             index = i; 
                             player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }
                         break;
                     case "right":
                         player.solidArea.x += player.speed;
-                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.currentMap == gp.buildings.get(i).buildingMap) {
                             index = i; 
                             player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }

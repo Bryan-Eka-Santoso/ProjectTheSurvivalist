@@ -562,7 +562,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.gameState = gp.PLAY_STATE;
             gp.currentKandang = null;
             gp.ui.resetKandangMenuState();
-            
         }
     }
 
@@ -821,19 +820,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         int col = gp.player.worldX / gp.TILE_SIZE;
         int row = gp.player.worldY / gp.TILE_SIZE;
 
-        if(gp.currentMap == 2){
-            if((col == 22 || col == 23) && row == 23) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
-                gp.currentMap = 0;
-                gp.monsters.clear();
-                gp.player.getPlayerImg();
-                gp.tileM.getTileImage();
-                gp.player.worldY = 51 * gp.TILE_SIZE;
-                gp.player.worldX = 51 * gp.TILE_SIZE;
-                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
-            }
-        }
-
         if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE || gp.gameState == gp.OPEN_SMELTER_STATE) {
             gp.gameState = gp.PLAY_STATE;
             temp1Furnace = null;
@@ -850,6 +836,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.selectedChestIndex = 0;
         } else if (gp.gameState == gp.BUILDING_STATE) {
             Buildings building = (Buildings) gp.player.inventory.getSelectedItem().clone();
+            building.buildingMap = gp.currentMap;
             if (building instanceof Chest) {
                 ((Chest) building).inventory = new Inventory(32, gp);
             }
@@ -888,6 +875,30 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.selectedChestIndex = 0;
             if (gp.player.buildingIndex != -1 && gp.gameState == gp.PLAY_STATE) {
                 gp.player.interactBuild(gp.buildings.get(gp.player.buildingIndex));
+            }
+        }
+
+        if(gp.currentMap == 2){
+            if ((col == 22 || col == 23) && row == 23) {
+                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.currentMap = 0;
+                gp.monsters.clear();
+                gp.player.getPlayerImg();
+                gp.tileM.getTileImage();
+                gp.player.worldY = 51 * gp.TILE_SIZE;
+                gp.player.worldX = 51 * gp.TILE_SIZE;
+                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
+            }
+        }
+        if(gp.currentMap == 3){
+            if(col == 52 && row == 53) {
+                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.currentMap = 0;
+                gp.player.getPlayerImg();
+                gp.tileM.getTileImage();
+                gp.player.worldY = 55 * gp.TILE_SIZE;
+                gp.player.worldX = 55 * gp.TILE_SIZE;
+                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
         }
     }

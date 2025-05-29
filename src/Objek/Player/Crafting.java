@@ -93,13 +93,13 @@ public class Crafting {
         r.put(recipe7, new MetalClub());
 
         List<Item> recipe8 = Arrays.asList(new Wood(3), new Wool(3));
-        r.put(recipe8, new Bed(gp, 1));
+        r.put(recipe8, new Bed(gp, 1, 0));
 
         List<Item> recipe9 = Arrays.asList(new Stone(8));
-        r.put(recipe9, new Furnace(gp, 1));
+        r.put(recipe9, new Furnace(gp, 1, 0));
 
         List<Item> recipe10 = Arrays.asList(new Wood(8));
-        r.put(recipe10, new Chest(gp, 1));
+        r.put(recipe10, new Chest(gp, 1, 0));
 
         return r;
     }

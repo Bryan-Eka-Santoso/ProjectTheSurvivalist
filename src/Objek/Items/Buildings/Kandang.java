@@ -10,8 +10,8 @@ import Objek.Controller.GamePanel;
 
 public abstract class Kandang extends Buildings {
 
-    public Kandang(String name,GamePanel gp) {
-        super(name, 3, 1, gp, new Rectangle(11,10,42,40),64,64);
+    public Kandang(String name,GamePanel gp, int buildingMap) {
+        super(name, 3, 1, gp, new Rectangle(11,10,42,40),64,64, buildingMap);
         this.gp = gp;
         this.worldX = gp.player.worldX;
         this.worldY = gp.player.worldY;

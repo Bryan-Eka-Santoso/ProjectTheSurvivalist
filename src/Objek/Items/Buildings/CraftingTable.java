@@ -8,9 +8,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class CraftingTable extends Buildings {
-    public CraftingTable(GamePanel gp, int currentStack) {
-        super("Crafting Table", 10, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48);
-
+    public CraftingTable(GamePanel gp, int currentStack, int buildingMap) {
+        super("Crafting Table", 10, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48, buildingMap);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/craftingTable.png"));
         } catch (IOException e) {

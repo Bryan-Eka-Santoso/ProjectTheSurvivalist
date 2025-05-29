@@ -12,8 +12,8 @@ public class CowCage extends Kandang {
     private static final int MAX_CAPACITY = 10;
     public ArrayList<Cow> cowsInCage;
     
-    public CowCage(GamePanel gp) {
-        super("Cow Cage", gp);
+    public CowCage(GamePanel gp, int buildingMap) {
+        super("Cow Cage", gp, buildingMap);
         this.gp = gp;
         this.cowsInCage = new ArrayList<>();
         try {

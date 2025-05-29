@@ -16,8 +16,8 @@ public class KandangAyam extends Kandang{
     Scanner scanner = new Scanner(System.in);
     Scanner scannerStr = new Scanner(System.in);
 
-    public KandangAyam(GamePanel gp) {
-        super("Kandang Ayam", gp );
+    public KandangAyam(GamePanel gp, int buildingMap) {
+        super("Kandang Ayam", gp, buildingMap);
         this.chickensInCage = new ArrayList<>();
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/coop.png"));

@@ -1,5 +1,6 @@
 package Objek.Items.Buildings;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -22,8 +23,8 @@ public class Orchard extends Buildings {
     private boolean watered; // Has the current phase been watered?
     private long lastWateredTime;
 
-    public Orchard(GamePanel gp, int currentStack) {
-        super("Orchard", 15, currentStack, gp, new java.awt.Rectangle(9, 9, 30, 30), 48, 48);
+    public Orchard(GamePanel gp, int currentStack, int buildingMap) {
+        super("Orchard", 15, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48, buildingMap);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/orchard.png"));
         } catch (Exception e) {

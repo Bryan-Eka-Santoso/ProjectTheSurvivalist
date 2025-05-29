@@ -68,6 +68,8 @@ public class InteractBuild {
             gp.tileM.getTileImage();
             gp.player.worldY = 53 * gp.TILE_SIZE;
             gp.player.worldX = 52 * gp.TILE_SIZE;
+            gp.eManager.lighting.setLightSource(); 
+            gp.player.buildingIndex = -1;
         }
     }
 }

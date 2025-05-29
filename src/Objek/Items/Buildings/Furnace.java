@@ -20,8 +20,8 @@ public class Furnace extends Buildings {
     public Item[] fuelMaterial;
     public Item[] cookedMaterial;
 
-    public Furnace(GamePanel gp, int currentStack) {
-        super("Furnace", 10, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48);
+    public Furnace(GamePanel gp, int currentStack, int buildingMap) {
+        super("Furnace", 10, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48, buildingMap);
         rawMaterial = new Item[1];
         fuelMaterial = new Item[1];
         cookedMaterial = new Item[1];

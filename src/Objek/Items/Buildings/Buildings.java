@@ -16,9 +16,11 @@ public class Buildings extends Item {
     public int solidAreaDefaultY;
     public int hp = 100;
     public boolean isAllowCollison;
+    public int buildingMap;
 
-    public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height) {
+    public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height, int buildingMap) {
         super(name, maxStack, currentStack);
+        this.buildingMap = buildingMap;
         this.gp = gp;
         this.solidArea = solidArea;
         this.solidAreaDefaultX = solidArea.x;
@@ -37,7 +39,7 @@ public class Buildings extends Item {
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
 
-            g2.drawImage(img, screenX, screenY, width, height, null);
+            g2.drawRect(screenX, screenY, width, height);
             
             if(hp < 100) {
                 double oneScale = (double)gp.TILE_SIZE/100;

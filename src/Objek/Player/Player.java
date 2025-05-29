@@ -288,6 +288,8 @@ public class Player {
                 animalIndex = gp.cCheck.checkAnimal(this, true);
                 buildingIndex = gp.cCheck.checkBuildings(this, true);
                 plantIndex = gp.cCheck.checkPlant(this, true);
+            } else if (gp.currentMap == 3) {
+                buildingIndex = gp.cCheck.checkBuildings(this, true);
             }
             
             if (!collisionOn) {

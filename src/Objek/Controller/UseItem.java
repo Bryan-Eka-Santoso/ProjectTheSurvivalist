@@ -332,7 +332,7 @@ public class UseItem {
 
                     if (building.hp <= 0) {
                         if (building instanceof Chest) {
-                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Chest(gp, 1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Chest(gp, 1, 0), gp));
                             Chest chest = (Chest) building;
                             for (int i = 0; i < chest.inventory.slots.length; i++) {
                                 int scatterX = rand.nextInt(75) - 30;
@@ -343,9 +343,9 @@ public class UseItem {
                                 }
                             }
                         } else if (building instanceof CraftingTable) {
-                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new CraftingTable(gp, 1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new CraftingTable(gp, 1, 0), gp));
                         } else if (building instanceof Orchard) {
-                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Orchard(gp, 1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Orchard(gp, 1, 0), gp));
                             Orchard orchard = (Orchard) building;
                             if (orchard.seed != null) {
                                 if (orchard.seed instanceof GuavaSeeds){
@@ -372,7 +372,7 @@ public class UseItem {
                                 }
                             }
                         } else if (building instanceof GardenPatch) {
-                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new GardenPatch(gp, 1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new GardenPatch(gp, 1, 0), gp));
                             GardenPatch gardenPatch = (GardenPatch) building;
                             if (gardenPatch.seed != null) {
                                 if (gardenPatch.seed instanceof Seeds){
@@ -397,9 +397,9 @@ public class UseItem {
                                 }
                             }
                         } else if (building instanceof Bed) {
-                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Bed(gp, 1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Bed(gp, 1, 0), gp));
                         } else if (building instanceof Furnace) {
-                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Furnace(gp, 1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Furnace(gp, 1, 0), gp));
                             Furnace furnace = (Furnace) building;
                             if (furnace.rawMaterial[0] != null) {
                                 player.gp.droppedItems.add(new ItemDrop(building.worldX + (rand.nextInt(40) - 20), building.worldY, furnace.rawMaterial[0], gp));
