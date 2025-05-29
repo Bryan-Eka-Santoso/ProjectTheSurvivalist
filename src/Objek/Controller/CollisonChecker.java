@@ -5,6 +5,8 @@ import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
+import Objek.Items.Unstackable.FishingRod;
+import Objek.Ore.Ore;
 import Objek.Plant.Bush;
 import Objek.Plant.Tree;
 import Objek.Player.Player;
@@ -26,9 +28,8 @@ public class CollisonChecker {
         int playerRightCol = entityRightX / gp.TILE_SIZE;
         int playerTopRow = entityTopY / gp.TILE_SIZE;
         int playerBottomRow = entityBottomY / gp.TILE_SIZE;
-
+        
         int tileNum1 = 0, tileNum2 = 0;
-
         switch (player.direction) {
             case "up":
                 playerTopRow = (entityTopY - player.speed) / gp.TILE_SIZE;
@@ -120,7 +121,6 @@ public class CollisonChecker {
             animal.solidArea.y = animal.worldY + animal.solidArea.y;
             gp.plants.get(i).solidArea.x = gp.plants.get(i).worldX + gp.plants.get(i).solidArea.x;
             gp.plants.get(i).solidArea.y = gp.plants.get(i).worldY + gp.plants.get(i).solidArea.y;
-
             if (animal.solidArea.intersects(gp.plants.get(i).solidArea)) {
                 if (gp.plants.get(i) instanceof Tree) {
                     animal.collisionOn = true;
@@ -248,6 +248,52 @@ public class CollisonChecker {
             }
         return index;
     }
+    public int checkOre(Player player, boolean collison) {
+        int index = -1;
+        
+        for(int i = 0; i < gp.ores.size(); i++) {
+            player.solidArea.x = player.worldX + player.solidArea.x;
+            player.solidArea.y = player.worldY + player.solidArea.y;
+            gp.ores.get(i).solidArea.x = gp.ores.get(i).worldX + gp.ores.get(i).solidArea.x;
+            gp.ores.get(i).solidArea.y = gp.ores.get(i).worldY + gp.ores.get(i).solidArea.y;
+            
+            switch(player.direction) {
+                case "up":
+                    player.solidArea.y -= player.speed;
+                    if(player.solidArea.intersects(gp.ores.get(i).solidArea)) {
+                        player.collisionOn = true;
+                        index = i;
+                    }
+                    break;
+                case "down":
+                    player.solidArea.y += player.speed;
+                    if(player.solidArea.intersects(gp.ores.get(i).solidArea)) {
+                        player.collisionOn = true;
+                        index = i;
+                    }
+                    break;
+                case "left":
+                    player.solidArea.x -= player.speed;
+                    if(player.solidArea.intersects(gp.ores.get(i).solidArea)) {
+                        player.collisionOn = true;
+                        index = i;
+                    }
+                    break;
+                case "right":
+                    player.solidArea.x += player.speed;
+                    if(player.solidArea.intersects(gp.ores.get(i).solidArea)) {
+                        player.collisionOn = true;
+                        index = i;
+                    }
+                    break;
+            }
+            player.solidArea.x = player.solidAreaDefaultX;
+            player.solidArea.y = player.solidAreaDefaultY;
+            gp.ores.get(i).solidArea.x = gp.ores.get(i).solidAreaDefaultX;
+            gp.ores.get(i).solidArea.y = gp.ores.get(i).solidAreaDefaultY;
+        }
+        return index;
+    }
 
     public int checkBuildings(Player player, boolean collison) {
         int index = -1; // Default value if no collision is detected
@@ -260,28 +306,28 @@ public class CollisonChecker {
                 switch (player.direction) {
                     case "up":
                         player.solidArea.y -= player.speed;
-                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.currentMap == gp.buildings.get(i).buildingMap) {
                             index = i; 
                             player.collisionOn = gp.buildings.get(i).isAllowCollison; // Kalo item ini diapus aja
                         }
                         break;
                     case "down":
                         player.solidArea.y += player.speed;
-                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.currentMap == gp.buildings.get(i).buildingMap) {
                             index = i; 
                             player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }
                         break;
                     case "left":
                         player.solidArea.x -= player.speed;
-                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.currentMap == gp.buildings.get(i).buildingMap) {
                             index = i; 
                             player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }
                         break;
                     case "right":
                         player.solidArea.x += player.speed;
-                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+                        if (player.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.currentMap == gp.buildings.get(i).buildingMap) {
                             index = i; 
                             player.collisionOn = gp.buildings.get(i).isAllowCollison;
                         }
@@ -402,7 +448,6 @@ public class CollisonChecker {
             animal.collisionOn = true;
             int def = gp.player.getDefense();
             if (animal instanceof Wolf) {
-                System.out.println("Player is attacked by a wolf!");
                 if (gp.player.helmet != null) {
                     gp.player.helmet.durability--;
                     if (gp.player.helmet.durability <= 0) {
@@ -456,15 +501,14 @@ public class CollisonChecker {
 
             int fishIndex = gp.fish.indexOf(animal);
             if (gp.currentMap == 1) {
-                // System.out.println("Player bertemu ikan: " + animal.nameFish + " (strength: " + animal.strength + ")");
-                if (gp.player.durabilityRod > 0) {
-                    // Start fishing minigame
-                    gp.ui.caughtFish = animal;
-                    gp.ui.fishIndex = fishIndex;
-                    gp.ui.playerFishingStrength = 50;
-                    gp.gameState = gp.FISHING_STATE;
-                } else {
-                    gp.ui.showRodRusakMessage();
+                if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof FishingRod) {
+                    if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability > 0) {
+                        gp.ui.caughtFish = animal;
+                        gp.ui.fishIndex = fishIndex;
+                        gp.gameState = gp.FISHING_STATE;
+                    } else {
+                        gp.ui.showRodRusakMessage();
+                    }
                 }
             }
         }
@@ -716,17 +760,42 @@ public class CollisonChecker {
     
         // Check collision
         if(monster.solidArea.intersects(gp.player.solidArea)) {
+            monster.collisionOn = true;
             int def = gp.player.getDefense();
-            if(10-def < 0){
-                gp.player.health -= 1; 
-            }else{
 
-                gp.player.health -= (10- def); // Decrease player HP
+            if (gp.player.helmet != null) {
+                gp.player.helmet.durability--;
+                if (gp.player.helmet.durability <= 0) {
+                    gp.player.helmet = null; // Remove helmet if durability is zero
+                }
+            }
+            if (gp.player.chestplate != null) {
+                gp.player.chestplate.durability--;
+                if (gp.player.chestplate.durability <= 0) {
+                    gp.player.chestplate = null; // Remove chestplate if durability is zero
+                }
+            }
+            if (gp.player.leggings != null) {
+                gp.player.leggings.durability--;
+                if (gp.player.leggings.durability <= 0) {
+                    gp.player.leggings = null; // Remove leggings if durability is zero
+                }
+            }
+            if (gp.player.boots != null) {
+                gp.player.boots.durability--;
+                if (gp.player.boots.durability <= 0) {
+                    gp.player.boots = null; // Remove boots if durability is zero
+                }
+            }
+            if(16 - def <= 0){
+                gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
+            } else {
+                gp.player.health -= (16-def); // Decrease player HP
             }
             if (gp.player.health <= 0) {
                 gp.player.health = 0; // Prevent negative health
-            } 
-            monster.collisionOn = true;
+            }
+            
         }
     
         // Reset hitbox positions
@@ -742,42 +811,56 @@ public class CollisonChecker {
         int entityTopY = monster.worldY + monster.solidArea.y;
         int entityBottomY = monster.worldY + monster.solidArea.y + monster.solidArea.height;
 
-        int nextLeftX = entityLeftX;
-        int nextRightX = entityRightX;
-        int nextTopY = entityTopY;
-        int nextBottomY = entityBottomY;
-
         switch(monster.direction) {
-            case "up": nextTopY -= monster.speed; break;
-            case "down": nextBottomY += monster.speed; break;
-            case "left": nextLeftX -= monster.speed; break;
-            case "right": nextRightX += monster.speed; break;
+            case "up": entityTopY -= monster.speed; break;
+            case "down": entityBottomY += monster.speed; break;
+            case "left": entityLeftX -= monster.speed; break;
+            case "right": entityRightX += monster.speed; break;
         }
 
-        int nextLeftCol = nextLeftX / gp.TILE_SIZE;
-        int nextRightCol = nextRightX / gp.TILE_SIZE;
-        int nextTopRow = nextTopY / gp.TILE_SIZE;
-        int nextBottomRow = nextBottomY / gp.TILE_SIZE;
-        
+        int nextLeftCol = entityLeftX / gp.TILE_SIZE;
+        int nextRightCol = entityRightX / gp.TILE_SIZE;
+        int nextTopRow = entityTopY / gp.TILE_SIZE;
+        int nextBottomRow = entityBottomY / gp.TILE_SIZE;
+
+        // Boundary check
         if(nextLeftCol < 0 || nextRightCol >= gp.MAX_WORLD_COL || 
         nextTopRow < 0 || nextBottomRow >= gp.MAX_WORLD_ROW) {
             monster.collisionOn = true;
             return;
         }
 
-        int validTile = 21;
-        
-        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];     // Top left
-        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];    // Top right
-        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];  // Bottom left
-        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow]; // Bottom right
-        
-        if(tileNum1 != validTile || tileNum2 != validTile || 
-        tileNum3 != validTile || tileNum4 != validTile) {
+        // Get tile numbers
+        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];
+        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];
+        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];
+        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow];
+
+        // Check collision property dari tiles
+        if(gp.tileM.tile[tileNum1].collison || 
+        gp.tileM.tile[tileNum2].collison || 
+        gp.tileM.tile[tileNum3].collison || 
+        gp.tileM.tile[tileNum4].collison) {
             monster.collisionOn = true;
         }
     }
-
+    public void monsterCheckOre(Monster monster) {
+        for(Ore ore : gp.ores) {
+            monster.solidArea.x = monster.worldX + monster.solidArea.x;
+            monster.solidArea.y = monster.worldY + monster.solidArea.y;
+            ore.solidArea.x = ore.worldX + ore.solidArea.x;
+            ore.solidArea.y = ore.worldY + ore.solidArea.y;
+            
+            if(monster.solidArea.intersects(ore.solidArea)) {
+                monster.collisionOn = true;
+            }
+            
+            monster.solidArea.x = monster.solidAreaDefaultX;
+            monster.solidArea.y = monster.solidAreaDefaultY;
+            ore.solidArea.x = ore.solidAreaDefaultX;
+            ore.solidArea.y = ore.solidAreaDefaultY;
+        }
+    }
     public void checkMonstersCollision(Monster monster) {
         int nextX = monster.worldX;
         int nextY = monster.worldY;

@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Point;
-
 import javax.imageio.ImageIO;
-
 import Objek.Items.Buildings.*;
 
 public class InteractBuild {
@@ -56,9 +54,11 @@ public class InteractBuild {
             gp.player.worldX = 23 * gp.TILE_SIZE;
             gp.isCave = !gp.isCave;
             gp.eManager.lighting.setLightSource(); 
-            gp.sp.spawnMonster("bat", 10, usedPositions);
-            gp.sp.spawnMonster("golem", 10, usedPositions);
             gp.player.buildingIndex = -1;
+            gp.sp.spawnMonster("bat", 5, usedPositions);
+            gp.sp.spawnMonster("golem",3, usedPositions);
+            gp.checkAndRespawnOres();
+            
         }
         if(building instanceof Shop) {
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);
@@ -68,6 +68,8 @@ public class InteractBuild {
             gp.tileM.getTileImage();
             gp.player.worldY = 53 * gp.TILE_SIZE;
             gp.player.worldX = 52 * gp.TILE_SIZE;
+            gp.eManager.lighting.setLightSource(); 
+            gp.player.buildingIndex = -1;
         }
     }
 }

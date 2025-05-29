@@ -1,5 +1,10 @@
-package Objek.Items.StackableItem.Foods;
+package Objek.Items.StackableItem.Materials.RawMaterials;
 
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
+import Objek.Items.StackableItem.Foods.Food;
 import Objek.Player.Player;
 
 public class RawArwana extends Food {
@@ -9,7 +14,7 @@ public class RawArwana extends Food {
     public RawArwana(int currentStack) {
         super("Raw Arwana", 10, currentStack);
         try {
-            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Foods/potato.png")); 
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/arwana/right1.png")); 
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

@@ -139,6 +139,9 @@ public class Lighting {
         if (gp.currentMap == 2) {
             filterAlpha = 0.8f;
         }
+        if (gp.currentMap == 3) {
+            filterAlpha = 0;
+        }
     }
     
     public void draw(Graphics2D g2) {

@@ -1,5 +1,6 @@
 package Objek.Items.Buildings;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
@@ -21,8 +22,8 @@ public class GardenPatch extends Buildings {
     private boolean watered;
     private long lastWateredTime;
 
-    public GardenPatch(GamePanel gp, int currentStack) {
-        super("Garden Patch", 15, currentStack, gp, new java.awt.Rectangle(9, 9, 30, 30), 48, 48);
+    public GardenPatch(GamePanel gp, int currentStack, int buildingMap) {
+        super("Garden Patch", 15, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48, buildingMap);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/gardenpatch.png")); 
         } catch (java.io.IOException e) {

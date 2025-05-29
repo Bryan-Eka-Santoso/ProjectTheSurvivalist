@@ -2,15 +2,16 @@ package Objek.Items.Buildings;
 
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
+import Objek.Items.StackableItem.Foods.CookedArwana;
+import Objek.Items.StackableItem.Foods.CookedBelida;
 import Objek.Items.StackableItem.Materials.GoldIngot;
 import Objek.Items.StackableItem.Materials.MetalIngot;
-import Objek.Items.StackableItem.Materials.Wood;
+import Objek.Items.StackableItem.Materials.Fuels.Fuel;
 
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
-
 import javax.imageio.ImageIO;
 
 public class Furnace extends Buildings {
@@ -19,21 +20,24 @@ public class Furnace extends Buildings {
     public Item[] fuelMaterial;
     public Item[] cookedMaterial;
 
-    public Furnace(GamePanel gp, int currentStack) {
-        super("Furnace", 10, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48);
+    public Furnace(GamePanel gp, int currentStack, int buildingMap) {
+        super("Furnace", 10, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48, buildingMap);
         rawMaterial = new Item[1];
         fuelMaterial = new Item[1];
         cookedMaterial = new Item[1];
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/smelter.png"));
         } catch (IOException e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
         recipe = fillRecipes();
     }
 
     public void cook() {
+        if (!(fuelMaterial[0] instanceof Fuel)) {
+            System.out.println("Please put fuel in the furnace");
+            return;
+        }
         for (int i = 0; i < fuelMaterial[0].currentStack; i++) {
             if (rawMaterial[0].currentStack > 0 && fuelMaterial[0].currentStack > 0) {
                 Item tempItem = rawMaterial[0];
@@ -90,13 +94,9 @@ public class Furnace extends Buildings {
 
     private LinkedHashMap<String, Item> fillRecipes() {
         LinkedHashMap<String, Item> r = new LinkedHashMap<>();
-
-        r.put("Raw Mutton", new Wood(1));
-
-        r.put("Raw Chicken", new Wood(1));
-
+        r.put("Raw Arwana", new CookedArwana(1));
+        r.put("Raw Belida", new CookedBelida(1));
         r.put("Metal", new MetalIngot(1));
-
         r.put("Gold", new GoldIngot(1));
 
         return r;

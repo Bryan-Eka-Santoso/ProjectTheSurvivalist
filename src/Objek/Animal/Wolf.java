@@ -223,7 +223,9 @@ public class Wolf extends WildAnimal {
             }
             actionMoveCounter++;
             if(actionMoveCounter >= actionMoveDelay) {
-                setRandomDirection();
+                if (!isPreyNearby(gp.player)) {
+                    setRandomDirection();
+                }
                 actionMoveCounter = 0;
             }
         } else {

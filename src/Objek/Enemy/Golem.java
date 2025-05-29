@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
+import Objek.Player.Player;
 
-public class Golem extends Monster {
-    private int radius = 300; 
+public class Golem extends Monster { 
     public int actionLockEnemyNearby = 15; // Delay untuk aksi ketika ada musuh di dekatnya
     private int actionLockCounter = 0;
     private int actionMoveCounter = 0;
@@ -20,16 +20,20 @@ public class Golem extends Monster {
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
     private int actionMoveDelay;
+    int spriteDisplaySize = gp.TILE_SIZE * 2;
+    int originalSpriteSize = 64;
+    double scaleFactor = (double)spriteDisplaySize / originalSpriteSize;
 
     Random random = new Random();
     public Golem(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
         super(name, worldX, worldY, speed, direction, gp);
+        setRandomDirection();
         this.hp = 200; // Set Golem's HP
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(10, 0, 44,62 );   
-        downHitbox = new Rectangle(10, 0, 44,62 );   
-        leftHitbox = new Rectangle(25 ,2, 30, 59);   
-        rightHitbox = new Rectangle(5, 2, 30, 59);  
+        upHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor) );   
+        downHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor) );   
+        leftHitbox =  new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));     
+        rightHitbox = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));  
         this.solidArea = downHitbox;
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
@@ -75,8 +79,9 @@ public class Golem extends Monster {
 
     @Override
     public void update() {  
-       if (isPlayerNearby()) {
+       if (isPreyNearby(gp.player)) {
             actionLockEnemyNearby = 10;
+            chasePlayer(gp.player);
         } else {
             actionLockEnemyNearby = 15;
         }
@@ -103,12 +108,96 @@ public class Golem extends Monster {
                 break;
         }
         collisionOn = false;
-        
-        gp.cCheck.checkMonsterPlayer(this);        // Check collision dengan player
-        gp.cCheck.checkMonstersCollision(this);
-        gp.cCheck.monsterCheckTile(this); //   
+        isCollision(this);
         
         // Jika tidak ada collision, boleh bergerak
+        if (!isPreyNearby(gp.player)) {
+            moveNormally();
+        } else {
+            moveTowardsPlayer();
+        }
+        
+    }
+    public void moveTowardsPlayer() {
+        String nextDirection = chasePlayer(gp.player);
+        direction = nextDirection;
+        switch(nextDirection) {
+            case "up": 
+                solidArea = upHitbox;
+            break;
+            case "down": 
+                solidArea = downHitbox;
+            break;
+            case "left": 
+                solidArea = leftHitbox;
+            break;
+            case "right": 
+                solidArea = rightHitbox;
+            break;
+        }
+        collisionOn = false;
+        isCollision(this);
+        if (!collisionOn) {
+            this.direction = nextDirection;
+            switch(this.direction) {
+                case "up": worldY -= speed; break;
+                case "down": worldY += speed; break;
+                case "left": worldX -= speed; break;
+                case "right": worldX += speed; break;
+            }
+        } else {
+            if (nextDirection.equals("up")) {
+                if (gp.player.worldX < this.worldX) {
+                    nextDirection = "left";
+                } else {
+                    nextDirection = "right";
+                }
+            } else if (nextDirection.equals("down")) {
+                if (gp.player.worldX < this.worldX) {
+                    nextDirection = "left";
+                } else {
+                    nextDirection = "right";
+                }
+            } else if (nextDirection.equals("left")) {
+                if (gp.player.worldY < this.worldY) {
+                    nextDirection = "up";
+                } else {
+                    nextDirection = "down";
+                }
+            } else if (nextDirection.equals("right")) {
+                if (gp.player.worldY < this.worldY) {
+                    nextDirection = "up";
+                } else {
+                    nextDirection = "down";
+                }
+            }
+            this.direction = nextDirection;
+            switch (direction) {
+                case "up":
+                worldY -= speed;
+                break;
+                case "down":
+                worldY += speed;
+                    break;
+                case "left":
+                    worldX -= speed;
+                    break;
+                case "right":
+                    worldX += speed;
+                    break;
+            }
+        }
+        actionMoveCounter++;
+        spriteCounter++;
+        if(spriteCounter > 0) {
+            spriteNum++;
+            if(spriteNum > 4) {
+                spriteNum = 1;
+            }
+            spriteCounter = 0;
+        }
+    }
+    public void moveNormally() {
         if(!collisionOn) {
             switch(direction) {
                 case "up": worldY -= speed; break;
@@ -118,48 +207,26 @@ public class Golem extends Monster {
             }
             actionMoveCounter++;
             if(actionMoveCounter >= actionMoveDelay) {
-                setRandomDirection();
+                if (!isPreyNearby(gp.player)) {
+                    setRandomDirection();
+                }
                 actionMoveCounter = 0;
             }
         } else {
             String newDirection;
-            String oldDirection = this.direction;
-
-            int randomMove = random.nextInt(2) + 1;
+            String oldDirection = direction;
+    
             switch(oldDirection) {
-                case "up": 
-                    if (randomMove == 1) {
-                        newDirection = "right"; 
-                    } else {
-                        newDirection = "left"; 
-                    }
-                break;
-                case "down":
-                    if (randomMove == 1) {
-                        newDirection = "right"; 
-                    } else {
-                        newDirection = "left"; 
-                    }
-                break;
-                case "left": 
-                    if (randomMove == 1) {
-                        newDirection = "up"; 
-                    } else {
-                        newDirection = "down"; 
-                    }
-                break;
-                case "right": 
-                    if (randomMove == 1) {
-                        newDirection = "up"; 
-                    } else {
-                        newDirection = "down"; 
-                    }
-                break;
+                case "up": newDirection = "down"; break;
+                case "down": newDirection = "up"; break;
+                case "left": newDirection = "right"; break;
+                case "right": newDirection = "left"; break;
                 default: newDirection = "down"; break;
             }
+    
             this.direction = newDirection;
-            this.actionMoveDelay = this.random.nextInt(91)+30;
-            switch(direction) {
+            this.actionMoveDelay = this.random.nextInt(91) + 30;
+            switch(newDirection) {
                 case "up": worldY -= speed; break;
                 case "down": worldY += speed; break;
                 case "left": worldX -= speed; break;
@@ -176,7 +243,6 @@ public class Golem extends Monster {
             spriteCounter = 0;
         }
     }
-
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
@@ -215,6 +281,7 @@ public class Golem extends Monster {
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE*2, gp.TILE_SIZE*2, null);
+
             if(hp < 200) {
                 double oneScale = (double)gp.TILE_SIZE/200;
                 double hpBarValue = oneScale * hp;
@@ -228,33 +295,74 @@ public class Golem extends Monster {
             }
         }
     }
+    public void isCollision(Monster monster) { 
+        gp.cCheck.checkMonsterPlayer(monster);        // Check collision dengan player
+        gp.cCheck.checkMonstersCollision(monster);
+        gp.cCheck.monsterCheckTile(monster);
+        gp.cCheck.monsterCheckOre(monster);
+    }
 
-    @Override
-    public boolean isPlayerNearby() {
-        // TODO Auto-generated method stub
-        if (Math.pow((gp.player.worldX - this.worldX), 2) + Math.pow((gp.player.worldY - this.worldY), 2) <= Math.pow(radius, 2) && !collisionOn) {
+    public boolean isPreyNearby(Player player) {
+        int entityLeftX = player.worldX + player.solidArea.x;
+        int entityRightX = player.worldX + player.solidArea.x + player.solidArea.width;
+        int entityTopY = player.worldY + player.solidArea.y;
+        int entityBottomY = player.worldY + player.solidArea.y + player.solidArea.height;
+
+        int nextLeftX = entityLeftX;
+        int nextRightX = entityRightX;
+        int nextTopY = entityTopY;
+        int nextBottomY = entityBottomY;
+
+        switch(direction) {
+            case "up": nextTopY -= speed; break;
+            case "down": nextBottomY += speed; break;
+            case "left": nextLeftX -= speed; break;
+            case "right": nextRightX += speed; break;
+        }
+
+        int nextLeftCol = nextLeftX / gp.TILE_SIZE;
+        int nextRightCol = nextRightX / gp.TILE_SIZE;
+        int nextTopRow = nextTopY / gp.TILE_SIZE;
+        int nextBottomRow = nextBottomY / gp.TILE_SIZE; 
+
+        int validTile = 21;
+        
+        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];     // Top left
+        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];    // Top right
+        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];  // Bottom left
+        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow]; // Bottom right
+        
+        if(tileNum1 != validTile || tileNum2 != validTile || 
+        tileNum3 != validTile || tileNum4 != validTile) {
+            return false; // Tidak bisa bergerak jika ada tile yang bukan air
+        }
+
+        if (Math.pow((player.worldX - this.worldX), 2) + Math.pow((player.worldY - this.worldY), 2) <= Math.pow(450, 2)) {
+            if (gp.player.isSleeping || gp.player.health <= 0) {
+                return false; // Tidak mengejar jika player sedang tidur
+            }
             return true;
         } else {
             return false;
         }
     }
 
-    public void chasePlayer() {
-        if (isPlayerNearby()) {
-            if (Math.abs(gp.player.worldX - this.worldX) > Math.abs(gp.player.worldY - this.worldY)) {
-                if (gp.player.worldX > this.worldX) {
-                    this.direction = "right";
-                } else {
-                    this.direction = "left";
-                }
+    public String chasePlayer(Player player) {
+        String nextDirection = "down";
+        if (Math.abs(player.worldX - this.worldX) > Math.abs(player.worldY - this.worldY)) {
+            if (player.worldX > this.worldX) {
+                nextDirection = "right";
             } else {
-                if (gp.player.worldY > this.worldY) {
-                    this.direction = "down";
-                } else {
-                    this.direction = "up";
-                }
+                nextDirection = "left";
+            }
+        } else {
+            if (player.worldY > this.worldY) {
+                nextDirection = "down";
+            } else {
+                nextDirection = "up";
             }
         }
+        return nextDirection;
     }
     
 }

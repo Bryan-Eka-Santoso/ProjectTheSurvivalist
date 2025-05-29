@@ -16,9 +16,11 @@ public class Buildings extends Item {
     public int solidAreaDefaultY;
     public int hp = 100;
     public boolean isAllowCollison;
+    public int buildingMap;
 
-    public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height) {
+    public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height, int buildingMap) {
         super(name, maxStack, currentStack);
+        this.buildingMap = buildingMap;
         this.gp = gp;
         this.solidArea = solidArea;
         this.solidAreaDefaultX = solidArea.x;

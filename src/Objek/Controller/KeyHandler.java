@@ -11,9 +11,14 @@ import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import Objek.Fish.Arwana;
+import Objek.Fish.Belida;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Items.StackableItem.Materials.RawMaterials.RawArwana;
+import Objek.Items.StackableItem.Materials.RawMaterials.RawBelida;
+import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Player.Inventory;
 import Objek.Player.Player;
@@ -557,7 +562,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.gameState = gp.PLAY_STATE;
             gp.currentKandang = null;
             gp.ui.resetKandangMenuState();
-            
         }
     }
 
@@ -735,7 +739,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void OneToNinePressed(int code) {
-        if (gp.gameState != gp.INVENTORY_STATE){ // Ada bug kalo game state ny di inventory
+        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.FISHING_STATE && !gp.player.isSleeping) { // Ada bug kalo game state ny di inventory
             gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
             playSE(2);
             gp.ui.selectedIndex = gp.ui.slotCol;
@@ -750,47 +754,61 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         int playerRandomStrength = gp.ui.random.nextInt(playerStrength) + (playerStrength / 2);
         
         int strengthDifference = playerRandomStrength - fishRandomStrength;
-        gp.ui.playerFishingStrength += strengthDifference;
-        
-        if (gp.ui.playerFishingStrength > 100) {
-            gp.ui.playerFishingStrength = 100;
-        } else if (gp.ui.playerFishingStrength < 0) {
-            gp.ui.playerFishingStrength = 0;
-        }
-        
-        if (gp.ui.playerFishingStrength >= 100) {
-            gp.ui.fishingSuccessful = true;
+
+        if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof FishingRod) {
+            ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength += strengthDifference;
             
-            gp.player.durabilityRod -= gp.ui.caughtFish.durabilityCost;
+            if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength > 100) {
+                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength = 100;
+            } else if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength < 0) {
+                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength = 0;
+            }
+
+            if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength >= 100) {
+                gp.ui.fishingSuccessful = true;
+                
+                
+                gp.ui.showDapatIkanMessage(gp.ui.caughtFish);
+                if (gp.fish.get(gp.ui.fishIndex) instanceof Arwana) {
+                    gp.player.inventory.addItems(new RawArwana(1));
+                } 
+                
+                if (gp.fish.get(gp.ui.fishIndex) instanceof Belida) {
+                    gp.player.inventory.addItems(new RawBelida(1));
+                } 
+                
+                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength = ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).maxStr;
+                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability -= 20;
+                if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
+                    gp.player.inventory.slots[gp.ui.selectedIndex] = null;
+                }
+                gp.fish.remove(gp.ui.fishIndex);
+                
+                gp.gameState = gp.PLAY_STATE;
+                
+            } else if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength <= 0) {
+                gp.ui.showGagalDapatIkanMessage(gp.ui.caughtFish);
+                
+                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability -= 20;
+                if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
+                    gp.player.inventory.slots[gp.ui.selectedIndex] = null;
+                }
+                
+                gp.gameState = gp.PLAY_STATE;
+            }
             
-            gp.ui.showDapatIkanMessage(gp.ui.caughtFish);
-            // gp.player.inventory.addItems(new FishItem(gp.ui.caughtFish.nameFish));
-            
-            gp.fish.remove(gp.ui.fishIndex);
-            
-            gp.gameState = gp.PLAY_STATE;
-            gp.ui.playerFishingStrength = 50;
-            
-        } else if (gp.ui.playerFishingStrength <= 0) {
-            gp.ui.showGagalDapatIkanMessage(gp.ui.caughtFish);
-            
-            gp.player.durabilityRod -= 1;
-            
-            gp.gameState = gp.PLAY_STATE;
-            gp.ui.playerFishingStrength = 50;
-        }
-        
-        if (gp.player.durabilityRod <= 0) {
-            gp.ui.showRodRusakMessage();
-            gp.gameState = gp.PLAY_STATE;
-            gp.ui.playerFishingStrength = 50;
+            if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof FishingRod) {
+                if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
+                    gp.ui.showRodRusakMessage();
+                    gp.gameState = gp.PLAY_STATE;
+                }
+            }
         }
     }
 
     public void EscapePressed() {
         if (gp.gameState == gp.FISHING_STATE) {
             gp.gameState = gp.PLAY_STATE;
-            gp.ui.playerFishingStrength = 50;
         } else if (gp.gameState != gp.PAUSE_STATE) {
             gp.gameState = gp.PAUSE_STATE;
         } else if (gp.gameState == gp.PAUSE_STATE) {
@@ -801,19 +819,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     public void SpacePressed() {
         int col = gp.player.worldX / gp.TILE_SIZE;
         int row = gp.player.worldY / gp.TILE_SIZE;
-
-        if(gp.currentMap == 2){
-            if((col == 22 || col == 23) && row == 23) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
-                gp.currentMap = 0;
-                gp.monsters.clear();
-                gp.player.getPlayerImg();
-                gp.tileM.getTileImage();
-                gp.player.worldY = 51 * gp.TILE_SIZE;
-                gp.player.worldX = 51 * gp.TILE_SIZE;
-                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
-            }
-        }
 
         if (gp.gameState == gp.OPEN_CRAFTINGTABLE_STATE || gp.gameState == gp.OPEN_SMELTER_STATE) {
             gp.gameState = gp.PLAY_STATE;
@@ -831,6 +836,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.selectedChestIndex = 0;
         } else if (gp.gameState == gp.BUILDING_STATE) {
             Buildings building = (Buildings) gp.player.inventory.getSelectedItem().clone();
+            building.buildingMap = gp.currentMap;
             if (building instanceof Chest) {
                 ((Chest) building).inventory = new Inventory(32, gp);
             }
@@ -869,6 +875,30 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.selectedChestIndex = 0;
             if (gp.player.buildingIndex != -1 && gp.gameState == gp.PLAY_STATE) {
                 gp.player.interactBuild(gp.buildings.get(gp.player.buildingIndex));
+            }
+        }
+
+        if(gp.currentMap == 2){
+            if ((col == 22 || col == 23) && row == 23) {
+                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.currentMap = 0;
+                gp.monsters.clear();
+                gp.player.getPlayerImg();
+                gp.tileM.getTileImage();
+                gp.player.worldY = 51 * gp.TILE_SIZE;
+                gp.player.worldX = 51 * gp.TILE_SIZE;
+                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
+            }
+        }
+        if(gp.currentMap == 3){
+            if(col == 52 && row == 53) {
+                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.currentMap = 0;
+                gp.player.getPlayerImg();
+                gp.tileM.getTileImage();
+                gp.player.worldY = 55 * gp.TILE_SIZE;
+                gp.player.worldX = 55 * gp.TILE_SIZE;
+                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
         }
     }

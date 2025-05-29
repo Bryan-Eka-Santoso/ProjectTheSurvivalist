@@ -4,9 +4,9 @@ import java.util.*;
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.*;
 import Objek.Items.StackableItem.Foods.*;
 import Objek.Items.StackableItem.Materials.*;
+import Objek.Items.StackableItem.Materials.Fuels.Wood;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.StackableItem.Seeds.MangoSeeds;
@@ -34,7 +34,7 @@ public class Crafting {
         LinkedHashMap<List<Item>, Item> r = new LinkedHashMap<>();
 
         List<Item> recipe0 = Arrays.asList(new Wood(4));
-        r.put(recipe0, new CraftingTable(gp, 1));
+        r.put(recipe0, new CraftingTable(gp, 1, 0));
 
         List<Item> recipe1 = Arrays.asList(new MetalSheet(1), new MetalFrame(1));
         r.put(recipe1, new SwordHandle(1));
@@ -104,22 +104,22 @@ public class Crafting {
         r.put(Arrays.asList(new Wheat(3)), new Bread(1));
 
         List<Item> recipe8 = Arrays.asList(new Wood(3), new Wool(3));
-        r.put(recipe8, new Bed(gp, 1));
+        r.put(recipe8, new Bed(gp, 1, 0));
 
         List<Item> recipe9 = Arrays.asList(new Stone(8));
-        r.put(recipe9, new Furnace(gp, 1));
+        r.put(recipe9, new Furnace(gp, 1, 0));
 
         List<Item> recipe10 = Arrays.asList(new Wood(8));
-        r.put(recipe10, new Chest(gp, 1));
+        r.put(recipe10, new Chest(gp, 1, 0));
 
         List<Item> recipe11 = Arrays.asList(new Seeds(3), new Stone(3));
-        r.put(recipe11, new GardenPatch(gp, 1));
+        r.put(recipe11, new GardenPatch(gp, 1, 0));
 
         List<Item> recipe12 = Arrays.asList(new GuavaSeeds(1), new MangoSeeds(1), new CoconutSeeds(1), new Wood(3));
-        r.put(recipe12, new Orchard(gp, 1));
+        r.put(recipe12, new Orchard(gp, 1, 0));
 
         List<Item> recipe13 = Arrays.asList(new MetalSheet(3));
-        r.put(recipe13, new Bucket(1));
+        r.put(recipe13, new Bucket(1, gp));
 
         List<Item> recipe14 = Arrays.asList(new MetalIngot(5));
         r.put(recipe14, new MetalHelmet());
