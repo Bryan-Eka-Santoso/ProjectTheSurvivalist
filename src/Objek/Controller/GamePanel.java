@@ -75,7 +75,7 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
-    private static final int MAX_WOLF = 1;
+    private static final int MAX_WOLF = 3;
 
     public Kandang currentKandang;
     public final int maxMap = 10;
@@ -168,7 +168,7 @@ public class GamePanel extends JPanel implements Runnable {
         sp.spawnAnimal("cow", 5, usedPositions);
         sp.spawnAnimal("sheep", 5, usedPositions);
         sp.spawnAnimal("pig", 5, usedPositions);
-        sp.spawnAnimal("wolf", 1, usedPositions);
+        sp.spawnAnimal("wolf", 3, usedPositions);
     }
     public void addPlant() {
         ArrayList<Point> usedPositions = new ArrayList<>();
@@ -288,7 +288,6 @@ public class GamePanel extends JPanel implements Runnable {
                     if (monsters.get(i) instanceof Bat) {
                         ((Bat) monsters.get(i)).chasePlayer();
                     }
-                        
                 }
                 for (int i = 0; i < monsters.size(); i++) {
                     monsters.get(i).update();

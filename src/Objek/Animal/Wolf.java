@@ -160,7 +160,6 @@ public class Wolf extends WildAnimal {
                 case "left": worldX -= speed; break;
                 case "right": worldX += speed; break;
             }
-            System.out.println(this.collisionOn + " " + this.direction + " " + nextDirection);
         } else {
             if (nextDirection.equals("up")) {
                 if (gp.player.worldX < this.worldX) {
@@ -297,8 +296,6 @@ public class Wolf extends WildAnimal {
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
-            g2.setColor(Color.red);
-            g2.drawRect(screenX, screenY, screenX, screenY);
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE * 2, gp.TILE_SIZE * 2, null);
             if(hp < 100) {
                 double oneScale = (double) gp.TILE_SIZE*2/100;
@@ -309,7 +306,6 @@ public class Wolf extends WildAnimal {
 
                 g2.setColor(new Color(255,0,30));
                 g2.fillRect(screenX, screenY-15, (int)hpBarValue +10, 10);
-                
             }
         }
     }
