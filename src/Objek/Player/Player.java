@@ -620,17 +620,6 @@ public class Player {
         gp.player.inventory.removeItem(selectedItem, amount);
     }
 
-    public void takeBuilding(Buildings selectedBuilding) {
-        if (selectedBuilding != null) {
-            selectedBuilding.currentStack = 1;
-            gp.buildings.remove(selectedBuilding);
-            gp.player.inventory.addItems(selectedBuilding);
-            System.out.println("Picked up " + selectedBuilding.name);
-        } else {
-            System.out.println("No building selected.");
-        }
-    }
-
     public void dropAllItems() {
         for (int i = 0; i < inventory.slots.length; i++) {
             if (inventory.slots[i] != null) {

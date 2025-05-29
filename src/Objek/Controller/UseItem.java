@@ -36,6 +36,7 @@ import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.StackableItem.Seeds.MangoSeeds;
 import Objek.Items.StackableItem.Seeds.Seeds;
+import Objek.Items.Unstackable.Bucket;
 import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WateringCan;
 import Objek.Items.Unstackable.Armor.Boots.Boots;
@@ -83,6 +84,22 @@ public class UseItem {
                 gp.player.boots = (Boots) selectedItem.clone();
                 player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
                 System.out.println("Equipping chestplate: " + selectedItem.name);
+            } else if (selectedItem instanceof Bucket) { 
+                Bucket bucket = (Bucket) selectedItem;
+                if (bucket.status.equals("empty")) {
+                    
+                    bucket.fillWater();
+                } else if (bucket.status.equals("water")) {
+                    System.out.println("Drinking water from the bucket.");
+                    bucket.drink();
+                } else if (bucket.status.equals("milk")) {
+                    System.out.println("Drinking milk from the bucket.");
+                    bucket.drink();
+                } else {
+                    System.out.println("Bucket is already filled with " + bucket.status + ".");
+                }
+            } else if (selectedItem instanceof Wood || selectedItem instanceof Stone || selectedItem instanceof GoldIngot || selectedItem instanceof MetalIngot) {
+                System.out.println("Using material: " + selectedItem.name);
             } else if (selectedItem instanceof WateringCan) {
                 System.out.println("Using unstackable item: " + selectedItem.name);
                 if (player.buildingIndex != -1){

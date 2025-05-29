@@ -739,7 +739,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void OneToNinePressed(int code) {
-        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.FISHING_STATE){ // Ada bug kalo game state ny di inventory
+        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.FISHING_STATE && !gp.player.isSleeping) { // Ada bug kalo game state ny di inventory
             gp.ui.slotCol = code - KeyEvent.VK_0 - 1;
             playSE(2);
             gp.ui.selectedIndex = gp.ui.slotCol;

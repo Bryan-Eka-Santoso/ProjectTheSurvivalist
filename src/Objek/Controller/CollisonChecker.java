@@ -448,7 +448,6 @@ public class CollisonChecker {
             animal.collisionOn = true;
             int def = gp.player.getDefense();
             if (animal instanceof Wolf) {
-                System.out.println("Player is attacked by a wolf!");
                 if (gp.player.helmet != null) {
                     gp.player.helmet.durability--;
                     if (gp.player.helmet.durability <= 0) {
@@ -763,8 +762,7 @@ public class CollisonChecker {
         if(monster.solidArea.intersects(gp.player.solidArea)) {
             monster.collisionOn = true;
             int def = gp.player.getDefense();
-            
-            System.out.println("Player is attacked by a wolf!");
+
             if (gp.player.helmet != null) {
                 gp.player.helmet.durability--;
                 if (gp.player.helmet.durability <= 0) {
