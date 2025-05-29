@@ -57,10 +57,10 @@ public class Player {
     public InteractBuild interactBuild;
     public int strengthRod = 30;
     public int durabilityRod = 10;
-    public Helmet[] helmets; // Array to hold helmets
-    public Chestplate[] chestplates; // Array to hold chestplates
-    public Leggings[] leggings; // Array to hold leggings
-    public Boots[] boots; // Array to hold boots
+    public Helmet helmet; // Array to hold helmets
+    public Chestplate chestplate; // Array to hold chestplates
+    public Leggings leggings; // Array to hold leggings
+    public Boots boots; // Array to hold boots
     private boolean isPoisoned = false;
     private static final long POISON_DURATION = 300; // 5 detik diitung dari framenya
     private static final int POISON_DAMAGE = 1;
@@ -110,14 +110,10 @@ public class Player {
         this.isSleeping = false;
         getPlayerImg();
         getPlayerCutImg();
-        this.helmets = new Helmet[1]; // Initialize helmet array
-        this.chestplates = new Chestplate[1]; // Initialize chestplate array
-        this.leggings = new Leggings[1]; // Initialize leggings array
-        this.boots = new Boots[1]; // Initialize boots array
-        helmets[0] = null; // Set default helmet to null
-        chestplates[0] = null; // Set default chestplate to null
-        leggings[0] = null; // Set default leggings to null
-        boots[0] = null; // Set default boots to null
+        this.helmet = null;
+        this.chestplate = null;
+        this.leggings = null;
+        this.boots = null;
         cutArea.width = 36;
         cutArea.height = 36;
     }
@@ -139,17 +135,17 @@ public class Player {
 
     public int getDefense() {
         int defense = 0;
-        if (helmets[0] != null) {
-            defense += helmets[0].defense;
+        if (helmet != null) {
+            defense += helmet.defense;
         }
-        if (chestplates[0] != null) {
-            defense += chestplates[0].defense;
+        if (chestplate != null) {
+            defense += chestplate.defense;
         }
-        if (leggings[0] != null) {
-            defense += leggings[0].defense;
+        if (leggings != null) {
+            defense += leggings.defense;
         }
-        if (boots[0] != null) {
-            defense += boots[0].defense;
+        if (boots != null) {
+            defense += boots.defense;
         }
         return defense;
     }

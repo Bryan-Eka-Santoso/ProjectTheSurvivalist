@@ -14,10 +14,7 @@ import javax.swing.SwingUtilities;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
-import Objek.Items.Unstackable.Armor.Boots.Boots;
-import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
-import Objek.Items.Unstackable.Armor.Helmet.Helmet;
-import Objek.Items.Unstackable.Armor.Leggings.Leggings;
+import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Player.Inventory;
 import Objek.Player.Player;
 
@@ -211,7 +208,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             if (code == KeyEvent.VK_SHIFT) {
                 shiftPressed = true;
             }
-            if (code == KeyEvent.VK_E && gp.gameState != gp.INVENTORY_STATE) {
+            if (code == KeyEvent.VK_E) {
                 EPressed();
             }
             if (code == KeyEvent.VK_I) {
@@ -400,6 +397,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.slotRow = 0;
             gp.ui.slotCol = 0;
             selectCounter++;
+            System.out.println(selectCounter);
             if (selectCounter > 4) {
                 selectCounter = 0;
             }
@@ -464,7 +462,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void EPressed() {
-        gp.player.useItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
+        if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) {
+            gp.player.useItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
+        }
     }
 
     public void CPressed() {
@@ -476,7 +476,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void RPressed() {
-        if (gp.gameState == gp.PLAY_STATE) {
+        if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.INVENTORY_STATE) {
             playSE(2);
             if (counter == 0) {
                 temp1 = gp.ui.selectedIndex;
@@ -506,99 +506,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.player.getPlayerImg();
             gp.tileM.getTileImage();
             gp.gameState = gp.PLAY_STATE;
-        }
-        if (gp.gameState == gp.INVENTORY_STATE) {
-            playSE(2);
-            if (counter == 0) {
-                if (selectCounter == 0) {
-                    temp1 = gp.ui.selectedIndex;
-                } else if (selectCounter == 1) {
-                    temp1 = -1;
-                } else if (selectCounter == 2) {
-                    temp1 = -2;
-                } else if (selectCounter == 3) {
-                    temp1 = -3;
-                } else if (selectCounter == 4) {
-                    temp1 = -4;
-                } 
-            }
-            if (counter == 1) {
-                if (selectCounter == 0) {
-                    temp2 = gp.ui.selectedIndex;
-                } else if (selectCounter == 1) {
-                    temp2 = -1;
-                } else if (selectCounter == 2) {
-                    temp2 = -2;
-                } else if (selectCounter == 3) {
-                    temp2 = -3;
-                } else if (selectCounter == 4) {
-                    temp2 = -4;
-                } 
-            }
-            counter++;
-            if (counter == 2) {
-                counter = 0;
-                if (temp1 >= 0 && temp2 >= 0) {
-                    gp.player.inventory.swapItems(temp1, temp2);
-                } else {
-                    if (temp1 >= 0 && temp2 == -1) {
-                        if (gp.player.inventory.slots[temp1] instanceof Helmet) {
-                            Helmet helmet = (Helmet) gp.player.inventory.slots[temp1];
-                            gp.player.inventory.slots[temp1] = gp.player.helmets[0];
-                            gp.player.helmets[0] = helmet;
-                        } 
-                    }
-                    if (temp1 == -1 && temp2 >= 0) {
-                        if (gp.player.inventory.slots[temp2] instanceof Helmet) {
-                            Helmet helmet = (Helmet) gp.player.inventory.slots[temp2];
-                            gp.player.inventory.slots[temp2] = gp.player.helmets[0];
-                            gp.player.helmets[0] = helmet;
-                        } 
-                    }
-                    if (temp1 >= 0 && temp2 == -2) {
-                        if (gp.player.inventory.slots[temp1] instanceof Chestplate) {
-                            Chestplate chestplates = (Chestplate) gp.player.inventory.slots[temp1];
-                            gp.player.inventory.slots[temp1] = gp.player.chestplates[1];
-                            gp.player.chestplates[1] = chestplates;
-                        } 
-                    }
-                    if (temp1 == -2 && temp2 >= 0) {
-                        if (gp.player.inventory.slots[temp2] instanceof Chestplate) {
-                            Chestplate chestplates = (Chestplate) gp.player.inventory.slots[temp2];
-                            gp.player.inventory.slots[temp2] = gp.player.chestplates[1];
-                            gp.player.chestplates[1] = chestplates;
-                        } 
-                    }
-                    if (temp1 >= 0 && temp2 == -3) {
-                        if (gp.player.inventory.slots[temp1] instanceof Leggings) {
-                            Leggings leggings = (Leggings) gp.player.inventory.slots[temp1];
-                            gp.player.inventory.slots[temp1] = gp.player.leggings[2];
-                            gp.player.leggings[2] = leggings;
-                        } 
-                    }
-                    if (temp1 == -3 && temp2 >= 0) {
-                        if (gp.player.inventory.slots[temp2] instanceof Leggings) {
-                            Leggings leggings = (Leggings) gp.player.inventory.slots[temp2];
-                            gp.player.inventory.slots[temp2] = gp.player.leggings[2];
-                            gp.player.leggings[2] = leggings;
-                        } 
-                    }
-                    if (temp1 >= 0 && temp2 == -4) {
-                        if (gp.player.inventory.slots[temp1] instanceof Boots) {
-                            Boots boots = (Boots) gp.player.inventory.slots[temp1];
-                            gp.player.inventory.slots[temp1] = gp.player.boots[3];
-                            gp.player.boots[3] = boots;
-                        } 
-                    }
-                    if (temp1 == -4 && temp2 >= 0) {
-                        if (gp.player.inventory.slots[temp2] instanceof Boots) {
-                            Boots boots = (Boots) gp.player.inventory.slots[temp2];
-                            gp.player.inventory.slots[temp2] = gp.player.boots[3];
-                            gp.player.boots[3] = boots;
-                        } 
-                    }
-                }
-            }
         }
     }
 
@@ -675,21 +582,21 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             topFrame.repaint();
         } 
         if (gp.gameState == gp.INVENTORY_STATE) {
-            if (selectCounter == 1 && gp.player.helmets[0] != null) {
-                gp.player.inventory.addItems(gp.player.helmets[0].clone());
-                gp.player.helmets[0] = null;
+            if (selectCounter == 1 && gp.player.helmet != null) {
+                gp.player.inventory.addItems(gp.player.helmet.clone());
+                gp.player.helmet = null;
             }
-            if (selectCounter == 2 && gp.player.chestplates[0] != null) {
-                gp.player.inventory.addItems(gp.player.chestplates[0].clone());
-                gp.player.chestplates[0] = null;
+            if (selectCounter == 2 && gp.player.chestplate != null) {
+                gp.player.inventory.addItems(gp.player.chestplate.clone());
+                gp.player.chestplate = null;
             }
-            if (selectCounter == 3 && gp.player.leggings[0] != null) {
-                gp.player.inventory.addItems(gp.player.leggings[0].clone());
-                gp.player.leggings[0] = null;
+            if (selectCounter == 3 && gp.player.leggings != null) {
+                gp.player.inventory.addItems(gp.player.leggings.clone());
+                gp.player.leggings = null;
             }
-            if (selectCounter == 4 && gp.player.boots[0] != null) {
-                gp.player.inventory.addItems(gp.player.boots[0].clone());
-                gp.player.boots[0] = null;
+            if (selectCounter == 4 && gp.player.boots != null) {
+                gp.player.inventory.addItems(gp.player.boots.clone());
+                gp.player.boots = null;
             }
         }
     }

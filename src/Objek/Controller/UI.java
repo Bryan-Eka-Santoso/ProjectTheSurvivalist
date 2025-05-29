@@ -1309,6 +1309,32 @@ public class UI {
                     g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
                 }
             }
+            if (chest.inventory.slots[i] instanceof Armor) {
+                Armor armorItem = (Armor) chest.inventory.slots[i];
+                if (armorItem.durability < armorItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) armorItem.durability / armorItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
             if (chest.inventory.slots[i] instanceof Buildings) {
                 Buildings stackableItem = (Buildings) chest.inventory.slots[i];
                 Font font = new Font("Arial", Font.BOLD, 20); // Family = Arial, Style = Bold, Size = 30 VERSI LENGKAP
@@ -1379,6 +1405,32 @@ public class UI {
 
                     // Calculate durability percentage
                     float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
+            if (gp.player.inventory.slots[i] instanceof Armor) { // Assuming ArsenalItem has durability
+                Armor armorItem = (Armor) gp.player.inventory.slots[i];
+                if (armorItem.durability < armorItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) armorItem.durability / armorItem.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {
@@ -1695,17 +1747,121 @@ public class UI {
         g2.drawRoundRect(frameX + 205, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
         g2.drawRoundRect(frameX + 280, frameY + 45 , gp.TILE_SIZE + 10, gp.TILE_SIZE + 10, 10, 10);
 
-        if (gp.player.helmets[0] != null) {
-            g2.drawImage(gp.player.helmets[0].img, frameX + 60, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        if (gp.player.helmet != null) {
+            g2.drawImage(gp.player.helmet.img, frameX + 60, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+
+            if (gp.player.helmet != null) {
+                if (gp.player.helmet.durability < gp.player.helmet.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = frameX + 55;
+                    int durabilityBarY = frameY + 45 + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) gp.player.helmet.durability / gp.player.helmet.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
         }
-        if (gp.player.chestplates[0] != null) {
-            g2.drawImage(gp.player.chestplates[0].img, frameX + 135, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        if (gp.player.chestplate != null) {
+            g2.drawImage(gp.player.chestplate.img, frameX + 135, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+
+            if (gp.player.chestplate != null) {
+                if (gp.player.chestplate.durability < gp.player.chestplate.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = frameX + 130;
+                    int durabilityBarY = frameY + 45 + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) gp.player.chestplate.durability / gp.player.chestplate.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
         }
-        if (gp.player.leggings[0] != null) {
-            g2.drawImage(gp.player.leggings[0].img, frameX + 210, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        if (gp.player.leggings != null) {
+            g2.drawImage(gp.player.leggings.img, frameX + 210, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+
+            if (gp.player.leggings != null) {
+                if (gp.player.leggings.durability < gp.player.leggings.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = frameX + 205;
+                    int durabilityBarY = frameY + 45 + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) gp.player.leggings.durability / gp.player.leggings.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
         }
-        if (gp.player.boots[0] != null) {
-            g2.drawImage(gp.player.boots[0].img, frameX + 285, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+        if (gp.player.boots != null) {
+            g2.drawImage(gp.player.boots.img, frameX + 285, frameY + 50, gp.TILE_SIZE, gp.TILE_SIZE, null);
+
+            if (gp.player.boots != null) {
+                if (gp.player.boots.durability < gp.player.boots.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = frameX + 280;
+                    int durabilityBarY = frameY + 45 + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) gp.player.boots.durability / gp.player.boots.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
         }
 
         g2.drawImage(gp.player.stay, frameX + 65, frameY + 200, 250, 300, null);
@@ -1769,6 +1925,58 @@ public class UI {
                     dx = 40;
                 }
                 g2.drawString(String.valueOf(stackableItem.currentStack), slotX + dx, slotY + 50);
+            }
+            if (gp.player.inventory.slots[i] instanceof Arsenal) { // Assuming ArsenalItem has durability
+                Arsenal arsenalItem = (Arsenal) gp.player.inventory.slots[i];
+                if (arsenalItem.durability < arsenalItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) arsenalItem.durability / arsenalItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
+            }
+            if (gp.player.inventory.slots[i] instanceof Armor) { // Assuming ArsenalItem has durability
+                Armor armorItem = (Armor) gp.player.inventory.slots[i];
+                if (armorItem.durability < armorItem.maxDurability) {
+                    int durabilityBarWidth = gp.TILE_SIZE + 10;
+                    int durabilityBarHeight = 5;
+                    int durabilityBarX = slotX;
+                    int durabilityBarY = slotY + gp.TILE_SIZE + 5;
+
+                    // Calculate durability percentage
+                    float durabilityPercentage = (float) armorItem.durability / armorItem.maxDurability;
+
+                    // Set color based on durability
+                    if (durabilityPercentage > 0.5) {
+                        g2.setColor(Color.GREEN);
+                    } else {
+                        g2.setColor(Color.RED);
+                    }
+
+                    // Draw the durability bar
+                    g2.fillRect(durabilityBarX, durabilityBarY, (int) (durabilityBarWidth * durabilityPercentage), durabilityBarHeight);
+
+                    // Draw the border of the durability bar
+                    g2.setColor(Color.BLACK);
+                    g2.drawRect(durabilityBarX, durabilityBarY, durabilityBarWidth, durabilityBarHeight);
+                }
             }
             if ((i + 1) % 4 == 0) {
                 slotX = slotXStart;
