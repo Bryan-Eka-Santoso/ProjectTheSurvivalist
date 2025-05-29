@@ -11,14 +11,13 @@ import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
-import Objek.Items.StackableItem.Foods.RawArwana;
-import Objek.Items.StackableItem.Foods.RawBelida;
+import Objek.Items.StackableItem.Materials.RawMaterials.RawArwana;
+import Objek.Items.StackableItem.Materials.RawMaterials.RawBelida;
 import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Player.Inventory;
