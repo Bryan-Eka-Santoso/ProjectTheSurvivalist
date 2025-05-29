@@ -35,6 +35,10 @@ import Objek.Items.StackableItem.Seeds.MangoSeeds;
 import Objek.Items.StackableItem.Seeds.Seeds;
 import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WateringCan;
+import Objek.Items.Unstackable.Armor.Boots.Boots;
+import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
+import Objek.Items.Unstackable.Armor.Helmet.Helmet;
+import Objek.Items.Unstackable.Armor.Leggings.Leggings;
 import Objek.Items.Unstackable.Arsenals.Arsenal;
 import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
@@ -56,7 +60,23 @@ public class UseItem {
 
     public void useItem(Item selectedItem, Player player) {
         if (selectedItem != null && selectedItem.name != null) {
-            if (selectedItem instanceof WateringCan) {
+            if (selectedItem instanceof Helmet) {
+                gp.player.helmet = (Helmet) selectedItem.clone();
+                player.inventory.removeItem(selectedItem, 1); // Remove helmet from inventory
+                System.out.println("Equipping helmet: " + selectedItem.name);
+            } else if (selectedItem instanceof Chestplate){
+                gp.player.chestplate = (Chestplate) selectedItem.clone();
+                player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
+                System.out.println("Equipping chestplate: " + selectedItem.name);
+            } else if (selectedItem instanceof Leggings){
+                gp.player.leggings = (Leggings) selectedItem.clone();
+                player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
+                System.out.println("Equipping chestplate: " + selectedItem.name);
+            } else if (selectedItem instanceof Boots){
+                gp.player.boots = (Boots) selectedItem.clone();
+                player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
+                System.out.println("Equipping chestplate: " + selectedItem.name);
+            } else if (selectedItem instanceof WateringCan) {
                 System.out.println("Using unstackable item: " + selectedItem.name);
                 if (player.buildingIndex != -1){
                     if (player.gp.buildings.get(player.buildingIndex) instanceof Orchard) {
@@ -96,6 +116,10 @@ public class UseItem {
                 Orchard orchard = (Orchard) gp.buildings.get(gp.player.buildingIndex);
                 if (orchard.seed != null) {
                     System.out.println("Orchard already has a seed planted!");
+                    return;
+                }
+                if (seed instanceof Seeds){
+                    System.out.println("You cannot plant seeds in an orchard! Please use a fruit seed.");
                     return;
                 }
                 orchard.plant(seed);
@@ -354,7 +378,6 @@ public class UseItem {
                                 if (gardenPatch.seed instanceof Seeds){
                                     if (gardenPatch.phase.equals("crops")) {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Wheat(rand.nextInt(1) + 1), gp));
-                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(rand.nextInt(2)), gp));
                                     } else {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(1), gp));
@@ -362,14 +385,12 @@ public class UseItem {
                                 } else if (gardenPatch.seed instanceof Potato){
                                     if (gardenPatch.phase.equals("crops")) {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Potato(rand.nextInt(2) + 2), gp));
-                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
                                     } else {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Potato(1), gp));
                                     }
                                 } else if (gardenPatch.seed instanceof Carrot){
                                     if (gardenPatch.phase.equals("crops")) {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Carrot(rand.nextInt(2) + 2), gp));
-                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
                                     } else {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Carrot(1), gp));
                                     }

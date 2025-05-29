@@ -121,7 +121,7 @@ public class CollisonChecker {
             gp.plants.get(i).solidArea.y = gp.plants.get(i).worldY + gp.plants.get(i).solidArea.y;
             if (animal.solidArea.intersects(gp.plants.get(i).solidArea)) {
                 if (gp.plants.get(i) instanceof Tree) {
-                        animal.collisionOn = true;
+                    animal.collisionOn = true;
                 }
             }
             animal.solidArea.x = animal.solidAreaDefaultX;
@@ -401,11 +401,34 @@ public class CollisonChecker {
             int def = gp.player.getDefense();
             if (animal instanceof Wolf) {
                 System.out.println("Player is attacked by a wolf!");
-                if(10 - def <= 0){
+                if (gp.player.helmet != null) {
+                    gp.player.helmet.durability--;
+                    if (gp.player.helmet.durability <= 0) {
+                        gp.player.helmet = null; // Remove helmet if durability is zero
+                    }
+                }
+                if (gp.player.chestplate != null) {
+                    gp.player.chestplate.durability--;
+                    if (gp.player.chestplate.durability <= 0) {
+                        gp.player.chestplate = null; // Remove chestplate if durability is zero
+                    }
+                }
+                if (gp.player.leggings != null) {
+                    gp.player.leggings.durability--;
+                    if (gp.player.leggings.durability <= 0) {
+                        gp.player.leggings = null; // Remove leggings if durability is zero
+                    }
+                }
+                if (gp.player.boots != null) {
+                    gp.player.boots.durability--;
+                    if (gp.player.boots.durability <= 0) {
+                        gp.player.boots = null; // Remove boots if durability is zero
+                    }
+                }
+                if(16 - def <= 0){
                     gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
-                }else {
-
-                    gp.player.health -= (10-def); // Decrease player HP
+                } else {
+                    gp.player.health -= (16-def); // Decrease player HP
                 }
                 if (gp.player.health <= 0) {
                     gp.player.health = 0; // Prevent negative health

@@ -5,12 +5,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class IronHelmet extends Helmet {
+public class MetalHelmet extends Helmet {
 
-    public IronHelmet() {
-        super("Iron Helmet", 100, 20, 100);
+    public MetalHelmet() {
+        super("Metal Helmet", 10, 20);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/ironhelmet.png"));
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/metalhelmet.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
