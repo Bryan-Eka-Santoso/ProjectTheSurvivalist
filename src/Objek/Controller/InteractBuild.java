@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Point;
-
 import javax.imageio.ImageIO;
-
 import Objek.Items.Buildings.*;
 
 public class InteractBuild {
