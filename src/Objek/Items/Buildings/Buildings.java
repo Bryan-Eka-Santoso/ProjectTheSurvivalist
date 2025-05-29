@@ -36,7 +36,9 @@ public class Buildings extends Item {
             && worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X 
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
-                
+            
+            g2.setColor(Color.WHITE);
+            g2.drawRect(screenX, screenY, width, height);
             g2.drawImage(img, screenX, screenY, width, height, null);
             
             if(hp < 100) {

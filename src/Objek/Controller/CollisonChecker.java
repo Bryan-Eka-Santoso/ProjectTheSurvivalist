@@ -6,6 +6,7 @@ import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
 import Objek.Plant.Bush;
+import Objek.Plant.Tree;
 import Objek.Player.Player;
 
 public class CollisonChecker {
@@ -121,7 +122,7 @@ public class CollisonChecker {
             gp.plants.get(i).solidArea.y = gp.plants.get(i).worldY + gp.plants.get(i).solidArea.y;
 
             if (animal.solidArea.intersects(gp.plants.get(i).solidArea)) {
-                if (animal instanceof Animal) {
+                if (gp.plants.get(i) instanceof Tree) {
                     animal.collisionOn = true;
                 }
             }
@@ -405,7 +406,6 @@ public class CollisonChecker {
                 if(10 - def <= 0){
                     gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
                 }else {
-
                     gp.player.health -= (10-def); // Decrease player HP
                 }
                 if (gp.player.health <= 0) {
