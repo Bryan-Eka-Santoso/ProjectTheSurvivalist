@@ -38,7 +38,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 30;
+    final int FPS = 45;
 
     public final int MAX_WORLD_COL = 98;
     public final int MAX_WORLD_ROW = 98;
@@ -196,6 +196,7 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addAnimals();
         addPlant();
+        player.inventory.addItems(new CraftingTable(this, 1));
         player.inventory.addItems(new MetalHelmet());
         player.inventory.addItems(new MetalChestplate());
         player.inventory.addItems(new MetalLeggings());

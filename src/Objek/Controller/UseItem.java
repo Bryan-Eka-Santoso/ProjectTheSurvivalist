@@ -199,8 +199,8 @@ public class UseItem {
 
                         if (plant instanceof Tree) {
                             player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Wood(rand.nextInt(4) + 4), gp));
-                        } else if (plant instanceof Bush) {
-                            player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Seeds(rand.nextInt(2)), gp));
+                        } else if (plant instanceof Bush && rand.nextInt(5) == 0) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Seeds(1), gp));
                         }
                         player.gp.plants.remove(player.plantIndex);
                         player.plantIndex = -1; 

@@ -1,10 +1,10 @@
 package Objek.Items.StackableItem.Foods;
 
-public class BlackBerries extends Berries {
-    public BlackBerries(int currentStack) {
-        super("Black Berries", currentStack);
+public class Blackberries extends Berries {
+    public Blackberries(int currentStack) {
+        super("Blackberries", currentStack);
         try {
-            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Food/blackberries.png")); 
+            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Foods/blackberry.png")); 
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
