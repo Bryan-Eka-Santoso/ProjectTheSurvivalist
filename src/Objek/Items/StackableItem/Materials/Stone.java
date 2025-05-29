@@ -8,7 +8,7 @@ public class Stone extends Material {
     public Stone(int currentStack) {
         super("Stone", currentStack);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/metalsheet.png")); 
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/stone.png")); 
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

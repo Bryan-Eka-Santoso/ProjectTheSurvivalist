@@ -17,5 +17,4 @@ public class FishingRod extends Unstackable {
             e.printStackTrace();
         }
     }
-
 }

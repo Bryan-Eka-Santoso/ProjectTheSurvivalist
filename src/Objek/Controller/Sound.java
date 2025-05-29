@@ -24,7 +24,7 @@ public class Sound {
             soundURL[8] = new File("ProjectTheSurvivalist/res/sound/armor-equip.mp3").toURI().toURL();
             soundURL[9] = new File("ProjectTheSurvivalist/res/sound/attacked.mp3").toURI().toURL();
             soundURL[10] = new File("ProjectTheSurvivalist/res/sound/breath-out.mp3").toURI().toURL();
-            soundURL[11] = new File("ProjectTheSurvivalist/res/sound/build.place.mp3").toURI().toURL();
+            soundURL[11] = new File("ProjectTheSurvivalist/res/sound/build-place.mp3").toURI().toURL();
             soundURL[12] = new File("ProjectTheSurvivalist/res/sound/caged.mp3").toURI().toURL();
             soundURL[13] = new File("ProjectTheSurvivalist/res/sound/chased.mp3").toURI().toURL();
             soundURL[14] = new File("ProjectTheSurvivalist/res/sound/chest-close.mp3").toURI().toURL();
