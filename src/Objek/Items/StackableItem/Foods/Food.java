@@ -5,14 +5,10 @@ import Objek.Items.StackableItem.Stackable;
 import Objek.Player.Player;
 
 public class Food extends Stackable {
-    Random random = new Random();
+    protected Random rand = new Random();
     int poisonChance ;// Random chance for poison effect
-    public Food(String name, int maxStack, int currentStack) {
-        super(name, maxStack, currentStack);
-    }
-
-    public Food(String name, int maxStack) {
-        super(name, maxStack);
+    public Food(String name, int currentStack) {
+        super(name, currentStack);
     }
 
     public void eat(Player player) {

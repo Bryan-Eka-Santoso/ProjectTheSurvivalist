@@ -2,9 +2,9 @@ package Objek.Items.Unstackable.Armor.Chestplate;
 
 public class GoldChestplate extends Chestplate {
     public GoldChestplate() {
-        super("Gold Chestplate", 100, 20);
+        super("Gold Chestplate", 65, 4);
         try {
-            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Armor/goldchestplate.png"));
+            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Armor/goldchestplate2.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

@@ -55,7 +55,7 @@ public class GardenPatch extends Buildings {
                 }
             } else if (seed instanceof Carrot) {
                 try {
-                    this.phaseSprites[1] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/potatocrop1.png"));
+                    this.phaseSprites[1] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/carrotcrop1.png"));
                     this.cropImg = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/carrotcrop2.png"));
                 } catch (Exception e) {
                     e.printStackTrace();

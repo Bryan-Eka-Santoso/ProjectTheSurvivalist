@@ -7,7 +7,7 @@ public class Material extends Stackable {
         super(name, maxStack, currentStack);
     }
 
-    public Material(String name, int maxStack) {
-        super(name, maxStack);
+    public Material(String name, int currentStack) {
+        super(name, 64, currentStack);
     }
 }

@@ -246,7 +246,7 @@ public class Chicken extends TameAnimal {
     
     public void getItem(Player player) {
         if(isReadyGetItem()) {
-            player.inventory.addItems(new Egg("Egg", 10, 1));
+            player.inventory.addItems(new Egg(1));
             setReadyGetItem(false); 
         }
     }

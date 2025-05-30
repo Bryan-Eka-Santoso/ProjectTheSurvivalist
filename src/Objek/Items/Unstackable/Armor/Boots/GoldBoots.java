@@ -7,9 +7,9 @@ import javax.imageio.ImageIO;
 
 public class GoldBoots extends Boots {
     public GoldBoots() {
-        super("Gold Boots", 50, 20);
+        super("Gold Boots", 50, 2);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/goldboots.png"));
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/goldboots2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

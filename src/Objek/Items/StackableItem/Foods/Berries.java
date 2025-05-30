@@ -4,7 +4,7 @@ import Objek.Items.StackableItem.Materials.Material;
 
 public class Berries extends Material {
     public Berries(String name, int currentStack) {
-        super(name, 20, currentStack);
+        super(name, currentStack);
     }
 
     public static Berries createBerries(int type, int currentStack) {

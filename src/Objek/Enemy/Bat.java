@@ -13,7 +13,7 @@ import Objek.Player.Player;
 import Objek.Controller.GamePanel;
 
 public class Bat extends Monster {
-    
+
     public int actionLockEnemyNearby = 15; // Delay untuk aksi ketika ada musuh di dekatnya
     private int actionLockCounter = 0;
     private int actionMoveCounter = 0;
@@ -26,13 +26,13 @@ public class Bat extends Monster {
     int originalSpriteSize = 32;
     double scaleFactor = (double)spriteDisplaySize / originalSpriteSize;
 
-
     Random random = new Random();
 
     public Bat(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
         super(name, worldX, worldY, speed, direction, gp);
         setRandomDirection();
         this.hp = 100;
+        this.attack = 5;
         this.actionMoveDelay = random.nextInt(91) + 30;
         upHitbox = new Rectangle((int)(1*scaleFactor), (int)(4*scaleFactor), (int)(16*scaleFactor),(int)(16*scaleFactor) );   
         downHitbox = new Rectangle((int)(1*scaleFactor), (int)(2*scaleFactor), (int)(18*scaleFactor),(int)(15*scaleFactor) );   

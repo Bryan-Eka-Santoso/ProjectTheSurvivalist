@@ -1947,7 +1947,7 @@ public class UI {
         g2.drawImage(gp.player.stay, frameX + 65, frameY + 200, 250, 300, null);
         g2.setFont(new Font("Arial", Font.PLAIN, 24));
         g2.setColor(Color.WHITE);
-        g2.drawString("Defense: 50", frameX + 75, frameY + 530);
+        g2.drawString("Defense: " + gp.player.getDefense(), frameX + 125, frameY + 530);
 
         int slotXStart = frameX + 30;
         int slotYStart = frameY + 35;
@@ -2291,16 +2291,18 @@ public class UI {
     }
 
     public Integer getClickedInventorySlot(int mouseX, int mouseY) {
-        int frameX = gp.TILE_SIZE * ((gp.SCREEN_WIDTH / gp.TILE_SIZE) / 4);
-        int frameY =  gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 13);
+        // Match the inventory panel position in drawInventory()
+        int frameX = gp.TILE_SIZE * 15;
+        int frameY = gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16);
         int slotXStart = frameX + 30;
-        int slotYStart = frameY + 35;
+        int slotYStart = frameY + 35 + 56;
         int slotX = slotXStart;
         int slotY = slotYStart;
+
         for (int i = 0; i < gp.player.inventory.slots.length; i++) {
             Rectangle r = new Rectangle(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
             if (r.contains(mouseX, mouseY)) return i;
-            if ((i + 1) % 9 == 0) {
+            if ((i + 1) % 4 == 0) {
                 slotX = slotXStart;
                 slotY += (gp.TILE_SIZE + 25);
             } else {
