@@ -2,9 +2,7 @@ package Objek.Items.StackableItem.Foods.RawFoods;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import Objek.Items.StackableItem.Foods.Food;
 import Objek.Items.StackableItem.Foods.RawFood;
 import Objek.Player.Player;
