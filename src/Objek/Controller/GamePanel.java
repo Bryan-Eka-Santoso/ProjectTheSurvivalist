@@ -5,20 +5,21 @@ import Objek.Animal.*;
 import Objek.Enemy.Monster;
 import Objek.Environment.EnvironmentManager;
 import Objek.Fish.Fish;
+import Objek.Ore.CrystalOre;
+import Objek.Ore.GemOre;
 import Objek.Ore.GoldOre;
-import Objek.Ore.IronOre;
+import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.Foods.Bread;
-import Objek.Items.StackableItem.Foods.Carrot;
-import Objek.Items.StackableItem.Seeds.CoconutSeeds;
-import Objek.Items.Unstackable.Bucket;
+import Objek.Items.StackableItem.Bucket;
+import Objek.Items.StackableItem.Materials.GoldIngot;
+import Objek.Items.StackableItem.Materials.MetalIngot;
 import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Lantern;
-import Objek.Items.Unstackable.WateringCan;
 import Objek.Items.Unstackable.Armor.Chestplate.MetalChestplate;
-import Objek.Items.Unstackable.Arsenals.Pickaxe;
+import Objek.Items.Unstackable.Armor.Helmet.WolfCloak;
+import Objek.Items.Unstackable.Arsenals.IcePickaxe;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -27,6 +28,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.awt.Point;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -80,7 +82,9 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_PIGS = 5;
     private static final int MAX_WOLF = 3;
     private static final int MAX_GOLD = 5;
-    private static final int MAX_IRON = 10;
+    private static final int MAX_CRYSTAL = 5;
+    private static final int MAX_GEM = 5;
+    private static final int MAX_METAL = 5;
     private static final int MAX_ROCK = 20;
 
 
@@ -134,12 +138,16 @@ public class GamePanel extends JPanel implements Runnable {
     }
      public void checkAndRespawnOres() {
         int goldCount = 0;
-        int ironCount = 0;
+        int metalCount = 0;
+        int crystalCount = 0;
+        int gemCount = 0;
         int rockCount = 0;
 
         for(Ore ore : ores) {
             if(ore instanceof GoldOre) goldCount++;
-            else if(ore instanceof IronOre) ironCount++;
+            else if(ore instanceof MetalOre) metalCount++;
+            else if (ore instanceof CrystalOre) crystalCount++;
+            else if (ore instanceof GemOre) gemCount++;
             else if(ore instanceof Rock) rockCount++;
         }
 
@@ -151,8 +159,14 @@ public class GamePanel extends JPanel implements Runnable {
         if(goldCount < MAX_GOLD) {
             sp.spawnOre("gold", MAX_CHICKENS - MAX_GOLD, usedPositions);
         }
-        if(ironCount < MAX_IRON) {
-            sp.spawnOre("iron", MAX_IRON - ironCount, usedPositions);
+        if(metalCount < MAX_METAL) {
+            sp.spawnOre("metal", MAX_METAL - metalCount, usedPositions);
+        }
+        if (crystalCount < MAX_CRYSTAL) {
+            sp.spawnOre("crystal", MAX_CRYSTAL - crystalCount, usedPositions);
+        }
+        if(gemCount < MAX_GEM) {
+            sp.spawnOre("gem", MAX_GEM - gemCount, usedPositions);
         }
         if(rockCount < MAX_ROCK) {
             sp.spawnOre("rock", MAX_ROCK - rockCount, usedPositions);
@@ -195,12 +209,13 @@ public class GamePanel extends JPanel implements Runnable {
             sp.spawnAnimal("wolf", MAX_WOLF - wolfCount, usedPositions);
         }
     }
+
     public void addPlant() {
         ArrayList<Point> usedPositions = new ArrayList<>();
-        sp.spawnPlant("guava", 20, usedPositions);
-        sp.spawnPlant("mango", 20, usedPositions);
-        sp.spawnPlant("bush", 200, usedPositions);
-        sp.spawnPlant("berrybush", 10, usedPositions);
+        sp.spawnPlant("guava", 50, usedPositions);
+        sp.spawnPlant("mango", 40, usedPositions);
+        sp.spawnPlant("bush", 300, usedPositions);
+        sp.spawnPlant("berrybush", 20, usedPositions);
     }
     
     @Override
@@ -211,31 +226,19 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        addPlant(new GuavaTree(40 * TILE_SIZE, 45 * TILE_SIZE, this));
-        addPlant(new GuavaTree(40 * TILE_SIZE, 49 * TILE_SIZE, this));
-        addPlant(new PalmTree(40 * TILE_SIZE,  54 * TILE_SIZE, this));
-        addPlant(new Bush(40 * TILE_SIZE,  57 * TILE_SIZE, this));
-        addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addPlant();
+        plants.sort(Comparator.comparingInt(p -> p.worldY));
+        buildings.sort(Comparator.comparingInt(p -> p.worldY));
+        player.inventory.addItems(new WolfCloak());
+        player.inventory.addItems(new GoldIngot(64));
+        player.inventory.addItems(new MetalIngot(64));
+        player.inventory.addItems(new IcePickaxe());
+        player.inventory.addItems(new CraftingTable(this, 1, 0));
         player.inventory.addItems(new FishingRod());
-        player.inventory.addItems(new MetalChestplate());
-        player.inventory.addItems(new Bucket(1, this));
-        player.inventory.addItems(new Carrot(5));
-        player.inventory.addItems(new GardenPatch(this, 5, 0));
-        player.inventory.addItems(new Orchard(this, 1, 0));
-        player.inventory.addItems(new CoconutSeeds(2));
-        player.inventory.addItems(new KandangAyam(this, 0));
         player.inventory.addItems(new Lantern(this));
+        player.inventory.addItems(new MetalChestplate());
+        player.inventory.addItems(new Bucket(5, this));
         player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new Bed(this, 2, 0));
-        player.inventory.addItems(new Furnace(this, 2, 0));
-        player.inventory.addItems(new Chest(this, 2, 0));
-        player.inventory.addItems(new WateringCan());
-        player.inventory.addItems(new Orchard(this, 1, 0));
-        player.inventory.addItems(new CoconutSeeds(2));
-        player.inventory.addItems(new Bread());
-        player.inventory.addItems(new Pickaxe("pickaxe", 50, 20));
-   
         
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
@@ -280,9 +283,6 @@ public class GamePanel extends JPanel implements Runnable {
                 if (currentMap == 0) {
                     checkAndRespawnAnimals();  
                 }
-                // if (currentMap == 2){
-                //     checkAndRespawnOres();
-                // }
                 repaint();
                 delta--;
             }
@@ -443,6 +443,7 @@ public class GamePanel extends JPanel implements Runnable {
             if (buildings.get(i) instanceof Orchard) {
                 if (((Orchard) buildings.get(i)).phase.equals("seed") || ((Orchard) buildings.get(i)).phase.equals("sprout")) {
                     ((Orchard) buildings.get(i)).updateGrowth();
+                    buildings.sort(Comparator.comparingInt(p -> p.worldY));
                 }
             }
         }

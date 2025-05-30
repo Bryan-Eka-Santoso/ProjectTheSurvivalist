@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class Wool extends Material {
     public Wool(int currentStack) {
-        super("Wool", 10, currentStack);
+        super("Wool", currentStack);
             try {
                 this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/wool.png")); 
             } catch (IOException e) {

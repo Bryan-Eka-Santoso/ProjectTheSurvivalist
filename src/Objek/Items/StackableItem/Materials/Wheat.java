@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class Wheat extends Material {
     public Wheat(int currentStack) {
-        super("Wheat", 20, currentStack);
+        super("Wheat", currentStack);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/wheat.png")); 
         } catch (IOException e) {

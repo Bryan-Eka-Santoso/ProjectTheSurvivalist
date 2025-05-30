@@ -6,7 +6,7 @@ public abstract class Stackable extends Item {
         super(name, maxStack, currentStack);
     }
 
-    public Stackable(String name, int maxStack) {
-        super(name, maxStack, maxStack);
+    public Stackable(String name, int currentStack) {
+        super(name, 64, currentStack);
     }
 }
