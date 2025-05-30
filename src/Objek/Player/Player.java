@@ -210,6 +210,26 @@ public class Player {
         }
     }
 
+    public Boolean isNearWater(){
+        int newX = gp.player.worldX, newY = gp.player.worldY; 
+        switch (gp.player.direction) {
+            case "up":
+                newY = gp.player.worldY - gp.TILE_SIZE;  
+                break;
+            case "down":
+                newY = gp.player.worldY + gp.TILE_SIZE;  
+                break;
+            case "left":
+                newX = gp.player.worldX - gp.TILE_SIZE;  
+                break;
+            case "right":
+                newX = gp.player.worldX + gp.TILE_SIZE;  
+                break;
+        }
+        int tileNum = gp.tileM.mapTile[gp.currentMap][newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
+        return tileNum == 16; // Assuming tile number 16 is water
+    }
+
     public void setPoisoned() {
         isPoisoned = true;
         poisonCounter = 0;

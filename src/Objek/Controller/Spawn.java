@@ -9,8 +9,10 @@ import Objek.Animal.Sheep;
 import Objek.Animal.Wolf;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
+import Objek.Ore.CrystalOre;
+import Objek.Ore.GemOre;
 import Objek.Ore.GoldOre;
-import Objek.Ore.IronOre;
+import Objek.Ore.MetalOre;
 import Objek.Ore.Rock;
 import Objek.Enemy.Bat;
 import Objek.Plant.BerryBush;
@@ -58,8 +60,14 @@ public class Spawn {
                 case "gold":
                     gp.ores.add(new GoldOre(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
                     break;
-                case "iron":
-                    gp.ores.add(new IronOre(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                case "metal":
+                    gp.ores.add(new MetalOre(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    break;
+                case "crystal":
+                    gp.ores.add(new CrystalOre(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    break;
+                case "gem":
+                    gp.ores.add(new GemOre(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
                     break;
                 case "rock":
                     gp.ores.add(new Rock(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));

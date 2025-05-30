@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
+import Objek.Items.Unstackable.Armor.Helmet.WolfCloak;
 import Objek.Player.*;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -126,7 +127,7 @@ public class Wolf extends WildAnimal {
         isCollision(this);
 
         // Jika tidak ada collision, boleh bergerak
-        if (!isPreyNearby(gp.player)) {
+        if (!isPreyNearby(gp.player) || (gp.player.helmet != null && gp.player.helmet instanceof WolfCloak)) {
             moveNormally();
         } else {
             moveTowardsPlayer();

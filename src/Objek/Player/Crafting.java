@@ -1,9 +1,11 @@
 package Objek.Player;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Bucket;
 import Objek.Items.StackableItem.Foods.*;
 import Objek.Items.StackableItem.Materials.*;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
@@ -121,6 +123,8 @@ public class Crafting {
         List<Item> recipe13 = Arrays.asList(new MetalSheet(3));
         r.put(recipe13, new Bucket(1, gp));
 
+        r.put(Arrays.asList(new WolfHide(5)), new WolfCloak());
+
         List<Item> recipe14 = Arrays.asList(new MetalIngot(5));
         r.put(recipe14, new MetalHelmet());
 
@@ -132,18 +136,6 @@ public class Crafting {
 
         List<Item> recipe17 = Arrays.asList(new MetalIngot(4));
         r.put(recipe17, new MetalBoots());
-
-        List<Item> recipe18 = Arrays.asList(new MetalIngot(5));
-        r.put(recipe18, new MetalHelmet());
-
-        List<Item> recipe19 = Arrays.asList(new MetalIngot(8));
-        r.put(recipe19, new MetalChestplate());
-
-        List<Item> recipe20 = Arrays.asList(new MetalIngot(7));
-        r.put(recipe20, new MetalLeggings());
-
-        List<Item> recipe21 = Arrays.asList(new MetalIngot(4));
-        r.put(recipe21, new MetalBoots());
 
         List<Item> recipe22 = Arrays.asList(new GoldIngot(5));
         r.put(recipe22, new GoldHelmet());
@@ -159,6 +151,18 @@ public class Crafting {
 
         List<Item> recipe26 = Arrays.asList(new Wood(5));
         r.put(recipe26, new WateringCan());
+
+        // List<Item> recipe27 = Arrays.asList(new Wood(8), new Wool(3), new MetalNails(4));
+        // r.put(recipe27, new KandangAyam(gp, 0));
+
+        // List<Item> recipe28 = Arrays.asList(new Wood(10), new Stone(6), new MetalNails(4));
+        // r.put(recipe28, new PigCage(gp, 0));
+
+        // List<Item> recipe29 = Arrays.asList(new Wood(10), new Wool(5), new MetalNails(4));
+        // r.put(recipe29, new SheepCage(gp, 0));
+
+        // List<Item> recipe30 = Arrays.asList(new Wood(12), new Stone(8), new MetalNails(6));
+        // r.put(recipe30, new CowCage(gp, 0));
 
         return r;
     }

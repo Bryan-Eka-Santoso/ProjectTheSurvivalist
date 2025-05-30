@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class Crystal extends Material {
     public Crystal(int currentStack) {
-        super("Crystal", 20, currentStack);
+        super("Crystal", currentStack);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/crystal.png")); 
         } catch (IOException e) {

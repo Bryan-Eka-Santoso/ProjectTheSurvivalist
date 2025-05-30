@@ -10,7 +10,7 @@ public class MetalHelmet extends Helmet {
     public MetalHelmet() {
         super("Metal Helmet", 80, 2);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/metalhelmet.png"));
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/metalhelmet2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

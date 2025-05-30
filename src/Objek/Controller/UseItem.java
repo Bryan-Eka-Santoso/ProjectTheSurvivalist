@@ -14,6 +14,7 @@ import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Bucket;
 import Objek.Items.StackableItem.Foods.Berries;
 import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Coconut;
@@ -21,22 +22,26 @@ import Objek.Items.StackableItem.Foods.Food;
 import Objek.Items.StackableItem.Foods.Guava;
 import Objek.Items.StackableItem.Foods.Mango;
 import Objek.Items.StackableItem.Foods.Potato;
+import Objek.Items.StackableItem.Foods.RawFoods.RawChicken;
+import Objek.Items.StackableItem.Foods.RawFoods.RawMeat;
+import Objek.Items.StackableItem.Foods.RawFoods.RawMutton;
+import Objek.Items.StackableItem.Foods.RawFoods.RawPork;
+import Objek.Items.StackableItem.Materials.Crystal;
 import Objek.Items.StackableItem.Materials.Feather;
+import Objek.Items.StackableItem.Materials.Gem;
+import Objek.Items.StackableItem.Materials.Gold;
 import Objek.Items.StackableItem.Materials.GoldIngot;
 import Objek.Items.StackableItem.Materials.Material;
+import Objek.Items.StackableItem.Materials.Metal;
 import Objek.Items.StackableItem.Materials.MetalIngot;
 import Objek.Items.StackableItem.Materials.Stone;
 import Objek.Items.StackableItem.Materials.Wheat;
+import Objek.Items.StackableItem.Materials.WolfHide;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
-import Objek.Items.StackableItem.Materials.RawMaterials.RawChicken;
-import Objek.Items.StackableItem.Materials.RawMaterials.RawMeat;
-import Objek.Items.StackableItem.Materials.RawMaterials.RawMutton;
-import Objek.Items.StackableItem.Materials.RawMaterials.RawPork;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.StackableItem.Seeds.MangoSeeds;
 import Objek.Items.StackableItem.Seeds.Seeds;
-import Objek.Items.Unstackable.Bucket;
 import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WateringCan;
 import Objek.Items.Unstackable.Armor.Boots.Boots;
@@ -48,8 +53,10 @@ import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
+import Objek.Ore.CrystalOre;
+import Objek.Ore.GemOre;
 import Objek.Ore.GoldOre;
-import Objek.Ore.IronOre;
+import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Enemy.Bat;
@@ -72,23 +79,29 @@ public class UseItem {
                 gp.player.helmet = (Helmet) selectedItem.clone();
                 player.inventory.removeItem(selectedItem, 1); // Remove helmet from inventory
                 System.out.println("Equipping helmet: " + selectedItem.name);
+
             } else if (selectedItem instanceof Chestplate){
                 gp.player.chestplate = (Chestplate) selectedItem.clone();
                 player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
                 System.out.println("Equipping chestplate: " + selectedItem.name);
+
             } else if (selectedItem instanceof Leggings){
                 gp.player.leggings = (Leggings) selectedItem.clone();
                 player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
                 System.out.println("Equipping chestplate: " + selectedItem.name);
+
             } else if (selectedItem instanceof Boots){
                 gp.player.boots = (Boots) selectedItem.clone();
                 player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
                 System.out.println("Equipping chestplate: " + selectedItem.name);
+
             } else if (selectedItem instanceof Bucket) { 
                 Bucket bucket = (Bucket) selectedItem;
-                if (bucket.status.equals("empty")) {
-                    
-                    bucket.fillWater();
+                if (gp.player.isNearWater()) {
+                    Bucket waterBucket = new Bucket(1, gp);
+                    waterBucket.fillWater();
+                    gp.player.inventory.addItems(waterBucket); // Add water bucket to inventory
+                    gp.player.inventory.removeItem(bucket, 1); // Remove empty bucket from inventory
                 } else if (bucket.status.equals("water")) {
                     System.out.println("Drinking water from the bucket.");
                     bucket.drink();
@@ -98,6 +111,7 @@ public class UseItem {
                 } else {
                     System.out.println("Bucket is already filled with " + bucket.status + ".");
                 }
+
             } else if (selectedItem instanceof Wood || selectedItem instanceof Stone || selectedItem instanceof GoldIngot || selectedItem instanceof MetalIngot) {
                 System.out.println("Using material: " + selectedItem.name);
             } else if (selectedItem instanceof WateringCan) {
@@ -293,6 +307,9 @@ public class UseItem {
                         System.out.println("Hit wolf: " + wolf.hp + "/" + 100);
                         if(wolf.hp <= 0) {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
+                            if (rand.nextInt(10) < 2) {
+                                player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
+                            }
                             player.gp.animals.remove(player.animalIndex);
                             player.gainExp(rand.nextInt(10) + 9);
                             player.animalIndex = -1;
@@ -328,7 +345,7 @@ public class UseItem {
                         golem.hp -= damage;
                         System.out.println("Hit golem: " + golem.hp + "/" + 200);
                         if(golem.hp <= 0) {
-                            player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
                             player.gp.monsters.remove(player.monsterIndex);
                             player.gainExp(rand.nextInt(10) + 15);
                             player.monsterIndex = -1;
@@ -401,8 +418,8 @@ public class UseItem {
                             if (gardenPatch.seed != null) {
                                 if (gardenPatch.seed instanceof Seeds){
                                     if (gardenPatch.phase.equals("crops")) {
-                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Wheat(rand.nextInt(1) + 1), gp));
-                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(rand.nextInt(2)), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Wheat(1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(rand.nextInt(2) + 1), gp));
                                     } else {
                                         player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(1), gp));
                                     }
@@ -453,9 +470,13 @@ public class UseItem {
                         
                         if(ore.hp <= 0) {
                             if(ore instanceof GoldOre) {
-                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new GoldIngot(1), gp));
-                            } else if(ore instanceof IronOre) {
-                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new MetalIngot(1), gp));
+                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Gold(1), gp));
+                            } else if(ore instanceof MetalOre) {
+                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Metal(1), gp));
+                            } else if (ore instanceof CrystalOre){
+                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Crystal(1), gp));
+                            } else if (ore instanceof GemOre) {
+                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Gem(1), gp));
                             } else if(ore instanceof Rock) {
                                 gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Stone(1), gp));
                             }

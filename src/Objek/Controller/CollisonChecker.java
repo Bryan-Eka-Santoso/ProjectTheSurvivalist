@@ -208,7 +208,7 @@ public class CollisonChecker {
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
                             if (!(gp.plants.get(i) instanceof Bush)) {
-                                player.collisionOn = true; // Kalo item ini diapus aja
+                                player.collisionOn = true;
                             }
                         }
                         break;
@@ -217,7 +217,7 @@ public class CollisonChecker {
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
                             if (!(gp.plants.get(i) instanceof Bush)) {
-                                player.collisionOn = true; // Kalo item ini diapus aja
+                                player.collisionOn = true;
                             }
                         }
                         break;
@@ -226,7 +226,7 @@ public class CollisonChecker {
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
                             if (!(gp.plants.get(i) instanceof Bush)) {
-                                player.collisionOn = true; // Kalo item ini diapus aja
+                                player.collisionOn = true;
                             }
                         }
                         break;
@@ -235,7 +235,7 @@ public class CollisonChecker {
                         if (player.solidArea.intersects(gp.plants.get(i).solidArea)) {
                             index = i; 
                             if (!(gp.plants.get(i) instanceof Bush)) {
-                                player.collisionOn = true; // Kalo item ini diapus aja
+                                player.collisionOn = true;
                             }
                         }
                         break;
@@ -787,10 +787,10 @@ public class CollisonChecker {
                     gp.player.boots = null; // Remove boots if durability is zero
                 }
             }
-            if(16 - def <= 0){
+            if(monster.attack - def <= 0){
                 gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
             } else {
-                gp.player.health -= (16-def); // Decrease player HP
+                gp.player.health -= (monster.attack-def); // Decrease player HP
             }
             if (gp.player.health <= 0) {
                 gp.player.health = 0; // Prevent negative health

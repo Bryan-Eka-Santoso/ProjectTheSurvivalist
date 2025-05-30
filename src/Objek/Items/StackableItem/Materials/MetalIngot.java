@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class MetalIngot extends Material {
     public MetalIngot(int currentStack) {
-        super("Metal Ingot", 20, currentStack);
+        super("Metal Ingot", currentStack);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/metalingot.png"));
         } catch (IOException e) {
