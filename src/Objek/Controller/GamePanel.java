@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.awt.Point;
 
 public class GamePanel extends JPanel implements Runnable {
@@ -195,12 +196,13 @@ public class GamePanel extends JPanel implements Runnable {
             sp.spawnAnimal("wolf", MAX_WOLF - wolfCount, usedPositions);
         }
     }
+
     public void addPlant() {
         ArrayList<Point> usedPositions = new ArrayList<>();
-        sp.spawnPlant("guava", 20, usedPositions);
-        sp.spawnPlant("mango", 20, usedPositions);
-        sp.spawnPlant("bush", 200, usedPositions);
-        sp.spawnPlant("berrybush", 10, usedPositions);
+        sp.spawnPlant("guava", 50, usedPositions);
+        sp.spawnPlant("mango", 40, usedPositions);
+        sp.spawnPlant("bush", 300, usedPositions);
+        sp.spawnPlant("berrybush", 20, usedPositions);
     }
     
     @Override
@@ -211,12 +213,9 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        addPlant(new GuavaTree(40 * TILE_SIZE, 45 * TILE_SIZE, this));
-        addPlant(new GuavaTree(40 * TILE_SIZE, 49 * TILE_SIZE, this));
-        addPlant(new PalmTree(40 * TILE_SIZE,  54 * TILE_SIZE, this));
-        addPlant(new Bush(40 * TILE_SIZE,  57 * TILE_SIZE, this));
-        addPlant(new BerryBush(40 * TILE_SIZE,  60 * TILE_SIZE, this));
         addPlant();
+        plants.sort(Comparator.comparingInt(p -> p.worldY));
+        buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new FishingRod());
         player.inventory.addItems(new MetalChestplate());
         player.inventory.addItems(new Bucket(1, this));
@@ -236,7 +235,6 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Bread());
         player.inventory.addItems(new Pickaxe("pickaxe", 50, 20));
    
-        
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
@@ -280,9 +278,6 @@ public class GamePanel extends JPanel implements Runnable {
                 if (currentMap == 0) {
                     checkAndRespawnAnimals();  
                 }
-                // if (currentMap == 2){
-                //     checkAndRespawnOres();
-                // }
                 repaint();
                 delta--;
             }
@@ -443,6 +438,7 @@ public class GamePanel extends JPanel implements Runnable {
             if (buildings.get(i) instanceof Orchard) {
                 if (((Orchard) buildings.get(i)).phase.equals("seed") || ((Orchard) buildings.get(i)).phase.equals("sprout")) {
                     ((Orchard) buildings.get(i)).updateGrowth();
+                    buildings.sort(Comparator.comparingInt(p -> p.worldY));
                 }
             }
         }
