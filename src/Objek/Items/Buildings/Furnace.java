@@ -2,6 +2,7 @@ package Objek.Items.Buildings;
 
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
+import Objek.Items.StackableItem.Bucket;
 import Objek.Items.StackableItem.Foods.Bacon;
 import Objek.Items.StackableItem.Foods.CookedArwana;
 import Objek.Items.StackableItem.Foods.CookedBelida;
@@ -98,6 +99,7 @@ public class Furnace extends Buildings {
 
     private LinkedHashMap<String, Item> fillRecipes() {
         LinkedHashMap<String, Item> r = new LinkedHashMap<>();
+        
         r.put("Raw Arwana", new CookedArwana(1));
         r.put("Raw Belida", new CookedBelida(1));
         r.put("Raw Meat", new Steak(1));
@@ -106,6 +108,7 @@ public class Furnace extends Buildings {
         r.put("Raw Pork", new Bacon(3));
         r.put("Metal", new MetalIngot(1));
         r.put("Gold", new GoldIngot(1));
+        r.put("Water Bucket", Bucket.getCleansedWaterBucket(gp));
 
         return r;
     }

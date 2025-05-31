@@ -97,17 +97,11 @@ public class UseItem {
 
             } else if (selectedItem instanceof Bucket) { 
                 Bucket bucket = (Bucket) selectedItem;
-                if (gp.player.isNearWater()) {
-                    Bucket waterBucket = new Bucket(1, gp);
-                    waterBucket.fillWater();
-                    gp.player.inventory.addItems(waterBucket); // Add water bucket to inventory
-                    gp.player.inventory.removeItem(bucket, 1); // Remove empty bucket from inventory
-                } else if (bucket.status.equals("water")) {
-                    System.out.println("Drinking water from the bucket.");
+                if (!bucket.status.equals("empty")) {
+                    System.out.println("Drinking from the bucket.");
                     bucket.drink();
-                } else if (bucket.status.equals("milk")) {
-                    System.out.println("Drinking milk from the bucket.");
-                    bucket.drink();
+                } else if (gp.player.isNearWater()) {
+                    bucket.fillWater();
                 } else {
                     System.out.println("Bucket is already filled with " + bucket.status + ".");
                 }

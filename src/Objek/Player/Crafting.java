@@ -66,6 +66,9 @@ public class Crafting {
 
         List<Item> recipe12 = Arrays.asList(new Coconut(1));
         r.put(recipe12, new CoconutSeeds(2));
+
+        List<Item> recipe13 = Arrays.asList(new Wool(1));
+        r.put(recipe13, new Strings(4));
         
         return r;
     }
@@ -162,6 +165,8 @@ public class Crafting {
 
         // List<Item> recipe30 = Arrays.asList(new Wood(12), new Stone(8), new MetalNails(6));
         // r.put(recipe30, new CowCage(gp, 0));
+
+        List<Item> recipe31 = Arrays.asList(new Wood(3), new MetalIngot(2));
 
         return r;
     }
