@@ -346,6 +346,7 @@ public class GamePanel extends JPanel implements Runnable {
         ui.isNeedLevel15 = false;
         ui.isCanGoToCave = false;
         ui.isCanGoToShop = false;
+        ui.isGoToShopMenu = false;
         int col = player.worldX / TILE_SIZE;
         int row = player.worldY / TILE_SIZE;
 
@@ -373,6 +374,9 @@ public class GamePanel extends JPanel implements Runnable {
         } else if(currentMap == 3){
             if (col == 52 && row == 53) {
                 ui.isCanGoToLand = true;
+            }
+            if((col == 47 || col == 48 || col == 49) && row == 48) {
+                ui.isGoToShopMenu = true;
             }
         }
     }

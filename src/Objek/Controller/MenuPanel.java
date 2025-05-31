@@ -68,6 +68,7 @@ public class MenuPanel extends JPanel {
         guideButton.setBorderPainted(false);
         guideButton.setContentAreaFilled(false);
         guideButton.setFocusPainted(false);
+        playButton.addActionListener(e -> showMenu());
         add(guideButton);
 
         JButton exitButton = new JButton(exit);
@@ -97,4 +98,18 @@ public class MenuPanel extends JPanel {
         gamePanel.startgameThread();
     }
 
+    public void showMenu() {
+        GuidePanel guidePanel = new GuidePanel();
+        GamePanel gamePanel = new GamePanel();
+        window.setContentPane(guidePanel);
+        guidePanel.setFocusable(true);
+        guidePanel.requestFocusInWindow();
+
+        window.pack();
+
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+
+        // 
+    }
 }

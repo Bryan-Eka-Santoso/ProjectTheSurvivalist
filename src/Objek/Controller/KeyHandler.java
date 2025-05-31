@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.Random;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import Objek.Fish.Arwana;
@@ -32,6 +33,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     Sound sound = new Sound();
     Spawn sp;
     boolean isTemp1Chest, isTemp2Chest;
+    Random rand = new Random();
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -524,6 +526,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         
         if(gp.currentMap == 0){
             if((col == 27 || col == 28) && row == 17) {
+                int randGetGolden = rand.nextInt(2);
                 gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
                 gp.currentMap = 1;
                 gp.animals.clear();
@@ -533,6 +536,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.worldX = 60 * gp.TILE_SIZE;
                 sp.spawnFish("Arwana", 20, usedPositions);
                 sp.spawnFish("Belida", 20, usedPositions);
+                if(randGetGolden == 1){
+                    sp.spawnFish("Golden", 2, usedPositions);
+                }
             }
         } else if (gp.currentMap == 1){
             if(col == 60 && row == 25) {
@@ -794,6 +800,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
                     gp.player.inventory.slots[gp.ui.selectedIndex] = null;
                 }
+                gp.fish.remove(gp.ui.fishIndex);
                 
                 gp.gameState = gp.PLAY_STATE;
             }

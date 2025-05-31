@@ -93,6 +93,7 @@ public class UI {
     public boolean isShowUnlockShip = false;
     public boolean isCanGoToCave = false;
     public boolean isCanGoToShop = false;
+    public boolean isGoToShopMenu = false;
 
     public Fish caughtFish;
     public int fishIndex;
@@ -195,7 +196,7 @@ public class UI {
             }
         }
         if (gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE 
-            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE) {
+            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE) {
             drawStats();
         }
         if (showNameInput) {
@@ -222,6 +223,9 @@ public class UI {
         }
         if (isNeedLevel15) {
             drawText("Ship locked! Reach level 15 to unlock it", Color.GRAY);
+        }
+        if (isGoToShopMenu && gp.gameState != gp.SHOP_STATE) {
+            drawText("Press space to access the shop menu", Color.GREEN);
         }
         if(gp.gameState == gp.FISHING_STATE) {
             drawFishingMinigame();
@@ -446,6 +450,8 @@ public class UI {
         if (caughtFish.nameFish.equalsIgnoreCase("Arwana")) {
             fishImage = caughtFish.right1;
         } else if (caughtFish.nameFish.equalsIgnoreCase("Belida")) {
+            fishImage = caughtFish.right1;
+        } else if (caughtFish.nameFish.equalsIgnoreCase("Golden")) {
             fishImage = caughtFish.right1;
         }
         
@@ -1379,14 +1385,14 @@ public class UI {
             }
             if (chest.inventory.slots[i] instanceof FishingRod) {
                 FishingRod fishingRod = (FishingRod) chest.inventory.slots[i];
-                if (fishingRod.durability <fishingRod.maxDurability) {
+                if (fishingRod.durability < fishingRod.maxDurability) {
                     int durabilityBarWidth = gp.TILE_SIZE + 10;
                     int durabilityBarHeight = 5;
                     int durabilityBarX = slotX;
                     int durabilityBarY = slotY + gp.TILE_SIZE + 5;
 
                     // Calculate durability percentage
-                    float durabilityPercentage = (float)fishingRod.durability /fishingRod.maxDurability;
+                    float durabilityPercentage = (float)fishingRod.durability / fishingRod.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {
@@ -1524,7 +1530,7 @@ public class UI {
                     int durabilityBarY = slotY + gp.TILE_SIZE + 5;
 
                     // Calculate durability percentage
-                    float durabilityPercentage = (float) fishingRod.durability / fishingRod.maxDurability;
+                    float durabilityPercentage = (float)fishingRod.durability / fishingRod.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {
@@ -1798,7 +1804,7 @@ public class UI {
                     int durabilityBarY = slotY + gp.TILE_SIZE + 5;
 
                     // Calculate durability percentage
-                    float durabilityPercentage = (float)fishingRod.durability /fishingRod.maxDurability;
+                    float durabilityPercentage = (float)fishingRod.durability / fishingRod.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {
@@ -2107,7 +2113,7 @@ public class UI {
                     int durabilityBarY = slotY + gp.TILE_SIZE + 5;
 
                     // Calculate durability percentage
-                    float durabilityPercentage = (float)fishingRod.durability /fishingRod.maxDurability;
+                    float durabilityPercentage = (float)fishingRod.durability / fishingRod.maxDurability;
 
                     // Set color based on durability
                     if (durabilityPercentage > 0.5) {
