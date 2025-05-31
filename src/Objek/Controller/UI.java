@@ -1637,7 +1637,7 @@ public class UI {
             itemList.add(result);
             recipeKeys.add(ingredients); // track the key (ingredient list)
 
-            contentY += 60;
+            contentY += 45;
         }
 
         g2.setClip(oldClip);
