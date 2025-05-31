@@ -50,6 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int SpawnX = 40, SpawnY = 44;
     
     KeyHandler keyH = new KeyHandler(this);
+    MouseHandler mouseHandler = new MouseHandler(this);
     Crafting recipe = new Crafting(this);
     public Player player = new Player("Player", 15, recipe, this, keyH);
     public TileManager tileM = new TileManager(this);
@@ -75,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int KANDANG_STATE = 11;
     public final int FISHING_STATE = 12;
     public final int GAME_OVER_STATE = 13;
+    public final int SHOP_STATE = 14;
 
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
@@ -111,6 +113,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseWheelListener(keyH);
         this.setFocusable(true);
         this.setLayout(null);
+        this.addMouseListener(mouseHandler);
         eManager.setup();
     }
 
@@ -265,9 +268,10 @@ public class GamePanel extends JPanel implements Runnable {
         table.worldY = 48 * TILE_SIZE;
         buildings.add(table);
         Buildings charsell = new Charsell(this, 1, 3);
-        charsell.worldX = 48 * TILE_SIZE;
+        charsell.worldX = 48 * TILE_SIZE + 23;
         charsell.worldY = 47 * TILE_SIZE;
         buildings.add(charsell);
+        System.out.println(charsell.worldX + " " + charsell.worldY);
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -341,6 +345,7 @@ public class GamePanel extends JPanel implements Runnable {
         ui.isCanGoToLand = false;
         ui.isNeedLevel15 = false;
         ui.isCanGoToCave = false;
+        ui.isCanGoToShop = false;
         int col = player.worldX / TILE_SIZE;
         int row = player.worldY / TILE_SIZE;
 
@@ -354,12 +359,19 @@ public class GamePanel extends JPanel implements Runnable {
             if ((col == 50 || col == 51) && row == 51) {
                 ui.isCanGoToCave = true;
             }
+            if (col == 40 && row == 41) {
+                ui.isCanGoToShop = true;
+            }
         } else if(currentMap == 1){
             if (col == 60 && row == 25) {
                 ui.isCanGoToLand = true;
             }
         } else if(currentMap == 2){
             if((col == 22 || col == 23) && row == 23) {
+                ui.isCanGoToLand = true;
+            }
+        } else if(currentMap == 3){
+            if (col == 52 && row == 53) {
                 ui.isCanGoToLand = true;
             }
         }

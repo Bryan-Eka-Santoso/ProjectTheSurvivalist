@@ -32,6 +32,8 @@ import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Items.Unstackable.Arsenals.*;
 import javax.imageio.ImageIO;
 
+import org.w3c.dom.events.MouseEvent;
+
 public class UI {
     GamePanel gp;
     Graphics2D g2;
@@ -90,6 +92,7 @@ public class UI {
     public boolean isCanGoToLand = false;
     public boolean isShowUnlockShip = false;
     public boolean isCanGoToCave = false;
+    public boolean isCanGoToShop = false;
 
     public Fish caughtFish;
     public int fishIndex;
@@ -108,6 +111,26 @@ public class UI {
     private long gagalDapatIkanTimer = 0;
     private long messageUnlock = 0;
     private final long MESSAGE_DISPLAY_TIME = 3000;
+
+    public int shopCategory = 0;
+    public ArrayList<ShopItem> shopItems = new ArrayList<>();
+    public ArrayList<Rectangle> shopItemRects = new ArrayList<>();
+    public Rectangle shopExitButton;
+    public boolean showPurchaseSuccess = false;
+    public boolean showInsufficientFunds = false;
+    public long messageTimer = 0;
+    public final long MESSAGE_DURATION = 2000;
+    public ArrayList<ShopItem> getShopItemsByCategory(int category) {
+    ArrayList<ShopItem> result = new ArrayList<>();
+    
+    for (ShopItem item : shopItems) {
+        if (item.category == category) {
+            result.add(item);
+        }
+    }
+    
+    return result;
+}
     
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -127,10 +150,13 @@ public class UI {
         g2.setFont(new Font("Arial", Font.PLAIN, 40));
         g2.setColor(Color.white);
 
+        if(gp.gameState == gp.SHOP_STATE) {
+            drawShopMenu();
+        }
         if (gp.gameState == gp.GAME_OVER_STATE) {
             respawnMenu();
         }
-        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE) {
+        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE&& gp.gameState != gp.SHOP_STATE) {
             drawSelectedItem();
         }
         if (gp.gameState == gp.PAUSE_STATE) {
@@ -184,8 +210,11 @@ public class UI {
         if (isCanGoToSea) {
             drawText("Press F to go to the sea", Color.GREEN);
         }
+        if (isCanGoToShop) {
+            drawText("Press space to go to the shop", Color.GREEN);
+        }
         if (isCanGoToLand) {
-            if(gp.currentMap == 2) {
+            if(gp.currentMap == 2 || gp.currentMap == 3) {
                 drawText("Press space to go to the land", Color.GREEN);
             } else {
                 drawText("Press F to go to the land", Color.GREEN);
@@ -223,6 +252,18 @@ public class UI {
         }
         if(isCanGoToCave) {
             drawText("Press space to go to the cave", Color.GREEN);
+        }
+        if(showPurchaseSuccess) {
+            drawText("Purchase successful!", Color.GREEN);
+            if(System.currentTimeMillis() - messageTimer > MESSAGE_DURATION) {
+                showPurchaseSuccess = false;
+            }
+        }
+        if(showInsufficientFunds) {
+            drawText("Not enough coins!", Color.RED);
+            if(System.currentTimeMillis() - messageTimer > MESSAGE_DURATION) {
+                showInsufficientFunds = false;
+            }
         }
     }
 
@@ -645,7 +686,6 @@ public class UI {
             selectedGetItemIndex = 0;
         }
     }
-   
     
     public void drawGetItemMenu(Graphics2D g2, Kandang kandang) {
         int windowWidth = gp.TILE_SIZE * 12;
@@ -2349,4 +2389,206 @@ public class UI {
         }
         return null;
     }
+    public void drawShopMenu() {
+        // Background semi-transparent overlay
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
+        
+        // Shop panel
+        int panelWidth = 900;
+        int panelHeight = 500;
+        int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
+        int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
+        
+        g2.setColor(new Color(70, 40, 0));
+        g2.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 15, 15);
+        
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(panelX+5, panelY+5, panelWidth-10, panelHeight-10, 10, 10);
+        
+        // Title
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
+        g2.drawString("Shop", panelX + 30, panelY + 50);
+        g2.drawString("Your Coins: " + gp.player.coins, panelX + 550, panelY + 50);
+        
+        // Category tabs
+        int tabWidth = 150;
+        int tabHeight = 40;
+        int tabY = panelY + 70;
+        
+        // Categories
+        String[] categories = {"Weapons", "Armor", "Food", "Materials", "Fishing"};
+        
+        for(int i = 0; i < categories.length; i++) {
+            int tabX = panelX + 30 + (i * (tabWidth + 10));
+            boolean isSelected = (shopCategory == i);
+            
+            if(isSelected) {
+                g2.setColor(new Color(255, 215, 0));  // Gold for selected tab
+                g2.fillRect(tabX, tabY, tabWidth, tabHeight);
+                g2.setColor(Color.BLACK);
+            } else {
+                g2.setColor(new Color(200, 200, 200)); // Light gray for unselected tab
+                g2.fillRect(tabX, tabY, tabWidth, tabHeight);
+                g2.setColor(Color.BLACK);
+            }
+            
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 18F));
+            int textX = tabX + (tabWidth - g2.getFontMetrics().stringWidth(categories[i])) / 2;
+            g2.drawString(categories[i], textX, tabY + 25);
+        }
+        
+        // Item display area
+        int itemAreaX = panelX + 30;
+        int itemAreaY = tabY + tabHeight + 20;
+        int itemAreaWidth = panelWidth - 60;
+        int itemAreaHeight = panelHeight - 160;
+        
+        g2.setColor(new Color(50, 30, 0));
+        g2.fillRect(itemAreaX, itemAreaY, itemAreaWidth, itemAreaHeight);
+        g2.setColor(Color.WHITE);
+        g2.drawRect(itemAreaX, itemAreaY, itemAreaWidth, itemAreaHeight);
+        
+        // Draw items based on selected category
+        drawShopItems(itemAreaX, itemAreaY, itemAreaWidth, itemAreaHeight);
+        
+        // Exit button
+        int buttonWidth = 100;
+        int buttonHeight = 40;
+        int buttonX = panelX + panelWidth - buttonWidth - 50;
+        int buttonY = panelY + panelHeight - buttonHeight - 50;
+        
+        shopExitButton = new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(shopExitButton.x, shopExitButton.y, shopExitButton.width, shopExitButton.height);
+        
+        g2.setColor(Color.BLACK);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 20F));
+        String exitText = "Exit";
+        int textX = buttonX + (buttonWidth - g2.getFontMetrics().stringWidth(exitText)) / 2;
+        int textY = buttonY + (buttonHeight + g2.getFontMetrics().getHeight()) / 2 - 4;
+        g2.drawString(exitText, textX, textY);
+    }
+    private void drawShopItems(int x, int y, int width, int height) {
+        // Set up item grid
+        int columns = 4;
+        int itemSize = gp.TILE_SIZE + 10;
+        int itemSpacing = 20;
+        int totalItemWidth = itemSize + itemSpacing;
+        
+        int startX = x + 20;
+        int startY = y + 20;
+        
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 14F));
+        
+        // Get items for the current category
+        ArrayList<ShopItem> categoryItems = getShopItemsByCategory(shopCategory);
+        
+        // Draw items
+        shopItemRects.clear();
+        for (int i = 0; i < categoryItems.size(); i++) {
+            ShopItem item = categoryItems.get(i);
+            
+            int row = i / columns;
+            int col = i % columns;
+            
+            int itemX = startX + (col * totalItemWidth);
+            int itemY = startY + (row * (itemSize + 60));
+            
+            // Background for item
+            g2.setColor(new Color(100, 70, 30));
+            g2.fillRect(itemX, itemY, itemSize, itemSize);
+            g2.setColor(Color.WHITE);
+            g2.drawRect(itemX, itemY, itemSize, itemSize);
+            
+            // Item image
+            g2.drawImage(item.item.img, itemX + 5, itemY + 5, itemSize - 10, itemSize - 10, null);
+            
+            // Item name
+            g2.setColor(Color.WHITE);
+            g2.drawString(item.item.name, itemX, itemY + itemSize + 15);
+            
+            // Item price
+            g2.setColor(Color.YELLOW);
+            g2.drawString(item.price + " coins", itemX, itemY + itemSize + 30);
+            
+            // Buy button
+            int buyButtonWidth = 80;
+            int buyButtonHeight = 25;
+            int buyButtonX = itemX + (itemSize - buyButtonWidth) / 2;
+            int buyButtonY = itemY + itemSize + 35;
+            
+            Rectangle buyButton = new Rectangle(buyButtonX, buyButtonY, buyButtonWidth, buyButtonHeight);
+            shopItemRects.add(buyButton);
+            
+            g2.setColor(new Color(50, 150, 50));  // Green buy button
+            g2.fillRect(buyButton.x, buyButton.y, buyButton.width, buyButton.height);
+            
+            g2.setColor(Color.WHITE);
+            String buyText = "Buy";
+            int textX = buyButtonX + (buyButtonWidth - g2.getFontMetrics().stringWidth(buyText)) / 2;
+            g2.drawString(buyText, textX, buyButtonY + 17);
+        }
+    }
+    public void handleShopClick(int x, int y) {
+        // Check if exit button clicked
+        if(shopExitButton != null && shopExitButton.contains(x, y)) {
+            gp.gameState = gp.PLAY_STATE;
+            return;
+        }
+        
+        // Check category tabs
+        int tabWidth = 150;
+        int tabHeight = 40;
+        int panelX = gp.SCREEN_WIDTH/2 - 400;
+        int panelY = gp.SCREEN_HEIGHT/2 - 250;
+        int tabY = panelY + 70;
+        
+        // Categories
+        String[] categories = {"Weapons", "Armor", "Food", "Materials", "Fishing"};
+        
+        for(int i = 0; i < categories.length; i++) {
+            int tabX = panelX + 30 + (i * (tabWidth + 10));
+            Rectangle tabRect = new Rectangle(tabX, tabY, tabWidth, tabHeight);
+            
+            if(tabRect.contains(x, y)) {
+                shopCategory = i;
+                return;
+            }
+        }
+        
+        // Check buy buttons
+        ArrayList<ShopItem> categoryItems = getShopItemsByCategory(shopCategory);
+        for(int i = 0; i < shopItemRects.size(); i++) {
+            if(i < categoryItems.size() && shopItemRects.get(i).contains(x, y)) {
+                purchaseItem(categoryItems.get(i));
+                return;
+            }
+        }
+    }
+
+    private void purchaseItem(ShopItem item) {
+        if(gp.player.coins >= item.price) {
+            // Deduct coins
+            gp.player.coins -= item.price;
+            
+            // Add item to inventory
+            // boolean added = gp.player.inventory.addItems(item.item);
+            
+            // if(added) {
+                showPurchaseSuccess = true;
+                messageTimer = System.currentTimeMillis();
+            // } else {
+                // Refund if inventory is full
+                // gp.player.coins += item.price;
+                // showInsufficientFunds = true;
+                // messageTimer = System.currentTimeMillis();
+            // }
+        } else {
+            showInsufficientFunds = true;
+            messageTimer = System.currentTimeMillis();
+        }
+    }
 }
+

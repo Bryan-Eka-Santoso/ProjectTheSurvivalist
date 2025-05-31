@@ -170,6 +170,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         // TODO Auto-generated method stub
         int code = e.getKeyCode();
         gp.player.lightUpdated = true;
+        
         if (gp.gameState == gp.GAME_OVER_STATE) {
             if (code == KeyEvent.VK_R) RPressed();
             if (code == KeyEvent.VK_Q) QPressed();
@@ -896,8 +897,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.currentMap = 0;
                 gp.player.getPlayerImg();
                 gp.tileM.getTileImage();
-                gp.player.worldY = 55 * gp.TILE_SIZE;
-                gp.player.worldX = 55 * gp.TILE_SIZE;
+                gp.player.worldY = 41 * gp.TILE_SIZE + 10;
+                gp.player.worldX = 40 * gp.TILE_SIZE + 10;
                 gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
         }
@@ -907,4 +908,5 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         sound.setFile(i);
         sound.play();
     }
+    
 }

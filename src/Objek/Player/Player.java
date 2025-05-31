@@ -67,8 +67,9 @@ public class Player {
     private static final long THIRST_DECREASE_INTERVAL = 300; // 5 detik diitung dari frame
     int hungerCounter = 0;
     int thirstCounter = 0;
+    public int coins = 0;
     private int poisonCounter = 0;
-     private boolean isDehydrated = false;
+    private boolean isDehydrated = false;
     private int dehydrationCounter = 0;
     private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
 
