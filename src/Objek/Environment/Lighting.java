@@ -8,7 +8,17 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
+import Objek.Animal.Chicken;
+import Objek.Animal.Cow;
+import Objek.Animal.Pig;
+import Objek.Animal.Sheep;
 import Objek.Controller.GamePanel;
+import Objek.Items.Buildings.Buildings;
+import Objek.Items.Buildings.CowCage;
+import Objek.Items.Buildings.KandangAyam;
+import Objek.Items.Buildings.PigCage;
+import Objek.Items.Buildings.SheepCage;
 import Objek.Items.Unstackable.Lantern;
 
 public class Lighting {
@@ -134,6 +144,7 @@ public class Lighting {
                     }
                 }
                 dayState = DAY;
+                resetAnimalStatus();
             }
         }
         if (gp.currentMap == 2) {
@@ -151,6 +162,38 @@ public class Lighting {
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, filterAlpha));
         g2.drawImage(darknessFilter, 0, 0, null);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));   
+    }
+    public void resetAnimalStatus(){
+       for(Buildings building : gp.buildings) {
+            if(building instanceof KandangAyam) {
+                KandangAyam kandang = (KandangAyam)building;
+                for(Chicken chicken : kandang.chickensInCage) {
+                    chicken.setReadyBreeding(true);
+                    chicken.setReadyGetItem(true);
+                }
+            }
+            else if(building instanceof CowCage) {
+                CowCage kandang = (CowCage)building;
+                for(Cow cow : kandang.cowsInCage) {
+                    cow.setReadyBreeding(true);
+                    cow.setReadyGetItem(true);
+                }
+            }
+            else if(building instanceof SheepCage) {
+                SheepCage kandang = (SheepCage)building;
+                for(Sheep sheep : kandang.sheepsInCage) {
+                    sheep.setReadyBreeding(true);
+                    sheep.setReadyGetItem(true);
+                }
+            }
+            else if(building instanceof PigCage) {
+                PigCage kandang = (PigCage)building;
+                for(Pig pig : kandang.pigsInCage) {
+                    pig.setReadyBreeding(true);
+                    pig.setReadyGetItem(true);
+                }
+            }
+        }
     }
 }
 

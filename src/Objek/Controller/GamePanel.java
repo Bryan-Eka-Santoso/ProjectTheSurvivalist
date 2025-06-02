@@ -113,11 +113,6 @@ public class GamePanel extends JPanel implements Runnable {
         eManager.setup();
     }
 
-    public void handleKandangInteraction(Kandang kandang) {
-        currentKandang = kandang;
-        gameState = KANDANG_STATE;
-    }
-
     public void setupGame() {
         gameState = PLAY_STATE;
         playMusic(7);
@@ -242,6 +237,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new CoconutSeeds(2));
         player.inventory.addItems(new Bread());
         player.inventory.addItems(new Pickaxe("pickaxe", 50, 20));
+        player.inventory.addItems(new PigCage(this));
    
         
         Buildings shop = new Shop(this, 1);

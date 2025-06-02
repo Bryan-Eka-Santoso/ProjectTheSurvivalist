@@ -16,8 +16,6 @@ import java.awt.Color;
 
 public class Chicken extends TameAnimal {
     Random random = new Random();
-    boolean readyGetItem;
-    boolean readyBreeding;
     private Rectangle upHitbox;
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
@@ -33,8 +31,6 @@ public class Chicken extends TameAnimal {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
-        this.readyBreeding = true;
-        this.readyGetItem = true;
         this.actionMoveDelay = random.nextInt(91) + 30;
         upHitbox = new Rectangle(2, 1, 26, 40);   
         downHitbox = new Rectangle(2, 1, 26, 40);   
@@ -43,7 +39,6 @@ public class Chicken extends TameAnimal {
         this.solidArea = downHitbox; 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
-        readyBreeding = true;
         this.grabOffsetX = 0;
         this.grabOffsetY = -10;
         this.hp = 60;

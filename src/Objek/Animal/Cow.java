@@ -23,8 +23,6 @@ public class Cow extends TameAnimal {
     private int speed = 8; 
 
     Random random = new Random();
-    boolean readyGetItem;
-    boolean readyBreeding;
     public int actionLockCounter = 0;
     private static final int COW_WIDTH = 128;
     private static final int COW_HEIGHT = 128;
@@ -41,8 +39,6 @@ public class Cow extends TameAnimal {
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
-        this.readyBreeding = true;
-        this.readyGetItem = true;
         this.grabOffsetX = 0;
         this.grabOffsetY = -40;
         this.hp = 100;

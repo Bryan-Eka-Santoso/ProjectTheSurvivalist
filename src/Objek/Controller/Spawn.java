@@ -78,13 +78,19 @@ public class Spawn {
         int maxAttempts = 1000; // Prevent infinite loop
         int spawnedCount = 0;
         int validTiles = 18; // Assuming grass tile number is 18
+        int playerSpawnX = 40; 
+        int playerSpawnY = 44; 
         
         while (spawnedCount < count && attempts < maxAttempts) {
         
             int x = (int)(Math.random() * (gp.MAX_WORLD_COL ));
             int y = (int)(Math.random() * (gp.MAX_WORLD_ROW ));
             Point pos = new Point(x, y);
-
+            
+            if (Math.abs(x - playerSpawnX) < 3 && Math.abs(y - playerSpawnY) < 3) {
+                attempts++;
+                continue;
+            }
             // Check if position is already used
             if (usedPositions.contains(pos)) {
                 attempts++;
