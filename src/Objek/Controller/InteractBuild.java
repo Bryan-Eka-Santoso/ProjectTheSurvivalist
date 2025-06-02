@@ -90,19 +90,22 @@ public class InteractBuild {
             gp.eManager.lighting.setLightSource(); 
             gp.player.buildingIndex = -1;
         }
-        else if (building instanceof Table) {
-            // Open shop UI when player interacts with table
+        else if (building instanceof ItemTable) {
             gp.gameState = gp.SHOP_STATE;
-            System.out.println("Game state set to: " + gp.gameState + ", SHOP_STATE is: " + gp.SHOP_STATE);
             
             if (gp.ui.shopItems == null) {
                 gp.ui.shopItems = new ArrayList<>();
-                System.out.println("Created new shopItems ArrayList");
             }
             if (gp.ui.shopItems.isEmpty()) {
                 initShopItems();
             }
-            System.out.println("Opening shop menu with " + gp.ui.shopItems.size() + " items");
+        }
+        else if(building instanceof EffectTable){
+            gp.gameState = gp.EFFECT_STATE;
+
+            if (gp.ui.effectItems.isEmpty()) {
+                initEffectItems();
+            }
         }
     }
 
@@ -112,7 +115,6 @@ public class InteractBuild {
             // gp.ui.shopItems.add(new ShopItem(new Sword(1), 100, 0));
             // gp.ui.shopItems.add(new ShopItem(new Axe(1), 120, 0));
             // gp.ui.shopItems.add(new ShopItem(new Pickaxe(1), 150, 0));
-            gp.ui.shopItems.add(new ShopItem(new FishingRod(), 80, 0));
             
             // Armor (category 1)
             // gp.ui.shopItems.add(new ShopItem(new LeatherHelmet(), 60, 1));
@@ -133,12 +135,37 @@ public class InteractBuild {
             
             // Fishing (category 4)
             gp.ui.shopItems.add(new ShopItem(new FishingRod(), 100, 4));
-            gp.ui.shopItems.add(new ShopItem(new Bucket(1, gp), 50, 4));
             
-            System.out.println("Shop items initialized successfully");
         } catch (Exception e) {
             System.err.println("Error initializing shop items: " + e.getMessage());
             e.printStackTrace();
         }
     }
+    public void initEffectItems() {
+    try {
+        // Repair (kategori 0)
+        gp.ui.effectItems.add(new ShopEffect("Repair All", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 150, 1));
+        gp.ui.effectItems.add(new ShopEffect("Repair Weapon", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 50, 1));
+        gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 50, 1));
+        
+        // Upgrade (kategori 1)
+        gp.ui.effectItems.add(new ShopEffect("Upgrade Weapon", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 200, 2));
+        gp.ui.effectItems.add(new ShopEffect("Upgrade Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 200, 2));
+        gp.ui.effectItems.add(new ShopEffect("Upgrade Bag", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 300, 2));
+        
+        // Effect (kategori 2)
+        gp.ui.effectItems.add(new ShopEffect("Health Boost", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 75, 3));
+        gp.ui.effectItems.add(new ShopEffect("Speed Boost", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 75, 3));
+        gp.ui.effectItems.add(new ShopEffect("Night Vision", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 100, 3));
+        
+        // Cheat (kategori 3)
+        gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
+        gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));
+        
+        System.out.println("Effect items initialized successfully");
+    } catch (Exception e) {
+        System.err.println("Error initializing effect items: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
 }

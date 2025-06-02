@@ -16,7 +16,9 @@ public class MouseHandler extends MouseAdapter {
         if(gp.gameState == gp.SHOP_STATE) {
             gp.ui.handleShopClick(e.getX(), e.getY());
         }
-        
+        if(gp.gameState == gp.EFFECT_STATE) {
+            gp.ui.handleEffectClick(e.getX(), e.getY());
+        }
         // Other mouse click handlers...
     }
     

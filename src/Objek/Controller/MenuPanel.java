@@ -109,7 +109,5 @@ public class MenuPanel extends JPanel {
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-
-        // 
     }
 }
