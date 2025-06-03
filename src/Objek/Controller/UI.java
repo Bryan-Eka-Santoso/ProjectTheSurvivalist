@@ -32,8 +32,6 @@ import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Items.Unstackable.Arsenals.*;
 import javax.imageio.ImageIO;
 
-import org.w3c.dom.events.MouseEvent;
-
 public class UI {
     GamePanel gp;
     Graphics2D g2;

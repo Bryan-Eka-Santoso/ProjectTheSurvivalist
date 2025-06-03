@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.awt.Point;
 import javax.imageio.ImageIO;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.Bucket;
 import Objek.Items.StackableItem.Foods.Bread;
 import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Potato;
@@ -15,11 +14,6 @@ import Objek.Items.StackableItem.Materials.Stone;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
 import Objek.Items.StackableItem.Seeds.Seeds;
 import Objek.Items.Unstackable.FishingRod;
-import Objek.Items.Unstackable.Arsenals.Axe;
-import Objek.Items.Unstackable.Arsenals.Pickaxe;
-import Objek.Items.Unstackable.Arsenals.Sword;
-import Objek.Items.*;
-import Objek.Controller.ShopItem;
 
 public class InteractBuild {
     GamePanel gp;

@@ -89,8 +89,6 @@ public class MenuPanel extends JPanel {
         gamePanel.setFocusable(true);
         gamePanel.requestFocusInWindow();
 
-        window.pack();
-
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
@@ -100,12 +98,9 @@ public class MenuPanel extends JPanel {
 
     public void showMenu() {
         GuidePanel guidePanel = new GuidePanel();
-        GamePanel gamePanel = new GamePanel();
         window.setContentPane(guidePanel);
         guidePanel.setFocusable(true);
         guidePanel.requestFocusInWindow();
-
-        window.pack();
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
