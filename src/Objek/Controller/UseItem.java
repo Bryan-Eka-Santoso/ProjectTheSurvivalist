@@ -201,6 +201,7 @@ public class UseItem {
                 Arsenal arsenal = (Arsenal) selectedItem;
                 player.isCutting = true;
                 player.cutting();
+                
                 if (player.plantIndex != -1 && gp.currentMap == 0) {
                     Plant plant = player.gp.plants.get(player.plantIndex);
 
@@ -351,8 +352,21 @@ public class UseItem {
                             player.monsterIndex = -1;
                         }
                     }
-                } else if (player.buildingIndex != -1 && !(player.gp.buildings.get(player.buildingIndex) instanceof Shop) && !(player.gp.buildings.get(player.buildingIndex) instanceof Cave)) {
+                } else if (player.buildingIndex != -1) {
                     Buildings building = player.gp.buildings.get(player.buildingIndex);
+                    if (building instanceof Shop) {
+                        System.out.println("Using arsenal on shop is not allowed!");
+                        return;
+                    } 
+                    else if (building instanceof Cave) {
+                        System.out.println("Using arsenal on cave is not allowed!");
+                        return;
+                    }
+                    else if (gp.currentMap == 3) {
+                        System.out.println("Cannot destroy buildings in this area!");
+                        return;
+                    }
+
                     building.hp -= arsenal.damage;
                     System.out.println("Using arsenal on building: " + arsenal.name);
                     System.out.println("Building HP: " + building.hp);
@@ -484,12 +498,6 @@ public class UseItem {
                             player.oreIndex = -1;
                         }
                     }
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Shop) {
-                    System.out.println("Using arsenal on shop is not allowed!");
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Shop) {
-                    System.out.println("Using arsenal on shop is not allowed!");
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Cave) {
-                    System.out.println("Using arsenal on cave is not allowed!");
                 } else {
                     System.out.println("No plant or animal selected to use the arsenal on!");
                 }
