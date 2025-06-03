@@ -6,6 +6,14 @@ import java.util.ArrayList;
 import java.awt.Point;
 import javax.imageio.ImageIO;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Foods.Bread;
+import Objek.Items.StackableItem.Foods.Carrot;
+import Objek.Items.StackableItem.Foods.RawFoods.Potato;
+import Objek.Items.StackableItem.Materials.Metal;
+import Objek.Items.StackableItem.Materials.Stone;
+import Objek.Items.StackableItem.Materials.Fuels.Wood;
+import Objek.Items.StackableItem.Seeds.Seeds;
+import Objek.Items.Unstackable.FishingRod;
 
 public class InteractBuild {
     GamePanel gp;
@@ -16,17 +24,23 @@ public class InteractBuild {
     }
 
     public void interact() {
+        if (gp.player.buildingIndex < 0 || gp.player.buildingIndex >= gp.buildings.size()) {
+            System.out.println("Invalid building index: " + gp.player.buildingIndex);
+            return;
+        }
+        
         Buildings building = (Buildings) gp.buildings.get(gp.player.buildingIndex);
+        
         if (building instanceof Chest) {
             gp.gameState = gp.OPEN_CHEST_STATE;
         }
-        if (building instanceof CraftingTable) {
+        else if (building instanceof CraftingTable) {
             gp.gameState = gp.OPEN_CRAFTINGTABLE_STATE;
         }
-        if (building instanceof Furnace) {
+        else if (building instanceof Furnace) {
             gp.gameState = gp.OPEN_SMELTER_STATE;
         }
-        if (building instanceof Bed) {
+        else if (building instanceof Bed) {
             if (gp.eManager.lighting.dayState == 2) {
                 gp.eManager.lighting.dayCounter = 580;
                 gp.player.isSleeping = true;
@@ -43,7 +57,7 @@ public class InteractBuild {
                 System.out.println("Masih pagi kerja");
             }
         }
-        if(building instanceof Cave) {
+        else if (building instanceof Cave) {
             ArrayList<Point> usedPositions = new ArrayList<>();
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
             gp.currentMap = 2;
@@ -55,12 +69,11 @@ public class InteractBuild {
             gp.isCave = !gp.isCave;
             gp.eManager.lighting.setLightSource(); 
             gp.player.buildingIndex = -1;
-            gp.sp.spawnMonster("bat", 5, usedPositions);
-            gp.sp.spawnMonster("golem",3, usedPositions);
+            gp.sp.spawnMonster("bat", 10, usedPositions);
+            gp.sp.spawnMonster("golem",5, usedPositions);
             gp.checkAndRespawnOres();
-            
         }
-        if(building instanceof Shop) {
+        else if (building instanceof Shop) {
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);
             gp.currentMap = 3;
             gp.animals.clear();
@@ -71,5 +84,82 @@ public class InteractBuild {
             gp.eManager.lighting.setLightSource(); 
             gp.player.buildingIndex = -1;
         }
+        else if (building instanceof ItemTable) {
+            gp.gameState = gp.SHOP_STATE;
+            
+            if (gp.ui.shopItems == null) {
+                gp.ui.shopItems = new ArrayList<>();
+            }
+            if (gp.ui.shopItems.isEmpty()) {
+                initShopItems();
+            }
+        }
+        else if(building instanceof EffectTable){
+            gp.gameState = gp.EFFECT_STATE;
+
+            if (gp.ui.effectItems.isEmpty()) {
+                initEffectItems();
+            }
+        }
     }
+
+    public void initShopItems() {
+        try {
+            // Weapons (category 0)
+            // gp.ui.shopItems.add(new ShopItem(new Sword(1), 100, 0));
+            // gp.ui.shopItems.add(new ShopItem(new Axe(1), 120, 0));
+            // gp.ui.shopItems.add(new ShopItem(new Pickaxe(1), 150, 0));
+            
+            // Armor (category 1)
+            // gp.ui.shopItems.add(new ShopItem(new LeatherHelmet(), 60, 1));
+            // gp.ui.shopItems.add(new ShopItem(new LeatherChestplate(), 100, 1));
+            // gp.ui.shopItems.add(new ShopItem(new IronHelmet(), 150, 1));
+            // gp.ui.shopItems.add(new ShopItem(new IronChestplate(), 200, 1));
+            
+            // Food (category 2)
+            gp.ui.shopItems.add(new ShopItem(new Bread(2), 20, 2));
+            gp.ui.shopItems.add(new ShopItem(new Carrot(5), 25, 2));
+            gp.ui.shopItems.add(new ShopItem(new Potato(4), 20, 2));
+            
+            // Materials (category 3)
+            gp.ui.shopItems.add(new ShopItem(new Wood(10), 30, 3));
+            gp.ui.shopItems.add(new ShopItem(new Stone(10), 40, 3));
+            gp.ui.shopItems.add(new ShopItem(new Metal(5), 70, 3));
+            gp.ui.shopItems.add(new ShopItem(new Seeds(3), 15, 3));
+            
+            // Fishing (category 4)
+            gp.ui.shopItems.add(new ShopItem(new FishingRod(), 100, 4));
+            
+        } catch (Exception e) {
+            System.err.println("Error initializing shop items: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    public void initEffectItems() {
+    try {
+        // Repair (kategori 0)
+        gp.ui.effectItems.add(new ShopEffect("Repair All", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 150, 1));
+        gp.ui.effectItems.add(new ShopEffect("Repair Weapon", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 50, 1));
+        gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 50, 1));
+        
+        // Upgrade (kategori 1)
+        gp.ui.effectItems.add(new ShopEffect("Upgrade Weapon", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 200, 2));
+        gp.ui.effectItems.add(new ShopEffect("Upgrade Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 200, 2));
+        gp.ui.effectItems.add(new ShopEffect("Upgrade Bag", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 300, 2));
+        
+        // Effect (kategori 2)
+        gp.ui.effectItems.add(new ShopEffect("Health Boost", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 75, 3));
+        gp.ui.effectItems.add(new ShopEffect("Speed Boost", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 75, 3));
+        gp.ui.effectItems.add(new ShopEffect("Night Vision", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 100, 3));
+        
+        // Cheat (kategori 3)
+        gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
+        gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));
+        
+        System.out.println("Effect items initialized successfully");
+    } catch (Exception e) {
+        System.err.println("Error initializing effect items: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
 }

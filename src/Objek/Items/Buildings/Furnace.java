@@ -2,7 +2,9 @@ package Objek.Items.Buildings;
 
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
+import Objek.Items.StackableItem.Bucket;
 import Objek.Items.StackableItem.Foods.Bacon;
+import Objek.Items.StackableItem.Foods.BakedPotato;
 import Objek.Items.StackableItem.Foods.CookedArwana;
 import Objek.Items.StackableItem.Foods.CookedBelida;
 import Objek.Items.StackableItem.Foods.CookedChicken;
@@ -54,12 +56,10 @@ public class Furnace extends Buildings {
                     if (rawMaterial[0].currentStack == 0) {
                         rawMaterial[0] = null;
                         System.out.println("No more " + cookedMaterial[0].name + " left");
-                        return;
                     }
                     if (fuelMaterial[0].currentStack == 0) {
                         fuelMaterial[0] = null;
                         System.out.println("No more " + cookedMaterial[0].name + " left");
-                        return;
                     }
                     System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                 } else if (result != null && cookedMaterial[0] != null) {
@@ -71,12 +71,10 @@ public class Furnace extends Buildings {
                             if (rawMaterial[0].currentStack == 0) {
                                 rawMaterial[0] = null;
                                 System.out.println("No more " + cookedMaterial[0].name + " left");
-                                return;
                             }
                             if (fuelMaterial[0].currentStack == 0) {
                                 fuelMaterial[0] = null;
                                 System.out.println("No more " + cookedMaterial[0].name + " left");
-                                return;
                             }
                             System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                         } else {
@@ -98,14 +96,17 @@ public class Furnace extends Buildings {
 
     private LinkedHashMap<String, Item> fillRecipes() {
         LinkedHashMap<String, Item> r = new LinkedHashMap<>();
+        
         r.put("Raw Arwana", new CookedArwana(1));
         r.put("Raw Belida", new CookedBelida(1));
         r.put("Raw Meat", new Steak(1));
-        r.put("Raw Chicken", new CookedChicken(1));
+        r.put("Raw Chicken", new CookedChicken(2));
         r.put("Raw Mutton", new CookedMutton(1));
         r.put("Raw Pork", new Bacon(3));
+        r.put("Potato", new BakedPotato(1));
         r.put("Metal", new MetalIngot(1));
         r.put("Gold", new GoldIngot(1));
+        r.put("Water Bucket", Bucket.getCleansedWaterBucket(gp));
 
         return r;
     }

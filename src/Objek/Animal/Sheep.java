@@ -19,8 +19,6 @@ public class Sheep extends TameAnimal {
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
     private Rectangle rightHitbox;
-    boolean readyGetItem;
-    boolean readyBreeding;
     private int actionMoveCounter = 0;
     private int actionMoveDelay;
     private int speed = 8; 
@@ -42,8 +40,6 @@ public class Sheep extends TameAnimal {
         this.grabOffsetX = 0;
         this.grabOffsetY = -40;
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
-        this.readyBreeding = true;
-        this.readyGetItem = true;
         
         this.hp = 100;
         try {

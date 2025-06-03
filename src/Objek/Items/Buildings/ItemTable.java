@@ -7,9 +7,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 
-public class Table extends Buildings {
-    public Table(GamePanel gp, int currentStack, int buildingMap) {
-        super("Table", 10, currentStack, gp, new Rectangle(0, 0, 89, 45), 89, 45, buildingMap);
+public class ItemTable extends Buildings {
+    public ItemTable(GamePanel gp, int currentStack, int buildingMap) {
+        super("ItemTable", 10, currentStack, gp, new Rectangle(0, 0, 89, 45), 89, 45, buildingMap);
+        isBreakable = false;
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/table.png"));
         } catch (IOException e) {

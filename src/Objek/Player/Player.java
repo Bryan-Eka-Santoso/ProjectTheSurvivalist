@@ -15,6 +15,7 @@ import Objek.Items.Unstackable.Armor.Boots.Boots;
 import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
 import Objek.Items.Unstackable.Armor.Helmet.Helmet;
 import Objek.Items.Unstackable.Armor.Leggings.Leggings;
+import Objek.Plant.Bush;
 import Objek.Plant.Plant;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -65,15 +66,18 @@ public class Player {
     private static final int POISON_DAMAGE = 1;
     private static final long HUNGER_DECREASE_INTERVAL = 420; // 7 detik diitung dari frame
     private static final long THIRST_DECREASE_INTERVAL = 300; // 5 detik diitung dari frame
+    private static final long HEALTH_REGEN_INTERVAL = 180; // 3 detik diitung dari frame
+    private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
     int hungerCounter = 0;
     int thirstCounter = 0;
+    public int coins = 0;
+    int healthCounter = 0;
     private int poisonCounter = 0;
-     private boolean isDehydrated = false;
+    private boolean isDehydrated = false;
     private int dehydrationCounter = 0;
-    private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
 
 
-    public Player(String name, int level, Crafting recipe, GamePanel gp, KeyHandler keyH) {
+    public Player(String name, int level, GamePanel gp, KeyHandler keyH) {
         this.name = name;
         this.worldX = gp.TILE_SIZE * gp.SpawnX;
         this.worldY = gp.TILE_SIZE * gp.SpawnY;
@@ -101,7 +105,7 @@ public class Player {
         System.out.println(gp.SCREEN_WIDTH + " " + gp.SCREEN_HEIGHT);
         SCREEN_X = gp.SCREEN_WIDTH / 2 - gp.TILE_SIZE / 2;
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - gp.TILE_SIZE / 2;
-        this.recipe = recipe;
+        this.recipe = new Crafting(gp);
         interactObj = new UseItem(gp);
         interactBuild = new InteractBuild(gp);
         this.isCutting = false;
@@ -285,14 +289,26 @@ public class Player {
                 hungerCounter = 0;
             }
             if(thirstCounter >= THIRST_DECREASE_INTERVAL) {
-                thirst--;
                 if(thirst > 0) {
+                    thirst--;
                 }
                 thirstCounter = 0;
             }
         }
+
+         if (this.hunger >= 75 || this.thirst >= 75) {
+            healthCounter++;
+            if (healthCounter >= HEALTH_REGEN_INTERVAL) {
+                if (health < maxHealth) {
+                    health++;
+                }
+                healthCounter = 0;
+            }
+        }
+
         thirstCounter++;
         hungerCounter++;
+        
         if(isPoisoned) {
             handlePoisonEffect();
         }
@@ -569,6 +585,9 @@ public class Player {
                 }
             }
             for (Plant other : gp.plants) {
+                if (other instanceof Bush){
+                    continue;
+                }
                 if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
                 Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
                     canPlace = false;

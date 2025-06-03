@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-public class KandangAyam extends Kandang{
+public class KandangAyam extends Kandang {
    
     private static final int MAX_CAPACITY = 10;
     public ArrayList<Chicken> chickensInCage;

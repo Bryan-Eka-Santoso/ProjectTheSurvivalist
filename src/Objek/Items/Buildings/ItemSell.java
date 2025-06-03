@@ -7,12 +7,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 
-public class LemariAtas extends Buildings {
-    public LemariAtas(GamePanel gp, int currentStack, int buildingMap) {
-        super("LemariAtas", 10, currentStack, gp, new Rectangle(0, 0, 450, 50), 450, 50, buildingMap);
+public class ItemSell extends Buildings {
+    public ItemSell(GamePanel gp, int currentStack, int buildingMap) {
+        super("ItemSell", 10, currentStack, gp, new Rectangle(0, 0, 41, 44), 41, 44, buildingMap);
         isBreakable = false;
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/lemariatas.png"));
+            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/character.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

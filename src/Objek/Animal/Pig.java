@@ -7,7 +7,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
-import Objek.Items.StackableItem.Bacon;
+import Objek.Items.StackableItem.Foods.Bacon;
 import Objek.Player.Player;
 
 
@@ -17,8 +17,7 @@ import java.awt.Color;
 
 public class Pig extends TameAnimal{
     Random random = new Random();
-    boolean readyGetItem;
-    boolean readyBreeding;
+
     private Rectangle upHitbox;
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
@@ -42,8 +41,6 @@ public class Pig extends TameAnimal{
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
-        this.readyBreeding = true;
-        this.readyGetItem = true;
         this.grabOffsetX = 0;
         this.grabOffsetY = -40;
         this.hp = 100;
@@ -250,7 +247,7 @@ public class Pig extends TameAnimal{
 
     public void getItem(Player player) {
         if(isReadyGetItem()) {
-            player.inventory.addItems(new Bacon("Bacon",10,1));
+            player.inventory.addItems(new Bacon(1));
             setReadyGetItem(false);
         }
     }

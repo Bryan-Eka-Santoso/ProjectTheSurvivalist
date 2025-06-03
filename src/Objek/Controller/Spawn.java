@@ -9,6 +9,7 @@ import Objek.Animal.Sheep;
 import Objek.Animal.Wolf;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
+import Objek.Fish.Golden;
 import Objek.Ore.CrystalOre;
 import Objek.Ore.GemOre;
 import Objek.Ore.GoldOre;
@@ -86,13 +87,19 @@ public class Spawn {
         int maxAttempts = 1000; // Prevent infinite loop
         int spawnedCount = 0;
         int validTiles = 18; // Assuming grass tile number is 18
+        int playerSpawnX = 40; 
+        int playerSpawnY = 44; 
         
         while (spawnedCount < count && attempts < maxAttempts) {
         
             int x = (int)(Math.random() * (gp.MAX_WORLD_COL ));
             int y = (int)(Math.random() * (gp.MAX_WORLD_ROW ));
             Point pos = new Point(x, y);
-
+            
+            if (Math.abs(x - playerSpawnX) < 3 && Math.abs(y - playerSpawnY) < 3) {
+                attempts++;
+                continue;
+            }
             // Check if position is already used
             if (usedPositions.contains(pos)) {
                 attempts++;
@@ -303,8 +310,8 @@ public class Spawn {
         
         while (spawnedCount < count && attempts < maxAttempts) {
         
-            int x = (int)(Math.random() * (gp.MAX_WORLD_COL ));
-            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW ));
+            int x = (int)(Math.random() * (gp.MAX_WORLD_COL));
+            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW));
             Point pos = new Point(x, y);
             
             if (usedPositions.contains(pos)) {
@@ -327,10 +334,13 @@ public class Spawn {
 
             switch (animalType.toLowerCase()) {
                 case "arwana":
-                    gp.fish.add(new Arwana("arwana", 0, 9, x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    gp.fish.add(new Arwana("arwana", 0, 15, x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
                     break;
                 case "belida":
-                    gp.fish.add(new Belida("belida", 0, 7, x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    gp.fish.add(new Belida("belida", 0, 20, x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    break;
+                case "golden":
+                    gp.fish.add(new Golden("golden", 0, 30, x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
                     break;
             }
             

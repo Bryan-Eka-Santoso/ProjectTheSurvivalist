@@ -15,13 +15,12 @@ import Objek.Enemy.Monster;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
-import Objek.Items.StackableItem.Foods.Berries;
 import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Coconut;
 import Objek.Items.StackableItem.Foods.Food;
 import Objek.Items.StackableItem.Foods.Guava;
 import Objek.Items.StackableItem.Foods.Mango;
-import Objek.Items.StackableItem.Foods.Potato;
+import Objek.Items.StackableItem.Foods.RawFoods.Potato;
 import Objek.Items.StackableItem.Foods.RawFoods.RawChicken;
 import Objek.Items.StackableItem.Foods.RawFoods.RawMeat;
 import Objek.Items.StackableItem.Foods.RawFoods.RawMutton;
@@ -37,6 +36,7 @@ import Objek.Items.StackableItem.Materials.MetalIngot;
 import Objek.Items.StackableItem.Materials.Stone;
 import Objek.Items.StackableItem.Materials.Wheat;
 import Objek.Items.StackableItem.Materials.WolfHide;
+import Objek.Items.StackableItem.Materials.Wool;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
@@ -76,38 +76,60 @@ public class UseItem {
     public void useItem(Item selectedItem, Player player) {
         if (selectedItem != null && selectedItem.name != null) {
             if (selectedItem instanceof Helmet) {
-                gp.player.helmet = (Helmet) selectedItem.clone();
-                player.inventory.removeItem(selectedItem, 1); // Remove helmet from inventory
+                if (gp.player.helmet != null){
+                    Helmet tempHelmet = gp.player.helmet;
+                    gp.player.helmet = (Helmet) selectedItem.clone();
+                    player.inventory.removeItem(selectedItem, 1);
+                    gp.player.inventory.slots[gp.ui.selectedIndex] = tempHelmet.clone(); // Update selected slot
+                } else {
+                    gp.player.helmet = (Helmet) selectedItem.clone();
+                    player.inventory.removeItem(selectedItem, 1); // Remove helmet from inventory
+                }
                 System.out.println("Equipping helmet: " + selectedItem.name);
 
             } else if (selectedItem instanceof Chestplate){
-                gp.player.chestplate = (Chestplate) selectedItem.clone();
-                player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
+                if (gp.player.chestplate != null){
+                    Chestplate tempChestplate = gp.player.chestplate;
+                    gp.player.chestplate = (Chestplate) selectedItem.clone();
+                    player.inventory.removeItem(selectedItem, 1);
+                    gp.player.inventory.slots[gp.ui.selectedIndex] = tempChestplate.clone(); // Update selected slot
+                } else {
+                    gp.player.chestplate = (Chestplate) selectedItem.clone();
+                    player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
+                }
                 System.out.println("Equipping chestplate: " + selectedItem.name);
 
             } else if (selectedItem instanceof Leggings){
-                gp.player.leggings = (Leggings) selectedItem.clone();
-                player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
-                System.out.println("Equipping chestplate: " + selectedItem.name);
+                if (gp.player.leggings != null){
+                    Leggings tempLeggings = gp.player.leggings;
+                    gp.player.leggings = (Leggings) selectedItem.clone();
+                    player.inventory.removeItem(selectedItem, 1);
+                    gp.player.inventory.slots[gp.ui.selectedIndex] = tempLeggings.clone(); // Update selected slot
+                } else {
+                    gp.player.leggings = (Leggings) selectedItem.clone();
+                    player.inventory.removeItem(selectedItem, 1); // Remove leggings from inventory
+                }
+                System.out.println("Equipping leggings: " + selectedItem.name);
 
             } else if (selectedItem instanceof Boots){
-                gp.player.boots = (Boots) selectedItem.clone();
-                player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
-                System.out.println("Equipping chestplate: " + selectedItem.name);
+                if (gp.player.boots != null){
+                    Boots tempBoots = gp.player.boots;
+                    gp.player.boots = (Boots) selectedItem.clone();
+                    player.inventory.removeItem(selectedItem, 1);
+                    gp.player.inventory.slots[gp.ui.selectedIndex] = tempBoots.clone(); // Update selected slot
+                } else {
+                    gp.player.boots = (Boots) selectedItem.clone();
+                    player.inventory.removeItem(selectedItem, 1); // Remove boots from inventory
+                }
+                System.out.println("Equipping boots: " + selectedItem.name);
 
             } else if (selectedItem instanceof Bucket) { 
                 Bucket bucket = (Bucket) selectedItem;
-                if (gp.player.isNearWater()) {
-                    Bucket waterBucket = new Bucket(1, gp);
-                    waterBucket.fillWater();
-                    gp.player.inventory.addItems(waterBucket); // Add water bucket to inventory
-                    gp.player.inventory.removeItem(bucket, 1); // Remove empty bucket from inventory
-                } else if (bucket.status.equals("water")) {
-                    System.out.println("Drinking water from the bucket.");
+                if (!bucket.status.equals("empty")) {
+                    System.out.println("Drinking from the bucket.");
                     bucket.drink();
-                } else if (bucket.status.equals("milk")) {
-                    System.out.println("Drinking milk from the bucket.");
-                    bucket.drink();
+                } else if (gp.player.isNearWater()) {
+                    bucket.fillWater();
                 } else {
                     System.out.println("Bucket is already filled with " + bucket.status + ".");
                 }
@@ -191,7 +213,7 @@ public class UseItem {
             } else if (selectedItem instanceof Food) {
                 Food food = (Food) selectedItem;
                 System.out.println("Using food: " + food.name);
-                food.eat(player); // 
+                food.eat(player);
                 playSE(1);
                 selectedItem.currentStack--;
                 if (selectedItem.currentStack <= 0) {
@@ -201,6 +223,7 @@ public class UseItem {
                 Arsenal arsenal = (Arsenal) selectedItem;
                 player.isCutting = true;
                 player.cutting();
+                
                 if (player.plantIndex != -1 && gp.currentMap == 0) {
                     Plant plant = player.gp.plants.get(player.plantIndex);
 
@@ -232,7 +255,7 @@ public class UseItem {
                         } else if (plant instanceof PalmTree) {
                             player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Coconut(rand.nextInt(2) + 1), gp));
                         } else if (plant instanceof BerryBush) {
-                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, Berries.createBerries(rand.nextInt(3) + 1, rand.nextInt(2) + 1), gp));
+                            // player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, Berries.createBerries(rand.nextInt(3) + 1, rand.nextInt(2) + 1), gp));
                         }
 
                         if (plant instanceof Tree) {
@@ -249,12 +272,12 @@ public class UseItem {
                     animal.hp -= arsenal.damage;
                     int damage = arsenal.damage;
 
-                    if (selectedItem instanceof Axe || selectedItem instanceof Pickaxe){
-                        System.out.println("Using axe/pickaxe: " + arsenal.name);
+                    if (selectedItem instanceof Pickaxe){
+                        System.out.println("Using pickaxe: " + arsenal.name);
                         arsenal.durability -= 3;
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     } else {
-                        System.out.println("Using sword/club: " + arsenal.name);
+                        System.out.println("Using axe/sword/club: " + arsenal.name);
                         arsenal.durability--;
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     }
@@ -286,7 +309,8 @@ public class UseItem {
                         sheep.hp -= damage;
                         System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
                         if(sheep.hp <= 0) {
-                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMutton(1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX - 15, animal.worldY, new RawMutton(1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX + 15, animal.worldY, new Wool(rand.nextInt(2) + 1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.gainExp(rand.nextInt(10) + 8);
                             player.animalIndex = -1;
@@ -306,7 +330,6 @@ public class UseItem {
                         wolf.hp -= damage;
                         System.out.println("Hit wolf: " + wolf.hp + "/" + 100);
                         if(wolf.hp <= 0) {
-                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
                             if (rand.nextInt(10) < 2) {
                                 player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
@@ -321,12 +344,12 @@ public class UseItem {
                     monster.hp -= arsenal.damage;
                     int damage = arsenal.damage;
 
-                    if (selectedItem instanceof Axe || selectedItem instanceof Pickaxe){
-                        System.out.println("Using axe/pickaxe: " + arsenal.name);
+                    if (selectedItem instanceof Pickaxe){
+                        System.out.println("Using pickaxe: " + arsenal.name);
                         arsenal.durability -= 3;
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     } else {
-                        System.out.println("Using sword/club: " + arsenal.name);
+                        System.out.println("Using axe/sword/club: " + arsenal.name);
                         arsenal.durability--;
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     }
@@ -335,7 +358,7 @@ public class UseItem {
                         bat.hp -= damage;
                         System.out.println("Hit bat: " + bat.hp + "/" + 30);
                         if(bat.hp <= 0) {
-                            player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
+                            // player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
                             player.gp.monsters.remove(player.monsterIndex);
                             player.gainExp(rand.nextInt(10) + 9);
                             player.monsterIndex = -1;
@@ -347,12 +370,49 @@ public class UseItem {
                         if(golem.hp <= 0) {
                             player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
                             player.gp.monsters.remove(player.monsterIndex);
-                            player.gainExp(rand.nextInt(10) + 15);
+                            player.gainExp(rand.nextInt(20) + 15);
                             player.monsterIndex = -1;
                         }
                     }
-                } else if (player.buildingIndex != -1 && !(player.gp.buildings.get(player.buildingIndex) instanceof Shop) && !(player.gp.buildings.get(player.buildingIndex) instanceof Cave)) {
+                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex).isBreakable) {
                     Buildings building = player.gp.buildings.get(player.buildingIndex);
+
+                    if (building instanceof KandangAyam){
+                        KandangAyam k = (KandangAyam) building;
+
+                        if (k.chickensInCage.size() > 0){
+                            System.out.println("Unable to use arsenal on Kandang Ayam with chickens inside!");
+                            return;
+                        }
+                    }
+
+                    if (building instanceof PigCage){
+                        PigCage p = (PigCage) building;
+
+                        if (p.pigsInCage.size() > 0){
+                            System.out.println("Unable to use arsenal on Pig Cage with pigs inside!");
+                            return;
+                        }
+                    }
+
+                    if (building instanceof SheepCage){
+                        SheepCage s = (SheepCage) building;
+
+                        if (s.sheepsInCage.size() > 0){
+                            System.out.println("Unable to use arsenal on Sheep Cage with sheeps inside!");
+                            return;
+                        }
+                    }
+
+                    if (building instanceof CowCage){
+                        CowCage c = (CowCage) building;
+
+                        if (c.cowsInCage.size() > 0){
+                            System.out.println("Unable to use arsenal on Cow Cage with cows inside!");
+                            return;
+                        }
+                    }
+
                     building.hp -= arsenal.damage;
                     System.out.println("Using arsenal on building: " + arsenal.name);
                     System.out.println("Building HP: " + building.hp);
@@ -382,6 +442,16 @@ public class UseItem {
                                     player.gp.droppedItems.add(new ItemDrop(building.worldX + scatterX, building.worldY + scatterY, chest.inventory.slots[i], gp));
                                     chest.inventory.slots[i] = null;
                                 }
+                            }
+                        } else if (building instanceof Kandang){
+                            if (building instanceof KandangAyam) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new KandangAyam(gp, 0), gp));
+                            } else if (building instanceof PigCage) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new PigCage(gp, 0), gp));
+                            } else if (building instanceof SheepCage) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new SheepCage(gp, 0), gp));
+                            } else if (building instanceof CowCage) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new CowCage(gp, 0), gp));
                             }
                         } else if (building instanceof CraftingTable) {
                             player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new CraftingTable(gp, 1, 0), gp));
@@ -469,27 +539,24 @@ public class UseItem {
                         }
                         
                         if(ore.hp <= 0) {
-                            if(ore instanceof GoldOre) {
-                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Gold(1), gp));
-                            } else if(ore instanceof MetalOre) {
-                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Metal(1), gp));
-                            } else if (ore instanceof CrystalOre){
-                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Crystal(1), gp));
-                            } else if (ore instanceof GemOre) {
-                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Gem(1), gp));
-                            } else if(ore instanceof Rock) {
-                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Stone(1), gp));
+                            if(ore instanceof Rock) {
+                                gp.droppedItems.add(new ItemDrop(ore.worldX, ore.worldY, new Stone(rand.nextInt(3) + 2), gp));
+                            } else {
+                                if(ore instanceof GoldOre) {
+                                    gp.droppedItems.add(new ItemDrop(ore.worldX - 10, ore.worldY, new Gold(rand.nextInt(2) + 1), gp));
+                                } else if(ore instanceof MetalOre) {
+                                    gp.droppedItems.add(new ItemDrop(ore.worldX - 10, ore.worldY, new Metal(rand.nextInt(2) + 1), gp));
+                                } else if (ore instanceof CrystalOre){
+                                    gp.droppedItems.add(new ItemDrop(ore.worldX - 10, ore.worldY, new Crystal(rand.nextInt(2) + 1), gp));
+                                } else if (ore instanceof GemOre) {
+                                    gp.droppedItems.add(new ItemDrop(ore.worldX - 10, ore.worldY, new Gem(rand.nextInt(2) + 1), gp));
+                                }
+                                gp.droppedItems.add(new ItemDrop(ore.worldX + 10, ore.worldY, new Stone(rand.nextInt(2) + 1), gp));
                             }
                             gp.ores.remove(player.oreIndex);
                             player.oreIndex = -1;
                         }
                     }
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Shop) {
-                    System.out.println("Using arsenal on shop is not allowed!");
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Shop) {
-                    System.out.println("Using arsenal on shop is not allowed!");
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Cave) {
-                    System.out.println("Using arsenal on cave is not allowed!");
                 } else {
                     System.out.println("No plant or animal selected to use the arsenal on!");
                 }

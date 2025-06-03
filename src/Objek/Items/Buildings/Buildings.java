@@ -16,6 +16,7 @@ public class Buildings extends Item {
     public int solidAreaDefaultY;
     public int hp = 100;
     public boolean isAllowCollison;
+    public boolean isBreakable;
     public int buildingMap;
 
     public Buildings(String name, int maxStack, int currentStack, GamePanel gp, Rectangle solidArea, int width, int height, int buildingMap) {
@@ -28,6 +29,7 @@ public class Buildings extends Item {
         this.width = width;
         this.height = height;
         this.isAllowCollison = true;  // Defaultnya true, bisa diubah di subclass
+        this.isBreakable = true;
     }
 
     public void draw(Graphics2D g2) {  // Bisa dipake utk dropped item

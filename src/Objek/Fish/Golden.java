@@ -1,83 +1,64 @@
-package Objek.Animal;
+package Objek.Fish;
 
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 import javax.imageio.ImageIO;
-
+import java.awt.Rectangle;
+import java.util.Random;
 import Objek.Controller.GamePanel;
-import Objek.Items.StackableItem.Foods.Egg;
-import Objek.Player.Player;
-
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
-import java.awt.Color;
 
-public class Chicken extends TameAnimal {
+public class Golden extends Fish {
     Random random = new Random();
-    private Rectangle upHitbox;
-    private Rectangle downHitbox;
-    private Rectangle leftHitbox;
-    private Rectangle rightHitbox;
-    private int actionMoveCounter = 0;
-    private int actionMoveDelay;
-    private int speed = 8; 
+    public Rectangle upHitbox;
+    public Rectangle downHitbox;
+    public Rectangle leftHitbox;
+    public Rectangle rightHitbox;
     public int actionLockCounter = 0;
-    private static final int CHICKEN_WIDTH = 32;
-    private static final int CHICKEN_HEIGHT = 32;
+    public int actionMoveCounter = 0;
+    public int speed = 8; 
     
-    public Chicken(String name, int x, int y, GamePanel gp) {
-        super(name, x, y, 15, "down", gp);
+    public Golden(String nameFish, int price, int stregth, int x, int y, GamePanel gp) {
+        super("Golden", 50, 30, x, y, 30, "down", gp, 2);
         setRandomDirection();
-        this.gender = (Math.random() < 0.5) ? "Male" : "Female";
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(2, 1, 26, 40);   
-        downHitbox = new Rectangle(2, 1, 26, 40);   
-        leftHitbox = new Rectangle(4, 4, 30, 25);   
-        rightHitbox = new Rectangle(4, 4, 30, 25);   // Lebih lebar di kanan
+        upHitbox = new Rectangle(8, 1, 20, 30);
+        downHitbox = new Rectangle(8, 1, 20, 30);       
+        leftHitbox = new Rectangle(1, 6, 30, 20);   
+        rightHitbox = new Rectangle(1, 6, 30, 20);
         this.solidArea = downHitbox; 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
-        this.grabOffsetX = 0;
-        this.grabOffsetY = -10;
-        this.hp = 60;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left4.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right4.png"));
+            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/up1.png"));
+            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/up2.png"));
+            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/up3.png"));
+            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/up4.png"));
+            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/down1.png"));
+            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/down2.png"));
+            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/down3.png"));
+            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/down4.png"));
+            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/left1.png"));
+            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/left2.png"));
+            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/left3.png"));
+            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/left4.png"));
+            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/right1.png"));
+            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/right2.png"));
+            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/right3.png"));
+            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    @Override
-    public int getWidth() {
-        return CHICKEN_WIDTH;
-    }
-    @Override
-    public int getHeight() {
-        return CHICKEN_HEIGHT;
-    }
 
-    private void setRandomDirection() {
-        String newDirection= null;
-        String oldDirection = this.direction;
-        do{
+    }
+    public int actionMoveDelay;
+    public void setRandomDirection() {
+    String newDirection= null;
+    String oldDirection = this.direction;
+    do{
             int random = this.random.nextInt(4);
-    
+
             switch(random) {
                 case 0: newDirection = "up"; break;
                 case 1: newDirection = "down"; break;
@@ -93,8 +74,8 @@ public class Chicken extends TameAnimal {
     @Override
     public void update() {
         actionLockCounter++;
-        if (actionLockCounter < 10) {
-            return;
+        if(actionLockCounter < 10) {
+            return; // Prevents the fish from moving too quickly
         }
         actionLockCounter = 0;
         if(direction == null) {
@@ -116,13 +97,10 @@ public class Chicken extends TameAnimal {
         }
         collisionOn = false;
         
-        gp.cCheck.animalCheckTile(this);    
-        gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant
-        gp.cCheck.checkPlayer(this);        // Check collision dengan player
-        gp.cCheck.checkAnimalCollision(this);
-        gp.cCheck.animalCheckBuildings(this); // Check collision dengan buildings
+        gp.cCheck.fishCheckTile(this);    
+        gp.cCheck.checkFishPlayer(this);
+        gp.cCheck.checkFishCollision(this);
         
-        // Jika tidak ada collision, boleh bergerak
         if(!collisionOn) {
             switch(direction) {
                 case "up": worldY -= speed; break;
@@ -138,7 +116,7 @@ public class Chicken extends TameAnimal {
         } else {
             String newDirection;
             String oldDirection = this.direction;
-    
+
             switch(oldDirection) {
                 case "up": newDirection = "down"; break;
                 case "down": newDirection = "up"; break;
@@ -166,7 +144,6 @@ public class Chicken extends TameAnimal {
         }
     }
 
-    @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
         
@@ -196,53 +173,16 @@ public class Chicken extends TameAnimal {
                 if(spriteNum == 4) image = right4;
                 break;
         }
-
+        
         int screenX = worldX - gp.player.worldX + gp.player.SCREEN_X;
         int screenY = worldY - gp.player.worldY + gp.player.SCREEN_Y;
 
-        if(worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X && 
+        if(gp.currentMap == 1 && 
+           worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X && 
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
-            if(hp < 60) {
-                double oneScale = (double)gp.TILE_SIZE/60;
-                double hpBarValue = oneScale * hp;
-
-                g2.setColor(new Color(35,35,35));
-                g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE+2, 12);
-
-                g2.setColor(new Color(255,0,30));
-                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
-                
-               
-            }
-        }
-    }
-
-    public Chicken breeding(Chicken pasangan, GamePanel gp) {
-        // Check if both chickens are ready to
-        if (readyBreeding) {
-            if (pasangan.isReadyBreeding()) {
-                System.out.println("Breeding chicken with " + pasangan.getName());
-                Chicken babyChicken = new Chicken("Baby Chicken", this.x, this.y, gp);
-                this.readyBreeding = false;
-                pasangan.setReadyBreeding(false);
-                return babyChicken;
-            } else {
-                System.out.println("Partner is not ready to breed.");
-                return null;
-            }
-        } else {
-            System.out.println("Not ready to breed yet.");
-            return null;
-        }
-    }
-    
-    public void getItem(Player player) {
-        if(isReadyGetItem()) {
-            player.inventory.addItems(new Egg(1));
-            setReadyGetItem(false); 
         }
     }
 }

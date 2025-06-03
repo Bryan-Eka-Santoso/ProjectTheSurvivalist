@@ -15,7 +15,7 @@ public class GemOre extends Ore {
         super(175, x, y, gp.TILE_SIZE , gp.TILE_SIZE, gp, new Rectangle((int)(1*scaleFactor), (int)(1*scaleFactor), (int)(29*scaleFactor), (int)(28*scaleFactor)));
         this.collision = true;
         try {
-            this.image = ImageIO.read(new File("ProjectTheSurvivalist/res/Ore/crystal.png"));
+            this.image = ImageIO.read(new File("ProjectTheSurvivalist/res/Ore/gem.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

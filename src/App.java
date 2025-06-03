@@ -8,6 +8,7 @@ public class App {
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
         window.setTitle("The Survivalists");
+        window.setSize(1125, 765);
 
         // Buat panel menu utama
         MenuPanel mainMenu = new MenuPanel(window);

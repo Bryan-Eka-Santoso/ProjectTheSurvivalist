@@ -50,8 +50,9 @@ public class GamePanel extends JPanel implements Runnable {
     public int SpawnX = 40, SpawnY = 44;
     
     KeyHandler keyH = new KeyHandler(this);
+    MouseHandler mouseHandler = new MouseHandler(this);
+    public Player player = new Player("Player", 15, this, keyH);
     Crafting recipe = new Crafting(this);
-    public Player player = new Player("Player", 15, recipe, this, keyH);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     public EnvironmentManager eManager = new EnvironmentManager(this);
@@ -75,18 +76,19 @@ public class GamePanel extends JPanel implements Runnable {
     public final int KANDANG_STATE = 11;
     public final int FISHING_STATE = 12;
     public final int GAME_OVER_STATE = 13;
+    public final int SHOP_STATE = 14;
+    public final int EFFECT_STATE = 15;
 
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
     private static final int MAX_WOLF = 3;
-    private static final int MAX_GOLD = 5;
-    private static final int MAX_CRYSTAL = 5;
-    private static final int MAX_GEM = 5;
-    private static final int MAX_METAL = 5;
-    private static final int MAX_ROCK = 20;
-
+    private static final int MAX_GOLD = 15;
+    private static final int MAX_CRYSTAL = 8;
+    private static final int MAX_GEM = 8;
+    private static final int MAX_METAL = 20;
+    private static final int MAX_ROCK = 30;
 
     public Kandang currentKandang;
     public final int maxMap = 10;
@@ -111,12 +113,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseWheelListener(keyH);
         this.setFocusable(true);
         this.setLayout(null);
+        this.addMouseListener(mouseHandler);
         eManager.setup();
-    }
-
-    public void handleKandangInteraction(Kandang kandang) {
-        currentKandang = kandang;
-        gameState = KANDANG_STATE;
     }
 
     public void setupGame() {
@@ -229,7 +227,9 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant();
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
+        player.inventory.addItems(new KandangAyam(this, 0));
         player.inventory.addItems(new WolfCloak());
+        player.inventory.addItems(new Furnace(this, 1, 0));
         player.inventory.addItems(new GoldIngot(64));
         player.inventory.addItems(new MetalIngot(64));
         player.inventory.addItems(new IcePickaxe());
@@ -239,6 +239,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new MetalChestplate());
         player.inventory.addItems(new Bucket(5, this));
         player.inventory.addItems(new WindAxe());
+        player.inventory.addItems(new KandangAyam(this, 0));
         
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
@@ -260,14 +261,22 @@ public class GamePanel extends JPanel implements Runnable {
         lemariKiri.worldX = 44 * TILE_SIZE;
         lemariKiri.worldY = 45 * TILE_SIZE;
         buildings.add(lemariKiri);
-        Buildings table = new Table(this, 1, 3);
-        table.worldX = 48 * TILE_SIZE;
-        table.worldY = 48 * TILE_SIZE;
-        buildings.add(table);
-        Buildings charsell = new Charsell(this, 1, 3);
-        charsell.worldX = 48 * TILE_SIZE;
-        charsell.worldY = 47 * TILE_SIZE;
-        buildings.add(charsell);
+        Buildings itemTable = new ItemTable(this, 1, 3);
+        itemTable.worldX = 46 * TILE_SIZE;
+        itemTable.worldY = 48 * TILE_SIZE;
+        buildings.add(itemTable);
+        Buildings itemSell = new ItemSell(this, 1, 3);
+        itemSell.worldX = 46 * TILE_SIZE + 23;
+        itemSell.worldY = 47 * TILE_SIZE;
+        buildings.add(itemSell);
+        Buildings effectTable = new EffectTable(this, 1, 3);
+        effectTable.worldX = 50 * TILE_SIZE;
+        effectTable.worldY = 48 * TILE_SIZE;
+        buildings.add(effectTable);
+        Buildings effectSell = new EffectSell(this, 1, 3);
+        effectSell.worldX = 50 * TILE_SIZE + 23;
+        effectSell.worldY = 47 * TILE_SIZE;
+        buildings.add(effectSell);
 
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
@@ -341,6 +350,9 @@ public class GamePanel extends JPanel implements Runnable {
         ui.isCanGoToLand = false;
         ui.isNeedLevel15 = false;
         ui.isCanGoToCave = false;
+        ui.isCanGoToShop = false;
+        ui.isGoToShopMenu = false;
+        ui.isGoToEffectMenu = false;
         int col = player.worldX / TILE_SIZE;
         int row = player.worldY / TILE_SIZE;
 
@@ -354,6 +366,9 @@ public class GamePanel extends JPanel implements Runnable {
             if ((col == 50 || col == 51) && row == 51) {
                 ui.isCanGoToCave = true;
             }
+            if (col == 40 && row == 41) {
+                ui.isCanGoToShop = true;
+            }
         } else if(currentMap == 1){
             if (col == 60 && row == 25) {
                 ui.isCanGoToLand = true;
@@ -362,7 +377,18 @@ public class GamePanel extends JPanel implements Runnable {
             if((col == 22 || col == 23) && row == 23) {
                 ui.isCanGoToLand = true;
             }
+        } else if(currentMap == 3){
+            if (col == 52 && row == 53) {
+                ui.isCanGoToLand = true;
+            }
+            if(col == 46 && row == 48) {
+                ui.isGoToShopMenu = true;
+            }
+            if(col == 50 && row == 48) {
+                ui.isGoToEffectMenu = true;
+            }
         }
+
     }
 
 
