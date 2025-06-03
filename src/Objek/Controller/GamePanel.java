@@ -12,14 +12,6 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.Bucket;
-import Objek.Items.StackableItem.Materials.GoldIngot;
-import Objek.Items.StackableItem.Materials.MetalIngot;
-import Objek.Items.Unstackable.FishingRod;
-import Objek.Items.Unstackable.Lantern;
-import Objek.Items.Unstackable.Armor.Chestplate.MetalChestplate;
-import Objek.Items.Unstackable.Armor.Helmet.WolfCloak;
-import Objek.Items.Unstackable.Arsenals.IcePickaxe;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -51,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    public Player player = new Player("Player", 15, this, keyH);
+    public Player player = new Player("Player", 1, this, keyH);
     Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
@@ -225,21 +217,10 @@ public class GamePanel extends JPanel implements Runnable {
         long currentTime;
         long timer = 0;
         addPlant();
+        checkAndRespawnAnimals();
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new KandangAyam(this, 0));
-        player.inventory.addItems(new WolfCloak());
-        player.inventory.addItems(new Furnace(this, 1, 0));
-        player.inventory.addItems(new GoldIngot(64));
-        player.inventory.addItems(new MetalIngot(64));
-        player.inventory.addItems(new IcePickaxe());
-        player.inventory.addItems(new CraftingTable(this, 1, 0));
-        player.inventory.addItems(new FishingRod());
-        player.inventory.addItems(new Lantern(this));
-        player.inventory.addItems(new MetalChestplate());
-        player.inventory.addItems(new Bucket(5, this));
         player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new KandangAyam(this, 0));
         
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
@@ -289,9 +270,6 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (delta >= 1) {
                 update();
-                if (currentMap == 0) {
-                    checkAndRespawnAnimals();  
-                }
                 repaint();
                 delta--;
             }
