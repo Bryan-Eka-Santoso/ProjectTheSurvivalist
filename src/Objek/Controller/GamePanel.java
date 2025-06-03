@@ -51,8 +51,8 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    Crafting recipe = new Crafting(this);
     public Player player = new Player("Player", 15, this, keyH);
+    Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     public EnvironmentManager eManager = new EnvironmentManager(this);
@@ -89,7 +89,6 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_GEM = 8;
     private static final int MAX_METAL = 20;
     private static final int MAX_ROCK = 30;
-
 
     public Kandang currentKandang;
     public final int maxMap = 10;
@@ -233,6 +232,7 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant();
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
+        player.inventory.addItems(new KandangAyam(this, 0));
         player.inventory.addItems(new WolfCloak());
         player.inventory.addItems(new Furnace(this, 1, 0));
         player.inventory.addItems(new GoldIngot(64));
@@ -393,6 +393,7 @@ public class GamePanel extends JPanel implements Runnable {
                 ui.isGoToEffectMenu = true;
             }
         }
+
     }
 
 

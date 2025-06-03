@@ -480,6 +480,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.gameState = gp.PLAYER_CRAFTING_STATE;
         } else if (gp.gameState == gp.PLAYER_CRAFTING_STATE) {
             gp.gameState = gp.PLAY_STATE;
+            gp.ui.scrollY = 0; // Reset scroll position when exiting crafting state
         } 
     }
 
@@ -836,6 +837,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.slotRow = 0;
             gp.ui.selectedIndex = 0;
             gp.ui.selectedChestIndex = 0;
+            gp.ui.scrollY = 0; // Reset scroll position when exiting crafting state
         } else if (gp.gameState == gp.OPEN_CHEST_STATE) {
             gp.gameState = gp.PLAY_STATE;
             gp.ui.slotCol = 0;

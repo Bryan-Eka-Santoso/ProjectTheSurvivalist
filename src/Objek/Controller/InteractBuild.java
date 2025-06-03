@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Foods.Bread;
 import Objek.Items.StackableItem.Foods.Carrot;
-import Objek.Items.StackableItem.Foods.Potato;
+import Objek.Items.StackableItem.Foods.RawFoods.Potato;
 import Objek.Items.StackableItem.Materials.Metal;
 import Objek.Items.StackableItem.Materials.Stone;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
@@ -69,8 +69,8 @@ public class InteractBuild {
             gp.isCave = !gp.isCave;
             gp.eManager.lighting.setLightSource(); 
             gp.player.buildingIndex = -1;
-            gp.sp.spawnMonster("bat", 5, usedPositions);
-            gp.sp.spawnMonster("golem", 3, usedPositions);
+            gp.sp.spawnMonster("bat", 10, usedPositions);
+            gp.sp.spawnMonster("golem",5, usedPositions);
             gp.checkAndRespawnOres();
         }
         else if (building instanceof Shop) {

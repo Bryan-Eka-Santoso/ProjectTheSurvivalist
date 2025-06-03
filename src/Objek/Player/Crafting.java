@@ -26,9 +26,9 @@ public class Crafting {
     public GamePanel gp;
 
     public Crafting(GamePanel gp) {
+        this.gp = gp;
         smallRecipes = fillSmallRecipes();
         recipes = fillRecipes();
-        this.gp = gp;
     }
 
     private LinkedHashMap<List<Item>, Item> fillSmallRecipes() {
@@ -154,19 +154,20 @@ public class Crafting {
         List<Item> recipe26 = Arrays.asList(new Wood(5));
         r.put(recipe26, new WateringCan());
 
-        // List<Item> recipe27 = Arrays.asList(new Wood(8), new Wool(3), new MetalNails(4));
-        // r.put(recipe27, new KandangAyam(gp, 0));
+        List<Item> recipe27 = Arrays.asList(new Wood(8), new Wool(3), new MetalNails(4), new Feather(3));
+        r.put(recipe27, new KandangAyam(gp, 0));
 
-        // List<Item> recipe28 = Arrays.asList(new Wood(10), new Stone(6), new MetalNails(4));
-        // r.put(recipe28, new PigCage(gp, 0));
+        List<Item> recipe28 = Arrays.asList(new Wood(10), new Stone(6), new MetalNails(4), new Feather(3));
+        r.put(recipe28, new PigCage(gp, 0));
 
-        // List<Item> recipe29 = Arrays.asList(new Wood(10), new Wool(5), new MetalNails(4));
-        // r.put(recipe29, new SheepCage(gp, 0));
+        List<Item> recipe29 = Arrays.asList(new Wood(10), new Wool(5), new MetalNails(4), new Feather(3));
+        r.put(recipe29, new SheepCage(gp, 0));
 
-        // List<Item> recipe30 = Arrays.asList(new Wood(12), new Stone(8), new MetalNails(6));
-        // r.put(recipe30, new CowCage(gp, 0));
+        List<Item> recipe30 = Arrays.asList(new Wood(12), new Stone(8), new MetalNails(6), new Feather(3));
+        r.put(recipe30, new CowCage(gp, 0));
 
-        // List<Item> recipe31 = Arrays.asList(new Wood(3), new MetalIngot(2));
+        List<Item> recipe31 = Arrays.asList(new Wood(3), new Strings(2));
+        r.put(recipe31, new FishingRod());
 
         return r;
     }

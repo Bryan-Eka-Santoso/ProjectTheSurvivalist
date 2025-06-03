@@ -15,6 +15,7 @@ import Objek.Items.Unstackable.Armor.Boots.Boots;
 import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
 import Objek.Items.Unstackable.Armor.Helmet.Helmet;
 import Objek.Items.Unstackable.Armor.Leggings.Leggings;
+import Objek.Plant.Bush;
 import Objek.Plant.Plant;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -65,13 +66,15 @@ public class Player {
     private static final int POISON_DAMAGE = 1;
     private static final long HUNGER_DECREASE_INTERVAL = 420; // 7 detik diitung dari frame
     private static final long THIRST_DECREASE_INTERVAL = 300; // 5 detik diitung dari frame
+    private static final long HEALTH_REGEN_INTERVAL = 180; // 3 detik diitung dari frame
+    private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
     int hungerCounter = 0;
     int thirstCounter = 0;
     public int coins = 0;
+    int healthCounter = 0;
     private int poisonCounter = 0;
     private boolean isDehydrated = false;
     private int dehydrationCounter = 0;
-    private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
 
 
     public Player(String name, int level, GamePanel gp, KeyHandler keyH) {
@@ -292,8 +295,20 @@ public class Player {
                 thirstCounter = 0;
             }
         }
+
+         if (this.hunger >= 75 || this.thirst >= 75) {
+            healthCounter++;
+            if (healthCounter >= HEALTH_REGEN_INTERVAL) {
+                if (health < maxHealth) {
+                    health++;
+                }
+                healthCounter = 0;
+            }
+        }
+
         thirstCounter++;
         hungerCounter++;
+        
         if(isPoisoned) {
             handlePoisonEffect();
         }
@@ -570,6 +585,9 @@ public class Player {
                 }
             }
             for (Plant other : gp.plants) {
+                if (other instanceof Bush){
+                    continue;
+                }
                 if (Math.abs(other.worldX - newX) < gp.TILE_SIZE && 
                 Math.abs(other.worldY - newY) < gp.TILE_SIZE) {
                     canPlace = false;
