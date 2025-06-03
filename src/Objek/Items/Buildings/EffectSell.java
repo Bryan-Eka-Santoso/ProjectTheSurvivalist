@@ -10,6 +10,7 @@ import Objek.Controller.GamePanel;
 public class EffectSell extends Buildings {
     public EffectSell(GamePanel gp, int currentStack, int buildingMap) {
         super("EffectSell", 10, currentStack, gp, new Rectangle(0, 0, 41, 44), 41, 44, buildingMap);
+        isBreakable = false;
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/character.png"));
         } catch (IOException e) {

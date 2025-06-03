@@ -10,6 +10,7 @@ import Objek.Controller.GamePanel;
 public class LemariAtas extends Buildings {
     public LemariAtas(GamePanel gp, int currentStack, int buildingMap) {
         super("LemariAtas", 10, currentStack, gp, new Rectangle(0, 0, 450, 50), 450, 50, buildingMap);
+        isBreakable = false;
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/lemariatas.png"));
         } catch (IOException e) {

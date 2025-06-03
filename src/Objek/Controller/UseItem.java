@@ -351,7 +351,7 @@ public class UseItem {
                             player.monsterIndex = -1;
                         }
                     }
-                } else if (player.buildingIndex != -1 && !(player.gp.buildings.get(player.buildingIndex) instanceof Shop) && !(player.gp.buildings.get(player.buildingIndex) instanceof Cave)) {
+                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex).isBreakable) {
                     Buildings building = player.gp.buildings.get(player.buildingIndex);
                     building.hp -= arsenal.damage;
                     System.out.println("Using arsenal on building: " + arsenal.name);

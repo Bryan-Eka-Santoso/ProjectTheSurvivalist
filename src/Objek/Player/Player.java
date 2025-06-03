@@ -74,7 +74,7 @@ public class Player {
     private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
 
 
-    public Player(String name, int level, Crafting recipe, GamePanel gp, KeyHandler keyH) {
+    public Player(String name, int level, GamePanel gp, KeyHandler keyH) {
         this.name = name;
         this.worldX = gp.TILE_SIZE * gp.SpawnX;
         this.worldY = gp.TILE_SIZE * gp.SpawnY;
@@ -102,7 +102,7 @@ public class Player {
         System.out.println(gp.SCREEN_WIDTH + " " + gp.SCREEN_HEIGHT);
         SCREEN_X = gp.SCREEN_WIDTH / 2 - gp.TILE_SIZE / 2;
         SCREEN_Y = gp.SCREEN_HEIGHT / 2 - gp.TILE_SIZE / 2;
-        this.recipe = recipe;
+        this.recipe = new Crafting(gp);
         interactObj = new UseItem(gp);
         interactBuild = new InteractBuild(gp);
         this.isCutting = false;

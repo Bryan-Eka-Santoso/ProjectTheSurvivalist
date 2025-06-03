@@ -1,7 +1,6 @@
 package Objek.Controller;
 
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -54,7 +53,6 @@ public class MenuPanel extends JPanel {
         add(titleLabel);
 
         JButton playButton = new JButton(play);
-        playButton.setFont(new Font("Arial", Font.PLAIN, 24));
         playButton.setBounds(450, 300, 250, 50);
         playButton.setBorderPainted(false);
         playButton.setContentAreaFilled(false);
@@ -63,16 +61,14 @@ public class MenuPanel extends JPanel {
         add(playButton);
 
         JButton guideButton = new JButton(guide);
-        guideButton.setFont(new Font("Arial", Font.PLAIN, 24));
         guideButton.setBounds(450, 370, 250, 50);
         guideButton.setBorderPainted(false);
         guideButton.setContentAreaFilled(false);
         guideButton.setFocusPainted(false);
-        playButton.addActionListener(e -> showMenu());
+        guideButton.addActionListener(e -> showMenu());
         add(guideButton);
 
         JButton exitButton = new JButton(exit);
-        exitButton.setFont(new Font("Arial", Font.PLAIN, 24));
         exitButton.setBounds(450, 440, 250, 50);
         exitButton.setBorderPainted(false);
         exitButton.setContentAreaFilled(false);
@@ -97,6 +93,7 @@ public class MenuPanel extends JPanel {
     }
 
     public void showMenu() {
+        System.out.println("test");
         GuidePanel guidePanel = new GuidePanel();
         window.setContentPane(guidePanel);
         guidePanel.setFocusable(true);

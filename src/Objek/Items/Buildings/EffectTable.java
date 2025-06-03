@@ -10,6 +10,7 @@ import Objek.Controller.GamePanel;
 public class EffectTable extends Buildings {
     public EffectTable(GamePanel gp, int currentStack, int buildingMap) {
         super("EffectTable", 10, currentStack, gp, new Rectangle(0, 0, 89, 45), 89, 45, buildingMap);
+        isBreakable = false;
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/table.png"));
         } catch (IOException e) {

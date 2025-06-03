@@ -507,7 +507,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             if (gp.currentMap == 1) {
                 gp.fish.clear();
             }
-            gp.player = new Player("Player", gp.player.level, gp.recipe, gp, gp.keyH);
+            gp.player = new Player("Player", gp.player.level, gp, gp.keyH);
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
             gp.currentMap = 0;
             gp.fish.clear();
