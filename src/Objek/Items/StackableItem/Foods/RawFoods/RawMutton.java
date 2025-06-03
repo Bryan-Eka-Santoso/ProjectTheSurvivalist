@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Items.StackableItem.Foods.Food;
-import Objek.Items.StackableItem.Foods.RawFood;
+import Objek.Items.StackableItem.Foods.Poisonous;
 import Objek.Player.Player;
 
-public class RawMutton extends Food implements RawFood {
+public class RawMutton extends Food implements Poisonous {
     public RawMutton(int currentStack) {
         super("Raw Mutton", currentStack);
             try {
@@ -16,7 +16,7 @@ public class RawMutton extends Food implements RawFood {
                 e.printStackTrace();
             } 
     }
-     @Override
+    @Override
     public void eat(Player player) {
         // Implement the logic for eating food here
         System.out.println("Eating " + name + "..."); // Eating action

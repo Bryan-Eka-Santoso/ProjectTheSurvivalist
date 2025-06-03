@@ -1,5 +1,6 @@
 package Objek.Items.StackableItem.Foods;
 
+import Objek.Items.StackableItem.Foods.RawFoods.Blackberries;
 import Objek.Items.StackableItem.Materials.Material;
 
 public class Berries extends Material {
@@ -19,4 +20,5 @@ public class Berries extends Material {
                 throw new IllegalArgumentException("Unknown berry type: " + type);
         }
     }
+    
 }

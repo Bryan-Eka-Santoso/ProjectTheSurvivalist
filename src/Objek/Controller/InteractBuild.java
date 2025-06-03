@@ -55,8 +55,8 @@ public class InteractBuild {
             gp.isCave = !gp.isCave;
             gp.eManager.lighting.setLightSource(); 
             gp.player.buildingIndex = -1;
-            gp.sp.spawnMonster("bat", 5, usedPositions);
-            gp.sp.spawnMonster("golem",3, usedPositions);
+            gp.sp.spawnMonster("bat", 10, usedPositions);
+            gp.sp.spawnMonster("golem",5, usedPositions);
             gp.checkAndRespawnOres();
             
         }

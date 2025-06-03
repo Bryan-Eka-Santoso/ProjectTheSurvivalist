@@ -229,6 +229,10 @@ public class GamePanel extends JPanel implements Runnable {
         addPlant();
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
+        player.inventory.addItems(new KandangAyam(this, 0));
+        // player.inventory.addItems(new CowCage(this, 0));
+        // player.inventory.addItems(new PigCage(this, 0));
+        // player.inventory.addItems(new SheepCage(this, 0));
         player.inventory.addItems(new WolfCloak());
         player.inventory.addItems(new Furnace(this, 1, 0));
         player.inventory.addItems(new GoldIngot(64));
@@ -364,6 +368,7 @@ public class GamePanel extends JPanel implements Runnable {
                 ui.isCanGoToLand = true;
             }
         }
+
     }
 
 
