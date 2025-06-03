@@ -15,7 +15,6 @@ import Objek.Enemy.Monster;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
-// import Objek.Items.StackableItem.Foods.Berries;
 import Objek.Items.StackableItem.Foods.Carrot;
 import Objek.Items.StackableItem.Foods.Coconut;
 import Objek.Items.StackableItem.Foods.Food;
@@ -224,6 +223,7 @@ public class UseItem {
                 Arsenal arsenal = (Arsenal) selectedItem;
                 player.isCutting = true;
                 player.cutting();
+                
                 if (player.plantIndex != -1 && gp.currentMap == 0) {
                     Plant plant = player.gp.plants.get(player.plantIndex);
 
@@ -557,12 +557,6 @@ public class UseItem {
                             player.oreIndex = -1;
                         }
                     }
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Shop) {
-                    System.out.println("Using arsenal on shop is not allowed!");
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Shop) {
-                    System.out.println("Using arsenal on shop is not allowed!");
-                } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex) instanceof Cave) {
-                    System.out.println("Using arsenal on cave is not allowed!");
                 } else {
                     System.out.println("No plant or animal selected to use the arsenal on!");
                 }

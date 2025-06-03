@@ -36,20 +36,31 @@ Pemain memelihara hewan untuk mendapatkan sumber daya tambahan
 
 # Controller Player
 W → Menggerakkan pemain ke arah atas
+
 A → Menggerakkan pemain ke arah kiri
+
 S → Menggerakkan pemain ke arah bawah
+
 D → Menggerakkan pemain ke arah kanan
 
 F → Berpindah antara wilayah daratan dan lautan
+
 C → Membuka menu crafting untuk membuat item dan peralatan
+
 I → Membuka inventory untuk melihat dan mengelola barang yang dimiliki pemain
+
 1 - 9 → Memilih item yang ingin digunakan sesuai dengan slot yang sedang dibawa pemain
 
 S (saat dalam mode chest/inventory) → Menukar atau memindahkan item antara chest dan inventory
+
 E → Digunakan untuk menyerang musuh, menebang pohon, dan menghancurkan bangunan
+
 T → Masuk dan keluar dari bangunan kandang
+
 G → Mengangkat dan memindahkan hewan
 
 ↓ (Tombol Panah Bawah) (saat dalam mode kandang) → Digunakan untuk memilih aksi seperti menghapus hewan, mengawinkan hewan, atau mengambil hasil ternak
+
 Enter (saat dalam mode kandang) → Konfirmasi atau menyetujui aksi yang dipilih
+
 Spasi (Spacebar) → Masuk dan keluar dari toko (Shop) serta menjelajahi atau keluar dari gua (Cave)
