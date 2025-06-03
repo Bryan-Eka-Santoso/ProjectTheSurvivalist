@@ -84,11 +84,11 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_SHEEP = 5;
     private static final int MAX_PIGS = 5;
     private static final int MAX_WOLF = 3;
-    private static final int MAX_GOLD = 5;
-    private static final int MAX_CRYSTAL = 5;
-    private static final int MAX_GEM = 5;
-    private static final int MAX_METAL = 5;
-    private static final int MAX_ROCK = 20;
+    private static final int MAX_GOLD = 15;
+    private static final int MAX_CRYSTAL = 8;
+    private static final int MAX_GEM = 8;
+    private static final int MAX_METAL = 20;
+    private static final int MAX_ROCK = 30;
 
 
     public Kandang currentKandang;
@@ -234,6 +234,7 @@ public class GamePanel extends JPanel implements Runnable {
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new WolfCloak());
+        player.inventory.addItems(new Furnace(this, 1, 0));
         player.inventory.addItems(new GoldIngot(64));
         player.inventory.addItems(new MetalIngot(64));
         player.inventory.addItems(new IcePickaxe());
