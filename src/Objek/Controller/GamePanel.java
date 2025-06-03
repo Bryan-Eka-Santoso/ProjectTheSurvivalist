@@ -117,11 +117,6 @@ public class GamePanel extends JPanel implements Runnable {
         eManager.setup();
     }
 
-    public void handleKandangInteraction(Kandang kandang) {
-        currentKandang = kandang;
-        gameState = KANDANG_STATE;
-    }
-
     public void setupGame() {
         gameState = PLAY_STATE;
         playMusic(7);

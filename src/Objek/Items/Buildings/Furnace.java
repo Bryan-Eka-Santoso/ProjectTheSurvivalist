@@ -56,12 +56,10 @@ public class Furnace extends Buildings {
                     if (rawMaterial[0].currentStack == 0) {
                         rawMaterial[0] = null;
                         System.out.println("No more " + cookedMaterial[0].name + " left");
-                        return;
                     }
                     if (fuelMaterial[0].currentStack == 0) {
                         fuelMaterial[0] = null;
                         System.out.println("No more " + cookedMaterial[0].name + " left");
-                        return;
                     }
                     System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                 } else if (result != null && cookedMaterial[0] != null) {
@@ -73,12 +71,10 @@ public class Furnace extends Buildings {
                             if (rawMaterial[0].currentStack == 0) {
                                 rawMaterial[0] = null;
                                 System.out.println("No more " + cookedMaterial[0].name + " left");
-                                return;
                             }
                             if (fuelMaterial[0].currentStack == 0) {
                                 fuelMaterial[0] = null;
                                 System.out.println("No more " + cookedMaterial[0].name + " left");
-                                return;
                             }
                             System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                         } else {

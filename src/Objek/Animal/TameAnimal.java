@@ -25,6 +25,7 @@ public abstract class TameAnimal extends Animal {
         this.height = 0;
         this.readyBreeding = true;
         this.hp = 100;  
+        this.readyGetItem = true;
     }
     
     public BufferedImage getDirectionalImage() {

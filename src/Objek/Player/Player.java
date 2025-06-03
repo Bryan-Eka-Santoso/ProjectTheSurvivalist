@@ -289,8 +289,8 @@ public class Player {
                 hungerCounter = 0;
             }
             if(thirstCounter >= THIRST_DECREASE_INTERVAL) {
-                thirst--;
                 if(thirst > 0) {
+                    thirst--;
                 }
                 thirstCounter = 0;
             }
