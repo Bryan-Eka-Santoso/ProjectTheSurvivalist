@@ -14,6 +14,7 @@ import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
+import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -224,7 +225,9 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new CowCage(this,0));
         player.inventory.addItems(new Bucket(1, this));
-        
+        player.inventory.addItems(new BladeArmor());
+
+
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;

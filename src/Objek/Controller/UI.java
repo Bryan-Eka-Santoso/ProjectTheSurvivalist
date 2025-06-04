@@ -196,7 +196,7 @@ public class UI {
         if (gp.gameState == gp.OPEN_SMELTER_STATE) {
             furnaceMenu();
         }
-        if(gp.gameState == gp.KANDANG_STATE) {
+        if(gp.gameState == gp.KANDANG_STATE) {  
             if (inBreedingMenu) {
                 drawBreedingMenu(g2, gp.currentKandang);
             }  else if(inRemoveMenu) { 

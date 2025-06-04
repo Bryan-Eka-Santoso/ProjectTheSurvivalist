@@ -224,7 +224,7 @@ public class Cow extends TameAnimal {
     }
     
     public void getItem(Player player) {
-        if(isReadyGetItem()) {
+        if (isReadyGetItem()) {
             boolean hasEmptyBucket = false;
             for(int i = 0; i < player.inventory.slots.length; i++) {
                 if(player.inventory.slots[i] instanceof Bucket) {
