@@ -122,10 +122,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread = new Thread(this);
         gameThread.start();
     }
-    
-    public void addPlant(Plant p) {
-        plants.add(p);
-    }
+
      public void checkAndRespawnOres() {
         int goldCount = 0;
         int metalCount = 0;
@@ -216,8 +213,8 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        addPlant();
         checkAndRespawnAnimals();
+        addPlant();
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new WindAxe());
@@ -226,34 +223,42 @@ public class GamePanel extends JPanel implements Runnable {
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
         buildings.add(shop);
+
         Buildings cave = new Cave(this, 1, 0);
         cave.worldX = 50 * TILE_SIZE;
         cave.worldY = 50 * TILE_SIZE;
         buildings.add(cave);
+
         Buildings lemariAtas = new LemariAtas(this, 1, 3);
         lemariAtas.worldX = 44 * TILE_SIZE;
         lemariAtas.worldY = 44 * TILE_SIZE;
         buildings.add(lemariAtas);
+
         Buildings lemariKanan = new LemariKanan(this, 1, 3);
         lemariKanan.worldX = 53 * TILE_SIZE;
         lemariKanan.worldY = 45 * TILE_SIZE;
         buildings.add(lemariKanan);
+
         Buildings lemariKiri = new LemariKiri(this, 1, 3);
         lemariKiri.worldX = 44 * TILE_SIZE;
         lemariKiri.worldY = 45 * TILE_SIZE;
         buildings.add(lemariKiri);
+
         Buildings itemTable = new ItemTable(this, 1, 3);
         itemTable.worldX = 46 * TILE_SIZE;
         itemTable.worldY = 48 * TILE_SIZE;
         buildings.add(itemTable);
+
         Buildings itemSell = new ItemSell(this, 1, 3);
         itemSell.worldX = 46 * TILE_SIZE + 23;
         itemSell.worldY = 47 * TILE_SIZE;
         buildings.add(itemSell);
+
         Buildings effectTable = new EffectTable(this, 1, 3);
         effectTable.worldX = 50 * TILE_SIZE;
         effectTable.worldY = 48 * TILE_SIZE;
         buildings.add(effectTable);
+
         Buildings effectSell = new EffectSell(this, 1, 3);
         effectSell.worldX = 50 * TILE_SIZE + 23;
         effectSell.worldY = 47 * TILE_SIZE;

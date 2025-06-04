@@ -22,6 +22,7 @@ import Objek.Plant.GuavaTree;
 import Objek.Plant.MangoTree;
 import Objek.Enemy.Golem;
 import Objek.Plant.Plant;
+import Objek.Plant.Tree;
 
 public class Spawn {
     public GamePanel gp;
@@ -185,13 +186,16 @@ public class Spawn {
             }
             boolean overPlant = false;
             for (Plant plant : gp.plants) {
-                int plantX = plant.worldX / gp.TILE_SIZE;
-                int plantY = plant.worldY / gp.TILE_SIZE;
-                if (Math.abs(x - plantX) < 3 && Math.abs(y - plantY) < 3) { 
-                    overPlant = true;
-                    break;
+                if (plant instanceof Tree) {
+                    int plantX = plant.worldX / gp.TILE_SIZE;
+                    int plantY = plant.worldY / gp.TILE_SIZE;
+                    if (Math.abs(x - plantX) < 3 && Math.abs(y - plantY) < 3) { 
+                        overPlant = true;
+                        break;
+                    }
                 }
             }
+            
             if (overPlant) {
                 attempts++;
                 continue;
