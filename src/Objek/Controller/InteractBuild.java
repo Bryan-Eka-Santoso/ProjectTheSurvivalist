@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.awt.Point;
 import javax.imageio.ImageIO;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.Foods.Bread;
-import Objek.Items.StackableItem.Foods.Carrot;
+import Objek.Items.StackableItem.Foods.Other.Bread;
+import Objek.Items.StackableItem.Foods.Other.Carrot;
 import Objek.Items.StackableItem.Foods.RawFoods.Potato;
-import Objek.Items.StackableItem.Materials.Metal;
-import Objek.Items.StackableItem.Materials.Stone;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
+import Objek.Items.StackableItem.Materials.OreDrops.Metal;
+import Objek.Items.StackableItem.Materials.OreDrops.Stone;
 import Objek.Items.StackableItem.Seeds.Seeds;
 import Objek.Items.Unstackable.FishingRod;
 

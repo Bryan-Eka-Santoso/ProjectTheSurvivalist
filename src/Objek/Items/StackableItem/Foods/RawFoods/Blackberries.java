@@ -1,8 +1,9 @@
 package Objek.Items.StackableItem.Foods.RawFoods;
 
 import java.util.Random;
-import Objek.Items.StackableItem.Foods.Berries;
+
 import Objek.Items.StackableItem.Foods.Poisonous;
+import Objek.Items.StackableItem.Foods.Fruits.Berries;
 import Objek.Player.Player;
 
 public class Blackberries extends Berries implements Poisonous {
@@ -36,5 +37,8 @@ public class Blackberries extends Berries implements Poisonous {
         }
         
         System.out.println("Health: " + player.health + ", Hunger: " + player.hunger);
+
+        player.thirst += getHydrationValue();
+        System.out.println("You ate a guava. Hydration increased by " + getHydrationValue() + ".");
     }
 }

@@ -6,7 +6,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
-import Objek.Items.StackableItem.Foods.Milk;
+import Objek.Items.StackableItem.Foods.Other.Milk;
 import Objek.Player.Player;
 
 import java.awt.Color;

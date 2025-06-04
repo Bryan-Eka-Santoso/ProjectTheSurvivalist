@@ -54,7 +54,7 @@ public class Bucket extends Stackable {
                 newBucket.fillMilk();
 
                 gp.player.inventory.addItems(newBucket);
-                gp.player.inventory.removeItem(this, 1); // Remove this bucket from inventory
+                gp.player.inventory.removeItem(this, 1); // Remove` this bucket from inventory
             }
         } else {
             System.out.println("Bucket is already filled.");
@@ -66,7 +66,7 @@ public class Bucket extends Stackable {
             System.out.println("You drank the cleansed water from the bucket.");
             gp.player.inventory.removeItem(this, 1); // Remove this bucket from inventory
             gp.player.inventory.addItems(new Bucket(1, gp)); // Add a new bucket with reduced stack
-            gp.player.thirst += 25;
+            gp.player.thirst += 40;
             if (gp.player.thirst > 100) {
                 gp.player.thirst = 100; // Cap thirst at 100
             }
@@ -74,9 +74,13 @@ public class Bucket extends Stackable {
             System.out.println("You drank the milk from the bucket.");
             gp.player.inventory.removeItem(this, 1); // Remove this bucket from inventory
             gp.player.inventory.addItems(new Bucket(1, gp)); // Add a new bucket with reduced stack
-            gp.player.thirst += 10;
+            gp.player.thirst += 25;
             if (gp.player.thirst > 100) {
                 gp.player.thirst = 100; // Cap thirst at 100
+            }
+            if (gp.player.isPoisoned()){
+                gp.player.curePoison(); // Cure poison if player is poisoned
+                System.out.println("The milk cured your poison.");
             }
         } else {
             System.out.println("The bucket is undrinkable.");

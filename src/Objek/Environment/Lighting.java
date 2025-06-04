@@ -144,7 +144,11 @@ public class Lighting {
                     }
                 }
                 dayState = DAY;
+                if (gp.currentMap == 0) {
+                    gp.checkAndRespawnAnimals();  
+                }
                 resetAnimalStatus();
+                
             }
         }
         if (gp.currentMap == 2) {

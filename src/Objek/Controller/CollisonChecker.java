@@ -7,8 +7,8 @@ import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
 import Objek.Items.Unstackable.FishingRod;
 import Objek.Ore.Ore;
-import Objek.Plant.Bush;
-import Objek.Plant.Tree;
+import Objek.Plant.Bushes.Bush;
+import Objek.Plant.Trees.Tree;
 import Objek.Player.Player;
 
 public class CollisonChecker {

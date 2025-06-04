@@ -3,15 +3,15 @@ package Objek.Items.Buildings;
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
 import Objek.Items.StackableItem.Bucket;
-import Objek.Items.StackableItem.Foods.Bacon;
-import Objek.Items.StackableItem.Foods.BakedPotato;
-import Objek.Items.StackableItem.Foods.CookedArwana;
-import Objek.Items.StackableItem.Foods.CookedBelida;
-import Objek.Items.StackableItem.Foods.CookedChicken;
-import Objek.Items.StackableItem.Foods.CookedMutton;
-import Objek.Items.StackableItem.Foods.Steak;
-import Objek.Items.StackableItem.Materials.GoldIngot;
-import Objek.Items.StackableItem.Materials.MetalIngot;
+import Objek.Items.StackableItem.Foods.CookedFoods.Bacon;
+import Objek.Items.StackableItem.Foods.CookedFoods.CookedArwana;
+import Objek.Items.StackableItem.Foods.CookedFoods.CookedBelida;
+import Objek.Items.StackableItem.Foods.CookedFoods.CookedChicken;
+import Objek.Items.StackableItem.Foods.CookedFoods.CookedMutton;
+import Objek.Items.StackableItem.Foods.CookedFoods.Steak;
+import Objek.Items.StackableItem.Foods.Other.BakedPotato;
+import Objek.Items.StackableItem.Materials.ForgedComponents.GoldIngot;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
 import Objek.Items.StackableItem.Materials.Fuels.Fuel;
 
 import java.awt.Rectangle;
@@ -61,7 +61,6 @@ public class Furnace extends Buildings {
                         fuelMaterial[0] = null;
                         System.out.println("No more " + cookedMaterial[0].name + " left");
                     }
-                    System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                 } else if (result != null && cookedMaterial[0] != null) {
                     if (result.name.equals(cookedMaterial[0].name)) {
                         if (cookedMaterial[0].currentStack < cookedMaterial[0].maxStack) {

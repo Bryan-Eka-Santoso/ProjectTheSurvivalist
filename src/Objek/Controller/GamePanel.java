@@ -1,6 +1,7 @@
 package Objek.Controller;
 
 import javax.swing.*;
+import Objek.AchievementHandler.AchievementManager;
 import Objek.Animal.*;
 import Objek.Enemy.Monster;
 import Objek.Environment.EnvironmentManager;
@@ -12,14 +13,6 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
-import Objek.Items.StackableItem.Bucket;
-import Objek.Items.StackableItem.Materials.GoldIngot;
-import Objek.Items.StackableItem.Materials.MetalIngot;
-import Objek.Items.Unstackable.FishingRod;
-import Objek.Items.Unstackable.Lantern;
-import Objek.Items.Unstackable.Armor.Chestplate.MetalChestplate;
-import Objek.Items.Unstackable.Armor.Helmet.WolfCloak;
-import Objek.Items.Unstackable.Arsenals.IcePickaxe;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -51,7 +44,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    public Player player = new Player("Player", 15, this, keyH);
+    public Player player = new Player("Player", 1, this, keyH);
     Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
@@ -60,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     Spawn sp = new Spawn(this);
     public CollisonChecker cCheck = new CollisonChecker(this);
+    public AchievementManager aManager = new AchievementManager();
     
     // Game State
     public int gameState;
@@ -130,10 +124,7 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread = new Thread(this);
         gameThread.start();
     }
-    
-    public void addPlant(Plant p) {
-        plants.add(p);
-    }
+
      public void checkAndRespawnOres() {
         int goldCount = 0;
         int metalCount = 0;
@@ -224,55 +215,53 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
+        checkAndRespawnAnimals();
         addPlant();
+
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new KandangAyam(this, 0));
-        player.inventory.addItems(new WolfCloak());
-        player.inventory.addItems(new Furnace(this, 1, 0));
-        player.inventory.addItems(new GoldIngot(64));
-        player.inventory.addItems(new MetalIngot(64));
-        player.inventory.addItems(new IcePickaxe());
-        player.inventory.addItems(new CraftingTable(this, 1, 0));
-        player.inventory.addItems(new FishingRod());
-        player.inventory.addItems(new Lantern(this));
-        player.inventory.addItems(new MetalChestplate());
-        player.inventory.addItems(new Bucket(5, this));
         player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new KandangAyam(this, 0));
         
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
         buildings.add(shop);
+
         Buildings cave = new Cave(this, 1, 0);
         cave.worldX = 50 * TILE_SIZE;
         cave.worldY = 50 * TILE_SIZE;
         buildings.add(cave);
+
         Buildings lemariAtas = new LemariAtas(this, 1, 3);
         lemariAtas.worldX = 44 * TILE_SIZE;
         lemariAtas.worldY = 44 * TILE_SIZE;
         buildings.add(lemariAtas);
+
         Buildings lemariKanan = new LemariKanan(this, 1, 3);
         lemariKanan.worldX = 53 * TILE_SIZE;
         lemariKanan.worldY = 45 * TILE_SIZE;
         buildings.add(lemariKanan);
+
         Buildings lemariKiri = new LemariKiri(this, 1, 3);
         lemariKiri.worldX = 44 * TILE_SIZE;
         lemariKiri.worldY = 45 * TILE_SIZE;
         buildings.add(lemariKiri);
+
         Buildings itemTable = new ItemTable(this, 1, 3);
         itemTable.worldX = 46 * TILE_SIZE;
         itemTable.worldY = 48 * TILE_SIZE;
         buildings.add(itemTable);
+
         Buildings itemSell = new ItemSell(this, 1, 3);
         itemSell.worldX = 46 * TILE_SIZE + 23;
         itemSell.worldY = 47 * TILE_SIZE;
         buildings.add(itemSell);
+
         Buildings effectTable = new EffectTable(this, 1, 3);
         effectTable.worldX = 50 * TILE_SIZE;
         effectTable.worldY = 48 * TILE_SIZE;
         buildings.add(effectTable);
+
         Buildings effectSell = new EffectSell(this, 1, 3);
         effectSell.worldX = 50 * TILE_SIZE + 23;
         effectSell.worldY = 47 * TILE_SIZE;
@@ -289,9 +278,6 @@ public class GamePanel extends JPanel implements Runnable {
 
             if (delta >= 1) {
                 update();
-                if (currentMap == 0) {
-                    checkAndRespawnAnimals();  
-                }
                 repaint();
                 delta--;
             }
@@ -487,6 +473,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Update the lighting system before drawing it
         eManager.update();
         eManager.draw(g2);
+        aManager.checkAll(this);
         ui.draw(g2);
         paintChildren(g);
         g2.dispose();
