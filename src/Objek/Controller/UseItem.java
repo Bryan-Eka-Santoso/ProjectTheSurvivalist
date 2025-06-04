@@ -52,6 +52,7 @@ import Objek.Items.Unstackable.Armor.Leggings.Leggings;
 import Objek.Items.Unstackable.Arsenals.Arsenal;
 import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
+import Objek.Items.Unstackable.Arsenals.FlimsyPickaxe;
 import Objek.Items.Unstackable.Arsenals.LightweightPickaxe;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
@@ -557,7 +558,7 @@ public class UseItem {
                         Ore ore = gp.ores.get(player.oreIndex);
                         
                         if (ore instanceof CrystalOre || ore instanceof GemOre){
-                            if (!(pickaxe instanceof LightweightPickaxe)){
+                            if (pickaxe instanceof FlimsyPickaxe){
                                 System.out.println("You need a Lightweight Pickaxe to mine Crystal or Gem Ore! (Or a stronger pickaxe)");
                                 return;
                             }
@@ -633,8 +634,6 @@ public class UseItem {
                 playSE(6);
             } else if (player.animalIndex != -1) {
                 Animal animal = player.gp.animals.get(player.animalIndex);
-                animal.hp -= fistDamage;
-                System.out.println("Punching animal with bare hands! Animal HP: " + animal.hp);
                 if (animal instanceof Chicken) {
                     Chicken chicken = (Chicken)animal;
                     chicken.hp -= fistDamage;
@@ -673,6 +672,18 @@ public class UseItem {
                     System.out.println("Hit cow: " + cow.hp + "/" + 100);
                     if(cow.hp <= 0) {
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
+                        player.gp.animals.remove(player.animalIndex);
+                        player.gainExp(rand.nextInt(10) + 9);
+                        player.animalIndex = -1;
+                    }
+                } else if (animal instanceof Wolf) {
+                    Wolf wolf = (Wolf)animal;
+                    wolf.hp -= fistDamage;
+                    System.out.println("Hit wolf: " + wolf.hp + "/" + 100);
+                    if(wolf.hp <= 0) {
+                        if (rand.nextInt(10) < 2) {
+                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
+                        }
                         player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 9);
                         player.animalIndex = -1;

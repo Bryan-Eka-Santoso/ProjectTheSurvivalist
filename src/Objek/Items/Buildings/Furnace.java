@@ -18,6 +18,8 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Random;
+
 import javax.imageio.ImageIO;
 
 public class Furnace extends Buildings {
@@ -25,6 +27,8 @@ public class Furnace extends Buildings {
     public Item[] rawMaterial;
     public Item[] fuelMaterial;
     public Item[] cookedMaterial;
+
+    Random rand = new Random();
 
     public Furnace(GamePanel gp, int currentStack, int buildingMap) {
         super("Furnace", 10, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48, buildingMap);
@@ -53,6 +57,7 @@ public class Furnace extends Buildings {
                     cookedMaterial[0].currentStack = result.currentStack;
                     rawMaterial[0].currentStack--;
                     fuelMaterial[0].currentStack--;
+                    gp.player.gainExp(rand.nextInt(5) + 10);
                     if (rawMaterial[0].currentStack == 0) {
                         rawMaterial[0] = null;
                         System.out.println("No more " + cookedMaterial[0].name + " left");

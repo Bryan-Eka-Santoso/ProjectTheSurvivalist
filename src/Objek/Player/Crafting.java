@@ -41,6 +41,8 @@ public class Crafting {
     public LinkedHashMap<List<Item>, Item> recipes = new LinkedHashMap<>();
     public GamePanel gp;
 
+    Random rand = new Random();
+
     public Crafting(GamePanel gp) {
         this.gp = gp;
         smallRecipes = fillSmallRecipes();
@@ -214,6 +216,8 @@ public class Crafting {
                     } else if (result instanceof Pickaxe) {
                         player.madePickaxe = true; // Set flag to true after crafting
                     }
+
+                    player.gainExp(rand.nextInt(5) + 10);
 
                 } else {
                     System.out.println("Not enough ingredients to craft " + itemName);

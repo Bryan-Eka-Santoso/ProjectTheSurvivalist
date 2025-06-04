@@ -39,6 +39,9 @@ public class Blackberries extends Berries implements Poisonous {
         System.out.println("Health: " + player.health + ", Hunger: " + player.hunger);
 
         player.thirst += getHydrationValue();
+        if (player.thirst > 100) {
+            player.thirst = 100; // Cap thirst at 100
+        }
         System.out.println("You ate a guava. Hydration increased by " + getHydrationValue() + ".");
     }
 }
