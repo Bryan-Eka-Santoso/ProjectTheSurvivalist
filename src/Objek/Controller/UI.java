@@ -126,7 +126,11 @@ public class UI {
     public boolean showInsufficientFunds = false;
     public long messageTimer = 0;
     public final long MESSAGE_DURATION = 2000;
+    public boolean showNeedBucketMessage = false;
+    public long needBucketMessageTimer = 0;
+    public final long NEED_BUCKET_MESSAGE_DURATION = 2000;
     public ArrayList<ShopItem> getShopItemsByCategory(int category) {
+
     ArrayList<ShopItem> result = new ArrayList<>();
     
     for (ShopItem item : shopItems) {
@@ -212,6 +216,9 @@ public class UI {
         }
         if (showKandangFullMessage) {
             drawFullKandangMessage(g2);
+        }
+        if(showNeedBucketMessage) {
+            drawNeedBucketMessage(g2);
         }
         if (showWrongKandangMessage) {
             drawWrongKandangMessage(g2);
@@ -308,6 +315,28 @@ public class UI {
     public void showAchievementNotification(Achievement a) {
         achievementToShow = a;
         achievementNotificationTime = System.currentTimeMillis();
+    }
+    public void showNeedBucketMessage() {
+        showNeedBucketMessage = true;
+        needBucketMessageTimer = System.currentTimeMillis();
+    }
+    public void drawNeedBucketMessage(Graphics2D g2) {
+        if(System.currentTimeMillis() - needBucketMessageTimer >= NEED_BUCKET_MESSAGE_DURATION) {
+            showNeedBucketMessage = false;
+        } else {
+            int messageWidth = gp.TILE_SIZE * 8;
+            int messageHeight = gp.TILE_SIZE * 3;
+            int messageX = gp.SCREEN_WIDTH/2 - messageWidth/2;
+            int messageY = gp.SCREEN_HEIGHT/2 - messageHeight/2;
+
+            g2.drawImage(woodBg, messageX, messageY, messageWidth, messageHeight, null);
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 24));
+            String message = "Need Empty Bucket!";
+            int textX = messageX + (messageWidth - g2.getFontMetrics().stringWidth(message))/2;
+            g2.drawString(message, textX, messageY + messageHeight/2);
+        }
     }
 
     public void respawnMenu() {
@@ -726,7 +755,6 @@ public class UI {
             else if(animal instanceof Pig) {
                 ((Pig)animal).getItem(player);
             }
-            animal.setReadyGetItem(false);
             inGetItemMenu = false;
             selectedGetItemIndex = 0;
         }
