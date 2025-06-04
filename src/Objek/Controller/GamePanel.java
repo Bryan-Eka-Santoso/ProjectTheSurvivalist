@@ -1,6 +1,7 @@
 package Objek.Controller;
 
 import javax.swing.*;
+import Objek.AchievementHandler.AchievementManager;
 import Objek.Animal.*;
 import Objek.Enemy.Monster;
 import Objek.Environment.EnvironmentManager;
@@ -52,6 +53,7 @@ public class GamePanel extends JPanel implements Runnable {
     Thread gameThread;
     Spawn sp = new Spawn(this);
     public CollisonChecker cCheck = new CollisonChecker(this);
+    public AchievementManager aManager = new AchievementManager();
     
     // Game State
     public int gameState;
@@ -215,6 +217,7 @@ public class GamePanel extends JPanel implements Runnable {
         long timer = 0;
         checkAndRespawnAnimals();
         addPlant();
+
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new WindAxe());
@@ -470,6 +473,7 @@ public class GamePanel extends JPanel implements Runnable {
         // Update the lighting system before drawing it
         eManager.update();
         eManager.draw(g2);
+        aManager.checkAll(this);
         ui.draw(g2);
         paintChildren(g);
         g2.dispose();

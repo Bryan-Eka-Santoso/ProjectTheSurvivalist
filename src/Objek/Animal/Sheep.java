@@ -7,7 +7,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
-import Objek.Items.StackableItem.Materials.Wool;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Wool;
 import Objek.Player.Player;
 
 import java.awt.image.BufferedImage;

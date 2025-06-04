@@ -16,13 +16,13 @@ import Objek.Ore.GoldOre;
 import Objek.Ore.MetalOre;
 import Objek.Ore.Rock;
 import Objek.Enemy.Bat;
-import Objek.Plant.BerryBush;
-import Objek.Plant.Bush;
-import Objek.Plant.GuavaTree;
-import Objek.Plant.MangoTree;
 import Objek.Enemy.Golem;
 import Objek.Plant.Plant;
-import Objek.Plant.Tree;
+import Objek.Plant.Bushes.BerryBush;
+import Objek.Plant.Bushes.Bush;
+import Objek.Plant.Trees.GuavaTree;
+import Objek.Plant.Trees.MangoTree;
+import Objek.Plant.Trees.Tree;
 
 public class Spawn {
     public GamePanel gp;

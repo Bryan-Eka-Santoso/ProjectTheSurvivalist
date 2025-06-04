@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
-import Objek.Items.StackableItem.Foods.Carrot;
+import Objek.Items.StackableItem.Foods.Other.Carrot;
 import Objek.Items.StackableItem.Foods.RawFoods.Potato;
 import Objek.Items.StackableItem.Seeds.Seeds;
 
