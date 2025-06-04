@@ -7,7 +7,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
-import Objek.Items.StackableItem.Foods.Egg;
+import Objek.Items.StackableItem.Foods.Other.Egg;
 import Objek.Player.Player;
 
 import java.awt.image.BufferedImage;

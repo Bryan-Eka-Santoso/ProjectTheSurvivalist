@@ -2,6 +2,7 @@ package Objek.Player;
 
 import javax.imageio.ImageIO;
 import Objek.Animal.Animal;
+import Objek.Animal.Cow;
 import Objek.Animal.TameAnimal;
 import Objek.Controller.GamePanel;
 import Objek.Controller.InteractBuild;
@@ -15,8 +16,9 @@ import Objek.Items.Unstackable.Armor.Boots.Boots;
 import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
 import Objek.Items.Unstackable.Armor.Helmet.Helmet;
 import Objek.Items.Unstackable.Armor.Leggings.Leggings;
-import Objek.Plant.Bush;
 import Objek.Plant.Plant;
+import Objek.Plant.Bushes.Bush;
+
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -62,8 +64,8 @@ public class Player {
     public Leggings leggings; // Array to hold leggings
     public Boots boots; // Array to hold boots
     private boolean isPoisoned = false;
-    private static final long POISON_DURATION = 300; // 5 detik diitung dari framenya
-    private static final int POISON_DAMAGE = 1;
+    private static final long POISON_DURATION = 600; // 10 detik diitung dari framenya
+    private static final int POISON_DAMAGE = 2;
     private static final long HUNGER_DECREASE_INTERVAL = 420; // 7 detik diitung dari frame
     private static final long THIRST_DECREASE_INTERVAL = 300; // 5 detik diitung dari frame
     private static final long HEALTH_REGEN_INTERVAL = 180; // 3 detik diitung dari frame
@@ -76,6 +78,11 @@ public class Player {
     private boolean isDehydrated = false;
     private int dehydrationCounter = 0;
 
+    public int totalTreesCut = 98;
+    public int totalBushesCut = 49;
+    public int totalOresMined = 49;
+    public boolean madeCraftingTable = false;
+    public boolean madePickaxe = false;
 
     public Player(String name, int level, GamePanel gp, KeyHandler keyH) {
         this.name = name;
@@ -214,6 +221,12 @@ public class Player {
         }
     }
 
+    public void curePoison() {
+        isPoisoned = false;
+        poisonCounter = 0;
+        System.out.println("Cured from poison!");
+    }
+
     public Boolean isNearWater(){
         int newX = gp.player.worldX, newY = gp.player.worldY; 
         switch (gp.player.direction) {
@@ -232,6 +245,10 @@ public class Player {
         }
         int tileNum = gp.tileM.mapTile[gp.currentMap][newX/gp.TILE_SIZE][newY/gp.TILE_SIZE];
         return tileNum == 16; // Assuming tile number 16 is water
+    }
+
+    public boolean isNearMilkableAnimal(){
+        return gp.player.animalIndex != -1 && (gp.animals.get(gp.player.animalIndex) instanceof Cow);
     }
 
     public void setPoisoned() {

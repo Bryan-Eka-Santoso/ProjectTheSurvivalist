@@ -7,7 +7,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
-import Objek.Items.StackableItem.Foods.Bacon;
+import Objek.Items.StackableItem.Foods.CookedFoods.Bacon;
 import Objek.Player.Player;
 
 

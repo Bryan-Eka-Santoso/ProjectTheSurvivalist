@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import Objek.Controller.GamePanel;
+import Objek.Plant.Trees.Tree;
 
 import java.awt.Color;
 
@@ -48,7 +49,7 @@ public class Plant {
                     g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
                 }
             if(hp < maxHp) {
-                double oneScale = (double)gp.TILE_SIZE/100;
+                double oneScale = (double)gp.TILE_SIZE/maxHp;
                 double hpBarValue = oneScale * hp;
                 
                 g2.setColor(new Color(35,35,35));

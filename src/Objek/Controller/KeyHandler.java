@@ -201,16 +201,16 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 }
                 return;
             }
-            if (code == KeyEvent.VK_W) {
+            if (code == KeyEvent.VK_W && !gp.player.isSleeping) {
                 WPressed();
             }
-            if (code == KeyEvent.VK_S) {
+            if (code == KeyEvent.VK_S && !gp.player.isSleeping) {
                 SPressed();
             }
-            if (code == KeyEvent.VK_A) {
+            if (code == KeyEvent.VK_A && !gp.player.isSleeping) {
                 APressed();
             }
-            if (code == KeyEvent.VK_D) {
+            if (code == KeyEvent.VK_D && !gp.player.isSleeping) {
                 DPressed();
             }
             if (code == KeyEvent.VK_SHIFT) {
@@ -574,6 +574,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void QPressed() {
+        if (gp.gameState == gp.INVENTORY_STATE){
+            gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], 1, gp.currentMap);
+        }
         if (gp.gameState == gp.DROPPED_ITEM_STATE){
             gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], gp.ui.amountToDrop, gp.currentMap);
             gp.gameState = gp.PLAY_STATE;
