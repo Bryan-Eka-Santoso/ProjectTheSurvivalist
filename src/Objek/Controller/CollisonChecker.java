@@ -6,6 +6,7 @@ import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
 import Objek.Items.Unstackable.FishingRod;
+import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
 import Objek.Ore.Ore;
 import Objek.Plant.Bushes.Bush;
 import Objek.Plant.Trees.Tree;
@@ -459,6 +460,9 @@ public class CollisonChecker {
                     if (gp.player.chestplate.durability <= 0) {
                         gp.player.chestplate = null; // Remove chestplate if durability is zero
                     }
+                    if (gp.player.chestplate instanceof BladeArmor) {
+                        animal.hp -= 2;
+                    }
                 }
                 if (gp.player.leggings != null) {
                     gp.player.leggings.durability--;
@@ -475,7 +479,7 @@ public class CollisonChecker {
                 if(16 - def <= 0){
                     gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
                 } else {
-                    gp.player.health -= (16-def); // Decrease player HP
+                    gp.player.health -= (16 - def); // Decrease player HP
                 }
                 if (gp.player.health <= 0) {
                     gp.player.health = 0; // Prevent negative health
@@ -773,6 +777,9 @@ public class CollisonChecker {
                 gp.player.chestplate.durability--;
                 if (gp.player.chestplate.durability <= 0) {
                     gp.player.chestplate = null; // Remove chestplate if durability is zero
+                }
+                if (gp.player.chestplate instanceof BladeArmor) {
+                    monster.hp -= 2;
                 }
             }
             if (gp.player.leggings != null) {
