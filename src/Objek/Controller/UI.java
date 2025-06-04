@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import Objek.AchievementHandler.Achievement;
 import Objek.Animal.*;
 import Objek.Fish.Fish;
 import Objek.Items.Item;
@@ -279,6 +281,33 @@ public class UI {
                 showInsufficientFunds = false;
             }
         }
+
+        if (achievementToShow != null) {
+            if (System.currentTimeMillis() - achievementNotificationTime < 3000) { // 3 seconds
+                g2.setColor(new Color(0,0,0,180));
+                g2.fillRoundRect(20, gp.SCREEN_HEIGHT - 240, 500, 95, 20, 20);
+                g2.setColor(Color.YELLOW);
+                g2.drawString("Achievement Unlocked!", 40, gp.SCREEN_HEIGHT - 210);
+                g2.setColor(Color.WHITE);
+                g2.drawString(achievementToShow.name, 40, gp.SCREEN_HEIGHT - 185);
+                g2.drawString(achievementToShow.description, 40, gp.SCREEN_HEIGHT - 160);
+
+                g2.setColor(new Color(255, 175, 255));
+                g2.setStroke(new BasicStroke(4));
+                g2.drawRoundRect(20, gp.SCREEN_HEIGHT - 240, 500, 95, 20, 20);
+            } else {
+                achievementToShow = null;
+            }
+        }
+    }
+
+    // In UI.java
+    private long achievementNotificationTime = 0;
+    private Achievement achievementToShow = null;
+
+    public void showAchievementNotification(Achievement a) {
+        achievementToShow = a;
+        achievementNotificationTime = System.currentTimeMillis();
     }
 
     public void respawnMenu() {

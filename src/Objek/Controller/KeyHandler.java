@@ -574,6 +574,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void QPressed() {
+        if (gp.gameState == gp.INVENTORY_STATE){
+            gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], 1, gp.currentMap);
+        }
         if (gp.gameState == gp.DROPPED_ITEM_STATE){
             gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], gp.ui.amountToDrop, gp.currentMap);
             gp.gameState = gp.PLAY_STATE;

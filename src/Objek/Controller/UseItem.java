@@ -15,30 +15,30 @@ import Objek.Enemy.Monster;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
-// import Objek.Items.StackableItem.Foods.Berries;
-import Objek.Items.StackableItem.Foods.Carrot;
-import Objek.Items.StackableItem.Foods.Coconut;
 import Objek.Items.StackableItem.Foods.Food;
-import Objek.Items.StackableItem.Foods.Guava;
-import Objek.Items.StackableItem.Foods.Mango;
+import Objek.Items.StackableItem.Foods.Fruits.Berries;
+import Objek.Items.StackableItem.Foods.Fruits.Coconut;
+import Objek.Items.StackableItem.Foods.Fruits.Guava;
+import Objek.Items.StackableItem.Foods.Fruits.Mango;
+import Objek.Items.StackableItem.Foods.Other.Carrot;
 import Objek.Items.StackableItem.Foods.RawFoods.Potato;
 import Objek.Items.StackableItem.Foods.RawFoods.RawChicken;
 import Objek.Items.StackableItem.Foods.RawFoods.RawMeat;
 import Objek.Items.StackableItem.Foods.RawFoods.RawMutton;
 import Objek.Items.StackableItem.Foods.RawFoods.RawPork;
-import Objek.Items.StackableItem.Materials.Crystal;
-import Objek.Items.StackableItem.Materials.Feather;
-import Objek.Items.StackableItem.Materials.Gem;
-import Objek.Items.StackableItem.Materials.Gold;
-import Objek.Items.StackableItem.Materials.GoldIngot;
 import Objek.Items.StackableItem.Materials.Material;
-import Objek.Items.StackableItem.Materials.Metal;
-import Objek.Items.StackableItem.Materials.MetalIngot;
-import Objek.Items.StackableItem.Materials.Stone;
 import Objek.Items.StackableItem.Materials.Wheat;
-import Objek.Items.StackableItem.Materials.WolfHide;
-import Objek.Items.StackableItem.Materials.Wool;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Feather;
+import Objek.Items.StackableItem.Materials.AnimalDrops.WolfHide;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Wool;
+import Objek.Items.StackableItem.Materials.ForgedComponents.GoldIngot;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
+import Objek.Items.StackableItem.Materials.OreDrops.Crystal;
+import Objek.Items.StackableItem.Materials.OreDrops.Gem;
+import Objek.Items.StackableItem.Materials.OreDrops.Gold;
+import Objek.Items.StackableItem.Materials.OreDrops.Metal;
+import Objek.Items.StackableItem.Materials.OreDrops.Stone;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.StackableItem.Seeds.MangoSeeds;
@@ -52,6 +52,7 @@ import Objek.Items.Unstackable.Armor.Leggings.Leggings;
 import Objek.Items.Unstackable.Arsenals.Arsenal;
 import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
+import Objek.Items.Unstackable.Arsenals.LightweightPickaxe;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
 import Objek.Ore.CrystalOre;
@@ -63,6 +64,12 @@ import Objek.Ore.Rock;
 import Objek.Enemy.Bat;
 import Objek.Enemy.Golem;
 import Objek.Plant.*;
+import Objek.Plant.Bushes.BerryBush;
+import Objek.Plant.Bushes.Bush;
+import Objek.Plant.Trees.GuavaTree;
+import Objek.Plant.Trees.MangoTree;
+import Objek.Plant.Trees.PalmTree;
+import Objek.Plant.Trees.Tree;
 import Objek.Player.Player;
 
 public class UseItem {
@@ -131,6 +138,8 @@ public class UseItem {
                     bucket.drink();
                 } else if (gp.player.isNearWater()) {
                     bucket.fillWater();
+                } else if (gp.player.isNearMilkableAnimal() && bucket.status.equals("empty")) {
+                    bucket.fillMilk();
                 } else {
                     System.out.println("Bucket is already filled with " + bucket.status + ".");
                 }
@@ -138,11 +147,14 @@ public class UseItem {
             } else if (selectedItem instanceof Wood || selectedItem instanceof Stone || selectedItem instanceof GoldIngot || selectedItem instanceof MetalIngot) {
                 System.out.println("Using material: " + selectedItem.name);
             } else if (selectedItem instanceof WateringCan) {
-                System.out.println("Using unstackable item: " + selectedItem.name);
+                WateringCan wateringCan = (WateringCan) selectedItem;
                 if (player.buildingIndex != -1){
+                    System.out.println("Using unstackable item: " + wateringCan.name);
                     if (player.gp.buildings.get(player.buildingIndex) instanceof Orchard) {
                         Orchard orchard = (Orchard) player.gp.buildings.get(player.buildingIndex);
                         if (orchard.seed != null) {
+                            wateringCan.durability -= 5;
+
                             System.out.println("Watering the seed: " + orchard.seed.name);
                             orchard.water();
                         } else {
@@ -151,6 +163,7 @@ public class UseItem {
                     } else if (player.gp.buildings.get(player.buildingIndex) instanceof GardenPatch) {
                         GardenPatch gardenPatch = (GardenPatch) player.gp.buildings.get(player.buildingIndex);
                         if (gardenPatch.seed != null) {
+                            wateringCan.durability -= 5;
                             System.out.println("Watering the seed: " + gardenPatch.seed.name);
                             gardenPatch.water();
                         } else {
@@ -158,6 +171,12 @@ public class UseItem {
                         }
                     } else {
                         System.out.println("No orchard/garden patch selected to use the watering can on!");
+                    }
+
+                    if (wateringCan.durability <= 0) {
+                        System.out.println("Watering can is broken!");
+                        player.inventory.removeItem(wateringCan, 1); // Remove the watering can from inventory
+                        return;
                     }
                 }
             } else if (selectedItem instanceof Lantern) {
@@ -248,20 +267,25 @@ public class UseItem {
 
                     System.out.println("Plant HP: " + plant.hp);
                     if (plant.hp <= 0) {
-                        if (plant instanceof GuavaTree) {
-                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Guava(rand.nextInt(2) + 1), gp));
-                        } else if (plant instanceof MangoTree) {
-                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Mango(rand.nextInt(2) + 1), gp));
-                        } else if (plant instanceof PalmTree) {
-                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Coconut(rand.nextInt(2) + 1), gp));
-                        } else if (plant instanceof BerryBush) {
-                            // player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, Berries.createBerries(rand.nextInt(3) + 1, rand.nextInt(2) + 1), gp));
+                        if (plant instanceof Tree){
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                            if (plant instanceof GuavaTree) {
+                                player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Guava(rand.nextInt(2) + 1), gp));
+                            } else if (plant instanceof MangoTree) {
+                                player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Mango(rand.nextInt(2) + 1), gp));
+                            } else if (plant instanceof PalmTree) {
+                                player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Coconut(rand.nextInt(2) + 1), gp));
+                            }
+                            player.totalTreesCut++;
                         }
 
-                        if (plant instanceof Tree) {
-                            player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Wood(rand.nextInt(4) + 4), gp));
-                        } else if (plant instanceof Bush && rand.nextInt(5) == 0) {
-                            player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Seeds(1), gp));
+                        if (plant instanceof Bush){
+                            if (rand.nextInt(5) == 0) {
+                                player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Seeds(1), gp));
+                            } if (plant instanceof BerryBush) {
+                                player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, Berries.createBerries(rand.nextInt(3) + 1, rand.nextInt(2) + 1), gp));
+                            }
+                            player.totalBushesCut++;
                         }
                         player.gp.plants.remove(player.plantIndex);
                         player.plantIndex = -1; 
@@ -531,6 +555,13 @@ public class UseItem {
                         Pickaxe pickaxe = (Pickaxe)player.inventory.getSelectedItem();
                         Ore ore = gp.ores.get(player.oreIndex);
                         
+                        if (ore instanceof CrystalOre || ore instanceof GemOre){
+                            if (!(pickaxe instanceof LightweightPickaxe)){
+                                System.out.println("You need a Lightweight Pickaxe to mine Crystal or Gem Ore! (Or a stronger pickaxe)");
+                                return;
+                            }
+                        }
+
                         ore.hp -= pickaxe.damage;
                         pickaxe.durability--;
                         
@@ -553,6 +584,7 @@ public class UseItem {
                                 }
                                 gp.droppedItems.add(new ItemDrop(ore.worldX + 10, ore.worldY, new Stone(rand.nextInt(2) + 1), gp));
                             }
+                            player.totalOresMined++;
                             gp.ores.remove(player.oreIndex);
                             player.oreIndex = -1;
                         }
@@ -571,6 +603,87 @@ public class UseItem {
                 }
             } else {
                 System.out.println("Unknown item type!"); 
+            }
+        } else if (selectedItem == null && gp.currentMap == 0) {
+            // Punching with bare hands
+            int fistDamage = 4;
+            if (player.plantIndex != -1) {
+                Plant plant = player.gp.plants.get(player.plantIndex);
+                plant.hp -= fistDamage;
+                System.out.println("Punching plant with bare hands! Plant HP: " + plant.hp);
+                if (plant.hp <= 0) {
+                    if (plant instanceof Tree){
+                        player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                        if (plant instanceof GuavaTree) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Guava(rand.nextInt(2) + 1), gp));
+                        } else if (plant instanceof MangoTree) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Mango(rand.nextInt(2) + 1), gp));
+                        } else if (plant instanceof PalmTree) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, new Coconut(rand.nextInt(2) + 1), gp));
+                        }
+                        player.totalTreesCut++;
+                    }
+
+                    if (plant instanceof Bush){
+                        if (rand.nextInt(5) == 0) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX - 20, plant.worldY, new Seeds(1), gp));
+                        } if (plant instanceof BerryBush) {
+                            player.gp.droppedItems.add(new ItemDrop(plant.worldX + 20, plant.worldY, Berries.createBerries(rand.nextInt(3) + 1, rand.nextInt(2) + 1), gp));
+                        }
+                        player.totalBushesCut++;
+                    }
+                    player.gp.plants.remove(player.plantIndex);
+                    player.plantIndex = -1; 
+                }
+                playSE(6);
+            } else if (player.animalIndex != -1) {
+                Animal animal = player.gp.animals.get(player.animalIndex);
+                animal.hp -= fistDamage;
+                System.out.println("Punching animal with bare hands! Animal HP: " + animal.hp);
+                if (animal instanceof Chicken) {
+                    Chicken chicken = (Chicken)animal;
+                    chicken.hp -= fistDamage;
+                    System.out.println("Hit chicken: " + chicken.hp + "/" + 60);
+                    if(chicken.hp <= 0) {
+                        player.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
+                        player.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
+                        player.gp.animals.remove(player.animalIndex);
+                        player.gainExp(rand.nextInt(10) + 5);
+                        player.animalIndex = -1;
+                    }
+                } else if (animal instanceof Pig) {
+                    Pig pig = (Pig)animal;
+                    pig.hp -= fistDamage;
+                    System.out.println("Hit pig: " + pig.hp + "/" + 80);
+                    if(pig.hp <= 0) {
+                        player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
+                        player.gp.animals.remove(player.animalIndex);
+                        player.gainExp(rand.nextInt(10) + 7);
+                        player.animalIndex = -1;
+                    }
+                } else if(animal instanceof Sheep) {
+                    Sheep sheep = (Sheep)animal;
+                    sheep.hp -= fistDamage;
+                    System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
+                    if(sheep.hp <= 0) {
+                        player.gp.droppedItems.add(new ItemDrop(animal.worldX - 15, animal.worldY, new RawMutton(1), gp));
+                        player.gp.droppedItems.add(new ItemDrop(animal.worldX + 15, animal.worldY, new Wool(rand.nextInt(2) + 1), gp));
+                        player.gp.animals.remove(player.animalIndex);
+                        player.gainExp(rand.nextInt(10) + 8);
+                        player.animalIndex = -1;
+                    }
+                } else if(animal instanceof Cow) {
+                    Cow cow = (Cow)animal;
+                    cow.hp -= fistDamage;
+                    System.out.println("Hit cow: " + cow.hp + "/" + 100);
+                    if(cow.hp <= 0) {
+                        player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
+                        player.gp.animals.remove(player.animalIndex);
+                        player.gainExp(rand.nextInt(10) + 9);
+                        player.animalIndex = -1;
+                    }
+                }
+                playSE(4);
             }
         } else {
             System.out.println("No item selected!"); 

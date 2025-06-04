@@ -6,8 +6,25 @@ import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
 import Objek.Items.StackableItem.Foods.*;
+import Objek.Items.StackableItem.Foods.Fruits.Coconut;
+import Objek.Items.StackableItem.Foods.Fruits.Guava;
+import Objek.Items.StackableItem.Foods.Fruits.Mango;
+import Objek.Items.StackableItem.Foods.Other.Bread;
 import Objek.Items.StackableItem.Materials.*;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Feather;
+import Objek.Items.StackableItem.Materials.AnimalDrops.WolfHide;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Wool;
+import Objek.Items.StackableItem.Materials.ForgedComponents.GoldIngot;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalFrame;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalNails;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalSheet;
+import Objek.Items.StackableItem.Materials.ForgedComponents.SwordHandle;
+import Objek.Items.StackableItem.Materials.ForgedComponents.ToolHandle;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
+import Objek.Items.StackableItem.Materials.OreDrops.Crystal;
+import Objek.Items.StackableItem.Materials.OreDrops.Gem;
+import Objek.Items.StackableItem.Materials.OreDrops.Stone;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
 import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.StackableItem.Seeds.MangoSeeds;
@@ -40,7 +57,7 @@ public class Crafting {
         List<Item> recipe1 = Arrays.asList(new MetalSheet(1), new MetalFrame(1));
         r.put(recipe1, new SwordHandle(1));
 
-        List<Item> recipe2 = Arrays.asList(new Wood(2), new MetalSheet(1));
+        List<Item> recipe2 = Arrays.asList(new Wood(3));
         r.put(recipe2, new ToolHandle(1));
 
         List<Item> recipe3 = Arrays.asList(new MetalIngot(1));
@@ -89,7 +106,9 @@ public class Crafting {
         List<Item> recipe3 = Arrays.asList(new ToolHandle(1), new Wood(1), new Stone(2));
         r.put(recipe3, new FlimsyAxe());
 
-        List<Item> recipe4 = Arrays.asList(new ToolHandle(1), new MetalIngot(2));
+        r.put(Arrays.asList(new ToolHandle(1), new Wood(3)), new FlimsyPickaxe());
+
+        List<Item> recipe4 = Arrays.asList(new ToolHandle(1), new Stone(2));
         r.put(recipe4, new LightweightPickaxe());
 
         List<Item> recipe5 = Arrays.asList(new ToolHandle(1), new Crystal(1), new MetalSheet(2));
@@ -190,6 +209,13 @@ public class Crafting {
                         }
                     }
                     player.inventory.addItems(result);
+
+                    if (result instanceof CraftingTable) {
+                        player.madeCraftingTable = true; // Set flag to true after crafting
+                    } else if (result instanceof Pickaxe) {
+                        player.madePickaxe = true; // Set flag to true after crafting
+                    }
+
                 } else {
                     System.out.println("Not enough ingredients to craft " + itemName);
                 }

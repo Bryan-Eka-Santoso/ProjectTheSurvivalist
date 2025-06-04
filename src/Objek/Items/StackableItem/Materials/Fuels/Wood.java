@@ -6,7 +6,7 @@ import javax.imageio.ImageIO;
 
 public class Wood extends Fuel {
     public Wood(int currentStack) {
-        super("Wood", 20, currentStack);
+        super("Wood", currentStack);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/wood-log.png")); 
         } catch (IOException e) {

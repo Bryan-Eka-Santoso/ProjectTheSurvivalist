@@ -10,6 +10,10 @@ import Objek.Items.StackableItem.Seeds.GuavaSeeds;
 import Objek.Items.StackableItem.Seeds.MangoSeeds;
 import Objek.Items.StackableItem.Seeds.Seeds;
 import Objek.Plant.*;
+import Objek.Plant.Trees.GuavaTree;
+import Objek.Plant.Trees.MangoTree;
+import Objek.Plant.Trees.PalmTree;
+import Objek.Plant.Trees.Tree;
 
 public class Orchard extends Buildings {
     public Seeds seed;
