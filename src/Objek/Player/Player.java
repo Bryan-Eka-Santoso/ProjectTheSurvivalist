@@ -83,6 +83,12 @@ public class Player {
     public int totalOresMined = 49;
     public boolean madeCraftingTable = false;
     public boolean madePickaxe = false;
+    
+    public int totalPlantsPlanted = 0;
+    public boolean hasForgedIronItem = false;
+    public int totalMonstersKilled = 0;
+    public int daysAlive = -1;
+    public int maxDaysAlive = 0;
 
     public Player(String name, int level, GamePanel gp, KeyHandler keyH) {
         this.name = name;

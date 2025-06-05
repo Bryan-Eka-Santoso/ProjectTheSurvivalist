@@ -311,6 +311,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             gameState = GAME_OVER_STATE;
             player.health = 0;
+            player.daysAlive = 0;
             eManager.lighting.filterAlpha = eManager.lighting.filterAlphaTemp;
             
         } else {
