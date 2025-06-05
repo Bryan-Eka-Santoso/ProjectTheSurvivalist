@@ -14,8 +14,10 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
+import Objek.Fish.Golden;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.GoldenFish;
 import Objek.Items.StackableItem.Stackable;
 import Objek.Items.StackableItem.Foods.RawFoods.RawArwana;
 import Objek.Items.StackableItem.Foods.RawFoods.RawBelida;
@@ -786,6 +788,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 
                 if (gp.fish.get(gp.ui.fishIndex) instanceof Belida) {
                     gp.player.inventory.addItems(new RawBelida(1));
+                } 
+
+                if (gp.fish.get(gp.ui.fishIndex) instanceof Golden) {
+                    gp.player.inventory.addItems(new GoldenFish(1));
                 } 
                 
                 ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength = ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).maxStr;
