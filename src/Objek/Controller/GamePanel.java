@@ -227,7 +227,6 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new Bucket(1, this));
         player.inventory.addItems(new BladeArmor());
 
-
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
@@ -305,7 +304,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void update() {
-        
+
         if (gameState == PAUSE_STATE) return;
         
         if (player.health <= 0) {
