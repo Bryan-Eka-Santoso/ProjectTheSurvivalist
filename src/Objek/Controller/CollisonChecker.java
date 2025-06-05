@@ -445,7 +445,7 @@ public class CollisonChecker {
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
     
         // Check collision
-        if(animal.solidArea.intersects(gp.player.solidArea)) {
+        if(animal.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen) {
             animal.collisionOn = true;
             int def = gp.player.getDefense();
             if (animal instanceof Wolf) {

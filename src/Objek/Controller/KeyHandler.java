@@ -152,7 +152,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (gp.gameState == gp.INVENTORY_STATE) {
+        if (gp.gameState == gp.INVENTORY_STATE && !gp.player.isFrozen) {
             int mouseX = e.getX();
             int mouseY = e.getY();
             Integer slotIdx = gp.ui.getClickedInventorySlot(mouseX, mouseY);
@@ -574,6 +574,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void QPressed() {
+        if (gp.player.isFrozen){
+            return; // Prevent dropping items if player is frozen
+        }
         if (gp.gameState == gp.INVENTORY_STATE){
             gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], 1, gp.currentMap);
         }

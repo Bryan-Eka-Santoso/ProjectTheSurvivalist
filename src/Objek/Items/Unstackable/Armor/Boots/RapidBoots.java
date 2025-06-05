@@ -4,7 +4,7 @@ public class RapidBoots extends Boots {
     public RapidBoots() {
         super("Rapid Boots", 125, 4);
         try {
-            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Equipments/rapidboots.png"));
+            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Armor/metalboots.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

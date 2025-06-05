@@ -116,7 +116,7 @@ public class Bat extends Monster {
         isCollision(this); // Cek collision dengan player dan tile
 
         // Jika tidak ada collision, boleh bergerak
-        if (!isPreyNearby(gp.player)) {
+        if (!isPreyNearby(gp.player) || gp.player.isFrozen) {
             moveNormally();
         } else {
             moveTowardsPlayer();

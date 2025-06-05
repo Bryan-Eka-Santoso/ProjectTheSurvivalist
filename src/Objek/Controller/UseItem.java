@@ -45,6 +45,7 @@ import Objek.Items.StackableItem.Seeds.MangoSeeds;
 import Objek.Items.StackableItem.Seeds.Seeds;
 import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WateringCan;
+import Objek.Items.Unstackable.WinterCrown;
 import Objek.Items.Unstackable.Armor.Boots.Boots;
 import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
 import Objek.Items.Unstackable.Armor.Helmet.Helmet;
@@ -53,6 +54,7 @@ import Objek.Items.Unstackable.Arsenals.Arsenal;
 import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
 import Objek.Items.Unstackable.Arsenals.FlimsyPickaxe;
+import Objek.Items.Unstackable.Arsenals.HaasClaws;
 import Objek.Items.Unstackable.Arsenals.LightweightPickaxe;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
@@ -84,7 +86,13 @@ public class UseItem {
 
     public void useItem(Item selectedItem, Player player) {
         if (selectedItem != null && selectedItem.name != null) {
-            if (selectedItem instanceof Helmet) {
+            if (selectedItem instanceof WinterCrown && (gp.currentMap == 0 || gp.currentMap == 2)) {
+                if (!player.isFrozen){
+                    player.isFrozen = true;
+                } else {
+                    player.isFrozen = false;
+                }
+            } else if (selectedItem instanceof Helmet) {
                 if (gp.player.helmet != null){
                     Helmet tempHelmet = gp.player.helmet;
                     gp.player.helmet = (Helmet) selectedItem.clone();
@@ -301,6 +309,11 @@ public class UseItem {
                     if (selectedItem instanceof Pickaxe){
                         System.out.println("Using pickaxe: " + arsenal.name);
                         arsenal.durability -= 3;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    } else if (selectedItem instanceof HaasClaws){
+                        System.out.println("Using Haas Claws");
+                        player.health += arsenal.damage;
+                        arsenal.durability--;
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     } else {
                         System.out.println("Using axe/sword/club: " + arsenal.name);

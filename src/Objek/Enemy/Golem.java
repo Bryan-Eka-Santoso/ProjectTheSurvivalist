@@ -112,7 +112,7 @@ public class Golem extends Monster {
         isCollision(this);
         
         // Jika tidak ada collision, boleh bergerak
-        if (!isPreyNearby(gp.player)) {
+        if (!isPreyNearby(gp.player) || gp.player.isFrozen) {
             moveNormally();
         } else {
             moveTowardsPlayer();

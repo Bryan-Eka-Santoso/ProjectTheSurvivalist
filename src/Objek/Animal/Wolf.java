@@ -127,7 +127,7 @@ public class Wolf extends WildAnimal {
         isCollision(this);
 
         // Jika tidak ada collision, boleh bergerak
-        if (!isPreyNearby(gp.player) || (gp.player.helmet != null && gp.player.helmet instanceof WolfCloak)) {
+        if (!isPreyNearby(gp.player) || (gp.player.helmet != null && gp.player.helmet instanceof WolfCloak) || gp.player.isFrozen) {
             moveNormally();
         } else {
             moveTowardsPlayer();

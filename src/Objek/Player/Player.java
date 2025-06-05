@@ -12,8 +12,11 @@ import Objek.Controller.UseItem;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Items.Unstackable.WinterCrown;
 import Objek.Items.Unstackable.Armor.Boots.Boots;
+import Objek.Items.Unstackable.Armor.Boots.RapidBoots;
 import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
+import Objek.Items.Unstackable.Armor.Helmet.GuardianHelmet;
 import Objek.Items.Unstackable.Armor.Helmet.Helmet;
 import Objek.Items.Unstackable.Armor.Leggings.Leggings;
 import Objek.Plant.Plant;
@@ -35,7 +38,7 @@ public class Player {
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
     public BufferedImage cutup1, cutup2, cutdown1, cutdown2, cutleft1, cutleft2, cutright1, cutright2;
-    public BufferedImage sleep, stay;
+    public BufferedImage sleep, stay, frozenfront;
     public String direction;
     public int spriteCounter = 0;
     public int spriteNum = 1;
@@ -70,13 +73,16 @@ public class Player {
     private static final long THIRST_DECREASE_INTERVAL = 300; // 5 detik diitung dari frame
     private static final long HEALTH_REGEN_INTERVAL = 180; // 3 detik diitung dari frame
     private static final int DEHYDRATION_DAMAGE_INTERVAL = 120; // 2 detik diitung dari frame
+    private static final int GUARDIAN_HELMET_DURATION = 60; // 1 detik diitung dari frame
     int hungerCounter = 0;
     int thirstCounter = 0;
     public int coins = 0;
     int healthCounter = 0;
     private int poisonCounter = 0;
     private boolean isDehydrated = false;
+    public boolean isFrozen = false; // Untuk Winter Crown
     private int dehydrationCounter = 0;
+    private int guardianHelmetCounter = 0;
 
     public int totalTreesCut = 98;
     public int totalBushesCut = 49;
@@ -151,6 +157,7 @@ public class Player {
             }
             sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
             stay = ImageIO.read(new File("ProjectTheSurvivalist/res/player/stay.png"));
+            frozenfront = ImageIO.read(new File("ProjectTheSurvivalist/res/player/frozenfront.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -313,13 +320,25 @@ public class Player {
             }
         }
 
-         if (this.hunger >= 75 || this.thirst >= 75) {
+        if (this.hunger >= 75 || this.thirst >= 75) {
             healthCounter++;
             if (healthCounter >= HEALTH_REGEN_INTERVAL) {
                 if (health < maxHealth) {
                     health++;
                 }
                 healthCounter = 0;
+            }
+        }
+
+        if (this.helmet instanceof GuardianHelmet) {
+            guardianHelmetCounter++;
+            if (guardianHelmetCounter >= GUARDIAN_HELMET_DURATION && (this.hunger >= 50 || this.thirst >= 50)) {
+                health += 2; // Restore 5 health when Guardian Helmet effect ends
+                guardianHelmetCounter = 0;
+
+                if (health > maxHealth) {
+                    health = maxHealth; // Ensure health does not exceed maxHealth
+                }
             }
         }
 
@@ -330,6 +349,10 @@ public class Player {
             handlePoisonEffect();
         }
         handleDehydrationEffect();
+        if (isFrozen) {
+            // Skip all movement and input logic when frozen
+            return;
+        }
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
                 direction = "up";
@@ -361,6 +384,9 @@ public class Player {
             }
             
             if (!collisionOn) {
+                if (this.boots instanceof RapidBoots){
+                    speed = keyH.shiftPressed ? 20 : 10;
+                }
                 switch (direction) {
                     case "up": worldY -= speed; break;
                     case "down": worldY += speed; break;
@@ -383,7 +409,9 @@ public class Player {
 
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        if (health <= 0) {
+        if (isFrozen){
+            image = frozenfront;
+        } else if (health <= 0) {
             image = down1;
         } else if (!isCutting) {
             switch (direction) {
@@ -631,6 +659,11 @@ public class Player {
     public void useItem(Item selectedItem) {
         if (isHoldingAnimal()) {
             System.out.println("Cannot use items while holding an animal!");
+            return;
+        }
+        // Only allow using Winter Crown when frozen
+        if (isFrozen && !(selectedItem instanceof WinterCrown)) {
+            System.out.println("You are frozen and can only use the Winter Crown!");
             return;
         }
         interactObj.useItem(selectedItem, this);
