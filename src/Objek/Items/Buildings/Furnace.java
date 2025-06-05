@@ -49,6 +49,9 @@ public class Furnace extends Buildings {
                 Item tempItem = rawMaterial[0];
                 Item result = recipe.get(tempItem.name);
                 if (result != null && cookedMaterial[0] == null) {
+                    if(result.name.contains("Metal")) {  
+                        gp.player.hasForgedIronItem = true;  // Set the achievement flag
+                    }
                     cookedMaterial[0] = result.clone();
                     cookedMaterial[0].currentStack = result.currentStack;
                     rawMaterial[0].currentStack--;
