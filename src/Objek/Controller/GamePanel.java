@@ -227,7 +227,7 @@ public class GamePanel extends JPanel implements Runnable {
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new CowCage(this,0));
-        player.inventory.addItems(new Bucket(1, this));
+        player.inventory.addItems(new Bucket(3, this));
         player.inventory.addItems(new BladeArmor());
         player.inventory.addItems(new RapidBoots());
         player.inventory.addItems(new WinterCrown());
@@ -310,7 +310,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void update() {
-        
+
         if (gameState == PAUSE_STATE) return;
         
         if (player.health <= 0) {
@@ -319,6 +319,7 @@ public class GamePanel extends JPanel implements Runnable {
 
             gameState = GAME_OVER_STATE;
             player.health = 0;
+            player.daysAlive = 0;
             eManager.lighting.filterAlpha = eManager.lighting.filterAlphaTemp;
             
         } else {

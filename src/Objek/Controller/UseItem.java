@@ -223,6 +223,7 @@ public class UseItem {
                         return;
                     }
                     gardenPatch.plant(seed);
+                    gp.player.totalPlantsPlanted++;
                     System.out.println("Using seed: " + seed.name);
                     gp.player.inventory.removeItem(seed, 1); // Remove seed from inventory
                 }
@@ -369,6 +370,7 @@ public class UseItem {
                         wolf.hp -= damage;
                         System.out.println("Hit wolf: " + wolf.hp + "/" + 100);
                         if(wolf.hp <= 0) {
+                            gp.player.totalMonstersKilled++;
                             if (rand.nextInt(10) < 2) {
                                 player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
@@ -398,6 +400,7 @@ public class UseItem {
                         System.out.println("Hit bat: " + bat.hp + "/" + 30);
                         if(bat.hp <= 0) {
                             // player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
+                            gp.player.totalMonstersKilled++;
                             player.gp.monsters.remove(player.monsterIndex);
                             player.gainExp(rand.nextInt(10) + 9);
                             player.monsterIndex = -1;
@@ -407,6 +410,7 @@ public class UseItem {
                         golem.hp -= damage;
                         System.out.println("Hit golem: " + golem.hp + "/" + 200);
                         if(golem.hp <= 0) {
+                            gp.player.totalMonstersKilled++;
                             player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
                             player.gp.monsters.remove(player.monsterIndex);
                             player.gainExp(rand.nextInt(20) + 15);

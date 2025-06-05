@@ -17,10 +17,7 @@ public class Wolf extends WildAnimal {
     String gender;
     boolean readyGetItem;
     boolean readyBreeding;
-    private Rectangle upHitbox;
-    private Rectangle downHitbox;
-    private Rectangle leftHitbox;
-    private Rectangle rightHitbox;
+    public boolean isBiting = true;
     public int actionLockCounter = 0;
     public int actionLockEnemyNearby = 15;
     private int actionMoveCounter = 0;
@@ -33,12 +30,9 @@ public class Wolf extends WildAnimal {
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
         this.readyBreeding = true;
         this.readyGetItem = true;  
+        this.isBiting = true;
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(17, 1, 28, 63);   
-        downHitbox = new Rectangle(18, 5, 28, 59);   
-        leftHitbox = new Rectangle(1, 16, 63, 35);   
-        rightHitbox = new Rectangle(1, 16, 63, 35);  
-        this.solidArea = downHitbox; 
+        this.solidArea = new Rectangle(30, 1, 34, 62);
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         readyBreeding = true;
@@ -106,23 +100,26 @@ public class Wolf extends WildAnimal {
             return; 
         }
         actionLockCounter = 0;
+
         if(direction == null) {
             direction = "down"; 
         }
+
         switch(direction) {
             case "up": 
-                solidArea = upHitbox;
+                solidArea =  new Rectangle(30, 1, 34, 62);
                 break;
             case "down": 
-                solidArea = downHitbox;
+                solidArea =  new Rectangle(30, 1, 34, 62);
                 break;
             case "left": 
-                solidArea = leftHitbox;
+                solidArea = new Rectangle(1, 30, 62, 34);   
                 break;
             case "right": 
-                solidArea = rightHitbox;
+                solidArea = new Rectangle(1, 30, 62, 34);
                 break;
         }
+        
         collisionOn = false;
         isCollision(this);
 
@@ -137,19 +134,19 @@ public class Wolf extends WildAnimal {
     public void moveTowardsPlayer() {
         String nextDirection = chasePlayer(gp.player);
         direction = nextDirection;
-        switch(nextDirection) {
+        switch(direction) {
             case "up": 
-                solidArea = upHitbox;
-            break;
+                solidArea =  new Rectangle(30, 1, 34, 62);
+                break;
             case "down": 
-                solidArea = downHitbox;
-            break;
+                solidArea =  new Rectangle(30, 1, 34, 62);
+                break;
             case "left": 
-                solidArea = leftHitbox;
-            break;
+                solidArea = new Rectangle(1, 30, 62, 34);   
+                break;
             case "right": 
-                solidArea = rightHitbox;
-            break;
+                solidArea = new Rectangle(1, 30, 62, 34);
+                break;
         }
         collisionOn = false;
         isCollision(this);
@@ -190,10 +187,10 @@ public class Wolf extends WildAnimal {
             this.direction = nextDirection;
             switch (direction) {
                 case "up":
-                worldY -= speed;
+                    worldY -= speed;
                 break;
                 case "down":
-                worldY += speed;
+                    worldY += speed;
                     break;
                 case "left":
                     worldX -= speed;
@@ -212,6 +209,21 @@ public class Wolf extends WildAnimal {
             }
             spriteCounter = 0;
         }
+        switch(direction) {
+            case "up": 
+                solidArea =  new Rectangle(30, 1, 34, 62);
+                break;
+            case "down": 
+                solidArea =  new Rectangle(30, 1, 34, 62);
+                break;
+            case "left": 
+                solidArea = new Rectangle(1, 30, 62, 34);   
+                break;
+            case "right": 
+                solidArea = new Rectangle(1, 30, 62, 34);
+                break;
+        }
+
     }
 
     public void moveNormally() {
@@ -299,6 +311,7 @@ public class Wolf extends WildAnimal {
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
+            
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE * 2, gp.TILE_SIZE * 2, null);
             if(hp < 100) {
                 double oneScale = (double) gp.TILE_SIZE*2/100;

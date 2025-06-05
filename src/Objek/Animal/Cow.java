@@ -213,7 +213,6 @@ public class Cow extends TameAnimal {
 
                 g2.setColor(new Color(255,0,30));
                 g2.fillRect(screenX+1 , screenY-15, (int)hpBarValue, 10);
-                
                
             }
         }

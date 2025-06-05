@@ -1,10 +1,13 @@
 package Objek.Controller;
 
 import java.awt.Rectangle;
+import java.util.Random;
+
 import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
+import Objek.Items.StackableItem.Materials.AnimalDrops.WolfHide;
 import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
 import Objek.Ore.Ore;
@@ -14,6 +17,7 @@ import Objek.Player.Player;
 
 public class CollisonChecker {
     GamePanel gp;
+    Random rand = new Random();
 
     public CollisonChecker (GamePanel gp) {
         this.gp = gp;
@@ -183,7 +187,7 @@ public class CollisonChecker {
             gp.buildings.get(i).solidArea.x = gp.buildings.get(i).worldX + gp.buildings.get(i).solidArea.x;
             gp.buildings.get(i).solidArea.y = gp.buildings.get(i).worldY + gp.buildings.get(i).solidArea.y;
 
-            if (animal.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+            if (animal.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.buildings.get(i).buildingMap == 0) {
                 if (animal instanceof Animal) {
                     animal.collisionOn = gp.buildings.get(i).isAllowCollison;
                 }
@@ -449,6 +453,7 @@ public class CollisonChecker {
             animal.collisionOn = true;
             int def = gp.player.getDefense();
             if (animal instanceof Wolf) {
+                ((Wolf) animal).isBiting = false;
                 if (gp.player.helmet != null) {
                     gp.player.helmet.durability--;
                     if (gp.player.helmet.durability <= 0) {
@@ -461,7 +466,15 @@ public class CollisonChecker {
                         gp.player.chestplate = null; // Remove chestplate if durability is zero
                     }
                     if (gp.player.chestplate instanceof BladeArmor) {
-                        animal.hp -= 2;
+                        animal.hp -= 5;
+                        if(animal.hp <= 0) {
+                            if (rand.nextInt(10) < 2) {
+                                gp.player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
+                            }
+                            gp.player.gp.animals.remove(animal);
+                            gp.player.gainExp(rand.nextInt(10) + 9);
+                            gp.player.animalIndex = -1;
+                        }
                     }
                 }
                 if (gp.player.leggings != null) {
@@ -779,7 +792,15 @@ public class CollisonChecker {
                     gp.player.chestplate = null; // Remove chestplate if durability is zero
                 }
                 if (gp.player.chestplate instanceof BladeArmor) {
-                    monster.hp -= 2;
+                    monster.hp -= 5;
+                    if(monster.hp <= 0) {
+                        if (rand.nextInt(10) < 2) {
+                            gp.player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new WolfHide(1), gp));
+                        }
+                        gp.player.gp.monsters.remove(monster);
+                        gp.player.gainExp(rand.nextInt(10) + 9);
+                        gp.player.monsterIndex = -1;
+                    }
                 }
             }
             if (gp.player.leggings != null) {
