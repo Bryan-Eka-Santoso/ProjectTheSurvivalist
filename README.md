@@ -104,3 +104,24 @@ Spasi (Spacebar) → Masuk dan keluar dari toko (Shop) serta menjelajahi atau ke
 <div align="center">
   <img src="img/remove.png" width="700px">
 </div>
+
+
+# Item Drop
+<h3>Cara Kerja </h3>
+<div align="center">
+  <img src="img/itemDrop.png" width="700px">
+</div>
+
+
+# 🛠️ Crafting
+<h3>A. Cara Kerja Resep </h3>
+<div align="center">
+  <img src="img/recipe.png" width="700px">
+</div>
+
+<h3>B. Cara Kerja Crafting </h3>
+<div align="center">
+  <img src="img/proses1.png" width="700px">
+  <br/>
+  <img src="img/proses2.png" width="700px">
+</div>
