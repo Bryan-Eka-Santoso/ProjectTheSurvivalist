@@ -67,6 +67,8 @@ G → Mengangkat dan memindahkan hewan
 
 Q → Menjatuhkan item ke world dengan jumlah yang bisa ditentukan untuk stackable items
 
+CAPS_LOCK → Membuka menu achievement
+
 ↓ (Tombol Panah Bawah) (saat dalam mode kandang) → Digunakan untuk memilih aksi seperti menghapus hewan, mengawinkan hewan, atau mengambil hasil ternak
 
 Enter (saat dalam mode kandang) → Konfirmasi atau menyetujui aksi yang dipilih
