@@ -352,10 +352,16 @@ public class UI {
         g2.drawString(message, x, y);
         
         String respawnMessage = "Press R to respawn or Q to quit";
+        String immortalityMessage = "";
+        if (gp.player.inventory.hasItem("Immortality")){
+            immortalityMessage = "Press E to use Immortality";
+        } 
         int respawnX = getXCenteredText(respawnMessage);
         int respawnY = y + 60;
         
         g2.drawString(respawnMessage, respawnX, respawnY);
+        g2.setColor(Color.MAGENTA);
+        g2.drawString(immortalityMessage, getXCenteredText(immortalityMessage), respawnY + 60);
     }
 
      public void showRodRusakMessage() {

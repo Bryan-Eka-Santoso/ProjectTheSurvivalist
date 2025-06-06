@@ -462,9 +462,6 @@ public class CollisonChecker {
                 }
                 if (gp.player.chestplate != null) {
                     gp.player.chestplate.durability--;
-                    if (gp.player.chestplate.durability <= 0) {
-                        gp.player.chestplate = null; // Remove chestplate if durability is zero
-                    }
                     if (gp.player.chestplate instanceof BladeArmor) {
                         animal.hp -= 5;
                         if(animal.hp <= 0) {
@@ -475,6 +472,9 @@ public class CollisonChecker {
                             gp.player.gainExp(rand.nextInt(10) + 9);
                             gp.player.animalIndex = -1;
                         }
+                    }
+                    if (gp.player.chestplate.durability <= 0) {
+                        gp.player.chestplate = null; // Remove chestplate if durability is zero
                     }
                 }
                 if (gp.player.leggings != null) {
@@ -492,7 +492,7 @@ public class CollisonChecker {
                 if(16 - def <= 0){
                     gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
                 } else {
-                    gp.player.health -= (16 - def); // Decrease player HP
+                    gp.player.health -= (12 - def); // Decrease player HP
                 }
                 if (gp.player.health <= 0) {
                     gp.player.health = 0; // Prevent negative health
@@ -788,9 +788,6 @@ public class CollisonChecker {
             }
             if (gp.player.chestplate != null) {
                 gp.player.chestplate.durability--;
-                if (gp.player.chestplate.durability <= 0) {
-                    gp.player.chestplate = null; // Remove chestplate if durability is zero
-                }
                 if (gp.player.chestplate instanceof BladeArmor) {
                     monster.hp -= 5;
                     if(monster.hp <= 0) {
@@ -801,6 +798,9 @@ public class CollisonChecker {
                         gp.player.gainExp(rand.nextInt(10) + 9);
                         gp.player.monsterIndex = -1;
                     }
+                }
+                if (gp.player.chestplate.durability <= 0) {
+                    gp.player.chestplate = null; // Remove chestplate if durability is zero
                 }
             }
             if (gp.player.leggings != null) {

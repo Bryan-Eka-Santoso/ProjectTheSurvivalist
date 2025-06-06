@@ -313,7 +313,14 @@ public class UseItem {
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     } else if (selectedItem instanceof HaasClaws){
                         System.out.println("Using Haas Claws");
-                        player.health += arsenal.damage;
+                        if (animal instanceof Wolf) {
+                            player.health += arsenal.damage / 2;
+                        } else {
+                            player.health += 2;
+                        }
+                        if (player.health > player.maxHealth) {
+                            player.health = player.maxHealth;
+                        }
                         arsenal.durability--;
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     } else {
@@ -385,7 +392,16 @@ public class UseItem {
                     monster.hp -= arsenal.damage;
                     int damage = arsenal.damage;
 
-                    if (selectedItem instanceof Pickaxe){
+                    if (selectedItem instanceof HaasClaws){
+                        System.out.println("Using Haas Claws");
+                        player.health += arsenal.damage / 2;
+                        
+                        if (player.health > player.maxHealth) {
+                            player.health = player.maxHealth;
+                        }
+                        arsenal.durability--;
+                        System.out.println("Arsenal durability: " + arsenal.durability);
+                    } else if (selectedItem instanceof Pickaxe){
                         System.out.println("Using pickaxe: " + arsenal.name);
                         arsenal.durability -= 3;
                         System.out.println("Arsenal durability: " + arsenal.durability);
@@ -405,18 +421,19 @@ public class UseItem {
                             player.gainExp(rand.nextInt(10) + 9);
                             player.monsterIndex = -1;
                         }
-                    }else if (monster instanceof Golem){
+                    } else if (monster instanceof Golem){
                         Golem golem = (Golem)monster;
                         golem.hp -= damage;
-                        System.out.println("Hit golem: " + golem.hp + "/" + 200);
+                        System.out.println("Hit golem: " + golem.hp + "/" + 300);
                         if(golem.hp <= 0) {
                             gp.player.totalMonstersKilled++;
                             player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
                             player.gp.monsters.remove(player.monsterIndex);
-                            player.gainExp(rand.nextInt(20) + 15);
+                            player.gainExp(rand.nextInt(20) + 35);
                             player.monsterIndex = -1;
                         }
                     }
+                    playSE(4);
                 } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex).isBreakable) {
                     Buildings building = player.gp.buildings.get(player.buildingIndex);
 
@@ -656,6 +673,7 @@ public class UseItem {
                     chicken.hp -= fistDamage;
                     System.out.println("Hit chicken: " + chicken.hp + "/" + 60);
                     if(chicken.hp <= 0) {
+                        player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
                         player.gp.animals.remove(player.animalIndex);
@@ -667,6 +685,7 @@ public class UseItem {
                     pig.hp -= fistDamage;
                     System.out.println("Hit pig: " + pig.hp + "/" + 80);
                     if(pig.hp <= 0) {
+                        player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
                         player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 7);
@@ -677,6 +696,7 @@ public class UseItem {
                     sheep.hp -= fistDamage;
                     System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
                     if(sheep.hp <= 0) {
+                        player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX - 15, animal.worldY, new RawMutton(1), gp));
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX + 15, animal.worldY, new Wool(rand.nextInt(2) + 1), gp));
                         player.gp.animals.remove(player.animalIndex);
@@ -688,6 +708,7 @@ public class UseItem {
                     cow.hp -= fistDamage;
                     System.out.println("Hit cow: " + cow.hp + "/" + 100);
                     if(cow.hp <= 0) {
+                        player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
                         player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 9);
@@ -698,6 +719,7 @@ public class UseItem {
                     wolf.hp -= fistDamage;
                     System.out.println("Hit wolf: " + wolf.hp + "/" + 100);
                     if(wolf.hp <= 0) {
+                        player.totalAnimalsKilled++;
                         if (rand.nextInt(10) < 2) {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                         }

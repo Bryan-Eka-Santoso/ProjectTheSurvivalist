@@ -22,6 +22,7 @@ import Objek.Items.StackableItem.Stackable;
 import Objek.Items.StackableItem.Foods.RawFoods.RawArwana;
 import Objek.Items.StackableItem.Foods.RawFoods.RawBelida;
 import Objek.Items.Unstackable.FishingRod;
+import Objek.Items.Unstackable.Immortality;
 import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Player.Inventory;
 import Objek.Player.Player;
@@ -178,6 +179,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         if (gp.gameState == gp.GAME_OVER_STATE) {
             if (code == KeyEvent.VK_R) RPressed();
             if (code == KeyEvent.VK_Q) QPressed();
+            if (code == KeyEvent.VK_E && gp.player.inventory.hasItem("Immortality")) EPressed();
             return; // Do nothing if game is overs
         }
         if (gp.gameState == gp.KANDANG_STATE) {
@@ -472,7 +474,11 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void EPressed() {
-        if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) {
+        if (gp.gameState == gp.GAME_OVER_STATE){
+            gp.gameState = gp.PLAY_STATE;
+            gp.player.inventory.removeItem(new Immortality(), 1);
+            gp.player.health = 40;
+        } else if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) {
             gp.player.useItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
         }
     }
@@ -509,6 +515,12 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             }
             if (gp.currentMap == 1) {
                 gp.fish.clear();
+            }
+            if (gp.player.inventory.hasItem("Immortality")) {
+                gp.player.dropAllItems();
+                gp.player.health = 0;
+                gp.player.daysAlive = 0;
+                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
             gp.player = new Player("Player", gp.player.level, gp, gp.keyH);
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
@@ -600,6 +612,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             topFrame.setContentPane(new MenuPanel(topFrame));
             topFrame.revalidate(); // Memaksa refresh layout
             topFrame.repaint();
+            gp.sound.stop();
         } 
         if (gp.gameState == gp.INVENTORY_STATE) {
             if (selectCounter == 1 && gp.player.helmet != null) {

@@ -321,7 +321,7 @@ public class Wolf extends WildAnimal {
                 g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE*2+2, 12);
 
                 g2.setColor(new Color(255,0,30));
-                g2.fillRect(screenX, screenY-15, (int)hpBarValue +10, 10);
+                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
             }
         }
     }

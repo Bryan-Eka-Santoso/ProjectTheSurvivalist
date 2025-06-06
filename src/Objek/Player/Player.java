@@ -2,20 +2,36 @@ package Objek.Player;
 
 import javax.imageio.ImageIO;
 import Objek.Animal.Animal;
+import Objek.Animal.Chicken;
 import Objek.Animal.Cow;
+import Objek.Animal.Pig;
+import Objek.Animal.Sheep;
 import Objek.Animal.TameAnimal;
+import Objek.Animal.Wolf;
 import Objek.Controller.GamePanel;
 import Objek.Controller.InteractBuild;
 import Objek.Controller.ItemDrop;
 import Objek.Controller.KeyHandler;
 import Objek.Controller.UseItem;
+import Objek.Enemy.Bat;
+import Objek.Enemy.Golem;
+import Objek.Enemy.Monster;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Stackable;
+import Objek.Items.StackableItem.Foods.RawFoods.RawChicken;
+import Objek.Items.StackableItem.Foods.RawFoods.RawMeat;
+import Objek.Items.StackableItem.Foods.RawFoods.RawMutton;
+import Objek.Items.StackableItem.Foods.RawFoods.RawPork;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Feather;
+import Objek.Items.StackableItem.Materials.AnimalDrops.WolfHide;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Wool;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
 import Objek.Items.Unstackable.WinterCrown;
 import Objek.Items.Unstackable.Armor.Boots.Boots;
 import Objek.Items.Unstackable.Armor.Boots.RapidBoots;
 import Objek.Items.Unstackable.Armor.Chestplate.Chestplate;
+import Objek.Items.Unstackable.Armor.Helmet.CursedHelmet;
 import Objek.Items.Unstackable.Armor.Helmet.GuardianHelmet;
 import Objek.Items.Unstackable.Armor.Helmet.Helmet;
 import Objek.Items.Unstackable.Armor.Leggings.Leggings;
@@ -27,12 +43,14 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Player {
     public String name;
     public int health, thirst, hunger, exp, level;
     public int maxHealth = 100, maxThirst = 100, maxHunger = 100;
-    public int maxExp = 100;
+    public int maxExp;
     public Inventory inventory;
     public int itemIndex; 
     public int worldX, worldY, speed, solidAreaX, solidAreaY;
@@ -83,6 +101,7 @@ public class Player {
     public boolean isFrozen = false; // Untuk Winter Crown
     private int dehydrationCounter = 0;
     private int guardianHelmetCounter = 0;
+    private int cursedHelmetCounter = 0;
 
     public int totalTreesCut = 98;
     public int totalBushesCut = 49;
@@ -92,9 +111,12 @@ public class Player {
     
     public int totalPlantsPlanted = 0;
     public boolean hasForgedIronItem = false;
+    public int totalAnimalsKilled = 0;
     public int totalMonstersKilled = 0;
     public int daysAlive = -1;
     public int maxDaysAlive = 0;
+
+    Random rand = new Random();
 
     public Player(String name, int level, GamePanel gp, KeyHandler keyH) {
         this.name = name;
@@ -103,8 +125,9 @@ public class Player {
         this.health = 100;
         this.thirst = 100;
         this.hunger = 100;
-        this.exp = 0;
         this.level = level;
+        this.maxExp = level * 50 + 100;
+        this.exp = 0;
         this.speed = 5;
         this.inventory = new Inventory(24, gp);
         this.gp = gp;
@@ -294,6 +317,66 @@ public class Player {
         return isDehydrated;
     }
 
+    private void handleCursedHelmetEffect() {
+        if (helmet != null && helmet instanceof CursedHelmet) {
+            cursedHelmetCounter++;
+            if (cursedHelmetCounter >= 5) {
+                int radius = 100;
+                for (Animal animal : new ArrayList<>(gp.animals)) {
+                    int dx = animal.worldX - this.worldX;
+                    int dy = animal.worldY - this.worldY;
+                    if (dx * dx + dy * dy <= radius * radius) {
+                        animal.hp -= 1;
+                        if (animal.hp <= 0) {
+                            totalAnimalsKilled++;
+                            if (animal instanceof Chicken){
+                                this.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
+                                this.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
+                                this.gainExp(rand.nextInt(10) + 5);
+                            } else if (animal instanceof Cow) {
+                                this.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
+                                this.gainExp(rand.nextInt(10) + 9);
+                            } else if (animal instanceof Pig){
+                                this.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
+                                this.gainExp(rand.nextInt(10) + 7);
+                            } else if (animal instanceof Sheep) {
+                                this.gp.droppedItems.add(new ItemDrop(animal.worldX - 15, animal.worldY, new RawMutton(1), gp));
+                                this.gp.droppedItems.add(new ItemDrop(animal.worldX + 15, animal.worldY, new Wool(rand.nextInt(2) + 1), gp));
+                                this.gainExp(rand.nextInt(10) + 8);
+                            } else if (animal instanceof Wolf){
+                                if (rand.nextInt(10) < 2) {
+                                    this.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
+                                }
+                                this.gainExp(rand.nextInt(10) + 9);
+                            }
+                            gp.animals.remove(animal);
+                        }
+                    }
+                }
+                for (Monster monster : new ArrayList<>(gp.monsters)) {
+                    int dx = monster.worldX - this.worldX;
+                    int dy = monster.worldY - this.worldY;
+                    if (dx * dx + dy * dy <= radius * radius) {
+                        monster.hp -= 1;
+                        if (monster.hp <= 0) {
+                            totalMonstersKilled++;
+                            if (monster instanceof Bat){
+                                this.gainExp(rand.nextInt(10) + 9);
+                            } else if (monster instanceof Golem){
+                                this.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
+                                this.gainExp(rand.nextInt(20) + 35);
+                            }
+                            gp.monsters.remove(monster);
+                        }
+                    }
+                }
+                cursedHelmetCounter = 0;
+            }
+        } else {
+            cursedHelmetCounter = 0;
+        }
+    }
+
     public void update() {
         
         if (keyH.shiftPressed && hunger > 20 && thirst >= 10 && gp.currentMap != 1) {
@@ -355,6 +438,7 @@ public class Player {
             handlePoisonEffect();
         }
         handleDehydrationEffect();
+        handleCursedHelmetEffect();
         if (isFrozen) {
             // Skip all movement and input logic when frozen
             return;
