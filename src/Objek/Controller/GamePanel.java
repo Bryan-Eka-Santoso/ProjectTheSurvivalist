@@ -81,6 +81,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int GAME_OVER_STATE = 13;
     public final int SHOP_STATE = 14;
     public final int EFFECT_STATE = 15;
+    public final int ACHIEVEMENT_STATE = 16;
 
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
@@ -318,7 +319,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     public void update() {
 
-        if (gameState == PAUSE_STATE) return;
+        if (gameState == PAUSE_STATE || gameState == ACHIEVEMENT_STATE) return;
         
         if (player.health <= 0) {
             gameState = GAME_OVER_STATE;
@@ -335,23 +336,22 @@ public class GamePanel extends JPanel implements Runnable {
             player.update();
         }
         
-        if (gameState != PAUSE_STATE) {
-            if (currentMap == 0) {
-                for (int i = 0; i < animals.size(); i++) {
-                    animals.get(i).update();
-                }
-            }
-            if (currentMap == 1) {
-                for (int i = 0; i < fish.size(); i++) {
-                    fish.get(i).update();
-                }
-            }
-            if (currentMap == 2) {
-                for (int i = 0; i < monsters.size(); i++) {
-                    monsters.get(i).update();
-                }
+        if (currentMap == 0) {
+            for (int i = 0; i < animals.size(); i++) {
+                animals.get(i).update();
             }
         }
+        if (currentMap == 1) {
+            for (int i = 0; i < fish.size(); i++) {
+                fish.get(i).update();
+            }
+        }
+        if (currentMap == 2) {
+            for (int i = 0; i < monsters.size(); i++) {
+                monsters.get(i).update();
+            }
+        }
+        
 
         ui.isCanGoToSea = false;
         ui.isCanGoToLand = false;

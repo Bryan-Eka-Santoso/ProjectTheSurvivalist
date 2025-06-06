@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import Objek.AchievementHandler.Achievement;
 import Objek.Animal.*;
 import Objek.Fish.Fish;
@@ -163,13 +162,18 @@ public class UI {
         if(gp.gameState == gp.SHOP_STATE) {
             drawShopMenu();
         }
+        if (gp.gameState == gp.ACHIEVEMENT_STATE) {
+            drawAchievementMenu();
+        }
         if(gp.gameState == gp.EFFECT_STATE) {
             drawEffectMenu();
         }
         if (gp.gameState == gp.GAME_OVER_STATE) {
             respawnMenu();
         }
-        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE&& gp.gameState != gp.SHOP_STATE && gp.gameState != gp.EFFECT_STATE) {
+        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE 
+        && gp.gameState != gp.OPEN_SMELTER_STATE&& gp.gameState != gp.SHOP_STATE 
+        && gp.gameState != gp.EFFECT_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
             drawSelectedItem();
         }
         if (gp.gameState == gp.PAUSE_STATE) {
@@ -208,7 +212,8 @@ public class UI {
             }
         }
         if (gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE 
-            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE && gp.gameState != gp.EFFECT_STATE) {
+            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE 
+            && gp.gameState != gp.EFFECT_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
             drawStats();
         }
         if (showNameInput) {
@@ -2549,6 +2554,7 @@ public class UI {
         int textY = buttonY + (buttonHeight + g2.getFontMetrics().getHeight()) / 2 - 4;
         g2.drawString(exitText, textX, textY);
     }
+
     public void drawEffectMenu() {
         // Background fully opaque untuk menutupi UI lainnya
         g2.setColor(new Color(0, 0, 0, 255)); // Menggunakan alpha 255 agar fully opaque
@@ -2911,6 +2917,23 @@ public class UI {
                 // Apply cheat effects
                 break;
         }
+    }
+    public void drawAchievementMenu() {
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
+        
+        // Shop panel
+        int panelWidth = 900;
+        int panelHeight = 500;
+        int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
+        int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
+        
+        g2.setColor(new Color(70, 40, 0));
+        g2.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 15, 15);
+        
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(panelX+5, panelY+5, panelWidth-10, panelHeight-10, 10, 10);
     }
 }
 

@@ -55,7 +55,6 @@ import Objek.Items.Unstackable.Arsenals.Axe;
 import Objek.Items.Unstackable.Arsenals.Club;
 import Objek.Items.Unstackable.Arsenals.FlimsyPickaxe;
 import Objek.Items.Unstackable.Arsenals.HaasClaws;
-import Objek.Items.Unstackable.Arsenals.LightweightPickaxe;
 import Objek.Items.Unstackable.Arsenals.Pickaxe;
 import Objek.Items.Unstackable.Arsenals.Sword;
 import Objek.Ore.CrystalOre;

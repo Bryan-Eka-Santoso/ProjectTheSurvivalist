@@ -231,6 +231,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     OneToNinePressed(code);
                 }
             }
+            if (code == KeyEvent.VK_CAPS_LOCK) {
+                CAPSLOCKPressed();
+            }
             if (code == KeyEvent.VK_R && !gp.player.isBuild) {
                 RPressed();
             }
@@ -848,6 +851,20 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         } else if (gp.gameState == gp.PAUSE_STATE) {
             gp.gameState = gp.PLAY_STATE;
         } 
+    }
+
+    public void CAPSLOCKPressed() {
+        if (gp.gameState == gp.PLAY_STATE) {
+            gp.gameState = gp.ACHIEVEMENT_STATE;
+            gp.ui.slotRow = 0;
+            gp.ui.slotCol = 0;
+            gp.ui.selectedIndex = 0;
+        } else if (gp.gameState == gp.ACHIEVEMENT_STATE) {
+            gp.gameState = gp.PLAY_STATE;
+            gp.ui.slotRow = 0;
+            gp.ui.slotCol = 0;
+            gp.ui.selectedIndex = 0;
+        }
     }
 
     public void SpacePressed() {
