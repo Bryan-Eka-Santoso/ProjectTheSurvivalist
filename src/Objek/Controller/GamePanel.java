@@ -14,6 +14,7 @@ import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
+import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
@@ -46,7 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    public Player player = new Player("Player", 1, this, keyH);
+    public Player player = new Player("Player", 15, this, keyH);
     Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
@@ -226,6 +227,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new CowCage(this,0));
         player.inventory.addItems(new Bucket(3, this));
         player.inventory.addItems(new BladeArmor());
+        player.inventory.addItems(new FishingRod());
 
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
