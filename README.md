@@ -110,6 +110,11 @@ Spasi (Spacebar) → Masuk dan keluar dari toko (Shop) serta menjelajahi atau ke
 <h3>Cara Kerja </h3>
 <div align="center">
   <img src="img/itemDrop.png" width="700px">
+  <p>
+    Singkatnya sesuai dengan gambar di atas Item yang di drop itu merupakan item yang dibungkus ke dalam class ItemDrop yang kemudian akan
+    digambar saat repaint() di dalam class ItemDrop ada objek Rectangle solidArea yang nantinya akan di cek hitbox nya dalam class CollisionChecker
+    
+  </p>
 </div>
 
 
