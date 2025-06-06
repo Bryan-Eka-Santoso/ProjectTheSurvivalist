@@ -6,7 +6,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
-import Objek.Items.StackableItem.Foods.Other.Milk;
+import Objek.Items.StackableItem.Bucket;
 import Objek.Player.Player;
 
 import java.awt.Color;
@@ -213,7 +213,6 @@ public class Cow extends TameAnimal {
 
                 g2.setColor(new Color(255,0,30));
                 g2.fillRect(screenX+1 , screenY-15, (int)hpBarValue, 10);
-                
                
             }
         }
@@ -224,9 +223,23 @@ public class Cow extends TameAnimal {
     }
     
     public void getItem(Player player) {
-        if(isReadyGetItem()) {
-            player.inventory.addItems(new Milk("Milk", 10, 1));
-            setReadyGetItem(false);
+        if (isReadyGetItem()) {
+            boolean hasEmptyBucket = false;
+            for(int i = 0; i < player.inventory.slots.length; i++) {
+                if(player.inventory.slots[i] instanceof Bucket) {
+                    Bucket bucket = (Bucket)player.inventory.slots[i];
+                    if(bucket.status.equals("empty")) {
+                        hasEmptyBucket = true;
+                        setReadyGetItem(false);
+                        bucket.fillMilk();
+                        break;
+                    }
+                }
+            }
+
+            if(!hasEmptyBucket) {
+                gp.ui.showNeedBucketMessage();
+            } 
         }
     }
 

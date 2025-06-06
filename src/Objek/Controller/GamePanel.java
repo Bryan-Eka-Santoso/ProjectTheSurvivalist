@@ -13,6 +13,16 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Bucket;
+import Objek.Items.Unstackable.FishingRod;
+import Objek.Items.Unstackable.Immortality;
+import Objek.Items.Unstackable.Lantern;
+import Objek.Items.Unstackable.WinterCrown;
+import Objek.Items.Unstackable.Armor.Boots.RapidBoots;
+import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
+import Objek.Items.Unstackable.Armor.Helmet.CursedHelmet;
+import Objek.Items.Unstackable.Armor.Helmet.GuardianHelmet;
+import Objek.Items.Unstackable.Arsenals.HaasClaws;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -44,7 +54,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    public Player player = new Player("Player", 1, this, keyH);
+    public Player player = new Player("Player", 15, this, keyH);
     Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
@@ -72,6 +82,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int GAME_OVER_STATE = 13;
     public final int SHOP_STATE = 14;
     public final int EFFECT_STATE = 15;
+    public final int ACHIEVEMENT_STATE = 16;
 
     private static final int MAX_CHICKENS = 10;
     private static final int MAX_COWS = 5;
@@ -221,7 +232,17 @@ public class GamePanel extends JPanel implements Runnable {
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new WindAxe());
-        
+        player.inventory.addItems(new FishingRod());
+        player.inventory.addItems(new Immortality());
+        player.inventory.addItems(new CursedHelmet());
+        player.inventory.addItems(new Bucket(3, this));
+        player.inventory.addItems(new BladeArmor());
+        player.inventory.addItems(new RapidBoots());
+        player.inventory.addItems(new WinterCrown());
+        player.inventory.addItems(new GuardianHelmet());
+        player.inventory.addItems(new HaasClaws());
+        player.inventory.addItems(new Lantern(this));
+
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
@@ -299,38 +320,42 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void update() {
-        
-        if (gameState == PAUSE_STATE) return;
+
+        if (player.health > 100) player.health = 100;
+
+        if (gameState == PAUSE_STATE || gameState == ACHIEVEMENT_STATE) return;
         
         if (player.health <= 0) {
-            if (!player.inventory.isEmpty()) 
-                player.dropAllItems();
-
             gameState = GAME_OVER_STATE;
-            player.health = 0;
-            eManager.lighting.filterAlpha = eManager.lighting.filterAlphaTemp;
+            if (!player.inventory.hasItem("Immortality")) {
+                if (!player.inventory.isEmpty()) 
+                    player.dropAllItems();
+    
+                player.health = 0;
+                player.daysAlive = 0;
+                eManager.lighting.filterAlpha = eManager.lighting.filterAlphaTemp;
+            }
             
         } else {
             player.update();
         }
         
-        if (gameState != PAUSE_STATE) {
-            if (currentMap == 0) {
-                for (int i = 0; i < animals.size(); i++) {
-                    animals.get(i).update();
-                }
-            }
-            if (currentMap == 1) {
-                for (int i = 0; i < fish.size(); i++) {
-                    fish.get(i).update();
-                }
-            }
-            if (currentMap == 2) {
-                for (int i = 0; i < monsters.size(); i++) {
-                    monsters.get(i).update();
-                }
+        if (currentMap == 0) {
+            for (int i = 0; i < animals.size(); i++) {
+                animals.get(i).update();
             }
         }
+        if (currentMap == 1) {
+            for (int i = 0; i < fish.size(); i++) {
+                fish.get(i).update();
+            }
+        }
+        if (currentMap == 2) {
+            for (int i = 0; i < monsters.size(); i++) {
+                monsters.get(i).update();
+            }
+        }
+        
 
         ui.isCanGoToSea = false;
         ui.isCanGoToLand = false;
