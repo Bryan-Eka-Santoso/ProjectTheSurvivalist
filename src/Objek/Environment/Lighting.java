@@ -111,7 +111,6 @@ public class Lighting {
                 gp.player.daysAlive++;
                 gp.player.maxDaysAlive = Math.max(gp.player.maxDaysAlive, gp.player.daysAlive);
             }
-            System.out.println("Day: " + gp.player.daysAlive);
             dayCounter++;
             if (dayCounter > 600) {
                 dayState = DUSK;
