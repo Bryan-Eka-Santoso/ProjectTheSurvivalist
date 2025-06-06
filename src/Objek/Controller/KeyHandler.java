@@ -532,6 +532,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.player.getPlayerImg();
             gp.tileM.getTileImage();
             gp.gameState = gp.PLAY_STATE;
+            gp.checkAndRespawnAnimals();
         }
     }
 
@@ -567,6 +568,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.tileM.getTileImage();
                 gp.player.worldY = 18 * gp.TILE_SIZE;
                 gp.player.worldX = 28 * gp.TILE_SIZE;
+                gp.checkAndRespawnAnimals();
             }
         }
     }
@@ -940,6 +942,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.worldY = 51 * gp.TILE_SIZE;
                 gp.player.worldX = 51 * gp.TILE_SIZE;
                 gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
+                gp.checkAndRespawnAnimals();
             }
         }
         if(gp.currentMap == 3){
@@ -951,6 +954,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.worldY = 41 * gp.TILE_SIZE + 10;
                 gp.player.worldX = 40 * gp.TILE_SIZE + 10;
                 gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
+                gp.checkAndRespawnAnimals();
             }
         }
     }

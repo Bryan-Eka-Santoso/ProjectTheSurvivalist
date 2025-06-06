@@ -10,6 +10,8 @@ import Objek.Items.StackableItem.Materials.Material;
 public class Crystal extends Material {
     public Crystal(int currentStack) {
         super("Crystal", currentStack);
+        this.isCanSell = true;
+        this.price = 10;
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/crystal.png")); 
         } catch (IOException e) {

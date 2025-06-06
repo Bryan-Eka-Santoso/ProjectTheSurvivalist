@@ -6,12 +6,16 @@ public abstract class Item implements Cloneable {
     public String name;
     public int currentStack;
     public int maxStack;
+    public int price;
     public BufferedImage img;
+    public boolean isCanSell;
     
-    public Item(String name, int maxStack, int currentStack) {
+    public Item(String name, int maxStack, int currentStack, boolean isCanSell, int price) {
         this.name = name;
         this.maxStack = maxStack;
         this.currentStack = currentStack;
+        this.isCanSell = isCanSell;
+        this.price = price;
     }
 
     public Item clone() {

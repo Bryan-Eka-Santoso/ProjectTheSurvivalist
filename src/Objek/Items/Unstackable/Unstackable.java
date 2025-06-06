@@ -4,6 +4,6 @@ import Objek.Items.Item;
 
 public abstract class Unstackable extends Item {
     public Unstackable(String name) {
-        super(name, 1, 1);
+        super(name, 1, 1, false, 0);
     }
 }

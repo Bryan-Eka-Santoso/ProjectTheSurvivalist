@@ -378,7 +378,6 @@ public class Player {
     }
 
     public void update() {
-        
         if (keyH.shiftPressed && hunger > 20 && thirst >= 10 && gp.currentMap != 1) {
             speed = 10;
             if(hungerCounter >= HUNGER_DECREASE_INTERVAL/4) {

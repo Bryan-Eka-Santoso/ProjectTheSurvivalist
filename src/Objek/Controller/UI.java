@@ -2493,7 +2493,7 @@ public class UI {
         
         // Title
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
-        g2.drawString("Shop", panelX + 30, panelY + 50);
+        g2.drawString("Shop Items", panelX + 30, panelY + 50);
         g2.drawString("Your Coins: " + gp.player.coins, panelX + 550, panelY + 50);
         
         // Category tabs
@@ -2575,7 +2575,7 @@ public class UI {
         
         // Judul
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 32F));
-        g2.drawString("Effect Shop", panelX + 30, panelY + 50);
+        g2.drawString("Shop Effect", panelX + 30, panelY + 50);
         g2.drawString("Your Coins: " + gp.player.coins, panelX + 550, panelY + 50);
         
         // Tab kategori
@@ -2584,7 +2584,7 @@ public class UI {
         int tabY = panelY + 70;
         
         // Kategori
-        String[] categories = {"Sell Items", "Repair", "Upgrade", "Effect", "Cheat"};
+        String[] categories = {"Sell Items", "Repair", "Cheat"};
         
         for(int i = 0; i < categories.length; i++) {
             int tabX = panelX + 30 + (i * (tabWidth + 10));
@@ -2638,7 +2638,7 @@ public class UI {
     }
     private void drawShopItems(int x, int y, int width, int height) {
         // Set up item grid
-        int columns = 4;
+        int columns = 9;
         int itemSize = gp.TILE_SIZE + 10;
         int itemSpacing = 35;  // Increased spacing between items
         int totalItemWidth = itemSize + itemSpacing;
@@ -2718,7 +2718,8 @@ public class UI {
     }
     private void drawEffectItems(int x, int y, int width, int height) {
         // Set up item grid
-        int columns = 4;
+        String buyText;
+        int columns = 9;
         int itemSize = gp.TILE_SIZE + 10;
         int itemSpacing = 35;  // Increased spacing between items
         int totalItemWidth = itemSize + itemSpacing;
@@ -2782,7 +2783,11 @@ public class UI {
             g2.fillRect(buyButton.x, buyButton.y, buyButton.width, buyButton.height);
             
             g2.setColor(Color.WHITE);
-            String buyText = "Buy";
+            if(effectCategory == 0){
+                buyText = "Sell";
+            } else {
+                buyText = "Buy";
+            }
             int textX = buyButtonX + (buyButtonWidth - g2.getFontMetrics().stringWidth(buyText)) / 2;
             g2.drawString(buyText, textX, buyButtonY + 17);
         }
@@ -2838,7 +2843,7 @@ public class UI {
         int tabY = panelY + 70;
         
         // Categories
-        String[] categories = {"Sell Items", "Repair", "Upgrade", "Effect", "Cheat"};
+        String[] categories = {"Sell Items", "Repair", "Cheat"};
         
         for(int i = 0; i < categories.length; i++) {
             int tabX = panelX + 30 + (i * (tabWidth + 10));
@@ -2882,39 +2887,93 @@ public class UI {
         }
     }
     private void purchaseEffect(ShopEffect item) {
-        if(gp.player.coins >= item.price) {
-            // Deduct coins
-            gp.player.coins -= item.price;
-            
-            // Apply effect based on category
+        if(effectCategory == 0){
+            gp.player.coins += item.price;
             applyEffect(item);
-            
             showPurchaseSuccess = true;
             messageTimer = System.currentTimeMillis();
         } else {
-            showInsufficientFunds = true;
-            messageTimer = System.currentTimeMillis();
+            if(gp.player.coins >= item.price) {
+                // Deduct coins
+                gp.player.coins -= item.price;
+                
+                // Apply effect based on category
+                applyEffect(item);
+                
+                showPurchaseSuccess = true;
+                messageTimer = System.currentTimeMillis();
+            } else {
+                showInsufficientFunds = true;
+                messageTimer = System.currentTimeMillis();
+            }
         }
     }
     private void applyEffect(ShopEffect effect) {
         switch(effect.category) {
-            case 0: // Repair
-                if(effect.name.equals("Repair All")) {
-                    // Repair all equipment
-                    if(gp.player.helmet != null) gp.player.helmet.durability = gp.player.helmet.maxDurability;
-                    if(gp.player.chestplate != null) gp.player.chestplate.durability = gp.player.chestplate.maxDurability;
-                    if(gp.player.leggings != null) gp.player.leggings.durability = gp.player.leggings.maxDurability;
-                    if(gp.player.boots != null) gp.player.boots.durability = gp.player.boots.maxDurability;
+            case 0:
+                for(int i = 0; i < gp.player.inventory.slots.length; i++) {
+                    if(gp.player.inventory.slots[i] != null && 
+                    gp.player.inventory.slots[i].name.equals(effect.name)) {
+                        Stackable stackItem = (Stackable)gp.player.inventory.slots[i];
+                        if(gp.player.inventory.slots[i] instanceof Stackable) {
+                            if(stackItem.currentStack > 1) {
+                                gp.player.inventory.removeItem(stackItem, 1);
+                            } else {
+                                gp.player.inventory.removeItem(stackItem, 1);
+
+                            }
+                        } else {
+                            gp.player.inventory.removeItem(stackItem, 1);
+                        }
+                        
+                        gp.interactBuild.initEffectItems();
+                        return;
+                    }
                 }
                 break;
-            case 1: // Upgrade
-                // Handle upgrades
+            case 1:
+                if(effect.name.equals("Repair Arsenal")) {
+                    for(int i = 0; i < gp.player.inventory.slots.length; i++) {
+                        if(gp.player.inventory.slots[i] instanceof Arsenal) {
+                            Arsenal arsenal = (Arsenal)gp.player.inventory.slots[i];
+                            arsenal.durability = arsenal.maxDurability;
+                        }
+                    }
+                }
+                if(effect.name.equals("Repair Armor")) {
+                    for(int i = 0; i < gp.player.inventory.slots.length; i++) {
+                        if(gp.player.inventory.slots[i] instanceof Armor) {
+                            Armor armor = (Armor)gp.player.inventory.slots[i];
+                            armor.durability = armor.maxDurability;
+                        }
+                    }
+                }
+                if(effect.name.equals("Repair Fishing Rod")) {
+                    for(int i = 0; i < gp.player.inventory.slots.length; i++) {
+                        if(gp.player.inventory.slots[i] instanceof FishingRod) {
+                            FishingRod fishingRod = (FishingRod)gp.player.inventory.slots[i];
+                            fishingRod.durability = fishingRod.maxDurability;
+                        }
+                    }
+                }
                 break;
-            case 2: // Effect
-                // Apply status effects
-                break;
-            case 3: // Cheat
-                // Apply cheat effects
+            case 2:
+                if(effect.name.equals("Upgrade Level")) {
+                    gp.player.level++;
+                }
+                if(effect.name.equals("Coins +999")) {
+                    gp.player.coins += 999;
+                }
+                if(effect.name.equals("God Mode")) {
+                    gp.isStrong = true;
+                    gp.ui.effectItems.clear();
+                    gp.interactBuild.initEffectItems();
+                }
+                if(effect.name.equals("Normal Mode")) {
+                    gp.isStrong = false;
+                    gp.ui.effectItems.clear();
+                    gp.interactBuild.initEffectItems();
+                }
                 break;
         }
     }
@@ -2936,4 +2995,3 @@ public class UI {
         g2.drawRoundRect(panelX+5, panelY+5, panelWidth-10, panelHeight-10, 10, 10);
     }
 }
-

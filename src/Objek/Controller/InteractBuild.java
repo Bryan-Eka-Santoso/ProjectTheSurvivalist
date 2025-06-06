@@ -137,24 +137,26 @@ public class InteractBuild {
     }
     public void initEffectItems() {
     try {
-        // Repair (kategori 0)
-        gp.ui.effectItems.add(new ShopEffect("Repair All", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 150, 1));
-        gp.ui.effectItems.add(new ShopEffect("Repair Weapon", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 50, 1));
-        gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 50, 1));
+        gp.ui.effectItems.clear();
+        for(int i = 0; i < gp.player.inventory.slots.length; i++) {
+            if(gp.player.inventory.slots[i] != null && gp.player.inventory.slots[i].isCanSell) {
+                gp.ui.effectItems.add(new ShopEffect(gp.player.inventory.slots[i].name, gp.player.inventory.slots[i].img, gp.player.inventory.slots[i].price, 0));
+            }
+        }
         
-        // Upgrade (kategori 1)
-        gp.ui.effectItems.add(new ShopEffect("Upgrade Weapon", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 200, 2));
-        gp.ui.effectItems.add(new ShopEffect("Upgrade Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 200, 2));
-        gp.ui.effectItems.add(new ShopEffect("Upgrade Bag", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 300, 2));
+        gp.ui.effectItems.add(new ShopEffect("Repair Arsenal", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 10, 1));
+        gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 10, 1));
+        gp.ui.effectItems.add(new ShopEffect("Repair Fishing Rod", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 10, 1));
         
-        // Effect (kategori 2)
-        gp.ui.effectItems.add(new ShopEffect("Health Boost", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 75, 3));
-        gp.ui.effectItems.add(new ShopEffect("Speed Boost", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 75, 3));
-        gp.ui.effectItems.add(new ShopEffect("Night Vision", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 100, 3));
-        
-        // Cheat (kategori 3)
-        gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
-        gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));
+        gp.ui.effectItems.add(new ShopEffect("Upgrade Level", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+        gp.ui.effectItems.add(new ShopEffect("Coins +999", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+        if(!gp.isStrong){
+            gp.ui.effectItems.add(new ShopEffect("God Mode", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+        } else {
+            gp.ui.effectItems.add(new ShopEffect("Normal Mode", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+        }
+        // gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
+        // gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));
         
         System.out.println("Effect items initialized successfully");
     } catch (Exception e) {

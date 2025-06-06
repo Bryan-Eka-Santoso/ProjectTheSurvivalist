@@ -14,6 +14,8 @@ import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
+import Objek.Items.StackableItem.Materials.OreDrops.Crystal;
+import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Immortality;
 import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WinterCrown;
@@ -63,6 +65,7 @@ public class GamePanel extends JPanel implements Runnable {
     Spawn sp = new Spawn(this);
     public CollisonChecker cCheck = new CollisonChecker(this);
     public AchievementManager aManager = new AchievementManager();
+    public InteractBuild interactBuild;
     
     // Game State
     public int gameState;
@@ -99,6 +102,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int currentMap = 0;
     public boolean isCave = false;
     public boolean isAfterUnlockShip = false;
+    public boolean isStrong = false;
     
     public ArrayList<Plant> plants = new ArrayList<>();
     public ArrayList<Animal> animals = new ArrayList<>();
@@ -118,6 +122,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusable(true);
         this.setLayout(null);
         this.addMouseListener(mouseHandler);
+        this.interactBuild = new InteractBuild(this);
         eManager.setup();
     }
 
@@ -230,6 +235,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
+        player.inventory.addItems(new FishingRod());
+        player.inventory.addItems(new Crystal(3));
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new Immortality());
         player.inventory.addItems(new CursedHelmet());
@@ -286,6 +293,11 @@ public class GamePanel extends JPanel implements Runnable {
         effectSell.worldY = 47 * TILE_SIZE;
         buildings.add(effectSell);
 
+        Buildings pintuDalam = new PintuDalam(this, 1, 3);
+        pintuDalam.worldX = 52 * TILE_SIZE + 10;
+        pintuDalam.worldY = 52 * TILE_SIZE;
+        buildings.add(pintuDalam);
+
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
 
@@ -318,6 +330,11 @@ public class GamePanel extends JPanel implements Runnable {
     }
     
     public void update() {
+        if(isStrong){
+            player.health = 100;
+            player.hunger = 100;
+            player.thirst = 100;
+        }
 
         if (gameState == PAUSE_STATE || gameState == ACHIEVEMENT_STATE) return;
         

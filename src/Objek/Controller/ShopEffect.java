@@ -25,4 +25,11 @@ public class ShopEffect {
             e.printStackTrace();
         }
     }
+
+    public ShopEffect(String name, BufferedImage img, int price, int category) {
+        this.name = name;
+        this.img = img;
+        this.price = price;
+        this.category = category;
+    }
 }
