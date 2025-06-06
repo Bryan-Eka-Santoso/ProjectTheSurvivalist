@@ -2479,8 +2479,8 @@ public class UI {
         g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
         
         // Shop panel
-        int panelWidth = 900;
-        int panelHeight = 500;
+        int panelWidth = 1000;
+        int panelHeight = 600;
         int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
         int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
         
@@ -2502,7 +2502,7 @@ public class UI {
         int tabY = panelY + 70;
         
         // Categories
-        String[] categories = {"Weapons", "Armor", "Food", "Materials", "Fishing"};
+        String[] categories = {"Tools", "Armor", "Food", "Materials", "Legendary Items"};
         
         for(int i = 0; i < categories.length; i++) {
             int tabX = panelX + 30 + (i * (tabWidth + 10));
@@ -2561,8 +2561,8 @@ public class UI {
         g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
         
         // Panel menu effect
-        int panelWidth = 900;
-        int panelHeight = 500;
+        int panelWidth = 1000;
+        int panelHeight = 600;
         int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
         int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
         
@@ -2638,7 +2638,7 @@ public class UI {
     }
     private void drawShopItems(int x, int y, int width, int height) {
         // Set up item grid
-        int columns = 9;
+        int columns = 10;
         int itemSize = gp.TILE_SIZE + 10;
         int itemSpacing = 35;  // Increased spacing between items
         int totalItemWidth = itemSize + itemSpacing;
@@ -2719,7 +2719,7 @@ public class UI {
     private void drawEffectItems(int x, int y, int width, int height) {
         // Set up item grid
         String buyText;
-        int columns = 9;
+        int columns = 10;
         int itemSize = gp.TILE_SIZE + 10;
         int itemSpacing = 35;  // Increased spacing between items
         int totalItemWidth = itemSize + itemSpacing;
@@ -2798,16 +2798,20 @@ public class UI {
             gp.gameState = gp.PLAY_STATE;
             return;
         }
+
+        // Calculate exact panel coordinates to match drawEffectMenu
+        int panelWidth = 1000;
+        int panelHeight = 600;
+        int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
+        int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
         
         // Check category tabs
         int tabWidth = 150;
         int tabHeight = 40;
-        int panelX = gp.SCREEN_WIDTH/2 - 400;
-        int panelY = gp.SCREEN_HEIGHT/2 - 250;
         int tabY = panelY + 70;
         
         // Categories
-        String[] categories = {"Weapons", "Armor", "Food", "Materials", "Fishing"};
+        String[] categories = {"Tools", "Armor", "Food", "Materials", "Legendary Items"};
         
         for(int i = 0; i < categories.length; i++) {
             int tabX = panelX + 30 + (i * (tabWidth + 10));
@@ -2982,8 +2986,8 @@ public class UI {
         g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
         
         // Shop panel
-        int panelWidth = 900;
-        int panelHeight = 500;
+        int panelWidth = 1000;
+        int panelHeight = 600;
         int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
         int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
         
