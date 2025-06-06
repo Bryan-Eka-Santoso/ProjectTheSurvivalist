@@ -124,7 +124,7 @@ public class Wolf extends WildAnimal {
         isCollision(this);
 
         // Jika tidak ada collision, boleh bergerak
-        if (!isPreyNearby(gp.player) || (gp.player.helmet != null && gp.player.helmet instanceof WolfCloak)) {
+        if (!isPreyNearby(gp.player) || (gp.player.helmet != null && gp.player.helmet instanceof WolfCloak) || gp.player.isFrozen) {
             moveNormally();
         } else {
             moveTowardsPlayer();
@@ -321,7 +321,7 @@ public class Wolf extends WildAnimal {
                 g2.fillRect(screenX-1, screenY-16, gp.TILE_SIZE*2+2, 12);
 
                 g2.setColor(new Color(255,0,30));
-                g2.fillRect(screenX, screenY-15, (int)hpBarValue +10, 10);
+                g2.fillRect(screenX, screenY-15, (int)hpBarValue, 10);
             }
         }
     }
@@ -367,6 +367,10 @@ public class Wolf extends WildAnimal {
         if(tileNum1 != validTile || tileNum2 != validTile || 
         tileNum3 != validTile || tileNum4 != validTile) {
             return false; // Tidak bisa bergerak jika ada tile yang bukan air
+        }
+
+        if (player.health <= 0) {
+            return false; // Tidak mengejar jika player sudah mati
         }
 
         if (Math.pow((player.worldX - this.worldX), 2) + Math.pow((player.worldY - this.worldY), 2) <= Math.pow(450, 2)) {

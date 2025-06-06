@@ -69,7 +69,7 @@ public class AchievementManager {
             "Survive for 10 days without dying.",
             gp -> gp.player.maxDaysAlive >= 10));
         addAchievement(new Achievement(
-            "Legend",
+            "Hardcore Professional",
             "Survive for 100 days without dying.",
             gp -> gp.player.maxDaysAlive >= 100));
 
