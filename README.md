@@ -1,4 +1,10 @@
 # Penjelasan Game The Survivalist
+
+<div align="center">
+  <img src="img/menu.png" width="500px">
+  <img src="img/gameplay.png" width="500px">
+</div>
+
 The Survivalists adalah sebuah game petualangan yang mengusung elemen bertahan hidup. Dalam permainan ini, pemain akan menjelajahi sebuah pulau terpencil yang dipenuhi misteri dan berbagai tantangan. Tujuan utama dari permainan ini adalah untuk bertahan hidup dengan memanfaatkan sumber daya yang tersedia di sekitar lingkungan.
 
 Pemain dapat mengumpulkan bahan-bahan alam, membangun tempat tinggal, membuat peralatan, serta menghadapi berbagai ancaman yang muncul di pulau. Aktivitas seperti berburu, memancing, dan bercocok tanam menjadi bagian penting untuk memenuhi kebutuhan hidup karakter.
