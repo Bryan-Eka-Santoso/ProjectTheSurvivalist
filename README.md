@@ -11,6 +11,15 @@ Pemain dapat mengumpulkan bahan-bahan alam, membangun tempat tinggal, membuat pe
 
 Selain itu, The Survivalists juga menawarkan berbagai fitur menarik seperti kemampuan untuk membangun struktur, bertarung melawan musuh, dan mengumpulkan berbagai barang untuk menunjang kelangsungan hidup. Semua elemen ini berpadu untuk menciptakan pengalaman bermain yang seru, menantang, dan penuh eksplorasi.
 
+# Struktur Class Utama
+
+<div align="center">
+  <img src="img/class.png" width="700px">
+</div>
+
+Berikut adalah gambaran struktur class utama yang ada dalam game ini class yang digambarkan di atas merupakan abstract class dari object - object lainnya yang ada dalam game ini.
+Ada juga class - class lain seperti GamePanel, KeyHandler, Player, Environtment, Lighting, UI, dan sebagainya akan tetapi disini mereka bukan berupa abstract class atau class yang berdiri sendiri.
+
 # Fitur Game
 Memancing
 Dibuka saat pemain mencapai level 15. Pemain dapat memancing di area perairan untuk mendapatkan ikan
