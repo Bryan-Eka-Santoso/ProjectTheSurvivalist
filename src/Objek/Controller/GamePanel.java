@@ -57,7 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    public Player player = new Player("Player", 15, this, keyH);
+    public Player player = new Player("Player", 1, this, keyH);
     Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
@@ -328,6 +328,8 @@ public class GamePanel extends JPanel implements Runnable {
     
     public void update() {
 
+        if (player.health > 100) player.health = 100;
+
         if (gameState == PAUSE_STATE || gameState == ACHIEVEMENT_STATE) return;
         
         if (player.health <= 0) {
@@ -406,7 +408,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
     }
-
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

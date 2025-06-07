@@ -965,6 +965,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
                 gp.currentMap = 0;
                 gp.monsters.clear();
+                gp.checkAndRespawnAnimals();
                 gp.player.getPlayerImg();
                 gp.tileM.getTileImage();
                 gp.player.worldY = 51 * gp.TILE_SIZE;
@@ -976,6 +977,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             if(col == 52 && row == 53) {
                 gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
                 gp.currentMap = 0;
+                gp.checkAndRespawnAnimals();
                 gp.player.getPlayerImg();
                 gp.tileM.getTileImage();
                 gp.player.worldY = 41 * gp.TILE_SIZE + 10;

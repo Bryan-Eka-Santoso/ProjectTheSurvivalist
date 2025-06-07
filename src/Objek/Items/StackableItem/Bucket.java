@@ -54,7 +54,7 @@ public class Bucket extends Stackable {
                 newBucket.fillMilk();
 
                 gp.player.inventory.addItems(newBucket);
-                gp.player.inventory.removeItem(this, 1); // Remove this bucket from inventory
+                gp.player.inventory.removeItem(this, 1); // Remove` this bucket from inventory
             }
         } else {
             System.out.println("Bucket is already filled.");
