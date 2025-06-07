@@ -107,6 +107,10 @@ public class Lighting {
         }
         
         if (dayState == DAY) {
+            if(dayCounter == 0){
+                gp.player.daysAlive++;
+                gp.player.maxDaysAlive = Math.max(gp.player.maxDaysAlive, gp.player.daysAlive);
+            }
             dayCounter++;
             if (dayCounter > 600) {
                 dayState = DUSK;

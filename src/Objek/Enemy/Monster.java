@@ -31,5 +31,6 @@ public abstract class Monster {
     abstract public void update();
     abstract public void draw(Graphics2D g2d);
     abstract public boolean isPreyNearby(Player player);
+    
 
 }

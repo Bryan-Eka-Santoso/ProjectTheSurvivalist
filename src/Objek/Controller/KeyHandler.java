@@ -14,12 +14,15 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
+import Objek.Fish.Golden;
 import Objek.Items.Item;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.GoldenFish;
 import Objek.Items.StackableItem.Stackable;
 import Objek.Items.StackableItem.Foods.RawFoods.RawArwana;
 import Objek.Items.StackableItem.Foods.RawFoods.RawBelida;
 import Objek.Items.Unstackable.FishingRod;
+import Objek.Items.Unstackable.Immortality;
 import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Player.Inventory;
 import Objek.Player.Player;
@@ -152,7 +155,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (gp.gameState == gp.INVENTORY_STATE) {
+        if (gp.gameState == gp.INVENTORY_STATE && !gp.player.isFrozen) {
             int mouseX = e.getX();
             int mouseY = e.getY();
             Integer slotIdx = gp.ui.getClickedInventorySlot(mouseX, mouseY);
@@ -176,6 +179,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         if (gp.gameState == gp.GAME_OVER_STATE) {
             if (code == KeyEvent.VK_R) RPressed();
             if (code == KeyEvent.VK_Q) QPressed();
+            if (code == KeyEvent.VK_E && gp.player.inventory.hasItem("Immortality")) EPressed();
             return; // Do nothing if game is overs
         }
         if (gp.gameState == gp.KANDANG_STATE) {
@@ -226,6 +230,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 if (code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9) {
                     OneToNinePressed(code);
                 }
+            }
+            if (code == KeyEvent.VK_CAPS_LOCK) {
+                CAPSLOCKPressed();
             }
             if (code == KeyEvent.VK_R && !gp.player.isBuild) {
                 RPressed();
@@ -470,7 +477,11 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void EPressed() {
-        if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) {
+        if (gp.gameState == gp.GAME_OVER_STATE){
+            gp.gameState = gp.PLAY_STATE;
+            gp.player.inventory.removeItem(new Immortality(), 1);
+            gp.player.health = 40;
+        } else if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) {
             gp.player.useItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
         }
     }
@@ -507,6 +518,12 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             }
             if (gp.currentMap == 1) {
                 gp.fish.clear();
+            }
+            if (gp.player.inventory.hasItem("Immortality")) {
+                gp.player.dropAllItems();
+                gp.player.health = 0;
+                gp.player.daysAlive = 0;
+                gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
             gp.player = new Player("Player", gp.player.level, gp, gp.keyH);
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
@@ -574,6 +591,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void QPressed() {
+        if (gp.player.isFrozen){
+            return; // Prevent dropping items if player is frozen
+        }
         if (gp.gameState == gp.INVENTORY_STATE){
             gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], 1, gp.currentMap);
         }
@@ -595,6 +615,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             topFrame.setContentPane(new MenuPanel(topFrame));
             topFrame.revalidate(); // Memaksa refresh layout
             topFrame.repaint();
+            gp.sound.stop();
         } 
         if (gp.gameState == gp.INVENTORY_STATE) {
             if (selectCounter == 1 && gp.player.helmet != null) {
@@ -787,6 +808,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 if (gp.fish.get(gp.ui.fishIndex) instanceof Belida) {
                     gp.player.inventory.addItems(new RawBelida(1));
                 } 
+
+                if (gp.fish.get(gp.ui.fishIndex) instanceof Golden) {
+                    gp.player.inventory.addItems(new GoldenFish(1));
+                } 
                 
                 ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength = ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).maxStr;
                 ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability -= 20;
@@ -826,6 +851,20 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         } else if (gp.gameState == gp.PAUSE_STATE) {
             gp.gameState = gp.PLAY_STATE;
         } 
+    }
+
+    public void CAPSLOCKPressed() {
+        if (gp.gameState == gp.PLAY_STATE) {
+            gp.gameState = gp.ACHIEVEMENT_STATE;
+            gp.ui.slotRow = 0;
+            gp.ui.slotCol = 0;
+            gp.ui.selectedIndex = 0;
+        } else if (gp.gameState == gp.ACHIEVEMENT_STATE) {
+            gp.gameState = gp.PLAY_STATE;
+            gp.ui.slotRow = 0;
+            gp.ui.slotCol = 0;
+            gp.ui.selectedIndex = 0;
+        }
     }
 
     public void SpacePressed() {

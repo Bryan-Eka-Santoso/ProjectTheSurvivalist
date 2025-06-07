@@ -147,8 +147,8 @@ public class Spawn {
         int spawnedCount = 0;
         int validTiles = 18;
         
-        int playerSpawnX = 40; 
-        int playerSpawnY = 44; 
+        int playerSpawnX = 40;
+        int playerSpawnY = 44;
         
         while (spawnedCount < count && attempts < maxAttempts) {
 

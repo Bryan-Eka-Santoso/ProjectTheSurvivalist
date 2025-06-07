@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
 import Objek.AchievementHandler.Achievement;
 import Objek.Animal.*;
 import Objek.Fish.Fish;
@@ -126,7 +125,11 @@ public class UI {
     public boolean showInsufficientFunds = false;
     public long messageTimer = 0;
     public final long MESSAGE_DURATION = 2000;
+    public boolean showNeedBucketMessage = false;
+    public long needBucketMessageTimer = 0;
+    public final long NEED_BUCKET_MESSAGE_DURATION = 2000;
     public ArrayList<ShopItem> getShopItemsByCategory(int category) {
+
     ArrayList<ShopItem> result = new ArrayList<>();
     
     for (ShopItem item : shopItems) {
@@ -159,13 +162,18 @@ public class UI {
         if(gp.gameState == gp.SHOP_STATE) {
             drawShopMenu();
         }
+        if (gp.gameState == gp.ACHIEVEMENT_STATE) {
+            drawAchievementMenu();
+        }
         if(gp.gameState == gp.EFFECT_STATE) {
             drawEffectMenu();
         }
         if (gp.gameState == gp.GAME_OVER_STATE) {
             respawnMenu();
         }
-        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE&& gp.gameState != gp.SHOP_STATE && gp.gameState != gp.EFFECT_STATE) {
+        if (gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.OPEN_CHEST_STATE 
+        && gp.gameState != gp.OPEN_SMELTER_STATE&& gp.gameState != gp.SHOP_STATE 
+        && gp.gameState != gp.EFFECT_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
             drawSelectedItem();
         }
         if (gp.gameState == gp.PAUSE_STATE) {
@@ -192,7 +200,7 @@ public class UI {
         if (gp.gameState == gp.OPEN_SMELTER_STATE) {
             furnaceMenu();
         }
-        if(gp.gameState == gp.KANDANG_STATE) {
+        if(gp.gameState == gp.KANDANG_STATE) {  
             if (inBreedingMenu) {
                 drawBreedingMenu(g2, gp.currentKandang);
             }  else if(inRemoveMenu) { 
@@ -204,7 +212,8 @@ public class UI {
             }
         }
         if (gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE 
-            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE && gp.gameState != gp.EFFECT_STATE) {
+            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE 
+            && gp.gameState != gp.EFFECT_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
             drawStats();
         }
         if (showNameInput) {
@@ -212,6 +221,9 @@ public class UI {
         }
         if (showKandangFullMessage) {
             drawFullKandangMessage(g2);
+        }
+        if(showNeedBucketMessage) {
+            drawNeedBucketMessage(g2);
         }
         if (showWrongKandangMessage) {
             drawWrongKandangMessage(g2);
@@ -309,6 +321,28 @@ public class UI {
         achievementToShow = a;
         achievementNotificationTime = System.currentTimeMillis();
     }
+    public void showNeedBucketMessage() {
+        showNeedBucketMessage = true;
+        needBucketMessageTimer = System.currentTimeMillis();
+    }
+    public void drawNeedBucketMessage(Graphics2D g2) {
+        if(System.currentTimeMillis() - needBucketMessageTimer >= NEED_BUCKET_MESSAGE_DURATION) {
+            showNeedBucketMessage = false;
+        } else {
+            int messageWidth = gp.TILE_SIZE * 8;
+            int messageHeight = gp.TILE_SIZE * 3;
+            int messageX = gp.SCREEN_WIDTH/2 - messageWidth/2;
+            int messageY = gp.SCREEN_HEIGHT/2 - messageHeight/2;
+
+            g2.drawImage(woodBg, messageX, messageY, messageWidth, messageHeight, null);
+
+            g2.setColor(Color.WHITE);
+            g2.setFont(new Font("Arial", Font.BOLD, 24));
+            String message = "Need Empty Bucket!";
+            int textX = messageX + (messageWidth - g2.getFontMetrics().stringWidth(message))/2;
+            g2.drawString(message, textX, messageY + messageHeight/2);
+        }
+    }
 
     public void respawnMenu() {
         g2.setColor(new Color(0, 0, 0, 150));
@@ -323,10 +357,16 @@ public class UI {
         g2.drawString(message, x, y);
         
         String respawnMessage = "Press R to respawn or Q to quit";
+        String immortalityMessage = "";
+        if (gp.player.inventory.hasItem("Immortality")){
+            immortalityMessage = "Press E to use Immortality";
+        } 
         int respawnX = getXCenteredText(respawnMessage);
         int respawnY = y + 60;
         
         g2.drawString(respawnMessage, respawnX, respawnY);
+        g2.setColor(Color.MAGENTA);
+        g2.drawString(immortalityMessage, getXCenteredText(immortalityMessage), respawnY + 60);
     }
 
      public void showRodRusakMessage() {
@@ -726,7 +766,6 @@ public class UI {
             else if(animal instanceof Pig) {
                 ((Pig)animal).getItem(player);
             }
-            animal.setReadyGetItem(false);
             inGetItemMenu = false;
             selectedGetItemIndex = 0;
         }
@@ -2515,6 +2554,7 @@ public class UI {
         int textY = buttonY + (buttonHeight + g2.getFontMetrics().getHeight()) / 2 - 4;
         g2.drawString(exitText, textX, textY);
     }
+
     public void drawEffectMenu() {
         // Background fully opaque untuk menutupi UI lainnya
         g2.setColor(new Color(0, 0, 0, 255)); // Menggunakan alpha 255 agar fully opaque
@@ -2877,6 +2917,23 @@ public class UI {
                 // Apply cheat effects
                 break;
         }
+    }
+    public void drawAchievementMenu() {
+        g2.setColor(new Color(0, 0, 0, 150));
+        g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
+        
+        // Shop panel
+        int panelWidth = 900;
+        int panelHeight = 500;
+        int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
+        int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
+        
+        g2.setColor(new Color(70, 40, 0));
+        g2.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 15, 15);
+        
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(5));
+        g2.drawRoundRect(panelX+5, panelY+5, panelWidth-10, panelHeight-10, 10, 10);
     }
 }
 

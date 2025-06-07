@@ -1,11 +1,15 @@
 package Objek.Controller;
 
 import java.awt.Rectangle;
+import java.util.Random;
+
 import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
+import Objek.Items.StackableItem.Materials.AnimalDrops.WolfHide;
 import Objek.Items.Unstackable.FishingRod;
+import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
 import Objek.Ore.Ore;
 import Objek.Plant.Bushes.Bush;
 import Objek.Plant.Trees.Tree;
@@ -13,6 +17,7 @@ import Objek.Player.Player;
 
 public class CollisonChecker {
     GamePanel gp;
+    Random rand = new Random();
 
     public CollisonChecker (GamePanel gp) {
         this.gp = gp;
@@ -182,7 +187,7 @@ public class CollisonChecker {
             gp.buildings.get(i).solidArea.x = gp.buildings.get(i).worldX + gp.buildings.get(i).solidArea.x;
             gp.buildings.get(i).solidArea.y = gp.buildings.get(i).worldY + gp.buildings.get(i).solidArea.y;
 
-            if (animal.solidArea.intersects(gp.buildings.get(i).solidArea)) {
+            if (animal.solidArea.intersects(gp.buildings.get(i).solidArea) && gp.buildings.get(i).buildingMap == 0) {
                 if (animal instanceof Animal) {
                     animal.collisionOn = gp.buildings.get(i).isAllowCollison;
                 }
@@ -444,10 +449,11 @@ public class CollisonChecker {
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
     
         // Check collision
-        if(animal.solidArea.intersects(gp.player.solidArea)) {
+        if(animal.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen) {
             animal.collisionOn = true;
             int def = gp.player.getDefense();
             if (animal instanceof Wolf) {
+                ((Wolf) animal).isBiting = false;
                 if (gp.player.helmet != null) {
                     gp.player.helmet.durability--;
                     if (gp.player.helmet.durability <= 0) {
@@ -456,6 +462,17 @@ public class CollisonChecker {
                 }
                 if (gp.player.chestplate != null) {
                     gp.player.chestplate.durability--;
+                    if (gp.player.chestplate instanceof BladeArmor) {
+                        animal.hp -= 5;
+                        if(animal.hp <= 0) {
+                            if (rand.nextInt(10) < 2) {
+                                gp.player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
+                            }
+                            gp.player.gp.animals.remove(animal);
+                            gp.player.gainExp(rand.nextInt(10) + 9);
+                            gp.player.animalIndex = -1;
+                        }
+                    }
                     if (gp.player.chestplate.durability <= 0) {
                         gp.player.chestplate = null; // Remove chestplate if durability is zero
                     }
@@ -475,7 +492,7 @@ public class CollisonChecker {
                 if(16 - def <= 0){
                     gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
                 } else {
-                    gp.player.health -= (16-def); // Decrease player HP
+                    gp.player.health -= (12 - def); // Decrease player HP
                 }
                 if (gp.player.health <= 0) {
                     gp.player.health = 0; // Prevent negative health
@@ -771,6 +788,17 @@ public class CollisonChecker {
             }
             if (gp.player.chestplate != null) {
                 gp.player.chestplate.durability--;
+                if (gp.player.chestplate instanceof BladeArmor) {
+                    monster.hp -= 5;
+                    if(monster.hp <= 0) {
+                        if (rand.nextInt(10) < 2) {
+                            gp.player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new WolfHide(1), gp));
+                        }
+                        gp.player.gp.monsters.remove(monster);
+                        gp.player.gainExp(rand.nextInt(10) + 9);
+                        gp.player.monsterIndex = -1;
+                    }
+                }
                 if (gp.player.chestplate.durability <= 0) {
                     gp.player.chestplate = null; // Remove chestplate if durability is zero
                 }

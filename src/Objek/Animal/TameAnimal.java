@@ -14,7 +14,6 @@ public abstract class TameAnimal extends Animal {
     int grabOffsetY = 0;
     int width;
     int height;
-    public int hp;
     public String gender;
     
     public TameAnimal(String name, int x, int y, int speed, String direction, GamePanel gp) {

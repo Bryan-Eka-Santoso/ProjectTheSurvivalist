@@ -112,7 +112,7 @@ public class Golem extends Monster {
         isCollision(this);
         
         // Jika tidak ada collision, boleh bergerak
-        if (!isPreyNearby(gp.player)) {
+        if (!isPreyNearby(gp.player) || gp.player.isFrozen) {
             moveNormally();
         } else {
             moveTowardsPlayer();
@@ -336,6 +336,10 @@ public class Golem extends Monster {
         if(tileNum1 != validTile || tileNum2 != validTile || 
         tileNum3 != validTile || tileNum4 != validTile) {
             return false; // Tidak bisa bergerak jika ada tile yang bukan air
+        }
+
+        if (player.health <= 0) {
+            return false; // Tidak mengejar jika player sudah mati
         }
 
         if (Math.pow((player.worldX - this.worldX), 2) + Math.pow((player.worldY - this.worldY), 2) <= Math.pow(450, 2)) {

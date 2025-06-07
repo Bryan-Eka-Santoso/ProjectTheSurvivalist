@@ -36,7 +36,43 @@ public class AchievementManager {
             "Ore Collector",
             "Mine 50 various stones.",
             gp -> gp.player.totalOresMined >= 50));
-        
+        addAchievement(new Achievement(
+            "Novice Farmer",
+            "Plant your first crop.",
+            gp -> gp.player.totalPlantsPlanted >= 1));
+        addAchievement(new Achievement(
+            "Green Thumb",
+            "Plant 10 crops.",
+            gp -> gp.player.totalPlantsPlanted >= 10));
+        addAchievement(new Achievement(
+            "Forest Guardian",
+            "Plant 100 crops.",
+            gp -> gp.player.totalPlantsPlanted >= 100));
+        addAchievement(new Achievement(
+            "Blacksmith",
+            "Craft your first iron item.",
+            gp -> gp.player.hasForgedIronItem));
+        addAchievement(new Achievement(
+            "Monster Hunter",
+            "Defeat your first monster.",
+            gp -> gp.player.totalMonstersKilled >= 1));
+        addAchievement(new Achievement(
+            "Master Hunter",
+            "Defeat 50 monsters.",
+            gp -> gp.player.totalMonstersKilled >= 50));
+         addAchievement(new Achievement(
+            "First Steps",
+            "Survive for one day.",
+            gp -> gp.player.daysAlive >= 1));
+        addAchievement(new Achievement(
+            "Undefeated",
+            "Survive for 10 days without dying.",
+            gp -> gp.player.maxDaysAlive >= 10));
+        addAchievement(new Achievement(
+            "Hardcore Professional",
+            "Survive for 100 days without dying.",
+            gp -> gp.player.maxDaysAlive >= 100));
+
     }
 
     public void addAchievement(Achievement a) {
