@@ -554,6 +554,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.worldX = 60 * gp.TILE_SIZE;
                 sp.spawnFish("Arwana", 20, usedPositions);
                 sp.spawnFish("Belida", 20, usedPositions);
+                gp.stopMusic();
+                gp.playMusic(18);
                 if(randGetGolden == 1){
                     sp.spawnFish("Golden", 2, usedPositions);
                 }
@@ -563,6 +565,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.tileM.loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
                 gp.currentMap = 0;
                 gp.fish.clear();
+                gp.stopMusic();
+                gp.playMusic(7);
                 gp.player.getPlayerImg();
                 gp.tileM.getTileImage();
                 gp.player.worldY = 18 * gp.TILE_SIZE;
@@ -649,6 +653,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         if (gp.player.droppedItem != -1) {
             if (gp.currentMap == gp.droppedItems.get(gp.player.droppedItem).mapIndex) {
                 gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
+                playSE(22);
                 gp.player.droppedItem = -1;
             }
         }
@@ -881,6 +886,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.selectedChestIndex = 0;
             gp.ui.scrollY = 0; // Reset scroll position when exiting crafting state
         } else if (gp.gameState == gp.OPEN_CHEST_STATE) {
+            playSE(14);
             gp.gameState = gp.PLAY_STATE;
             gp.ui.slotCol = 0;
             gp.ui.slotRow = 0;
@@ -889,6 +895,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         } else if (gp.gameState == gp.BUILDING_STATE) {
             Buildings building = (Buildings) gp.player.inventory.getSelectedItem().clone();
             building.buildingMap = gp.currentMap;
+            playSE(11);
             if (building instanceof Chest) {
                 ((Chest) building).inventory = new Inventory(32, gp);
             }
@@ -935,6 +942,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
                 gp.currentMap = 0;
                 gp.monsters.clear();
+                gp.stopMusic();
+                gp.playMusic(7);
                 gp.player.getPlayerImg();
                 gp.tileM.getTileImage();
                 gp.player.worldY = 51 * gp.TILE_SIZE;
@@ -946,6 +955,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             if(col == 52 && row == 53) {
                 gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
                 gp.currentMap = 0;
+                gp.stopMusic();
+                gp.playMusic(7);
                 gp.player.getPlayerImg();
                 gp.tileM.getTileImage();
                 gp.player.worldY = 41 * gp.TILE_SIZE + 10;

@@ -231,6 +231,7 @@ public class GamePanel extends JPanel implements Runnable {
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new WindAxe());
+        player.inventory.addItems(new Furnace(this, 1, 0));
         player.inventory.addItems(new Immortality());
         player.inventory.addItems(new CursedHelmet());
         player.inventory.addItems(new Bucket(3, this));
@@ -319,6 +320,8 @@ public class GamePanel extends JPanel implements Runnable {
     
     public void update() {
 
+        if (player.health > 100) player.health = 100;
+
         if (gameState == PAUSE_STATE || gameState == ACHIEVEMENT_STATE) return;
         
         if (player.health <= 0) {
@@ -351,7 +354,6 @@ public class GamePanel extends JPanel implements Runnable {
                 monsters.get(i).update();
             }
         }
-        
 
         ui.isCanGoToSea = false;
         ui.isCanGoToLand = false;
@@ -397,7 +399,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
     }
-
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

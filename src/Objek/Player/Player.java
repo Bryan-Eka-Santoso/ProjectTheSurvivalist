@@ -12,6 +12,7 @@ import Objek.Controller.GamePanel;
 import Objek.Controller.InteractBuild;
 import Objek.Controller.ItemDrop;
 import Objek.Controller.KeyHandler;
+import Objek.Controller.Sound;
 import Objek.Controller.UseItem;
 import Objek.Enemy.Bat;
 import Objek.Enemy.Golem;
@@ -97,6 +98,8 @@ public class Player {
     public int coins = 0;
     int healthCounter = 0;
     private int poisonCounter = 0;
+    int soundCounter = 0;
+    int soundCounterWalk = 0;
     private boolean isDehydrated = false;
     public boolean isFrozen = false; // Untuk Winter Crown
     private int dehydrationCounter = 0;
@@ -117,6 +120,7 @@ public class Player {
     public int maxDaysAlive = 0;
 
     Random rand = new Random();
+    Sound sound = new Sound();
 
     public Player(String name, int level, GamePanel gp, KeyHandler keyH) {
         this.name = name;
@@ -212,6 +216,7 @@ public class Player {
         if (exp >= maxExp) {
             exp -= maxExp;
             level++;
+            playSE(21);
             maxExp += 50;
             System.out.println("Level up! Current level: " + level);
         }
@@ -241,6 +246,7 @@ public class Player {
     private void handlePoisonEffect() {
         if(isPoisoned) {
             poisonCounter++;
+            playSE(24);
             
             // Damage setiap 60 frames (1 detik)
             if(poisonCounter % 60 == 0) {
@@ -378,6 +384,13 @@ public class Player {
     }
 
     public void update() {
+        if (hunger <= 20 || thirst <= 20) {
+            if (soundCounter == 0) {
+                playSE(10);
+            }
+            soundCounter++;
+            if (soundCounter > 100) soundCounter = 0;
+        }
         
         if (keyH.shiftPressed && hunger > 20 && thirst >= 10 && gp.currentMap != 1) {
             speed = 10;
@@ -457,7 +470,6 @@ public class Player {
             collisionOn = false;
             gp.cCheck.checkTile(this);
             
-            
             droppedItem = gp.cCheck.checkItemDrop(this, true);
             if (gp.currentMap == 1) {
                 fishIndex = gp.cCheck.checkFish(this, true);
@@ -473,6 +485,15 @@ public class Player {
                 buildingIndex = gp.cCheck.checkBuildings(this, true);
             }
             
+            int tileNum = gp.player.checkSoundTile();
+            
+            soundCounterWalk++;
+            if (soundCounterWalk > 60) soundCounterWalk = 0;
+            if (soundCounterWalk == 0) {
+                if (tileNum != -1) {
+                    playSE(tileNum);
+                }
+            }
             if (!collisionOn) {
                 if (this.boots instanceof RapidBoots){
                     speed = keyH.shiftPressed ? 20 : 10;
@@ -624,6 +645,7 @@ public class Player {
             TameAnimal nearbyAnimal = findNearbyAnimal();
             if (nearbyAnimal != null) {
                 grabAnimal(nearbyAnimal, selectedItem);
+                playSE(19);
             }
         } else {  
             unGrabAnimal();
@@ -678,6 +700,7 @@ public class Player {
                             return;
                         }
                         gp.ui.showAnimalNameInput(grabbedAnimal, kandang);
+                        playSE(12);
                         return;
                     }
                 }
@@ -730,6 +753,7 @@ public class Player {
                 }
             }
             if (canPlace) {
+                playSE(19);
                 grabbedAnimal.worldX = newX;
                 grabbedAnimal.worldY = newY;
                 grabbedAnimal.unGrab();
@@ -807,4 +831,21 @@ public class Player {
         }
         System.out.println("Dropped all items.");
     }
+
+    public int checkSoundTile() {
+        int tileNum = gp.tileM.mapTile[gp.currentMap][worldX / gp.TILE_SIZE][worldY / gp.TILE_SIZE];
+        if (tileNum == 18) { // grass tile
+            return 20; // Sound for grass
+        } else if (tileNum == 17) { // sand tile
+            return 26; // Sound for sand
+        } else {
+            return -1; // No sound
+        }
+    }
+
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
+    
 }

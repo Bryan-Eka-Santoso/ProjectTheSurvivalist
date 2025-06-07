@@ -33,6 +33,7 @@ public class InteractBuild {
         
         if (building instanceof Chest) {
             gp.gameState = gp.OPEN_CHEST_STATE;
+            playSE(15); // Sound for opening chest
         }
         else if (building instanceof CraftingTable) {
             gp.gameState = gp.OPEN_CRAFTINGTABLE_STATE;
@@ -62,6 +63,8 @@ public class InteractBuild {
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
             gp.currentMap = 2;
             gp.animals.clear();
+            gp.stopMusic();
+            gp.playMusic(27);
             gp.player.getPlayerImg();
             gp.tileM.getTileImage();
             gp.player.worldY = 24 * gp.TILE_SIZE;
@@ -77,6 +80,8 @@ public class InteractBuild {
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);
             gp.currentMap = 3;
             gp.animals.clear();
+            gp.stopMusic();
+            gp.playMusic(28);
             gp.player.getPlayerImg();
             gp.tileM.getTileImage();
             gp.player.worldY = 53 * gp.TILE_SIZE;
@@ -162,4 +167,10 @@ public class InteractBuild {
         e.printStackTrace();
     }
 }
+
+public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
+    
 }

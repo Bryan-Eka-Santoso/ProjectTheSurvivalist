@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
+import Objek.Controller.Sound;
 import Objek.Items.Unstackable.Armor.Helmet.WolfCloak;
 import Objek.Player.*;
 import java.awt.Color;
@@ -13,12 +14,14 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Wolf extends WildAnimal {
+    Sound sound = new Sound();
     Random random = new Random();
     String gender;
     boolean readyGetItem;
     boolean readyBreeding;
     public boolean isBiting = true;
     public int actionLockCounter = 0;
+    public int soundCounter = 0;
     public int actionLockEnemyNearby = 15;
     private int actionMoveCounter = 0;
     private int actionMoveDelay;
@@ -89,13 +92,21 @@ public class Wolf extends WildAnimal {
 
     @Override
     public void update() {
+        
         if (isPreyNearby(gp.player) && !(gp.player.helmet instanceof WolfCloak)) {
             actionLockEnemyNearby = 10;
+            if (soundCounter == 0) {
+                playSE(13);
+            }
             chasePlayer(gp.player);
         } else {
             actionLockEnemyNearby = 15;
         }
         actionLockCounter++;
+        soundCounter++;
+        if (soundCounter >= 140) {
+            soundCounter = 0;
+        }
         if(actionLockCounter < actionLockEnemyNearby) {
             return; 
         }
@@ -400,5 +411,13 @@ public class Wolf extends WildAnimal {
         }
         return nextDirection;
     }
+
+    public void playSE(int i) {
+        sound.setFile(i);
+        if (!sound.clip.isActive() && !sound.clip.isRunning()) {
+            sound.play();
+        }
+    }
+    
 
 }
