@@ -14,6 +14,11 @@ import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
+import Objek.Items.StackableItem.Foods.RawFoods.RawArwana;
+import Objek.Items.StackableItem.Foods.RawFoods.RawChicken;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
+import Objek.Items.StackableItem.Materials.Fuels.Wood;
+import Objek.Items.StackableItem.Materials.OreDrops.Metal;
 import Objek.Items.Unstackable.Immortality;
 import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WinterCrown;
@@ -83,10 +88,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final int EFFECT_STATE = 15;
     public final int ACHIEVEMENT_STATE = 16;
 
-    private static final int MAX_CHICKENS = 10;
-    private static final int MAX_COWS = 5;
-    private static final int MAX_SHEEP = 5;
-    private static final int MAX_PIGS = 5;
+    private static final int MAX_CHICKENS = 12 ;
+    private static final int MAX_COWS = 8;
+    private static final int MAX_SHEEP = 8;
+    private static final int MAX_PIGS = 8;
     private static final int MAX_WOLF = 3;
     private static final int MAX_GOLD = 15;
     private static final int MAX_CRYSTAL = 8;
@@ -213,8 +218,8 @@ public class GamePanel extends JPanel implements Runnable {
         ArrayList<Point> usedPositions = new ArrayList<>();
         sp.spawnPlant("guava", 50, usedPositions);
         sp.spawnPlant("mango", 40, usedPositions);
-        sp.spawnPlant("bush", 300, usedPositions);
-        sp.spawnPlant("berrybush", 20, usedPositions);
+        sp.spawnPlant("bush", 280, usedPositions);
+        sp.spawnPlant("berrybush", 40, usedPositions);
     }
     
     @Override
@@ -230,7 +235,11 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new WindAxe());
+        player.inventory.addItems(new KandangAyam(this, 0));
+        player.inventory.addItems(new RawArwana(5));
+        player.inventory.addItems(new RawChicken(5));
+        player.inventory.addItems(new Wood(12));
+        player.inventory.addItems(new Furnace(this, 1, 0));
         player.inventory.addItems(new Immortality());
         player.inventory.addItems(new CursedHelmet());
         player.inventory.addItems(new Bucket(3, this));
@@ -240,6 +249,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new GuardianHelmet());
         player.inventory.addItems(new HaasClaws());
         player.inventory.addItems(new Lantern(this));
+        player.inventory.addItems(new Metal(64));
 
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;

@@ -33,6 +33,7 @@ import Objek.Items.Unstackable.*;
 import Objek.Items.Unstackable.Armor.Chestplate.*;
 import Objek.Items.Unstackable.Armor.Helmet.*;
 import Objek.Items.Unstackable.Armor.Leggings.*;
+import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Items.Unstackable.Armor.Boots.*;
 
 public class Crafting {
@@ -215,6 +216,8 @@ public class Crafting {
                         player.madeCraftingTable = true; // Set flag to true after crafting
                     } else if (result instanceof Pickaxe) {
                         player.madePickaxe = true; // Set flag to true after crafting
+                    } else if (result instanceof Armor){
+                        player.hasCraftedArmor = true; // Set flag to true after crafting any armor
                     }
 
                     player.gainExp(rand.nextInt(5) + 10);

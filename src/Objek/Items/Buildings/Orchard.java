@@ -113,6 +113,7 @@ public class Orchard extends Buildings {
             phase = "tree";
             img = this.tree.image;
             watered = false;
+            gp.player.totalPlantsPlanted++;
             System.out.println("Tree fully grown!");
         }
     }

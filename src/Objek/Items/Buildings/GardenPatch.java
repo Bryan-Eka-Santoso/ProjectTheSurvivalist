@@ -117,6 +117,7 @@ public class GardenPatch extends Buildings {
             phase = "crops";
             img = this.cropImg;
             watered = false;
+            gp.player.totalPlantsPlanted++;
             System.out.println("Crops fully grown!");
         }
     }

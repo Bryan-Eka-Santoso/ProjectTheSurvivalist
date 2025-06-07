@@ -465,6 +465,7 @@ public class CollisonChecker {
                     if (gp.player.chestplate instanceof BladeArmor) {
                         animal.hp -= 5;
                         if(animal.hp <= 0) {
+                            gp.player.totalAnimalsKilled++;
                             if (rand.nextInt(10) < 2) {
                                 gp.player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
@@ -791,6 +792,7 @@ public class CollisonChecker {
                 if (gp.player.chestplate instanceof BladeArmor) {
                     monster.hp -= 5;
                     if(monster.hp <= 0) {
+                        gp.player.totalMonstersKilled++;
                         if (rand.nextInt(10) < 2) {
                             gp.player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new WolfHide(1), gp));
                         }

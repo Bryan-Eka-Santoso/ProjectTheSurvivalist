@@ -29,7 +29,7 @@ public class Golem extends Monster {
         super(name, worldX, worldY, speed, direction, gp);
         setRandomDirection();
         this.hp = 300; // Set Golem's HP
-        this.attack = 10;
+        this.attack = 15;
         this.actionMoveDelay = random.nextInt(91) + 30;
         upHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor) );   
         downHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor) );   

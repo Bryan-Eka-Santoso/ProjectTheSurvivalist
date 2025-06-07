@@ -185,10 +185,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         if (gp.gameState == gp.KANDANG_STATE) {
             if(gp.ui.inBreedingMenu) {
                 gp.ui.handleBreedingKeyPress(code, gp.currentKandang);
-            }
-            else if(gp.ui.inGetItemMenu) {
+            } else if(gp.ui.inGetItemMenu) {
                 gp.ui.handleGetItemKeyPress(code, gp.currentKandang, gp.player);
-            }else if(gp.ui.inRemoveMenu){
+            } else if(gp.ui.inRemoveMenu){
                 gp.ui.handleRemoveKeyPress(code, gp.currentKandang, gp.player);
             }
         }
@@ -231,9 +230,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     OneToNinePressed(code);
                 }
             }
-            if (code == KeyEvent.VK_CAPS_LOCK) {
-                CAPSLOCKPressed();
-            }
             if (code == KeyEvent.VK_R && !gp.player.isBuild) {
                 RPressed();
             }
@@ -244,7 +240,11 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 LeftPressed();
             }
             if (code == KeyEvent.VK_C && !gp.player.isBuild) {
-                CPressed();
+                if (shiftPressed){
+                    ShiftCPressed();
+                } else {
+                    CPressed();
+                }
             }
             if (code == KeyEvent.VK_RIGHT) {
                 RightPressed();
@@ -314,6 +314,12 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void WPressed() {
+        if (gp.gameState == gp.ACHIEVEMENT_STATE){
+            if (gp.ui.achievementScroll > 0) {
+                gp.ui.achievementScroll--;
+                playSE(2);
+            }
+        }
         if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
             upPressed = true;
         }
@@ -377,6 +383,12 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
     
     public void SPressed() {
+        if (gp.gameState == gp.ACHIEVEMENT_STATE){
+            if (gp.ui.achievementScroll < gp.aManager.achievements.size() - UI.ACHIEVEMENTS_PER_PAGE) {
+                gp.ui.achievementScroll++;
+                playSE(2);
+            }
+        }
         if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.BUILDING_STATE) {
             downPressed = true;
         }
@@ -477,6 +489,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void EPressed() {
+        if (gp.gameState == gp.ACHIEVEMENT_STATE){
+            System.out.println("Disabled");
+            return;
+        }
         if (gp.gameState == gp.GAME_OVER_STATE){
             gp.gameState = gp.PLAY_STATE;
             gp.player.inventory.removeItem(new Immortality(), 1);
@@ -496,6 +512,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     }
 
     public void RPressed() {
+        if (gp.gameState == gp.ACHIEVEMENT_STATE){
+            System.out.println("Disabled");
+            return;
+        }
         if (gp.gameState == gp.PLAY_STATE || gp.gameState == gp.INVENTORY_STATE) {
             playSE(2);
             if (counter == 0) {
@@ -664,8 +684,12 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.amountToDrop = 1;
         }
         if (gp.player.grabbedAnimal == null && gp.gameState == gp.PLAY_STATE){
+            if (gp.ui.slotCol == 0) {
+                gp.ui.slotCol = 9;
+            } 
             if (gp.ui.slotCol > 0) {
                 gp.ui.slotCol--;
+                playSE(2);
             } else {
                 playSE(2);
                 if (counter == 0) {
@@ -734,6 +758,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.ui.selectedRecipeIndex--; 
             }
         }
+        playSE(2);
     }
 
     public void DownPressed() {
@@ -747,6 +772,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.ui.selectedRecipeIndex++; 
             }
         }
+        playSE(2);
     }
 
     public void IPressed() {
@@ -819,6 +845,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                     gp.player.inventory.slots[gp.ui.selectedIndex] = null;
                 }
                 gp.fish.remove(gp.ui.fishIndex);
+                gp.player.totalFishCaught++;
                 
                 gp.gameState = gp.PLAY_STATE;
                 
@@ -848,12 +875,14 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.gameState = gp.PLAY_STATE;
         } else if (gp.gameState != gp.PAUSE_STATE) {
             gp.gameState = gp.PAUSE_STATE;
+            gp.sound.stop();
         } else if (gp.gameState == gp.PAUSE_STATE) {
             gp.gameState = gp.PLAY_STATE;
+            gp.sound.play();
         } 
     }
 
-    public void CAPSLOCKPressed() {
+    public void ShiftCPressed() {
         if (gp.gameState == gp.PLAY_STATE) {
             gp.gameState = gp.ACHIEVEMENT_STATE;
             gp.ui.slotRow = 0;
@@ -861,6 +890,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.selectedIndex = 0;
         } else if (gp.gameState == gp.ACHIEVEMENT_STATE) {
             gp.gameState = gp.PLAY_STATE;
+            gp.ui.achievementScroll = 0;
             gp.ui.slotRow = 0;
             gp.ui.slotCol = 0;
             gp.ui.selectedIndex = 0;

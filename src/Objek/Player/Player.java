@@ -106,11 +106,16 @@ public class Player {
     public int totalTreesCut = 98;
     public int totalBushesCut = 49;
     public int totalOresMined = 49;
+    public int totalFishCaught = 0;
+    public int totalCursedHelmetKills = 0;
     public boolean madeCraftingTable = false;
     public boolean madePickaxe = false;
-    
     public int totalPlantsPlanted = 0;
-    public boolean hasForgedIronItem = false;
+    public boolean hasCraftedArmor = false;
+    public boolean hasLegendaryItem = false;
+    public boolean hasNamedChicken = false;
+    public boolean hasPurifiedWater = false;
+    public int totalMaterialsCooked = 0;
     public int totalAnimalsKilled = 0;
     public int totalMonstersKilled = 0;
     public int daysAlive = -1;
@@ -329,6 +334,7 @@ public class Player {
                         animal.hp -= 1;
                         if (animal.hp <= 0) {
                             totalAnimalsKilled++;
+                            totalCursedHelmetKills++;
                             if (animal instanceof Chicken){
                                 this.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
                                 this.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
@@ -360,6 +366,7 @@ public class Player {
                         monster.hp -= 1;
                         if (monster.hp <= 0) {
                             totalMonstersKilled++;
+                            totalCursedHelmetKills++;
                             if (monster instanceof Bat){
                                 this.gainExp(rand.nextInt(10) + 9);
                             } else if (monster instanceof Golem){

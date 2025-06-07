@@ -3,6 +3,7 @@ package Objek.Items.Buildings;
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
 import Objek.Items.StackableItem.Bucket;
+import Objek.Items.StackableItem.Foods.Food;
 import Objek.Items.StackableItem.Foods.CookedFoods.Bacon;
 import Objek.Items.StackableItem.Foods.CookedFoods.CookedArwana;
 import Objek.Items.StackableItem.Foods.CookedFoods.CookedBelida;
@@ -53,8 +54,11 @@ public class Furnace extends Buildings {
                 Item tempItem = rawMaterial[0];
                 Item result = recipe.get(tempItem.name);
                 if (result != null && cookedMaterial[0] == null) {
-                    if(result.name.contains("Metal")) {  
-                        gp.player.hasForgedIronItem = true;  // Set the achievement flag
+                    if (result instanceof Food){
+                        gp.player.totalMaterialsCooked++;
+                    }
+                    if (result.name.equals("Cleansed Water Bucket")){
+                        gp.player.hasPurifiedWater = true;
                     }
                     cookedMaterial[0] = result.clone();
                     cookedMaterial[0].currentStack = result.currentStack;
@@ -63,11 +67,11 @@ public class Furnace extends Buildings {
                     gp.player.gainExp(rand.nextInt(5) + 10);
                     if (rawMaterial[0].currentStack == 0) {
                         rawMaterial[0] = null;
-                        System.out.println("No more " + cookedMaterial[0].name + " left");
+                        System.out.println("No more " + rawMaterial[0].name + " left");
                     }
                     if (fuelMaterial[0].currentStack == 0) {
                         fuelMaterial[0] = null;
-                        System.out.println("No more " + cookedMaterial[0].name + " left");
+                        System.out.println("No more " + fuelMaterial[0].name + " left");
                     }
                 } else if (result != null && cookedMaterial[0] != null) {
                     if (result.name.equals(cookedMaterial[0].name)) {
@@ -75,6 +79,9 @@ public class Furnace extends Buildings {
                             rawMaterial[0].currentStack--;
                             fuelMaterial[0].currentStack--;
                             cookedMaterial[0].currentStack += result.currentStack;
+                            if (result instanceof Food){
+                                gp.player.totalMaterialsCooked += result.currentStack;
+                            }
                             if (rawMaterial[0].currentStack == 0) {
                                 rawMaterial[0] = null;
                                 System.out.println("No more " + cookedMaterial[0].name + " left");

@@ -3,7 +3,9 @@ package Objek.Controller;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -56,6 +58,9 @@ public class UI {
 
     private static final int ANIMALS_PER_PAGE = 4;
     private Rectangle breedButton, getItemButton;
+    
+    public int achievementScroll = 0;
+    public static final int ACHIEVEMENTS_PER_PAGE = 7; // Adjust as needed
 
     public boolean showNameInput = false;
     private String currentInput = "";
@@ -298,6 +303,7 @@ public class UI {
             if (System.currentTimeMillis() - achievementNotificationTime < 3000) { // 3 seconds
                 g2.setColor(new Color(0,0,0,180));
                 g2.fillRoundRect(20, gp.SCREEN_HEIGHT - 240, 500, 95, 20, 20);
+                g2.setFont(new Font("Arial", Font.BOLD, 20));
                 g2.setColor(Color.YELLOW);
                 g2.drawString("Achievement Unlocked!", 40, gp.SCREEN_HEIGHT - 210);
                 g2.setColor(Color.WHITE);
@@ -1164,6 +1170,9 @@ public class UI {
             }
             else if (keyCode == KeyEvent.VK_ENTER && !currentInput.isEmpty()) {
                 animalToName.setName(currentInput);
+                if (animalToName.getName().equalsIgnoreCase("bryan")){
+                    gp.player.hasNamedChicken = true;
+                }
                 if(targetKandang.addAnimal(animalToName)) {
                     showNameInput = false;
                     currentInput = "";
@@ -2921,19 +2930,59 @@ public class UI {
     public void drawAchievementMenu() {
         g2.setColor(new Color(0, 0, 0, 150));
         g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
-        
-        // Shop panel
+
         int panelWidth = 900;
         int panelHeight = 500;
         int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
         int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
-        
-        g2.setColor(new Color(70, 40, 0));
+
+        // g2.setColor(new Color(70, 40, 0));
+        // g2.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 15, 15);
+        GradientPaint gpGradient = new GradientPaint(
+            panelX * 2, panelY, new Color(200, 160, 90), // Bottom color (light brown/gold)
+            panelX + panelWidth, panelY + panelHeight, new Color(90, 60, 30) // Top color (brownish)
+        );
+        Paint oldPaint = g2.getPaint();
+        g2.setPaint(gpGradient);
         g2.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 15, 15);
+        g2.setPaint(oldPaint);
         
         g2.setColor(Color.WHITE);
-        g2.setStroke(new BasicStroke(5));
-        g2.drawRoundRect(panelX+5, panelY+5, panelWidth-10, panelHeight-10, 10, 10);
+        g2.setStroke(new BasicStroke(8));
+        g2.drawRoundRect(panelX, panelY, panelWidth, panelHeight, 10, 10);
+
+        // Draw achievements
+        int startY = panelY + 40;
+        int lineHeight = 60;
+        int imgSize = 48;
+        int i = 0;
+        ArrayList<Achievement> achievementList = new ArrayList<>(gp.aManager.achievements.values());
+        int total = achievementList.size();
+
+        int end = Math.min(achievementScroll + ACHIEVEMENTS_PER_PAGE, total);
+        for (int idx = achievementScroll; idx < end; idx++) {
+            Achievement a = achievementList.get(idx);
+            int y = startY + (i * lineHeight);
+
+            // Draw image
+            if (a.img != null) {
+                g2.drawImage(a.img, panelX + 40, y, imgSize, imgSize, null);
+            }
+
+            // Draw name
+            g2.setFont(new Font("Arial", Font.BOLD, 24));
+            g2.setColor(a.isCompleted ? Color.GREEN : Color.WHITE);
+            g2.drawString(a.name, panelX + 110, y + 20);
+            g2.setFont(new Font("Arial", Font.PLAIN, 16));
+            g2.drawString(a.description, panelX + 110, y + 42);
+
+            i++;
+        }   
+
+        // Draw scroll instructions
+        g2.setFont(new Font("Arial", Font.ITALIC, 18));
+        g2.setColor(Color.WHITE);
+        g2.drawString("Press W/S to scroll", panelX + panelWidth - 200, panelY + panelHeight - 30);
     }
 }
 

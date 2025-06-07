@@ -222,7 +222,6 @@ public class UseItem {
                         return;
                     }
                     gardenPatch.plant(seed);
-                    gp.player.totalPlantsPlanted++;
                     System.out.println("Using seed: " + seed.name);
                     gp.player.inventory.removeItem(seed, 1); // Remove seed from inventory
                 }
@@ -263,7 +262,7 @@ public class UseItem {
                         System.out.println("Arsenal durability: " + arsenal.durability);
                     }
 
-                    if (selectedItem instanceof Sword || selectedItem instanceof Pickaxe){
+                    if (selectedItem instanceof Sword || selectedItem instanceof Pickaxe || selectedItem instanceof HaasClaws){
                         System.out.println("Using sword: " + arsenal.name);
                         arsenal.durability -= 3;
                         System.out.println("Arsenal durability: " + arsenal.durability);
@@ -333,6 +332,7 @@ public class UseItem {
                         chicken.hp -= damage;
                         System.out.println("Hit chicken: " + chicken.hp + "/" + 60);
                         if(chicken.hp <= 0) {
+                            gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
                             player.gp.animals.remove(player.animalIndex);
@@ -345,6 +345,7 @@ public class UseItem {
                         pig.hp -= damage;
                         System.out.println("Hit pig: " + pig.hp + "/" + 80);
                         if(pig.hp <= 0) {
+                            gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.gainExp(rand.nextInt(10) + 7);
@@ -355,6 +356,7 @@ public class UseItem {
                         sheep.hp -= damage;
                         System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
                         if(sheep.hp <= 0) {
+                            gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX - 15, animal.worldY, new RawMutton(1), gp));
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX + 15, animal.worldY, new Wool(rand.nextInt(2) + 1), gp));
                             player.gp.animals.remove(player.animalIndex);
@@ -366,6 +368,7 @@ public class UseItem {
                         cow.hp -= damage;
                         System.out.println("Hit cow: " + cow.hp + "/" + 100);
                         if(cow.hp <= 0) {
+                            gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.gainExp(rand.nextInt(10) + 9);
@@ -376,7 +379,7 @@ public class UseItem {
                         wolf.hp -= damage;
                         System.out.println("Hit wolf: " + wolf.hp + "/" + 100);
                         if(wolf.hp <= 0) {
-                            gp.player.totalMonstersKilled++;
+                            gp.player.totalAnimalsKilled++;
                             if (rand.nextInt(10) < 2) {
                                 player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
