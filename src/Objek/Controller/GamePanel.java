@@ -16,7 +16,6 @@ import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
 import Objek.Items.StackableItem.Foods.RawFoods.RawArwana;
 import Objek.Items.StackableItem.Foods.RawFoods.RawChicken;
-import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
 import Objek.Items.StackableItem.Materials.OreDrops.Metal;
 import Objek.Items.Unstackable.Immortality;
@@ -235,7 +234,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new KandangAyam(this, 0));
+        player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new RawArwana(5));
         player.inventory.addItems(new RawChicken(5));
         player.inventory.addItems(new Wood(12));

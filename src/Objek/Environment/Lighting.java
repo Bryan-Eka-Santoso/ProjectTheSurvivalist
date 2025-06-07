@@ -111,7 +111,9 @@ public class Lighting {
                 gp.player.daysAlive++;
                 gp.player.maxDaysAlive = Math.max(gp.player.maxDaysAlive, gp.player.daysAlive);
             }
-            dayCounter++;
+            if (gp.gameState != gp.PAUSE_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
+                dayCounter++;
+            }
             if (dayCounter > 600) {
                 dayState = DUSK;
                 dayCounter = 0;
@@ -127,7 +129,9 @@ public class Lighting {
             }
         } 
         if (dayState == NIGHT) {
-            dayCounter++;
+            if (gp.gameState != gp.PAUSE_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
+                dayCounter++;
+            }
             if (dayCounter > 600) {
                 dayState = DAWN;
                 dayCounter = 0;
