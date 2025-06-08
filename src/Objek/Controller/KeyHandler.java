@@ -191,7 +191,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.ui.handleRemoveKeyPress(code, gp.currentKandang, gp.player);
             }
         }
-        if (gp.ui.showNameInput) {
+        if (gp.ui.showNameInput) {  
             gp.ui.handleNameInputKey(code);
             return; 
         } else {

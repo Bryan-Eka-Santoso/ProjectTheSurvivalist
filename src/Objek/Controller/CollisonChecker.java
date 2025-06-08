@@ -552,8 +552,8 @@ public class CollisonChecker {
             case "right": nextX += animal.speed; break;
         }
     
-        for (Animal otherAnimal : gp.animals) {
-            if (animal == otherAnimal) continue;
+        for (int i = 0; i < gp.animals.size(); i++) {
+            if (animal == gp.animals.get(i)) continue;
             
             // Create predicted collision box
             Rectangle predictedArea = new Rectangle(
@@ -565,10 +565,10 @@ public class CollisonChecker {
             
             // Get other animal's area
             Rectangle otherArea = new Rectangle(
-                otherAnimal.worldX + otherAnimal.solidArea.x,
-                otherAnimal.worldY + otherAnimal.solidArea.y,
-                otherAnimal.solidArea.width,
-                otherAnimal.solidArea.height
+                gp.animals.get(i).worldX + gp.animals.get(i).solidArea.x,
+                gp.animals.get(i).worldY + gp.animals.get(i).solidArea.y,
+                gp.animals.get(i).solidArea.width,
+                gp.animals.get(i).solidArea.height
             );
             
             // Check collision with predicted position
@@ -579,24 +579,24 @@ public class CollisonChecker {
                 switch (animal.direction) {
                     case "up": 
                         animal.worldY += pushDistance;
-                        otherAnimal.worldY -= pushDistance;
+                        gp.animals.get(i).worldY -= pushDistance;
                         break;
                     case "down": 
                         animal.worldY -= pushDistance;
-                        otherAnimal.worldY += pushDistance;
+                        gp.animals.get(i).worldY += pushDistance;
                         break;
                     case "left": 
                         animal.worldX += pushDistance;
-                        otherAnimal.worldX -= pushDistance;
+                        gp.animals.get(i).worldX -= pushDistance;
                         break;
                     case "right": 
                         animal.worldX -= pushDistance;
-                        otherAnimal.worldX += pushDistance;
+                        gp.animals.get(i).worldX += pushDistance;
                         break;
                 }
                 // Force direction change for both animals
                 animal.direction = getOppositeDirection(animal.direction);
-                otherAnimal.direction = getOppositeDirection(otherAnimal.direction);
+                gp.animals.get(i).direction = getOppositeDirection(gp.animals.get(i).direction);
             }
         }
     }

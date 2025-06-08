@@ -38,7 +38,6 @@ import Objek.Items.Unstackable.Armor.Helmet.Helmet;
 import Objek.Items.Unstackable.Armor.Leggings.Leggings;
 import Objek.Plant.Plant;
 import Objek.Plant.Bushes.Bush;
-
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -495,7 +494,7 @@ public class Player {
             int tileNum = gp.player.checkSoundTile();
             
             soundCounterWalk++;
-            if (soundCounterWalk > 60) soundCounterWalk = 0;
+            if (soundCounterWalk > 30) soundCounterWalk = 0;
             if (soundCounterWalk == 0) {
                 if (tileNum != -1) {
                     playSE(tileNum);
