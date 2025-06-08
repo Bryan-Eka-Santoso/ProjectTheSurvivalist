@@ -14,9 +14,6 @@ import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
 import Objek.Items.StackableItem.Bucket;
-import Objek.Items.StackableItem.Foods.RawFoods.RawArwana;
-import Objek.Items.StackableItem.Foods.RawFoods.RawChicken;
-import Objek.Items.StackableItem.Materials.Fuels.Wood;
 import Objek.Items.StackableItem.Materials.OreDrops.Metal;
 import Objek.Items.Unstackable.Immortality;
 import Objek.Items.Unstackable.Lantern;
@@ -235,9 +232,6 @@ public class GamePanel extends JPanel implements Runnable {
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new WindAxe());
-        player.inventory.addItems(new RawArwana(5));
-        player.inventory.addItems(new RawChicken(5));
-        player.inventory.addItems(new Wood(12));
         player.inventory.addItems(new Furnace(this, 1, 0));
         player.inventory.addItems(new Immortality());
         player.inventory.addItems(new CursedHelmet());
@@ -362,7 +356,6 @@ public class GamePanel extends JPanel implements Runnable {
                 monsters.get(i).update();
             }
         }
-        
 
         ui.isCanGoToSea = false;
         ui.isCanGoToLand = false;

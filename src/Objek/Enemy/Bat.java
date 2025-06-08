@@ -11,12 +11,14 @@ import javax.imageio.ImageIO;
 
 import Objek.Player.Player;
 import Objek.Controller.GamePanel;
+import Objek.Controller.Sound;
 
 public class Bat extends Monster {
 
     public int actionLockEnemyNearby = 15; // Delay untuk aksi ketika ada musuh di dekatnya
     private int actionLockCounter = 0;
     private int actionMoveCounter = 0;
+    public int soundCounter = 0;
     private Rectangle upHitbox;
     private Rectangle downHitbox;
     private Rectangle leftHitbox;
@@ -25,6 +27,8 @@ public class Bat extends Monster {
     int spriteDisplaySize = gp.TILE_SIZE * 2;
     int originalSpriteSize = 32;
     double scaleFactor = (double)spriteDisplaySize / originalSpriteSize;
+
+    Sound sound = new Sound();
 
     Random random = new Random();
 
@@ -87,10 +91,15 @@ public class Bat extends Monster {
        if (isPreyNearby(gp.player)) {
             actionLockEnemyNearby = 10;
             chasePlayer(gp.player);
+            if (soundCounter == 0) playSE(13);
         } else {
             actionLockEnemyNearby = 15;
         }
         actionLockCounter++;
+        soundCounter++;
+        if (soundCounter >= 140) {
+            soundCounter = 0;
+        }
         if(actionLockCounter < actionLockEnemyNearby) {
             return; 
         }
@@ -374,4 +383,9 @@ public class Bat extends Monster {
         }
         return nextDirection;
     }
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
+    
 }

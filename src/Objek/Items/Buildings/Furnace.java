@@ -50,6 +50,10 @@ public class Furnace extends Buildings {
             return;
         }
         for (int i = 0; i < fuelMaterial[0].currentStack; i++) {
+            if (rawMaterial[0] == null) {
+                System.out.println("No raw material to cook");
+                return;
+            }
             if (rawMaterial[0].currentStack > 0 && fuelMaterial[0].currentStack > 0) {
                 Item tempItem = rawMaterial[0];
                 Item result = recipe.get(tempItem.name);

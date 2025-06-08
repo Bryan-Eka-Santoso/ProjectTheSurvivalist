@@ -101,6 +101,7 @@ public class UseItem {
                     gp.player.helmet = (Helmet) selectedItem.clone();
                     player.inventory.removeItem(selectedItem, 1); // Remove helmet from inventory
                 }
+                playSE(8); // Play armor equip sound
                 System.out.println("Equipping helmet: " + selectedItem.name);
 
             } else if (selectedItem instanceof Chestplate){
@@ -113,6 +114,7 @@ public class UseItem {
                     gp.player.chestplate = (Chestplate) selectedItem.clone();
                     player.inventory.removeItem(selectedItem, 1); // Remove chestplate from inventory
                 }
+                playSE(8);
                 System.out.println("Equipping chestplate: " + selectedItem.name);
 
             } else if (selectedItem instanceof Leggings){
@@ -125,6 +127,7 @@ public class UseItem {
                     gp.player.leggings = (Leggings) selectedItem.clone();
                     player.inventory.removeItem(selectedItem, 1); // Remove leggings from inventory
                 }
+                playSE(8);
                 System.out.println("Equipping leggings: " + selectedItem.name);
 
             } else if (selectedItem instanceof Boots){
@@ -137,6 +140,7 @@ public class UseItem {
                     gp.player.boots = (Boots) selectedItem.clone();
                     player.inventory.removeItem(selectedItem, 1); // Remove boots from inventory
                 }
+                playSE(8);
                 System.out.println("Equipping boots: " + selectedItem.name);
 
             } else if (selectedItem instanceof Bucket) { 
@@ -144,6 +148,9 @@ public class UseItem {
                 if (!bucket.status.equals("empty")) {
                     System.out.println("Drinking from the bucket.");
                     bucket.drink();
+                    if (!bucket.status.equals("water")) {
+                        playSE(17); // Play drinking sound
+                    }
                 } else if (gp.player.isNearWater()) {
                     bucket.fillWater();
                 } else if (gp.player.isNearMilkableAnimal() && bucket.status.equals("empty")) {
@@ -216,6 +223,7 @@ public class UseItem {
             } else if ((selectedItem instanceof Seeds || selectedItem instanceof Carrot || selectedItem instanceof Potato) && gp.player.buildingIndex != -1) {
                 if (gp.buildings.get(gp.player.buildingIndex) instanceof GardenPatch){
                     Item seed = selectedItem;
+                    playSE(23);
                     GardenPatch gardenPatch = (GardenPatch) gp.buildings.get(gp.player.buildingIndex);
                     if (gardenPatch.seed != null) {
                         System.out.println("Garden patch already has a seed planted!");

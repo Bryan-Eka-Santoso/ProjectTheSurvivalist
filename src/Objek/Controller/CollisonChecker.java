@@ -18,6 +18,7 @@ import Objek.Player.Player;
 public class CollisonChecker {
     GamePanel gp;
     Random rand = new Random();
+    Sound sound = new Sound();
 
     public CollisonChecker (GamePanel gp) {
         this.gp = gp;
@@ -492,8 +493,10 @@ public class CollisonChecker {
                 }
                 if(16 - def <= 0){
                     gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
+                    playSE(9);
                 } else {
-                    gp.player.health -= (12 - def); // Decrease player HP
+                    gp.player.health -= (12 - def); // Decrease player HP by 12 minus defense
+                    playSE(9);
                 }
                 if (gp.player.health <= 0) {
                     gp.player.health = 0; // Prevent negative health
@@ -819,8 +822,10 @@ public class CollisonChecker {
             }
             if(monster.attack - def <= 0){
                 gp.player.health -= 1; // Decrease player HP by 1 if defense is high enough
+                playSE(9);
             } else {
                 gp.player.health -= (monster.attack-def); // Decrease player HP
+                playSE(9);
             }
             if (gp.player.health <= 0) {
                 gp.player.health = 0; // Prevent negative health
@@ -950,5 +955,11 @@ public class CollisonChecker {
             }
         }
     }
+
+    public void playSE(int i) {
+        sound.setFile(i);
+        sound.play();
+    }
+    
 
 }
