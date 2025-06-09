@@ -20,7 +20,7 @@ public class Golden extends Fish {
     public int speed = 8; 
     
     public Golden(String nameFish, int price, int stregth, int x, int y, GamePanel gp) {
-        super("Golden", 50, 30, x, y, 30, "down", gp, 2);
+        super("Golden", 50, 25, x, y, 30, "down", gp, 2);
         setRandomDirection();
         this.actionMoveDelay = random.nextInt(91) + 30;
         upHitbox = new Rectangle(8, 1, 20, 30);
