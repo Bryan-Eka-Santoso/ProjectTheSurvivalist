@@ -208,10 +208,32 @@ public class AchievementManager {
             e.printStackTrace();
         }
         addAchievement(new Achievement(
-            "Safety First",
+            "Master Chef",
             "Cook 10 raw foods.",
             gp -> gp.player.totalMaterialsCooked >= 10,
             img22));
+        BufferedImage img23 = null;
+        try {
+            img23 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Bucket/cleansedwater.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addAchievement(new Achievement(
+            "Better Safe Than Sorry",
+            "Cleanse a bucket of water.",
+            gp -> gp.player.hasPurifiedWater,
+            img23));
+        BufferedImage img24 = null;
+        try {
+            img24 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/frozenfront.png"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addAchievement(new Achievement(
+            "Freestyle Dulu Ni Bos",
+            "Use winter crown to dodge 3 wolves.",
+            gp -> gp.player.hasDodgedWolves,
+            img24));
         BufferedImage img18 = null;
         try {
             img18 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/cursedhelmet.png"));

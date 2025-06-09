@@ -1,6 +1,7 @@
 package Objek.Controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -88,6 +89,18 @@ public class UseItem {
             if (selectedItem instanceof WinterCrown && (gp.currentMap == 0 || gp.currentMap == 2)) {
                 if (!player.isFrozen){
                     player.isFrozen = true;
+                    int radius = 210;
+                    int wolves = 0;
+                    for (Animal animal : new ArrayList<>(gp.animals)) {
+                        int dx = animal.worldX - gp.player.worldX;
+                        int dy = animal.worldY - gp.player.worldY;
+                        if (dx * dx + dy * dy <= radius * radius && animal instanceof Wolf) {
+                            wolves++;
+                        }
+                    }
+                    if (wolves == 3){
+                        gp.player.hasDodgedWolves = true;
+                    }
                 } else {
                     player.isFrozen = false;
                 }
