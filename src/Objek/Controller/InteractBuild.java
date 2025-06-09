@@ -6,14 +6,69 @@ import java.util.ArrayList;
 import java.awt.Point;
 import javax.imageio.ImageIO;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Foods.CookedFoods.Bacon;
+import Objek.Items.StackableItem.Foods.CookedFoods.CookedArwana;
+import Objek.Items.StackableItem.Foods.CookedFoods.CookedBelida;
+import Objek.Items.StackableItem.Foods.CookedFoods.CookedChicken;
+import Objek.Items.StackableItem.Foods.CookedFoods.CookedMutton;
+import Objek.Items.StackableItem.Foods.CookedFoods.Steak;
+import Objek.Items.StackableItem.Foods.Fruits.Guava;
+import Objek.Items.StackableItem.Foods.Fruits.Mango;
+import Objek.Items.StackableItem.Foods.Fruits.RaspBerries;
+import Objek.Items.StackableItem.Foods.Other.BakedPotato;
 import Objek.Items.StackableItem.Foods.Other.Bread;
 import Objek.Items.StackableItem.Foods.Other.Carrot;
+import Objek.Items.StackableItem.Foods.Other.Egg;
+import Objek.Items.StackableItem.Foods.RawFoods.Blackberries;
 import Objek.Items.StackableItem.Foods.RawFoods.Potato;
+import Objek.Items.StackableItem.Foods.RawFoods.RawArwana;
+import Objek.Items.StackableItem.Foods.RawFoods.RawBelida;
+import Objek.Items.StackableItem.Foods.RawFoods.RawChicken;
+import Objek.Items.StackableItem.Foods.RawFoods.RawMeat;
+import Objek.Items.StackableItem.Foods.RawFoods.RawPork;
+import Objek.Items.StackableItem.Materials.Strings;
+import Objek.Items.StackableItem.Materials.Wheat;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Feather;
+import Objek.Items.StackableItem.Materials.AnimalDrops.WolfHide;
+import Objek.Items.StackableItem.Materials.AnimalDrops.Wool;
+import Objek.Items.StackableItem.Materials.ForgedComponents.GoldIngot;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalFrame;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalNails;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalSheet;
+import Objek.Items.StackableItem.Materials.ForgedComponents.SwordHandle;
+import Objek.Items.StackableItem.Materials.ForgedComponents.ToolHandle;
 import Objek.Items.StackableItem.Materials.Fuels.Wood;
+import Objek.Items.StackableItem.Materials.OreDrops.Gold;
 import Objek.Items.StackableItem.Materials.OreDrops.Metal;
 import Objek.Items.StackableItem.Materials.OreDrops.Stone;
-import Objek.Items.StackableItem.Seeds.Seeds;
-import Objek.Items.Unstackable.FishingRod;
+import Objek.Items.Unstackable.*;
+import Objek.Items.Unstackable.Armor.Boots.GoldBoots;
+import Objek.Items.Unstackable.Armor.Boots.MetalBoots;
+import Objek.Items.Unstackable.Armor.Boots.RapidBoots;
+import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
+import Objek.Items.Unstackable.Armor.Chestplate.GoldChestplate;
+import Objek.Items.Unstackable.Armor.Chestplate.MetalChestplate;
+import Objek.Items.Unstackable.Armor.Helmet.CursedHelmet;
+import Objek.Items.Unstackable.Armor.Helmet.GoldHelmet;
+import Objek.Items.Unstackable.Armor.Helmet.GuardianHelmet;
+import Objek.Items.Unstackable.Armor.Helmet.MetalHelmet;
+import Objek.Items.Unstackable.Armor.Helmet.WolfCloak;
+import Objek.Items.Unstackable.Armor.Leggings.GoldLeggings;
+import Objek.Items.Unstackable.Armor.Leggings.MetalLeggings;
+import Objek.Items.Unstackable.Arsenals.FlimsyAxe;
+import Objek.Items.Unstackable.Arsenals.FlimsyPickaxe;
+import Objek.Items.Unstackable.Arsenals.GoldSword;
+import Objek.Items.Unstackable.Arsenals.HaasClaws;
+import Objek.Items.Unstackable.Arsenals.IcePickaxe;
+import Objek.Items.Unstackable.Arsenals.LightweightAxe;
+import Objek.Items.Unstackable.Arsenals.LightweightPickaxe;
+import Objek.Items.Unstackable.Arsenals.MetalClub;
+import Objek.Items.Unstackable.Arsenals.MetalSword;
+import Objek.Items.Unstackable.Arsenals.SpikedMetalClub;
+import Objek.Items.Unstackable.Arsenals.SpikedWoodenClub;
+import Objek.Items.Unstackable.Arsenals.WindAxe;
+import Objek.Items.Unstackable.Arsenals.WoodenClub;
 
 public class InteractBuild {
     GamePanel gp;
@@ -110,30 +165,82 @@ public class InteractBuild {
 
     public void initShopItems() {
         try {
-            // Weapons (category 0)
-            // gp.ui.shopItems.add(new ShopItem(new Sword(1), 100, 0));
-            // gp.ui.shopItems.add(new ShopItem(new Axe(1), 120, 0));
-            // gp.ui.shopItems.add(new ShopItem(new Pickaxe(1), 150, 0));
+            // Tools (category 0)
+            gp.ui.shopItems.add(new ShopItem(new FlimsyAxe(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new FlimsyPickaxe(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new GoldSword(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new IcePickaxe(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new LightweightAxe(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new LightweightPickaxe(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new MetalClub(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new MetalSword(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new SpikedMetalClub(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new WindAxe(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new SpikedWoodenClub(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new WoodenClub(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new Lantern(gp), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new WateringCan(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new FishingRod(), 100, 0));
             
             // Armor (category 1)
-            // gp.ui.shopItems.add(new ShopItem(new LeatherHelmet(), 60, 1));
-            // gp.ui.shopItems.add(new ShopItem(new LeatherChestplate(), 100, 1));
-            // gp.ui.shopItems.add(new ShopItem(new IronHelmet(), 150, 1));
-            // gp.ui.shopItems.add(new ShopItem(new IronChestplate(), 200, 1));
+            gp.ui.shopItems.add(new ShopItem(new GoldBoots(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new MetalBoots(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new GoldChestplate(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new MetalChestplate(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new GoldHelmet(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new MetalHelmet(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new WolfCloak(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new GoldLeggings(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new MetalLeggings(), 100, 1));
             
             // Food (category 2)
-            gp.ui.shopItems.add(new ShopItem(new Bread(2), 20, 2));
-            gp.ui.shopItems.add(new ShopItem(new Carrot(5), 25, 2));
-            gp.ui.shopItems.add(new ShopItem(new Potato(4), 20, 2));
+            gp.ui.shopItems.add(new ShopItem(new Bacon(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new CookedArwana(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new CookedBelida(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new CookedChicken(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new CookedMutton(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Steak(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Guava(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Mango(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new RaspBerries(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new BakedPotato(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Bread(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Carrot(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Egg(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Blackberries(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Potato(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawArwana(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawBelida(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawChicken(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawMeat(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawPork(1), 100, 2));
             
             // Materials (category 3)
-            gp.ui.shopItems.add(new ShopItem(new Wood(10), 30, 3));
-            gp.ui.shopItems.add(new ShopItem(new Stone(10), 40, 3));
-            gp.ui.shopItems.add(new ShopItem(new Metal(5), 70, 3));
-            gp.ui.shopItems.add(new ShopItem(new Seeds(3), 15, 3));
-            
-            // Fishing (category 4)
-            gp.ui.shopItems.add(new ShopItem(new FishingRod(), 100, 4));
+            gp.ui.shopItems.add(new ShopItem(new Feather(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new WolfHide(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new Wool(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new GoldIngot(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new MetalFrame(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new MetalIngot(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new MetalNails(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new MetalSheet(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new SwordHandle(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new ToolHandle(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new Wood(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new Gold(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new Metal(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new Stone(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new Strings(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new Wheat(1), 100, 3));
+
+            // Legendary Items (category 4)
+            gp.ui.shopItems.add(new ShopItem(new RapidBoots(), 100, 4));
+            gp.ui.shopItems.add(new ShopItem(new HaasClaws(), 100, 4));
+            gp.ui.shopItems.add(new ShopItem(new Immortality(), 100, 4));
+            gp.ui.shopItems.add(new ShopItem(new GuardianHelmet(), 100, 4));
+            gp.ui.shopItems.add(new ShopItem(new WinterCrown(), 100, 4));
+            gp.ui.shopItems.add(new ShopItem(new BladeArmor(), 100, 4));
+            gp.ui.shopItems.add(new ShopItem(new CursedHelmet(), 100, 4));
             
         } catch (Exception e) {
             System.err.println("Error initializing shop items: " + e.getMessage());
@@ -142,24 +249,26 @@ public class InteractBuild {
     }
     public void initEffectItems() {
     try {
-        // Repair (kategori 0)
-        gp.ui.effectItems.add(new ShopEffect("Repair All", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 150, 1));
-        gp.ui.effectItems.add(new ShopEffect("Repair Weapon", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 50, 1));
-        gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 50, 1));
+        gp.ui.effectItems.clear();
+        for(int i = 0; i < gp.player.inventory.slots.length; i++) {
+            if(gp.player.inventory.slots[i] != null && gp.player.inventory.slots[i].isCanSell) {
+                gp.ui.effectItems.add(new ShopEffect(gp.player.inventory.slots[i].name, gp.player.inventory.slots[i].img, gp.player.inventory.slots[i].price, 0));
+            }
+        }
         
-        // Upgrade (kategori 1)
-        gp.ui.effectItems.add(new ShopEffect("Upgrade Weapon", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 200, 2));
-        gp.ui.effectItems.add(new ShopEffect("Upgrade Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 200, 2));
-        gp.ui.effectItems.add(new ShopEffect("Upgrade Bag", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 300, 2));
+        gp.ui.effectItems.add(new ShopEffect("Repair Arsenal", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 10, 1));
+        gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 10, 1));
+        gp.ui.effectItems.add(new ShopEffect("Repair Fishing Rod", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 10, 1));
         
-        // Effect (kategori 2)
-        gp.ui.effectItems.add(new ShopEffect("Health Boost", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 75, 3));
-        gp.ui.effectItems.add(new ShopEffect("Speed Boost", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 75, 3));
-        gp.ui.effectItems.add(new ShopEffect("Night Vision", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 100, 3));
-        
-        // Cheat (kategori 3)
-        gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
-        gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));
+        gp.ui.effectItems.add(new ShopEffect("Upgrade Level", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+        gp.ui.effectItems.add(new ShopEffect("Coins +999", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+        if(!gp.isStrong){
+            gp.ui.effectItems.add(new ShopEffect("God Mode", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+        } else {
+            gp.ui.effectItems.add(new ShopEffect("Normal Mode", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+        }
+        // gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
+        // gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));
         
         System.out.println("Effect items initialized successfully");
     } catch (Exception e) {
