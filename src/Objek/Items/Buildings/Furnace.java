@@ -70,12 +70,12 @@ public class Furnace extends Buildings {
                     fuelMaterial[0].currentStack--;
                     gp.player.gainExp(rand.nextInt(5) + 10);
                     if (rawMaterial[0].currentStack == 0) {
-                        rawMaterial[0] = null;
                         System.out.println("No more " + rawMaterial[0].name + " left");
+                        rawMaterial[0] = null;
                     }
                     if (fuelMaterial[0].currentStack == 0) {
-                        fuelMaterial[0] = null;
                         System.out.println("No more " + fuelMaterial[0].name + " left");
+                        fuelMaterial[0] = null;
                     }
                 } else if (result != null && cookedMaterial[0] != null) {
                     if (result.name.equals(cookedMaterial[0].name)) {
@@ -87,16 +87,14 @@ public class Furnace extends Buildings {
                                 gp.player.totalMaterialsCooked += result.currentStack;
                             }
                             if (rawMaterial[0].currentStack == 0) {
-                                rawMaterial[0] = null;
                                 System.out.println("No more " + cookedMaterial[0].name + " left");
+                                rawMaterial[0] = null;
                             }
                             if (fuelMaterial[0].currentStack == 0) {
-                                fuelMaterial[0] = null;
                                 System.out.println("No more " + cookedMaterial[0].name + " left");
+                                fuelMaterial[0] = null;
                             }
-                            System.out.println("Cooking " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " to make " + cookedMaterial[0].name);
                         } else {
-                            System.out.println("Cannot cook " + rawMaterial[0].name + " with " + fuelMaterial[0].name + " because it will produce " + result.name + " instead of " + cookedMaterial[0].name);
                             System.out.println("Inventory is full, please remove some items");
                             return;
                         }
