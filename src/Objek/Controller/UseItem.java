@@ -1,6 +1,7 @@
 package Objek.Controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -88,6 +89,18 @@ public class UseItem {
             if (selectedItem instanceof WinterCrown && (gp.currentMap == 0 || gp.currentMap == 2)) {
                 if (!player.isFrozen){
                     player.isFrozen = true;
+                    int radius = 210;
+                    int wolves = 0;
+                    for (Animal animal : new ArrayList<>(gp.animals)) {
+                        int dx = animal.worldX - gp.player.worldX;
+                        int dy = animal.worldY - gp.player.worldY;
+                        if (dx * dx + dy * dy <= radius * radius && animal instanceof Wolf) {
+                            wolves++;
+                        }
+                    }
+                    if (wolves == 3){
+                        gp.player.hasDodgedWolves = true;
+                    }
                 } else {
                     player.isFrozen = false;
                 }
@@ -354,7 +367,7 @@ public class UseItem {
                         System.out.println("Hit pig: " + pig.hp + "/" + 80);
                         if(pig.hp <= 0) {
                             gp.player.totalAnimalsKilled++;
-                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
+                            player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawPork(1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.gainExp(rand.nextInt(10) + 7);
                             player.animalIndex = -1;
@@ -365,8 +378,8 @@ public class UseItem {
                         System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
                         if(sheep.hp <= 0) {
                             gp.player.totalAnimalsKilled++;
-                            player.gp.droppedItems.add(new ItemDrop(animal.worldX - 15, animal.worldY, new RawMutton(1), gp));
-                            player.gp.droppedItems.add(new ItemDrop(animal.worldX + 15, animal.worldY, new Wool(rand.nextInt(2) + 1), gp));
+                            player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) - 15, animal.worldY + 64, new RawMutton(1), gp));
+                            player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) + 15, animal.worldY + 64, new Wool(rand.nextInt(2) + 1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.gainExp(rand.nextInt(10) + 8);
                             player.animalIndex = -1;
@@ -377,7 +390,7 @@ public class UseItem {
                         System.out.println("Hit cow: " + cow.hp + "/" + 100);
                         if(cow.hp <= 0) {
                             gp.player.totalAnimalsKilled++;
-                            player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
+                            player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawMeat(1), gp));
                             player.gp.animals.remove(player.animalIndex);
                             player.gainExp(rand.nextInt(10) + 9);
                             player.animalIndex = -1;
@@ -437,7 +450,7 @@ public class UseItem {
                         System.out.println("Hit golem: " + golem.hp + "/" + 300);
                         if(golem.hp <= 0) {
                             gp.player.totalMonstersKilled++;
-                            player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
+                            player.gp.droppedItems.add(new ItemDrop(monster.worldX + 64, monster.worldY + 64, new MetalIngot(rand.nextInt(2) + 1), gp));
                             player.gp.monsters.remove(player.monsterIndex);
                             player.gainExp(rand.nextInt(20) + 35);
                             player.monsterIndex = -1;
@@ -596,7 +609,7 @@ public class UseItem {
                         player.buildingIndex = -1; 
                     } 
                     playSE(6);
-                } else if (gp.player.oreIndex != -1){
+                } else if (gp.player.oreIndex != -1 && gp.ores.size() > 0) {
                     if(player.inventory.getSelectedItem() instanceof Pickaxe) {
                         Pickaxe pickaxe = (Pickaxe)player.inventory.getSelectedItem();
                         Ore ore = gp.ores.get(player.oreIndex);
@@ -696,7 +709,7 @@ public class UseItem {
                     System.out.println("Hit pig: " + pig.hp + "/" + 80);
                     if(pig.hp <= 0) {
                         player.totalAnimalsKilled++;
-                        player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawPork(1), gp));
+                        player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawPork(1), gp));
                         player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 7);
                         player.animalIndex = -1;
@@ -707,8 +720,8 @@ public class UseItem {
                     System.out.println("Hit sheep: " + sheep.hp + "/" + 70);
                     if(sheep.hp <= 0) {
                         player.totalAnimalsKilled++;
-                        player.gp.droppedItems.add(new ItemDrop(animal.worldX - 15, animal.worldY, new RawMutton(1), gp));
-                        player.gp.droppedItems.add(new ItemDrop(animal.worldX + 15, animal.worldY, new Wool(rand.nextInt(2) + 1), gp));
+                        player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) - 15, animal.worldY + 64, new RawMutton(1), gp));
+                        player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) + 15, animal.worldY + 64, new Wool(rand.nextInt(2) + 1), gp));
                         player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 8);
                         player.animalIndex = -1;
@@ -719,7 +732,7 @@ public class UseItem {
                     System.out.println("Hit cow: " + cow.hp + "/" + 100);
                     if(cow.hp <= 0) {
                         player.totalAnimalsKilled++;
-                        player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new RawMeat(1), gp));
+                        player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawMeat(1), gp));
                         player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 9);
                         player.animalIndex = -1;

@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 
 public class LightweightAxe extends Axe {
     public LightweightAxe() {
-        super("Light Weight Axe", 15, 110);
+        super("Lightweight Axe", 15, 110);
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/lightweightaxe.png")); 
         } catch (IOException e) {

@@ -13,6 +13,8 @@ public class Bread extends Food {
 
     public Bread(int currentStack) {
         super("Bread", currentStack);
+        this.isCanSell = true;
+        this.price = 15; // Set the price for Bread
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Foods/Bread.png")); 
         } catch (IOException e) {

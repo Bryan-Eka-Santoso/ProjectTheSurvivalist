@@ -124,10 +124,16 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                         if (furnace.rawMaterial[0] == null) {
                             furnace.rawMaterial[0] = item;
                             gp.player.inventory.slots[idx] = null;
+                        } else if (furnace.rawMaterial[0].name.equals(item.name)) {
+                            furnace.rawMaterial[0].currentStack += item.currentStack;
+                            gp.player.inventory.slots[idx] = null;
                         } else if (furnace.fuelMaterial[0] == null) {
                             furnace.fuelMaterial[0] = item;
                             gp.player.inventory.slots[idx] = null;
-                        }
+                        } else if (furnace.fuelMaterial[0].name.equals(item.name)) {
+                            furnace.fuelMaterial[0].currentStack += item.currentStack;
+                            gp.player.inventory.slots[idx] = null;
+                        } 
                         // Optionally: handle cooked slot if you want to allow putting cooked items back
                     }
                 }
@@ -620,7 +626,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         if (gp.player.isFrozen){
             return; // Prevent dropping items if player is frozen
         }
-        if (gp.gameState == gp.INVENTORY_STATE){
+        if (gp.gameState == gp.INVENTORY_STATE && gp.player.inventory.slots[gp.ui.selectedIndex] != null) {
             gp.player.dropItem(gp.player.inventory.slots[gp.ui.selectedIndex], 1, gp.currentMap);
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE){
@@ -629,7 +635,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.ui.amountToDrop = 1;
         } else if (gp.gameState == gp.PLAY_STATE){
             if (gp.player.inventory.slots[gp.ui.selectedIndex] != null){
-                if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Stackable || gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Buildings){
+                if ((gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Stackable || gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Buildings) && gp.player.inventory.slots[gp.ui.selectedIndex].currentStack > 1) {
                     itemStack = gp.player.inventory.slots[gp.ui.selectedIndex].currentStack;
                     gp.gameState = gp.DROPPED_ITEM_STATE;
                 } else {
@@ -642,24 +648,6 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             topFrame.revalidate(); // Memaksa refresh layout
             topFrame.repaint();
             gp.sound.stop();
-        } 
-        if (gp.gameState == gp.INVENTORY_STATE) {
-            if (selectCounter == 1 && gp.player.helmet != null) {
-                gp.player.inventory.addItems(gp.player.helmet.clone());
-                gp.player.helmet = null;
-            }
-            if (selectCounter == 2 && gp.player.chestplate != null) {
-                gp.player.inventory.addItems(gp.player.chestplate.clone());
-                gp.player.chestplate = null;
-            }
-            if (selectCounter == 3 && gp.player.leggings != null) {
-                gp.player.inventory.addItems(gp.player.leggings.clone());
-                gp.player.leggings = null;
-            }
-            if (selectCounter == 4 && gp.player.boots != null) {
-                gp.player.inventory.addItems(gp.player.boots.clone());
-                gp.player.boots = null;
-            }
         }
     }
 

@@ -94,7 +94,7 @@ public class Player {
     private static final int GUARDIAN_HELMET_DURATION = 60; // 1 detik diitung dari frame
     int hungerCounter = 0;
     int thirstCounter = 0;
-    public int coins = 0;
+    public int coins = 999;
     int healthCounter = 0;
     private int poisonCounter = 0;
     int soundCounter = 0;
@@ -105,12 +105,13 @@ public class Player {
     private int guardianHelmetCounter = 0;
     private int cursedHelmetCounter = 0;
 
-    public int totalTreesCut = 98;
-    public int totalBushesCut = 49;
-    public int totalOresMined = 49;
+    public int totalTreesCut = 0;
+    public int totalBushesCut = 0;
+    public int totalOresMined = 0;
     public int totalFishCaught = 0;
     public int totalCursedHelmetKills = 0;
     public boolean madeCraftingTable = false;
+    public boolean hasDodgedWolves = false;
     public boolean madePickaxe = false;
     public int totalPlantsPlanted = 0;
     public boolean hasCraftedArmor = false;
@@ -134,7 +135,7 @@ public class Player {
         this.thirst = 100;
         this.hunger = 100;
         this.level = level;
-        this.maxExp = level * 50 + 100;
+        this.maxExp = (level - 1) * 50 + 100;
         this.exp = 0;
         this.speed = 5;
         this.inventory = new Inventory(24, gp);
@@ -224,11 +225,13 @@ public class Player {
             maxExp += 50;
             System.out.println("Level up! Current level: " + level);
         }
-        if (level > 10) {
-            // TODO: Implement benefits of leveling up
-        } else if (level > 20) {
-            // TODO: Implement benefits of leveling up
-        }
+    }
+
+    public void gainLevel() {
+        level++;
+        maxExp += 50;
+        playSE(21);
+        System.out.println("Level up! Current level: " + level);
     }
 
     public int getDefense() {

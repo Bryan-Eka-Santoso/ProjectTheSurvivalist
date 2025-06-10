@@ -12,6 +12,8 @@ public class Blackberries extends Berries implements Poisonous {
 
     public Blackberries(int currentStack) {
         super("Blackberries", currentStack);
+        this.isCanSell = true;
+        this.price = 2; // Set the price for Blackberries
         try {
             this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Foods/blackberry.png")); 
         } catch (java.io.IOException e) {

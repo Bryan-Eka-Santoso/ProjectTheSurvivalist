@@ -10,6 +10,8 @@ import Objek.Items.StackableItem.Materials.Material;
 public class MetalIngot extends Material {
     public MetalIngot(int currentStack) {
         super("Metal Ingot", currentStack);
+        this.isCanSell = true;
+        this.price = 25; // Set the price for Metal Ingot
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/metalingot.png"));
         } catch (IOException e) {

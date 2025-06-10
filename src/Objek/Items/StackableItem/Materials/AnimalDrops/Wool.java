@@ -14,6 +14,6 @@ public class Wool extends Material {
                 this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/wool.png")); 
             } catch (IOException e) {
                 e.printStackTrace();
-            } 
+            }
     }
 }

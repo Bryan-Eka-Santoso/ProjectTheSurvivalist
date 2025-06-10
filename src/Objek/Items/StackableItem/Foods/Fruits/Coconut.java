@@ -7,6 +7,8 @@ import Objek.Player.Player;
 public class Coconut extends Food implements Hydrating {
     public Coconut(int currentStack) {
         super("Coconut", currentStack);
+        this.isCanSell = true;
+        this.price = 5; // Set the price for Coconut
         try {
             this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Foods/coconut.png")); 
         } catch (java.io.IOException e) {
