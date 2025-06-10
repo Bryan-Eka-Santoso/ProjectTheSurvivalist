@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 public class GuidePanel extends JPanel {
@@ -12,7 +14,7 @@ public class GuidePanel extends JPanel {
     private JPanel movementContainer;
     private JPanel interactionContainer;
     private JPanel mekanismeContainer;
-
+    private JFrame parentFrame; // Reference ke frame utama
 
     public GuidePanel() {
         setPreferredSize(new Dimension(1125, 765));
@@ -23,7 +25,7 @@ public class GuidePanel extends JPanel {
 
         JPanel containerPanel = new JPanel();
         containerPanel.setLayout(null);
-        containerPanel.setPreferredSize(new Dimension(1100, 1200)); // Tinggi total disesuaikan
+        containerPanel.setPreferredSize(new Dimension(1100, 1280)); // Tambah tinggi untuk tombol back
         containerPanel.setBackground(Color.BLACK);
 
         // Container gerak (lebih kecil)
@@ -41,11 +43,77 @@ public class GuidePanel extends JPanel {
         containerPanel.add(mekanismeContainer);
         isiMekanismeGame();
 
+        // Tambahkan tombol back
+        JButton backButton = createBackButton();
+        backButton.setBounds(475, 1200, 150, 50); // Posisi di bawah semua container
+        containerPanel.add(backButton);
 
         JScrollPane scrollPane = new JScrollPane(containerPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setBorder(null);
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    // Constructor dengan parameter untuk parent frame
+    public GuidePanel(JFrame parentFrame) {
+        this();
+        this.parentFrame = parentFrame;
+    }
+
+    private JButton createBackButton() {
+        JButton backButton = new JButton("BACK TO MENU");
+        backButton.setFont(pixelFont.deriveFont(Font.BOLD, 18f));
+        backButton.setForeground(Color.WHITE);
+        backButton.setBackground(new Color(60, 60, 60));
+        backButton.setBorder(new LineBorder(Color.WHITE, 2));
+        backButton.setFocusPainted(false);
+        
+        // Hover effect
+        backButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                backButton.setBackground(new Color(100, 100, 100));
+            }
+            
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                backButton.setBackground(new Color(60, 60, 60));
+            }
+        });
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleBackButton();
+            }
+        });
+
+        return backButton;
+    }
+
+    // Method untuk handle back button - kembali ke MenuPanel
+    private void handleBackButton() {
+        if (parentFrame != null) {
+            // Buat MenuPanel baru dan set sebagai content pane
+            MenuPanel mainMenu = new MenuPanel(parentFrame);
+            parentFrame.setContentPane(mainMenu);
+            parentFrame.revalidate();
+            parentFrame.repaint();
+        } else {
+            // Jika parentFrame null, cari frame dari parent component
+            Container parent = this.getParent();
+            while (parent != null && !(parent instanceof JFrame)) {
+                parent = parent.getParent();
+            }
+            
+            if (parent instanceof JFrame) {
+                JFrame frame = (JFrame) parent;
+                MenuPanel mainMenu = new MenuPanel(frame);
+                frame.setContentPane(mainMenu);
+                frame.revalidate();
+                frame.repaint();
+            }
+        }
     }
 
     private JPanel createGuideContainer(String title, int yPosition, int height) {
@@ -63,8 +131,6 @@ public class GuidePanel extends JPanel {
 
         return container;
     }
-
-
 
     private void isiPetunjukGerak() {
         if (movementContainer == null) return;
@@ -180,7 +246,4 @@ public class GuidePanel extends JPanel {
         mekanismeContainer.revalidate();
         mekanismeContainer.repaint();
     }
-
-
-    
 }
