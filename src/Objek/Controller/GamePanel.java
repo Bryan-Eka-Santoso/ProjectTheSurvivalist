@@ -237,6 +237,7 @@ public class GamePanel extends JPanel implements Runnable {
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
         player.inventory.addItems(new FishingRod());
+        player.inventory.addItems(new Chest(this, 1, 0));
         player.inventory.addItems(new Crystal(3));
         player.inventory.addItems(new WindAxe());
         player.inventory.addItems(new Furnace(this, 1, 0));

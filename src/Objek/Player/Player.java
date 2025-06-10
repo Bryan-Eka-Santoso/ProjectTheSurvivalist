@@ -94,7 +94,7 @@ public class Player {
     private static final int GUARDIAN_HELMET_DURATION = 60; // 1 detik diitung dari frame
     int hungerCounter = 0;
     int thirstCounter = 0;
-    public int coins = 0;
+    public int coins = 999;
     int healthCounter = 0;
     private int poisonCounter = 0;
     int soundCounter = 0;
@@ -225,11 +225,13 @@ public class Player {
             maxExp += 50;
             System.out.println("Level up! Current level: " + level);
         }
-        if (level > 10) {
-            // TODO: Implement benefits of leveling up
-        } else if (level > 20) {
-            // TODO: Implement benefits of leveling up
-        }
+    }
+
+    public void gainLevel() {
+        level++;
+        maxExp += 50;
+        playSE(21);
+        System.out.println("Level up! Current level: " + level);
     }
 
     public int getDefense() {

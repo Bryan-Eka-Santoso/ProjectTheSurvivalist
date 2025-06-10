@@ -76,7 +76,7 @@ public class AchievementManager {
             e.printStackTrace();
         }
         addAchievement(new Achievement(
-            "Bushwhacker Pro",
+            "Mowing the Lawn",
             "Destroy 100 bushes.",
             gp -> gp.player.totalBushesCut >= 100,
             img6));
@@ -126,7 +126,7 @@ public class AchievementManager {
             img10));
         BufferedImage img11 = null;
         try {
-            img11 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/metalingot.png"));
+            img11 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/metalchestplate2.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -225,7 +225,7 @@ public class AchievementManager {
             img23));
         BufferedImage img24 = null;
         try {
-            img24 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/frozenfront.png"));
+            img24 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/wintercrown.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -258,7 +258,7 @@ public class AchievementManager {
             img14));
         BufferedImage img15 = null;
         try {
-            img15 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/wintercrown.png"));
+            img15 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/guardianhelmet.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }

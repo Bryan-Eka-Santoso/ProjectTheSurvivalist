@@ -32,6 +32,7 @@ import Objek.Player.Player;
 import Objek.Items.Buildings.Furnace;
 import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Armor;
+import Objek.Items.Unstackable.Armor.Boots.RapidBoots;
 import Objek.Items.Unstackable.Arsenals.*;
 import javax.imageio.ImageIO;
 
@@ -2386,6 +2387,7 @@ public class UI {
         g2.setColor(c);
         g2.setStroke(new BasicStroke(5));
         g2.drawRoundRect(x + 5, y + 5, width - 10, height - 10, 25, 25);
+        g2.setStroke(new BasicStroke(3)); // Reset stroke to default
     }
 
     // Returns [isChest, slotIndex] or null if not found
@@ -2432,6 +2434,7 @@ public class UI {
         int slotX = slotXStart;
         int slotY = slotYStart;
 
+        // Check inventory slots
         for (int i = 0; i < gp.player.inventory.slots.length; i++) {
             Rectangle r = new Rectangle(slotX, slotY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
             if (r.contains(mouseX, mouseY)) return i;
@@ -2442,6 +2445,42 @@ public class UI {
                 slotX += (gp.TILE_SIZE + 25);
             }
         }
+
+        // Check armor slots (helmet, chestplate, leggings, boots)
+        int armorFrameX = gp.TILE_SIZE * 4;
+        int armorFrameY = gp.TILE_SIZE * (gp.SCREEN_HEIGHT / gp.TILE_SIZE - 16);
+        int[] armorOffsets = {55, 130, 205, 280}; // X offsets for helmet, chestplate, leggings, boots
+        int armorY = armorFrameY + 45;
+        for (int i = 0; i < 4; i++) {
+            Rectangle armorRect = new Rectangle(armorFrameX + armorOffsets[i], armorY, gp.TILE_SIZE + 10, gp.TILE_SIZE + 10);
+            if (armorRect.contains(mouseX, mouseY)) {
+                // Move armor to first empty inventory slot
+                Item armorItem = null;
+                if (i == 0 && gp.player.helmet != null) {
+                    armorItem = gp.player.helmet;
+                    gp.player.helmet = null;
+                } else if (i == 1 && gp.player.chestplate != null) {
+                    armorItem = gp.player.chestplate;
+                    gp.player.chestplate = null;
+                } else if (i == 2 && gp.player.leggings != null) {
+                    armorItem = gp.player.leggings;
+                    gp.player.leggings = null;
+                } else if (i == 3 && gp.player.boots != null) {
+                    armorItem = gp.player.boots;
+                    gp.player.boots = null;
+                }
+                if (armorItem != null) {
+                    for (int j = 0; j < gp.player.inventory.slots.length; j++) {
+                        if (gp.player.inventory.slots[j] == null) {
+                            gp.player.inventory.slots[j] = armorItem;
+                            break;
+                        }
+                    }
+                }
+                return null; // Don't select any inventory slot
+            }
+        }
+
         return null;
     }
 
@@ -2684,23 +2723,23 @@ public class UI {
             
             // Item name - centering text
             g2.setColor(Color.WHITE);
-            String name = item.item.name;
+            String name = item.item.name.length() > 12 ? item.item.name.substring(0, 12) + "..." : item.item.name;
             int nameWidth = g2.getFontMetrics().stringWidth(name);
             int nameX = itemX + (itemSize - nameWidth)/2;
-            g2.drawString(name, nameX, itemY + itemSize + 15);
+            g2.drawString(name, nameX, itemY + itemSize + 16);
             
             // Item price - centering text
             g2.setColor(Color.YELLOW);
             String price = item.price + " coins";
             int priceWidth = g2.getFontMetrics().stringWidth(price);
             int priceX = itemX + (itemSize - priceWidth)/2;
-            g2.drawString(price, priceX, itemY + itemSize + 30);
+            g2.drawString(price, priceX, itemY + itemSize + 32);
             
             // Buy button - centered
             int buyButtonWidth = 80;
             int buyButtonHeight = 25;
             int buyButtonX = itemX + (itemSize - buyButtonWidth) / 2;
-            int buyButtonY = itemY + itemSize + 35;
+            int buyButtonY = itemY + itemSize + 38;
             
             Rectangle buyButton = new Rectangle(buyButtonX, buyButtonY, buyButtonWidth, buyButtonHeight);
             shopItemRects.add(buyButton);
@@ -2849,8 +2888,10 @@ public class UI {
         }
         
         // Check category tabs
-        int panelX = gp.SCREEN_WIDTH/2 - 450;
-        int panelY = gp.SCREEN_HEIGHT/2 - 250;
+        int panelWidth = 1000;
+        int panelHeight = 600;
+        int panelX = gp.SCREEN_WIDTH/2 - panelWidth/2;
+        int panelY = gp.SCREEN_HEIGHT/2 - panelHeight/2;
         int tabWidth = 150;
         int tabHeight = 40;
         int tabY = panelY + 70;
@@ -2880,7 +2921,11 @@ public class UI {
     private void purchaseItem(ShopItem item) {
         if(gp.player.coins >= item.price) {
             // Deduct coins
+            if (item.category == 4){
+                gp.player.hasLegendaryItem = true;
+            }
             gp.player.coins -= item.price;
+            gp.player.inventory.addItems(item.item);
             
             // Add item to inventory
             // boolean added = gp.player.inventory.addItems(item.item);
@@ -2972,7 +3017,7 @@ public class UI {
                 break;
             case 2:
                 if(effect.name.equals("Upgrade Level")) {
-                    gp.player.level++;
+                    gp.player.gainLevel();
                 }
                 if(effect.name.equals("Coins +999")) {
                     gp.player.coins += 999;

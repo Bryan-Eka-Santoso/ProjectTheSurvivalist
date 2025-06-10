@@ -11,7 +11,7 @@ public class Crystal extends Material {
     public Crystal(int currentStack) {
         super("Crystal", currentStack);
         this.isCanSell = true;
-        this.price = 10;
+        this.price = 15;
         try {
             this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/crystal.png")); 
         } catch (IOException e) {
