@@ -577,7 +577,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 sp.spawnFish("Belida", 20, usedPositions);
                 gp.stopMusic();
                 gp.playMusic(18);
-                if(randGetGolden == 1){
+                if(randGetGolden == 0){
                     sp.spawnFish("Golden", 2, usedPositions);
                 }
             }
