@@ -3,6 +3,7 @@ package Objek.Controller;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Paint;
@@ -10,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -128,6 +130,7 @@ public class UI {
     public int effectCategory = 0;
     public boolean showPurchaseSuccess = false;
     public boolean showInsufficientFunds = false;
+    public boolean showUnfulfilledRequirements = false;
     public long messageTimer = 0;
     public final long MESSAGE_DURATION = 2000;
     public boolean showNeedBucketMessage = false;
@@ -296,6 +299,12 @@ public class UI {
             drawText("Not enough coins!", Color.RED);
             if(System.currentTimeMillis() - messageTimer > MESSAGE_DURATION) {
                 showInsufficientFunds = false;
+            }
+        }
+        if (showUnfulfilledRequirements) {
+            drawText("You don't meet the requirements!", Color.RED);
+            if(System.currentTimeMillis() - messageTimer > MESSAGE_DURATION) {
+                showUnfulfilledRequirements = false;
             }
         }
 
@@ -1940,7 +1949,30 @@ public class UI {
         if (gp.player.inventory.slots[slotCol] != null) {
             Font font = new Font("Arial", Font.BOLD, 25); // Family = Arial, Style = Bold, Size = 30
             g2.setFont(font);
-            g2.drawString(gp.player.inventory.slots[slotCol].name, gp.TILE_SIZE * 12, cursorY - 50);
+            String text = gp.player.inventory.slots[slotCol].name;
+            if (gp.player.inventory.slots[slotCol].isLegendaryItem){
+                FontMetrics fm = g2.getFontMetrics();
+                Rectangle2D bounds = fm.getStringBounds(text, g2);
+
+                // Create a GlyphVector for the text
+                java.awt.font.GlyphVector gv = font.createGlyphVector(g2.getFontRenderContext(), text);
+                Shape textShape = gv.getOutline(getXForCenteredText(text) - text.length()+ 50, cursorY - 50);
+
+                // Create gradient paint
+                GradientPaint gradient = new GradientPaint(
+                    getXForCenteredText(text) - text.length() + 50, cursorY - 100 - (float)bounds.getHeight(), new Color(103, 238, 255),
+                    getXForCenteredText(text) - text.length() + 50 + (float)bounds.getWidth(), cursorY - (float)bounds.getHeight(), Color.WHITE
+                );
+                Paint oldPaint = g2.getPaint();
+                g2.setPaint(gradient);
+                g2.fill(textShape);
+                g2.setPaint(oldPaint);
+            } else {
+                g2.setColor(Color.WHITE);
+                g2.drawString(text, getXForCenteredText(text) - text.length() * 2 + 52, cursorY - 50);
+            }
+            g2.setColor(Color.WHITE);
+            g2.setPaint(Color.WHITE);
         }
         g2.setStroke(new BasicStroke(3));
         g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight, 10, 10);
@@ -2373,7 +2405,7 @@ public class UI {
     public int getXCenteredText(String text) {
         int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         int x = (int)(gp.SCREEN_WIDTH / 2 - length/2);
-        return x;
+        return x; // Adjust for better centering
     }
 
     
@@ -2792,15 +2824,65 @@ public class UI {
             // Add more vertical spacing between rows
             int itemY = startY + (row * (itemSize + 80));
             
+            BufferedImage lock = null;
+            try {
+                lock = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/lock.png"));
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+
+            // Buy button - centered
+            int buyButtonWidth = 80;
+            int buyButtonHeight = 25;
+            int buyButtonX = itemX + (itemSize - buyButtonWidth) / 2;
+            int buyButtonY = itemY + itemSize + 35;
+
             // Background for item
-            g2.setColor(new Color(100, 70, 30));
-            g2.fillRect(itemX, itemY, itemSize, itemSize);
-            g2.setColor(Color.WHITE);
-            g2.drawRect(itemX, itemY, itemSize, itemSize);
-            
-            // Item image
-            if (item.img != null) {
-                g2.drawImage(item.img, itemX + 5, itemY + 5, itemSize - 10, itemSize - 10, null);
+            if (isEffectUsable(item)){
+                g2.setColor(new Color(100, 70, 30));
+                g2.fillRect(itemX, itemY, itemSize, itemSize);
+                g2.setColor(Color.WHITE);
+                g2.drawRect(itemX, itemY, itemSize, itemSize);
+                
+                // Item image
+                if (item.img != null) {
+                    g2.drawImage(item.img, itemX + 5, itemY + 5, itemSize - 10, itemSize - 10, null);
+                }
+                
+                Rectangle buyButton = new Rectangle(buyButtonX, buyButtonY, buyButtonWidth, buyButtonHeight);
+                effectItemRects.add(buyButton);
+                
+                g2.setColor(new Color(50, 150, 50));  // Green buy button
+                g2.fillRect(buyButton.x, buyButton.y, buyButton.width, buyButton.height);
+                
+                g2.setColor(Color.WHITE);
+                if(effectCategory == 0){
+                    buyText = "Sell";
+                } else {
+                    buyText = "Buy";
+                }
+            } else {
+                g2.setColor(new Color(70, 40, 0));
+                g2.fillRect(itemX, itemY, itemSize, itemSize);
+                g2.setColor(Color.WHITE);
+                g2.drawRect(itemX, itemY, itemSize, itemSize);
+                
+                // Draw lock icon
+                if (lock != null) {
+                    int lockSize = 30;
+                    int lockX = itemX + (itemSize - lockSize) / 2;
+                    int lockY = itemY + (itemSize - lockSize) / 2;
+                    g2.drawImage(lock, lockX, lockY, lockSize, lockSize, null);
+                }
+                
+                Rectangle lockedButton = new Rectangle(buyButtonX, buyButtonY, buyButtonWidth, buyButtonHeight);
+                effectItemRects.add(lockedButton);
+
+                g2.setColor(Color.GRAY);
+                g2.fillRect(lockedButton.x, lockedButton.y, lockedButton.width, lockedButton.height);
+                g2.setColor(Color.WHITE);
+                buyText = "Locked";
+
             }
             
             // Item name - centering text
@@ -2816,25 +2898,7 @@ public class UI {
             int priceWidth = g2.getFontMetrics().stringWidth(price);
             int priceX = itemX + (itemSize - priceWidth)/2;
             g2.drawString(price, priceX, itemY + itemSize + 30);
-            
-            // Buy button - centered
-            int buyButtonWidth = 80;
-            int buyButtonHeight = 25;
-            int buyButtonX = itemX + (itemSize - buyButtonWidth) / 2;
-            int buyButtonY = itemY + itemSize + 35;
-            
-            Rectangle buyButton = new Rectangle(buyButtonX, buyButtonY, buyButtonWidth, buyButtonHeight);
-            effectItemRects.add(buyButton);
-            
-            g2.setColor(new Color(50, 150, 50));  // Green buy button
-            g2.fillRect(buyButton.x, buyButton.y, buyButton.width, buyButton.height);
-            
-            g2.setColor(Color.WHITE);
-            if(effectCategory == 0){
-                buyText = "Sell";
-            } else {
-                buyText = "Buy";
-            }
+
             int textX = buyButtonX + (buyButtonWidth - g2.getFontMetrics().stringWidth(buyText)) / 2;
             g2.drawString(buyText, textX, buyButtonY + 17);
         }
@@ -2944,6 +3008,11 @@ public class UI {
         }
     }
     private void purchaseEffect(ShopEffect item) {
+        if (!isEffectUsable(item)) {
+            showUnfulfilledRequirements = true;
+            messageTimer = System.currentTimeMillis();
+            return; // Effect already active, cannot purchase again
+        }
         if(effectCategory == 0){
             gp.player.coins += item.price;
             applyEffect(item);
@@ -2964,6 +3033,34 @@ public class UI {
                 messageTimer = System.currentTimeMillis();
             }
         }
+    }
+    private boolean isEffectUsable(ShopEffect effect) {
+        if (effect.name.equals("Repair Arsenal")) {
+            for (Item item : gp.player.inventory.slots) {
+                if (item instanceof Arsenal && ((Arsenal)item).durability < ((Arsenal)item).maxDurability) {
+                    return true;
+                }
+            }
+        } else if (effect.name.equals("Repair Armor")) {
+            for (Item item : gp.player.inventory.slots) {
+                if (item instanceof Armor && ((Armor)item).durability < ((Armor)item).maxDurability) {
+                    return true;
+                }
+            }
+        } else if (effect.name.equals("Repair Fishing Rod")) {
+            for (Item item : gp.player.inventory.slots) {
+                if (item instanceof FishingRod && ((FishingRod)item).durability < ((FishingRod)item).maxDurability) {
+                    return true;
+                }
+            }
+        } else if (effect.name.equals("Upgrade Level")) {
+            return gp.player.level < 100;
+        } else if (effect.name.equals("Coins +999")) {
+            return true;
+        } else if (effect.name.equals("God Mode") || effect.name.equals("Normal Mode")) {
+            return true;
+        }
+        return false;
     }
     private void applyEffect(ShopEffect effect) {
         switch(effect.category) {
@@ -3049,7 +3146,7 @@ public class UI {
             panelX * 2, panelY, new Color(200, 160, 90), // Bottom color (light brown/gold)
             panelX + panelWidth, panelY + panelHeight, new Color(90, 60, 30) // Top color (brownish)
         );
-        Paint oldPaint = g2.getPaint();
+        Paint oldPaint = g2.getPaint(); 
         g2.setPaint(gpGradient);
         g2.fillRoundRect(panelX, panelY, panelWidth, panelHeight, 15, 15);
         g2.setPaint(oldPaint);

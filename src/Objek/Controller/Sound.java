@@ -42,8 +42,7 @@ public class Sound {
             soundURL[26] = new File("ProjectTheSurvivalist/res/sound/sand-step.wav").toURI().toURL();
             soundURL[27] = new File("ProjectTheSurvivalist/res/sound/cave-sound.wav").toURI().toURL();
             soundURL[28] = new File("ProjectTheSurvivalist/res/sound/shop-theme.wav").toURI().toURL();
-           
-
+            soundURL[29] = new File("ProjectTheSurvivalist/res/sound/winter-crown.wav").toURI().toURL();
            
         }  catch (Exception e) {
             e.printStackTrace();

@@ -9,6 +9,7 @@ public abstract class Item implements Cloneable {
     public int price;
     public BufferedImage img;
     public boolean isCanSell;
+    public boolean isLegendaryItem = false;
     
     public Item(String name, int maxStack, int currentStack, boolean isCanSell, int price) {
         this.name = name;

@@ -89,6 +89,7 @@ public class UseItem {
             if (selectedItem instanceof WinterCrown && (gp.currentMap == 0 || gp.currentMap == 2)) {
                 if (!player.isFrozen){
                     player.isFrozen = true;
+                    playSE(29);
                     int radius = 210;
                     int wolves = 0;
                     for (Animal animal : new ArrayList<>(gp.animals)) {

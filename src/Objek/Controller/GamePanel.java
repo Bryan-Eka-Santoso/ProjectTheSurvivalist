@@ -13,6 +13,13 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
+import Objek.Items.Unstackable.Immortality;
+import Objek.Items.Unstackable.WinterCrown;
+import Objek.Items.Unstackable.Armor.Boots.RapidBoots;
+import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
+import Objek.Items.Unstackable.Armor.Helmet.CursedHelmet;
+import Objek.Items.Unstackable.Armor.Helmet.GuardianHelmet;
+import Objek.Items.Unstackable.Arsenals.HaasClaws;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -223,6 +230,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
+        player.inventory.addItems(new WinterCrown());
+        player.inventory.addItems(new HaasClaws());
+        player.inventory.addItems(new GuardianHelmet());
+        player.inventory.addItems(new BladeArmor());
+        player.inventory.addItems(new RapidBoots());
+        player.inventory.addItems(new Immortality());
+        player.inventory.addItems(new CursedHelmet());
 
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
