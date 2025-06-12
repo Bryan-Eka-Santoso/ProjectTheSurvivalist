@@ -1,5 +1,10 @@
-import javax.swing.JFrame;
+import java.awt.CardLayout;
 
+import javax.smartcardio.Card;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import Objek.Controller.GuidePanel;
 import Objek.Controller.MenuPanel;
 
 public class App {
@@ -17,5 +22,8 @@ public class App {
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+
+
     }
+
 }
