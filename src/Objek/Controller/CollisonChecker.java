@@ -780,7 +780,7 @@ public class CollisonChecker {
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
     
         // Check collision
-        if(monster.solidArea.intersects(gp.player.solidArea)) {
+        if(monster.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen) {
             monster.collisionOn = true;
             int def = gp.player.getDefense();
 

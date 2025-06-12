@@ -166,74 +166,72 @@ public class InteractBuild {
     public void initShopItems() {
         try {
             // Tools (category 0)
-            gp.ui.shopItems.add(new ShopItem(new FlimsyAxe(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new FlimsyPickaxe(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new GoldSword(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new IcePickaxe(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new LightweightAxe(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new LightweightPickaxe(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new MetalClub(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new MetalSword(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new SpikedMetalClub(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new WindAxe(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new SpikedWoodenClub(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new WoodenClub(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new Lantern(gp), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new WateringCan(), 100, 0));
-            gp.ui.shopItems.add(new ShopItem(new FishingRod(), 100, 0));
+            gp.ui.shopItems.add(new ShopItem(new WoodenClub(), 25, 0));
+            gp.ui.shopItems.add(new ShopItem(new SpikedWoodenClub(), 40, 0));
+            gp.ui.shopItems.add(new ShopItem(new MetalClub(), 60, 0));
+            gp.ui.shopItems.add(new ShopItem(new SpikedMetalClub(), 85, 0));
+            gp.ui.shopItems.add(new ShopItem(new FlimsyPickaxe(), 35, 0));
+            gp.ui.shopItems.add(new ShopItem(new LightweightPickaxe(), 55, 0));
+            gp.ui.shopItems.add(new ShopItem(new IcePickaxe(), 70, 0));
+            gp.ui.shopItems.add(new ShopItem(new GoldSword(), 80, 0));
+            gp.ui.shopItems.add(new ShopItem(new MetalSword(), 75, 0));
+            gp.ui.shopItems.add(new ShopItem(new FlimsyAxe(), 30, 0));
+            gp.ui.shopItems.add(new ShopItem(new LightweightAxe(), 50, 0));
+            gp.ui.shopItems.add(new ShopItem(new WindAxe(), 90, 0));
+            gp.ui.shopItems.add(new ShopItem(new Lantern(gp), 45, 0));
+            gp.ui.shopItems.add(new ShopItem(new WateringCan(), 20, 0));
+            gp.ui.shopItems.add(new ShopItem(new FishingRod(), 35, 0));
             
             // Armor (category 1)
-            gp.ui.shopItems.add(new ShopItem(new GoldBoots(), 100, 1));
-            gp.ui.shopItems.add(new ShopItem(new MetalBoots(), 100, 1));
-            gp.ui.shopItems.add(new ShopItem(new GoldChestplate(), 100, 1));
-            gp.ui.shopItems.add(new ShopItem(new MetalChestplate(), 100, 1));
-            gp.ui.shopItems.add(new ShopItem(new GoldHelmet(), 100, 1));
-            gp.ui.shopItems.add(new ShopItem(new MetalHelmet(), 100, 1));
-            gp.ui.shopItems.add(new ShopItem(new WolfCloak(), 100, 1));
-            gp.ui.shopItems.add(new ShopItem(new GoldLeggings(), 100, 1));
-            gp.ui.shopItems.add(new ShopItem(new MetalLeggings(), 100, 1));
+            gp.ui.shopItems.add(new ShopItem(new GoldBoots(), 60, 1));
+            gp.ui.shopItems.add(new ShopItem(new MetalBoots(), 50, 1));
+            gp.ui.shopItems.add(new ShopItem(new GoldLeggings(), 75, 1));
+            gp.ui.shopItems.add(new ShopItem(new MetalLeggings(), 65, 1));
+            gp.ui.shopItems.add(new ShopItem(new GoldChestplate(), 90, 1));
+            gp.ui.shopItems.add(new ShopItem(new MetalChestplate(), 80, 1));
+            gp.ui.shopItems.add(new ShopItem(new GoldHelmet(), 70, 1));
+            gp.ui.shopItems.add(new ShopItem(new MetalHelmet(), 60, 1));
+            gp.ui.shopItems.add(new ShopItem(new WolfCloak(), 90, 1));
             
             // Food (category 2)
-            gp.ui.shopItems.add(new ShopItem(new Bacon(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new CookedArwana(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new CookedBelida(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new CookedChicken(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new CookedMutton(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new Steak(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new Guava(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new Mango(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new RaspBerries(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new BakedPotato(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new Bread(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new Carrot(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new Egg(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new Blackberries(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new Potato(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new RawArwana(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new RawBelida(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new RawChicken(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new RawMeat(1), 100, 2));
-            gp.ui.shopItems.add(new ShopItem(new RawPork(1), 100, 2));
+            gp.ui.shopItems.add(new ShopItem(new Bacon(1), 12, 2));
+            gp.ui.shopItems.add(new ShopItem(new CookedArwana(1), 18, 2));
+            gp.ui.shopItems.add(new ShopItem(new CookedBelida(1), 17, 2));
+            gp.ui.shopItems.add(new ShopItem(new CookedChicken(1), 15, 2));
+            gp.ui.shopItems.add(new ShopItem(new CookedMutton(1), 16, 2));
+            gp.ui.shopItems.add(new ShopItem(new Steak(1), 20, 2));
+            gp.ui.shopItems.add(new ShopItem(new Guava(1), 6, 2));
+            gp.ui.shopItems.add(new ShopItem(new Mango(1), 7, 2));
+            gp.ui.shopItems.add(new ShopItem(new RaspBerries(1), 8, 2));
+            gp.ui.shopItems.add(new ShopItem(new BakedPotato(1), 10, 2));
+            gp.ui.shopItems.add(new ShopItem(new Bread(1), 9, 2));
+            gp.ui.shopItems.add(new ShopItem(new Carrot(1), 5, 2));
+            gp.ui.shopItems.add(new ShopItem(new Egg(1), 4, 2));
+            gp.ui.shopItems.add(new ShopItem(new Blackberries(1), 8, 2));
+            gp.ui.shopItems.add(new ShopItem(new Potato(1), 4, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawArwana(1), 10, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawBelida(1), 9, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawChicken(1), 8, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawMeat(1), 7, 2));
+            gp.ui.shopItems.add(new ShopItem(new RawPork(1), 7, 2));
             
             // Materials (category 3)
-            gp.ui.shopItems.add(new ShopItem(new Feather(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new WolfHide(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new Wool(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new GoldIngot(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new MetalFrame(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new MetalIngot(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new MetalNails(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new MetalSheet(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new SwordHandle(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new ToolHandle(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new Wood(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new Gold(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new Metal(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new Stone(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new Strings(1), 100, 3));
-            gp.ui.shopItems.add(new ShopItem(new Wheat(1), 100, 3));
+            gp.ui.shopItems.add(new ShopItem(new Feather(1), 3, 3));
+            gp.ui.shopItems.add(new ShopItem(new WolfHide(1), 12, 3));
+            gp.ui.shopItems.add(new ShopItem(new Wool(1), 10, 3));
+            gp.ui.shopItems.add(new ShopItem(new MetalFrame(1), 20, 3));
+            gp.ui.shopItems.add(new ShopItem(new MetalNails(1), 3, 3));
+            gp.ui.shopItems.add(new ShopItem(new MetalSheet(1), 15, 3));
+            gp.ui.shopItems.add(new ShopItem(new SwordHandle(1), 13, 3));
+            gp.ui.shopItems.add(new ShopItem(new ToolHandle(1), 11, 3));
+            gp.ui.shopItems.add(new ShopItem(new Wood(1), 2, 3));
+            gp.ui.shopItems.add(new ShopItem(new Gold(1), 22, 3));
+            gp.ui.shopItems.add(new ShopItem(new Metal(1), 7, 3));
+            gp.ui.shopItems.add(new ShopItem(new Stone(1), 4, 3));
+            gp.ui.shopItems.add(new ShopItem(new Strings(1), 6, 3));
+            gp.ui.shopItems.add(new ShopItem(new Wheat(1), 6, 3));
 
-            // Legendary Items (category 4)
+            // Legendary Items (category 4) - keep at 100
             gp.ui.shopItems.add(new ShopItem(new RapidBoots(), 100, 4));
             gp.ui.shopItems.add(new ShopItem(new HaasClaws(), 100, 4));
             gp.ui.shopItems.add(new ShopItem(new Immortality(), 100, 4));
@@ -257,7 +255,7 @@ public class InteractBuild {
             }
             
             gp.ui.effectItems.add(new ShopEffect("Repair Arsenal", "ProjectTheSurvivalist/res/Items/Equipments/sword.png", 10, 1));
-            gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 10, 1));
+            gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate2.png", 10, 1));
             gp.ui.effectItems.add(new ShopEffect("Repair Fishing Rod", "ProjectTheSurvivalist/res/Items/Equipments/fishingrod.png", 10, 1));
             
             gp.ui.effectItems.add(new ShopEffect("Upgrade Level", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
