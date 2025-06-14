@@ -406,7 +406,7 @@ public class UseItem {
                                 player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
                             player.gp.animals.remove(player.animalIndex);
-                            player.gainExp(rand.nextInt(10) + 9);
+                            player.gainExp(rand.nextInt(10) + 30);
                             player.animalIndex = -1;
                         }
                     } 

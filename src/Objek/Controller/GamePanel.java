@@ -14,6 +14,7 @@ import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
 import Objek.Items.Unstackable.Immortality;
+import Objek.Items.Unstackable.Lantern;
 import Objek.Items.Unstackable.WinterCrown;
 import Objek.Items.Unstackable.Armor.Boots.RapidBoots;
 import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
@@ -156,7 +157,7 @@ public class GamePanel extends JPanel implements Runnable {
         }
 
         if(goldCount < MAX_GOLD) {
-            sp.spawnOre("gold", MAX_CHICKENS - MAX_GOLD, usedPositions);
+            sp.spawnOre("gold", MAX_GOLD - goldCount, usedPositions);
         }
         if(metalCount < MAX_METAL) {
             sp.spawnOre("metal", MAX_METAL - metalCount, usedPositions);
@@ -230,6 +231,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
+        player.inventory.addItems(new Chest(this, 1, 0));
+        player.inventory.addItems(new Lantern(this));
         player.inventory.addItems(new WinterCrown());
         player.inventory.addItems(new HaasClaws());
         player.inventory.addItems(new GuardianHelmet());

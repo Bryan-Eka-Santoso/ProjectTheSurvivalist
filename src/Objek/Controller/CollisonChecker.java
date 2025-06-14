@@ -5,9 +5,11 @@ import java.util.Random;
 
 import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
+import Objek.Enemy.Golem;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
 import Objek.Items.StackableItem.Materials.AnimalDrops.WolfHide;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
 import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
 import Objek.Ore.Ore;
@@ -796,8 +798,8 @@ public class CollisonChecker {
                     monster.hp -= 5;
                     if(monster.hp <= 0) {
                         gp.player.totalMonstersKilled++;
-                        if (rand.nextInt(10) < 2) {
-                            gp.player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new WolfHide(1), gp));
+                        if (monster instanceof Golem) {
+                            gp.player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
                         }
                         gp.player.gp.monsters.remove(monster);
                         gp.player.gainExp(rand.nextInt(10) + 9);

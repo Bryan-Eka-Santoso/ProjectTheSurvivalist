@@ -172,19 +172,19 @@ public class GuidePanel extends JPanel {
         interactionContainer.add(titleLabel);
 
         String[] petunjuk = {
-            "F - Berpindah antara wilayah daratan dan lautan",
-            "C - Membuka menu crafting untuk membuat item dan peralatan",
-            "I - Membuka inventory untuk melihat dan mengelola barang",
-            "1 - 9 - Memilih item sesuai slot",
-            "S (saat chest/inventory) - Memindahkan item",
-            "E - Menyerang, menebang pohon, menghancurkan bangunan",
-            "T - Masuk dan keluar kandang",
-            "G - Mengangkat dan memindahkan hewan",
-            "Q - Menjatuhkan item ke world (stackable bisa pilih jumlah)",
-            "ShiftC - Membuka menu achievement",
-            "(Arrow Down, mode kandang) - Pilih aksi: hapus, kawin, panen",
-            "Enter (mode kandang) - Konfirmasi aksi",
-            "Spasi (Spacebar) - Masuk/keluar toko dan gua"
+            "F → Berpindah antara wilayah daratan dan lautan",
+            "C → Membuka menu crafting untuk membuat item dan peralatan",
+            "I → Membuka inventory untuk melihat dan mengelola barang",
+            "1 - 9 → Memilih item sesuai slot",
+            "S → Memindahkan item saat membuka chest/inventory",
+            "E → Menyerang, menebang pohon, menghancurkan bangunan",
+            "T → Masuk dan keluar kandang",
+            "G → Mengangkat dan memindahkan hewan",
+            "Q → Menjatuhkan item ke world (stackable bisa pilih jumlah)",
+            "Shift + C → Membuka menu achievement",
+            "Arrow Down → Memilih aksi saat mode kandang: hapus, kawin, panen",
+            "Enter → Konfirmasi aksi saat mode kandang",
+            "Spasi (Spacebar) → Masuk/keluar toko dan gua"
         };
 
         for (int i = 0; i < petunjuk.length; i++) {

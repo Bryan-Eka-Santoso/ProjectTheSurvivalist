@@ -220,10 +220,7 @@ public class Player {
         exp += amount;
         if (exp >= maxExp) {
             exp -= maxExp;
-            level++;
-            playSE(21);
-            maxExp += 50;
-            System.out.println("Level up! Current level: " + level);
+            gainLevel();
         }
     }
 
@@ -231,6 +228,7 @@ public class Player {
         level++;
         maxExp += 50;
         playSE(21);
+        gp.ui.showLevelUpMessage = true;
         System.out.println("Level up! Current level: " + level);
     }
 
