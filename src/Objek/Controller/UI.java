@@ -6,7 +6,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
 import java.awt.Paint;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
@@ -36,6 +38,7 @@ import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Armor;
 import Objek.Items.Unstackable.Arsenals.*;
 import javax.imageio.ImageIO;
+import javax.swing.SwingUtilities;
 
 public class UI {
     GamePanel gp;
@@ -68,16 +71,19 @@ public class UI {
     private String currentInput = "";
     private TameAnimal animalToName;
     private Kandang targetKandang;
-    private Rectangle textField;
+    Rectangle textField;
     private BufferedImage woodBg;
     private Rectangle backButton;
     private TameAnimal selectedMale;
     private TameAnimal selectedFemale;
     public boolean inBreedingMenu = false;
     public boolean inGetItemMenu = false;
-    private Rectangle getItemBackButton;
+    public Rectangle getItemBackButton;
     public Rectangle removeButton;
     public Rectangle removeBackButton;
+    public Rectangle breedConfirmButton;
+    public Rectangle removeConfirmButton;
+    public Rectangle getItemCollectButton;
     public boolean inRemoveMenu = false;
     public int selectedRemoveIndex = 0;
     private int removeScrollPosition = 0;
@@ -789,27 +795,49 @@ public class UI {
     }
     
     public void drawGetItemMenu(Graphics2D g2, Kandang kandang) {
-        int windowWidth = gp.TILE_SIZE * 12;
+        int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
         int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
 
+        // Draw wooden background with border shadow
+        g2.setColor(new Color(0, 0, 0, 160));
+        g2.fillRoundRect(windowX-5, windowY-5, windowWidth+10, windowHeight+10, 20, 20);
         g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
+        
+        // Decorative hay frame
+        g2.setColor(new Color(218, 165, 32, 180));
+        g2.fillRoundRect(windowX+10, windowY+10, windowWidth-20, windowHeight-20, 15, 15);
+        
+        // Title banner
+        g2.setColor(new Color(120, 60, 30));
+        g2.fillRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
+        g2.setColor(new Color(255, 255, 255));
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
 
-        g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.BOLD, 30));
-        String title = "Get Item Menu";
+        String title = "Collect Products";
         int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
         g2.drawString(title, titleX, windowY + 60);
 
+        // Animal list container
+        g2.setColor(new Color(30, 15, 0, 160));
+        g2.fillRoundRect(windowX + 20, windowY + 100, windowWidth - 40, windowHeight - 180, 15, 15);
+        g2.setColor(new Color(255, 255, 255));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRoundRect(windowX + 20, windowY + 100, windowWidth - 40, windowHeight - 180, 15, 15);
+
+        // Get ready animals
         ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
+        
         if(kandang instanceof KandangAyam) {
             for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
                 if(chicken.isReadyGetItem()) {
                     readyAnimals.add(chicken);
                 }
             }
-        }else if(kandang instanceof CowCage) {
+        } else if(kandang instanceof CowCage) {
             for(Cow cow : ((CowCage)kandang).cowsInCage) {
                 if(cow.isReadyGetItem()) readyAnimals.add(cow);
             }
@@ -826,46 +854,115 @@ public class UI {
         int startY = windowY + 120;
         int lineHeight = 40;
 
+        // Headers
+        g2.setFont(new Font("Arial", Font.BOLD, 18));
+        g2.setColor(new Color(255, 230, 180));
+        g2.drawString("Animal", windowX + 35, startY);
+        g2.drawString("Product", windowX + windowWidth - 200, startY);
+        
+        // Draw horizontal line below headers
+        g2.setStroke(new BasicStroke(1));
+        g2.drawLine(windowX + 30, startY + 10, windowX + windowWidth - 30, startY + 10);
+
         if(readyAnimals.isEmpty()) {
-            g2.drawString("No animals ready to get items!", windowX + 30, startY + 40);
+            g2.setFont(new Font("Arial", Font.ITALIC, 18));
+            g2.setColor(new Color(255, 200, 150));
+            g2.drawString("No animals ready to collect products!", windowX + (windowWidth/2) - 150, startY + 50);
         } else {
-            int endIndex = Math.min(getItemScrollPosition + ANIMALS_PER_PAGE+2, readyAnimals.size());
+            int endIndex = Math.min(getItemScrollPosition + ANIMALS_PER_PAGE, readyAnimals.size());
             for(int i = getItemScrollPosition; i < endIndex; i++) {
                 TameAnimal animal = readyAnimals.get(i);
-                int y = startY + (i - getItemScrollPosition) * lineHeight;
+                int y = startY + 35 + (i - getItemScrollPosition) * lineHeight;
                 
-                if(i == selectedGetItemIndex) {
-                    g2.setColor(Color.BLACK);
-                    g2.drawRect(windowX + 25, y - 10, windowWidth - 50, lineHeight);
+                // Alternate row backgrounds
+                if((i - getItemScrollPosition) % 2 == 0) {
+                    g2.setColor(new Color(120, 80, 40, 120));
+                } else {
+                    g2.setColor(new Color(90, 60, 30, 120));
                 }
+                g2.fillRoundRect(windowX + 30, y - 20, windowWidth - 60, lineHeight, 8, 8);
+                
+                // Selection highlight
+                if(i == selectedGetItemIndex) {
+                    g2.setColor(new Color(70, 100, 170, 180));
+                    g2.fillRoundRect(windowX + 30, y - 20, windowWidth - 60, lineHeight, 8, 8);
+                    g2.setColor(new Color(200, 255, 255));
+                    g2.drawRoundRect(windowX + 30, y - 20, windowWidth - 60, lineHeight, 8, 8);
+                }
+                
                 g2.setColor(Color.WHITE);
-                g2.drawString(animal.getName() + " is ready!", windowX + 30, y + 15);
+                g2.setFont(new Font("Arial", Font.BOLD, 16));
+                g2.drawString(animal.getName(), windowX + 40, y);
+                
+                // Product name
+                String productName = "";
+                if(animal instanceof Chicken) productName = "Egg";
+                else if(animal instanceof Cow) productName = "Milk";
+                else if(animal instanceof Sheep) productName = "Wool";
+                else if(animal instanceof Pig) productName = "Meat";
+                
+                g2.drawString(productName, windowX + windowWidth - 200, y);
+            }
+            
+            // Scrollbar if needed
+            if(readyAnimals.size() > ANIMALS_PER_PAGE) {
+                int scrollBarHeight = 200;
+                int scrollBarWidth = 15;
+                int scrollBarX = windowX + windowWidth - 35;
+                int scrollBarY = windowY + 130;
+                
+                // Draw scrollbar background
+                g2.setColor(new Color(60, 30, 0, 120));
+                g2.fillRoundRect(scrollBarX, scrollBarY, scrollBarWidth, scrollBarHeight, 7, 7);
+                
+                // Draw scrollbar handle
+                float handleRatio = (float)ANIMALS_PER_PAGE / readyAnimals.size();
+                int handleHeight = Math.max(30, (int)(scrollBarHeight * handleRatio));
+                int maxScroll = readyAnimals.size() - ANIMALS_PER_PAGE;
+                int handleY = scrollBarY + (int)(((float)getItemScrollPosition / Math.max(1, maxScroll)) * (scrollBarHeight - handleHeight));
+                
+                g2.setColor(new Color(200, 150, 80));
+                g2.fillRoundRect(scrollBarX, handleY, scrollBarWidth, handleHeight, 7, 7);
             }
         }
 
-        
-        int buttonWidth = 100;
+        // Buttons
+        int buttonWidth = 120;
         int buttonHeight = 40;
-        getItemBackButton = new Rectangle(windowX + 30, windowY + windowHeight - buttonHeight - 20,buttonWidth, buttonHeight);
-        g2.setColor(Color.WHITE);
-        g2.fillRect(getItemBackButton.x, getItemBackButton.y, getItemBackButton.width, getItemBackButton.height);
-        g2.setColor(Color.BLACK);
-        g2.setFont(new Font("Arial", Font.BOLD, 16)); 
-        String text = "Back";
-        int textX = getItemBackButton.x + (buttonWidth - g2.getFontMetrics().stringWidth(text))/2;
-        int textY = getItemBackButton.y + (buttonHeight + g2.getFontMetrics().getHeight())/2 - 2;
-        g2.drawString(text, textX, textY);
+        
+        // Back button
+        getItemBackButton = new Rectangle(windowX + 30, windowY + windowHeight - buttonHeight - 20, buttonWidth, buttonHeight);
+        drawKandangButton(g2, getItemBackButton, "Back", new Color(70, 40, 20), new Color(100, 60, 30));
+        
+        // Collect button (only show if an animal is selected)
+        if(selectedGetItemIndex >= 0 && selectedGetItemIndex < readyAnimals.size()) {
+            getItemCollectButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, windowY + windowHeight - buttonHeight - 20, buttonWidth, buttonHeight);
+            drawKandangButton(g2, getItemCollectButton, "Collect", new Color(70, 90, 140), new Color(90, 120, 180));
+        }
     }
 
     public void drawBreedingMenu(Graphics2D g2, Kandang kandang) {
-        int windowWidth = gp.TILE_SIZE * 12;
+        int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
         int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
-
+        
+        // Draw wooden background with border shadow
+        g2.setColor(new Color(0, 0, 0, 160));
+        g2.fillRoundRect(windowX-5, windowY-5, windowWidth+10, windowHeight+10, 20, 20);
         g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
+        
+        // Decorative hay frame
+        g2.setColor(new Color(218, 165, 32, 180));
+        g2.fillRoundRect(windowX+10, windowY+10, windowWidth-20, windowHeight-20, 15, 15);
+        
+        // Title banner
+        g2.setColor(new Color(120, 60, 30));
+        g2.fillRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
+        g2.setColor(new Color(255, 255, 255));
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
 
-        g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.BOLD, 30));
         String title = "Breeding Menu";
         int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
@@ -873,105 +970,190 @@ public class UI {
 
         if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
             g2.setFont(new Font("Arial", Font.BOLD, 20));
-            String msg = "Kandang is full! Cannot breed!";
-            int msgX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(msg))/2;
-            g2.drawString(msg, msgX, windowY + 100);
+            g2.setColor(new Color(255, 100, 100));
+            String fullMsg = "Cage is full! Remove animals first.";
+            g2.drawString(fullMsg, windowX + (windowWidth - g2.getFontMetrics().stringWidth(fullMsg))/2, windowY + 130);
         } else {
+            // Animal list containers
+            g2.setColor(new Color(30, 15, 0, 160));
+            // Left panel for males
+            g2.fillRoundRect(windowX + 20, windowY + 100, windowWidth/2 - 30, windowHeight - 180, 15, 15);
+            // Right panel for females
+            g2.fillRoundRect(windowX + windowWidth/2 + 10, windowY + 100, windowWidth/2 - 30, windowHeight - 180, 15, 15);
+            
+            g2.setColor(Color.WHITE);
+            g2.drawRoundRect(windowX + 20, windowY + 100, windowWidth/2 - 30, windowHeight - 180, 15, 15);
+            g2.drawRoundRect(windowX + windowWidth/2 + 10, windowY + 100, windowWidth/2 - 30, windowHeight - 180, 15, 15);
 
-            g2.setFont(new Font("Arial", Font.BOLD, 20));
-            g2.drawString("Male Animals", windowX + 50, windowY + 80);
-            g2.drawString("Female Animals", windowX + windowWidth/2 + 50, windowY + 80);
-
-            ArrayList<TameAnimal> animals = new ArrayList<>();
-            if(kandang instanceof KandangAyam) {
-                animals.addAll(((KandangAyam)kandang).chickensInCage);
-            }else if(kandang instanceof CowCage) {
-                animals.addAll(((CowCage)kandang).cowsInCage);
-            } else if(kandang instanceof SheepCage) {
-                animals.addAll(((SheepCage)kandang).sheepsInCage);
-            } else if(kandang instanceof PigCage) {
-                animals.addAll(((PigCage)kandang).pigsInCage);
-            }
-
+            // Headers
+            g2.setFont(new Font("Arial", Font.BOLD, 18));
+            g2.setColor(new Color(255, 230, 180));
+            g2.drawString("Male Animals", windowX + 30, windowY + 120);
+            g2.drawString("Female Animals", windowX + windowWidth/2 + 20, windowY + 120);
+            
+            // Get animals by gender
             ArrayList<TameAnimal> males = new ArrayList<>();
             ArrayList<TameAnimal> females = new ArrayList<>();
-            for(TameAnimal animal : animals) {
-                if(animal.getGender().equals("Male") && animal.isReadyBreeding()) 
-                    males.add(animal);
-                else if(animal.getGender().equals("Female") && animal.isReadyBreeding())
-                    females.add(animal);
+            
+            if(kandang instanceof KandangAyam) {
+                for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+                    if(chicken.isReadyBreeding()) {
+                        if(chicken.getGender().equalsIgnoreCase("Male")) males.add(chicken);
+                        else females.add(chicken);
+                    }
+                }
+            } else if(kandang instanceof CowCage) {
+                for(Cow cow : ((CowCage)kandang).cowsInCage) {
+                    if(cow.isReadyBreeding()) {
+                        if(cow.getGender().equalsIgnoreCase("Male")) males.add(cow);
+                        else females.add(cow);
+                    }
+                }
+            } else if(kandang instanceof SheepCage) {
+                for(Sheep sheep : ((SheepCage)kandang).sheepsInCage) {
+                    if(sheep.isReadyBreeding()) {
+                        if(sheep.getGender().equalsIgnoreCase("Male")) males.add(sheep);
+                        else females.add(sheep);
+                    }
+                }
+            } else if(kandang instanceof PigCage) {
+                for(Pig pig : ((PigCage)kandang).pigsInCage) {
+                    if(pig.isReadyBreeding()) {
+                        if(pig.getGender().equalsIgnoreCase("Male")) males.add(pig);
+                        else females.add(pig);
+                    }
+                }
             }
 
-            int startY = windowY + 120;
-            int lineHeight = 40;
+            int startY = windowY + 150;
+            int lineHeight = 35;
+
+            // Draw male list
             if(males.isEmpty()) {
-                g2.setFont(new Font("Arial", Font.PLAIN, 16));
-                g2.drawString("No male animals available!", windowX + 30, startY);
+                g2.setFont(new Font("Arial", Font.ITALIC, 16));
+                g2.setColor(new Color(255, 200, 150));
+                g2.drawString("No breeding-ready males", windowX + 30, startY + 30);
             } else {
-                int endIndexMale = Math.min(breedingScrollPosition + ANIMALS_PER_PAGE+2, males.size());
+                int endIndexMale = Math.min(breedingScrollPosition + ANIMALS_PER_PAGE, males.size());
                 for(int i = breedingScrollPosition; i < endIndexMale; i++) {
                     TameAnimal male = males.get(i);
                     int y = startY + (i - breedingScrollPosition) * lineHeight;
                     
+                    // Row highlight for selected
                     if(i == selectedBreedMaleIndex && isMaleList) {
-                        g2.setColor(Color.BLACK);
-                        g2.drawRect(windowX + 25, y - 10, windowWidth/2 - 50, lineHeight);
+                        g2.setColor(new Color(140, 100, 60, 180));
+                        g2.fillRoundRect(windowX + 25, y - 10, windowWidth/2 - 40, lineHeight, 8, 8);
+                        g2.setColor(new Color(255, 255, 200));
+                        g2.drawRoundRect(windowX + 25, y - 10, windowWidth/2 - 40, lineHeight, 8, 8);
                     }
+                    
+                    // Alternating row backgrounds
+                    else if((i - breedingScrollPosition) % 2 == 0) {
+                        g2.setColor(new Color(120, 80, 40, 80));
+                        g2.fillRoundRect(windowX + 25, y - 10, windowWidth/2 - 40, lineHeight, 8, 8);
+                    }
+
                     g2.setColor(Color.WHITE);
-                    g2.drawString(male.getName() + " (Ready)", windowX + 30, y + 15);
-                }   
+                    g2.setFont(new Font("Arial", Font.BOLD, 16));
+                    g2.drawString(male.getName() + " ♂", windowX + 35, y + 10);
+                }
             }
 
+            // Draw female list
             if(females.isEmpty()) {
-                g2.setFont(new Font("Arial", Font.PLAIN, 16));
-                g2.drawString("No female animals available!", windowX + windowWidth/2 + 30, startY);
+                g2.setFont(new Font("Arial", Font.ITALIC, 16));
+                g2.setColor(new Color(255, 200, 150));
+                g2.drawString("No breeding-ready females", windowX + windowWidth/2 + 20, startY + 30);
             } else {
-                int endIndexFemale = Math.min(breedingScrollPosition + ANIMALS_PER_PAGE+2, females.size());
+                int endIndexFemale = Math.min(breedingScrollPosition + ANIMALS_PER_PAGE, females.size());
                 for(int i = breedingScrollPosition; i < endIndexFemale; i++) {
                     TameAnimal female = females.get(i);
                     int y = startY + (i - breedingScrollPosition) * lineHeight;
                     
+                    // Row highlight for selected
                     if(i == selectedBreedFemaleIndex && !isMaleList) {
-                        g2.setColor(Color.BLACK);
-                        g2.drawRect(windowX + windowWidth/2 + 25, y - 10, windowWidth/2 - 50, lineHeight);
+                        g2.setColor(new Color(140, 100, 60, 180));
+                        g2.fillRoundRect(windowX + windowWidth/2 + 15, y - 10, windowWidth/2 - 40, lineHeight, 8, 8);
+                        g2.setColor(new Color(255, 255, 200));
+                        g2.drawRoundRect(windowX + windowWidth/2 + 15, y - 10, windowWidth/2 - 40, lineHeight, 8, 8);
                     }
+                    // Alternating row backgrounds
+                    else if((i - breedingScrollPosition) % 2 == 0) {
+                        g2.setColor(new Color(120, 80, 40, 80));
+                        g2.fillRoundRect(windowX + windowWidth/2 + 15, y - 10, windowWidth/2 - 40, lineHeight, 8, 8);
+                    }
+
                     g2.setColor(Color.WHITE);
-                    g2.drawString(female.getName() + " (Ready)", windowX + windowWidth/2 + 30, y + 15);
+                    g2.setFont(new Font("Arial", Font.BOLD, 16));
+                    g2.drawString(female.getName() + " ♀", windowX + windowWidth/2 + 25, y + 10);
                 }
             }
 
+            // Selection message
             if(selectedMale != null) {
-                g2.setFont(new Font("Arial", Font.ITALIC, 16));
-                g2.drawString("Selected male: " + selectedMale.getName(), windowX + 30, windowY + windowHeight - 100);
+                g2.setColor(new Color(255, 255, 200));
+                g2.setFont(new Font("Arial", Font.BOLD, 16));
+                g2.fillRoundRect(windowX + 20, windowY + windowHeight - 100, windowWidth - 40, 30, 8, 8);
+                g2.setColor(new Color(70, 40, 10));
+                g2.drawString("Selected male: " + selectedMale.getName(), windowX + 30, windowY + windowHeight - 80);
+                
                 if(!females.isEmpty()) {
-                    g2.drawString("Please select a female", windowX + (windowWidth - g2.getFontMetrics().stringWidth("Please select a female"))/2, windowY + windowHeight - 80);
+                    g2.setColor(new Color(255, 255, 200));
+                    g2.fillRoundRect(windowX + 20, windowY + windowHeight - 70, windowWidth - 40, 30, 8, 8);
+                    g2.setColor(new Color(70, 40, 10));
+                    g2.drawString("Please select a female", windowX + (windowWidth - g2.getFontMetrics().stringWidth("Please select a female"))/2, windowY + windowHeight - 50);
                 }
             }
         }
 
-        int buttonWidth = 100;
+        // Back Button
+        int buttonWidth = 120;
         int buttonHeight = 40;
         backButton = new Rectangle(windowX + 30, windowY + windowHeight - buttonHeight - 20, buttonWidth, buttonHeight);
-        g2.setColor(Color.WHITE);
-        g2.fillRect(backButton.x, backButton.y, backButton.width, backButton.height);
-        g2.setColor(Color.BLACK);
-        g2.drawString("Back", backButton.x + 30, backButton.y + 25);
+        drawKandangButton(g2, backButton, "Back", new Color(70, 40, 20), new Color(100, 60, 30));
+
+        // Only show Breed button if a male is selected
+        if(selectedMale != null) {
+            breedConfirmButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, windowY + windowHeight - buttonHeight - 20, buttonWidth, buttonHeight);
+            drawKandangButton(g2, breedConfirmButton, "Breed", new Color(90, 130, 70), new Color(120, 170, 90));
+        }
     }
     
     public void drawRemoveMenu(Graphics2D g2, Kandang kandang) {
-        int windowWidth = gp.TILE_SIZE * 12;
+        int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
         int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
 
+        // Draw wooden background with border shadow
+        g2.setColor(new Color(0, 0, 0, 160));
+        g2.fillRoundRect(windowX-5, windowY-5, windowWidth+10, windowHeight+10, 20, 20);
         g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
+        
+        // Decorative hay frame
+        g2.setColor(new Color(218, 165, 32, 180));
+        g2.fillRoundRect(windowX+10, windowY+10, windowWidth-20, windowHeight-20, 15, 15);
+        
+        // Title banner
+        g2.setColor(new Color(120, 60, 30));
+        g2.fillRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
+        g2.setColor(new Color(255, 255, 255));
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
 
-        g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.BOLD, 30));
         String title = "Remove Animal";
         int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
         g2.drawString(title, titleX, windowY + 60);
 
+        // Animal list container
+        g2.setColor(new Color(30, 15, 0, 160));
+        g2.fillRoundRect(windowX + 20, windowY + 100, windowWidth - 40, windowHeight - 180, 15, 15);
+        g2.setColor(new Color(255, 255, 255));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRoundRect(windowX + 20, windowY + 100, windowWidth - 40, windowHeight - 180, 15, 15);
+
+        // Get all animals
         ArrayList<TameAnimal> animals = new ArrayList<>();
         if(kandang instanceof KandangAyam) {
             animals.addAll(((KandangAyam)kandang).chickensInCage);
@@ -986,58 +1168,128 @@ public class UI {
         int startY = windowY + 120;
         int lineHeight = 40;
 
+        // Headers
+        g2.setFont(new Font("Arial", Font.BOLD, 18));
+        g2.setColor(new Color(255, 230, 180));
+        g2.drawString("Animal", windowX + 35, startY);
+        g2.drawString("Gender", windowX + windowWidth - 200, startY);
+        
+        // Draw horizontal line below headers
+        g2.setStroke(new BasicStroke(1));
+        g2.drawLine(windowX + 30, startY + 10, windowX + windowWidth - 30, startY + 10);
+
         if(animals.isEmpty()) {
-            g2.drawString("No animals in cage!", windowX + 30, startY + 40);
+            g2.setFont(new Font("Arial", Font.ITALIC, 18));
+            g2.setColor(new Color(255, 200, 150));
+            g2.drawString("No animals in cage!", windowX + (windowWidth/2) - 80, startY + 50);
         } else {
-            int endIndex = Math.min(removeScrollPosition + ANIMALS_PER_PAGE + 2, animals.size());
+            int endIndex = Math.min(removeScrollPosition + ANIMALS_PER_PAGE, animals.size());
             for(int i = removeScrollPosition; i < endIndex; i++) {
                 TameAnimal animal = animals.get(i);
-                int y = startY + (i - removeScrollPosition) * lineHeight;
+                int y = startY + 35 + (i - removeScrollPosition) * lineHeight;
                 
-                if(i == selectedRemoveIndex) {
-                    g2.setColor(Color.BLACK);
-                    g2.drawRect(windowX + 25, y - 10, windowWidth - 50, lineHeight);
+                // Alternate row backgrounds
+                if((i - removeScrollPosition) % 2 == 0) {
+                    g2.setColor(new Color(120, 80, 40, 120));
+                } else {
+                    g2.setColor(new Color(90, 60, 30, 120));
                 }
+                g2.fillRoundRect(windowX + 30, y - 20, windowWidth - 60, lineHeight, 8, 8);
+                
+                // Selection highlight
+                if(i == selectedRemoveIndex) {
+                    g2.setColor(new Color(180, 100, 70, 180));
+                    g2.fillRoundRect(windowX + 30, y - 20, windowWidth - 60, lineHeight, 8, 8);
+                    g2.setColor(new Color(255, 255, 200));
+                    g2.drawRoundRect(windowX + 30, y - 20, windowWidth - 60, lineHeight, 8, 8);
+                }
+                
                 g2.setColor(Color.WHITE);
-                g2.drawString(animal.getName(), windowX + 30, y + 15);
+                g2.setFont(new Font("Arial", Font.BOLD, 16));
+                g2.drawString(animal.getName(), windowX + 40, y);
+                
+                // Gender with symbol
+                String genderText = animal.getGender() + " " + (animal.getGender().equalsIgnoreCase("Male") ? "♂" : "♀");
+                g2.drawString(genderText, windowX + windowWidth - 200, y);
+            }
+            
+            // Scrollbar if needed
+            if(animals.size() > ANIMALS_PER_PAGE) {
+                int scrollBarHeight = 200;
+                int scrollBarWidth = 15;
+                int scrollBarX = windowX + windowWidth - 35;
+                int scrollBarY = windowY + 130;
+                
+                // Draw scrollbar background
+                g2.setColor(new Color(60, 30, 0, 120));
+                g2.fillRoundRect(scrollBarX, scrollBarY, scrollBarWidth, scrollBarHeight, 7, 7);
+                
+                // Draw scrollbar handle
+                float handleRatio = (float)ANIMALS_PER_PAGE / animals.size();
+                int handleHeight = Math.max(30, (int)(scrollBarHeight * handleRatio));
+                int maxScroll = animals.size() - ANIMALS_PER_PAGE;
+                int handleY = scrollBarY + (int)(((float)removeScrollPosition / Math.max(1, maxScroll)) * (scrollBarHeight - handleHeight));
+                
+                g2.setColor(new Color(200, 150, 80));
+                g2.fillRoundRect(scrollBarX, handleY, scrollBarWidth, handleHeight, 7, 7);
             }
         }
 
-        // Back button
-        int buttonWidth = 100;
+        // Buttons
+        int buttonWidth = 120;
         int buttonHeight = 40;
+        
+        // Back button
         removeBackButton = new Rectangle(windowX + 30, windowY + windowHeight - buttonHeight - 20, buttonWidth, buttonHeight);
-        g2.setColor(Color.WHITE);
-        g2.fillRect(removeBackButton.x, removeBackButton.y, removeBackButton.width, removeBackButton.height);
-        g2.setColor(Color.BLACK);
-         g2.setFont(new Font("Arial", Font.BOLD, 16)); 
-        String text = "Back";
-        int textX = removeBackButton.x + (buttonWidth - g2.getFontMetrics().stringWidth(text))/2;
-        int textY = removeBackButton.y + (buttonHeight + g2.getFontMetrics().getHeight())/2 - 2;
-        g2.drawString(text, textX, textY);
+        drawKandangButton(g2, removeBackButton, "Back", new Color(70, 40, 20), new Color(100, 60, 30));
+        
+        // Remove button (only show if an animal is selected)
+        if(selectedRemoveIndex >= 0) {
+            removeConfirmButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, windowY + windowHeight - buttonHeight - 20, buttonWidth, buttonHeight);
+            drawKandangButton(g2, removeConfirmButton, "Remove", new Color(170, 70, 70), new Color(210, 90, 90));
+        }
     }
+
     public void drawKandangMenu(Graphics2D g2, Kandang kandang) {
-        int windowWidth = gp.TILE_SIZE * 12;
+        int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
         int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
-
+        
+        // Draw wooden background with border
+        g2.setColor(new Color(0, 0, 0, 160));
+        g2.fillRoundRect(windowX-5, windowY-5, windowWidth+10, windowHeight+10, 20, 20);
         g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
-
+        
+        // Decorative hay frame
+        g2.setColor(new Color(218, 165, 32, 180));
+        g2.fillRoundRect(windowX+10, windowY+10, windowWidth-20, windowHeight-20, 15, 15);
+        
+        // Title with decorative barn icon
+        g2.setColor(new Color(120, 60, 30));
+        g2.fillRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
+        g2.setColor(new Color(255, 255, 255));
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
+        
         g2.setColor(Color.WHITE);
         g2.setFont(new Font("Arial", Font.BOLD, 30));
         String title = kandang.getName() + " (" + kandang.getCurrentCapacity() + "/" + kandang.getMaxCapacity() + ")";
         int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
         g2.drawString(title, titleX, windowY + 60);
-
-        g2.setFont(new Font("Arial", Font.PLAIN, 20));
-        int startY = windowY + 80;
-        int lineHeight = 30;
         
+        // Animal list container
+        g2.setColor(new Color(30, 15, 0, 160));
+        g2.fillRoundRect(windowX + 20, windowY + 100, windowWidth - 40, windowHeight - 180, 15, 15);
+        g2.setColor(new Color(255, 255, 255));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRoundRect(windowX + 20, windowY + 100, windowWidth - 40, windowHeight - 180, 15, 15);
+        
+        // Get animal list based on cage type
         ArrayList<TameAnimal> animals = new ArrayList<>();
         if(kandang instanceof KandangAyam) {
             animals.addAll(((KandangAyam)kandang).chickensInCage);
-        }else if(kandang instanceof CowCage) {
+        } else if(kandang instanceof CowCage) {
             animals.addAll(((CowCage)kandang).cowsInCage);
         } else if(kandang instanceof SheepCage) {
             animals.addAll(((SheepCage)kandang).sheepsInCage);
@@ -1045,42 +1297,126 @@ public class UI {
             animals.addAll(((PigCage)kandang).pigsInCage);
         }
         
+        // Display animals with nicer formatting
+        g2.setFont(new Font("Arial", Font.PLAIN, 20));
+        int startY = windowY + 140;
+        int lineHeight = 32;
         int endIndex = Math.min(kandangScrollPosition + ANIMALS_PER_PAGE, animals.size());
+        
+        // Draw column headers
+        g2.setColor(new Color(255, 230, 180));
+        g2.setFont(new Font("Arial", Font.BOLD, 18));
+        g2.drawString("Animal", windowX + 30, startY - 10);
+        g2.drawString("Breeding Status", windowX + windowWidth/2 - 70, startY - 10);
+        g2.drawString("Product Status", windowX + windowWidth - 160, startY - 10);
+        
+        // Draw horizontal line below headers
+        g2.setStroke(new BasicStroke(1));
+        g2.drawLine(windowX + 30, startY, windowX + windowWidth - 30, startY);
+        
+        // Draw each animal with alternating row colors
         for(int i = kandangScrollPosition; i < endIndex; i++) {
             TameAnimal animal = animals.get(i);
-            int y = startY + (i - kandangScrollPosition) * (lineHeight * 2);
+            int y = startY + 25 + (i - kandangScrollPosition) * (lineHeight + 10);
             
+            // Alternate row backgrounds
+            if((i - kandangScrollPosition) % 2 == 0) {
+                g2.setColor(new Color(120, 80, 40, 120));
+            } else {
+                g2.setColor(new Color(90, 60, 30, 120));
+            }
+            g2.fillRoundRect(windowX + 25, y - 20, windowWidth - 50, lineHeight + 5, 10, 10);
+            
+            // Animal name with gender icon
             g2.setColor(Color.WHITE);
-            g2.drawString(animal.getName() + " (" + animal.getGender() + ")", windowX + 20, y);
-            g2.drawString("Breeding: " + (animal.isReadyBreeding() ? "Ready" : "Not Ready"), windowX + 20, y + lineHeight);
+            g2.setFont(new Font("Arial", Font.BOLD, 18));
+            String genderIcon = animal.getGender().equalsIgnoreCase("Male") ? "♂" : "♀";
+            g2.drawString(animal.getName() + " " + genderIcon, windowX + 30, y);
+            
+            // Breeding status with color indicator
+            String breedingStatus = animal.isReadyBreeding() ? "Ready" : "Not Ready";
+            g2.setColor(animal.isReadyBreeding() ? new Color(100, 255, 100) : new Color(255, 180, 100));
+            g2.drawString(breedingStatus, windowX + windowWidth/2 - 70, y);
+            
+            // Product status with color indicator
             if(animal instanceof Chicken || animal instanceof Cow || animal instanceof Sheep || animal instanceof Pig) {
-                g2.drawString("Get Item: " + (((TameAnimal)animal).isReadyGetItem() ? "Ready" : "Not Ready"), windowX + windowWidth/2, y + lineHeight);
+                String productStatus = ((TameAnimal)animal).isReadyGetItem() ? "Ready" : "Not Ready";
+                g2.setColor(((TameAnimal)animal).isReadyGetItem() ? new Color(100, 255, 100) : new Color(255, 180, 100));
+                g2.drawString(productStatus, windowX + windowWidth - 160, y);
             }
         }
-
-        int buttonWidth = 150;
+        
+        // Scrollbar if needed
+        if(animals.size() > ANIMALS_PER_PAGE) {
+            int scrollBarHeight = 200;
+            int scrollBarWidth = 15;
+            int scrollBarX = windowX + windowWidth - 35;
+            int scrollBarY = windowY + 130;
+            
+            // Draw scrollbar background
+            g2.setColor(new Color(60, 30, 0, 120));
+            g2.fillRoundRect(scrollBarX, scrollBarY, scrollBarWidth, scrollBarHeight, 7, 7);
+            
+            // Draw scrollbar handle
+            float handleRatio = (float)ANIMALS_PER_PAGE / animals.size();
+            int handleHeight = Math.max(30, (int)(scrollBarHeight * handleRatio));
+            int maxScroll = animals.size() - ANIMALS_PER_PAGE;
+            int handleY = scrollBarY + (int)(((float)kandangScrollPosition / maxScroll) * (scrollBarHeight - handleHeight));
+            
+            g2.setColor(new Color(200, 150, 80));
+            g2.fillRoundRect(scrollBarX, handleY, scrollBarWidth, handleHeight, 7, 7);
+        }
+        
+        // Action buttons with icon and hover effects
+        int buttonWidth = 180;
         int buttonHeight = 50;
         int buttonY = windowY + windowHeight - buttonHeight - 20;
         
+        // Breeding button
         breedButton = new Rectangle(windowX + 30, buttonY, buttonWidth, buttonHeight);
-        g2.setColor(Color.WHITE);
-        g2.fillRect(breedButton.x, breedButton.y, breedButton.width, breedButton.height);
-        g2.setColor(Color.BLACK);
-        g2.drawString("Breeding", breedButton.x + 40, breedButton.y + 30);
-
+        drawKandangButton(g2, breedButton, "Breeding", new Color(90, 130, 70), new Color(120, 170, 90));
+        
+        // Remove button
         removeButton = new Rectangle(windowX + (windowWidth - buttonWidth)/2, buttonY, buttonWidth, buttonHeight);
-        g2.setColor(Color.WHITE);
-        g2.fillRect(removeButton.x, removeButton.y, removeButton.width, removeButton.height);
-        g2.setColor(Color.BLACK);
-        g2.drawString("Remove", removeButton.x + 40, removeButton.y + 30);
-
+        drawKandangButton(g2, removeButton, "Remove Animal", new Color(170, 70, 70), new Color(200, 90, 90));
+        
+        // Get Item button
         getItemButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, buttonY, buttonWidth, buttonHeight);
-        g2.setColor(Color.WHITE);
-        g2.fillRect(getItemButton.x, getItemButton.y, getItemButton.width, getItemButton.height);
-        g2.setColor(Color.BLACK);
-        g2.drawString("Get Item", getItemButton.x + 40, getItemButton.y + 30);
+        drawKandangButton(g2, getItemButton, "Collect Products", new Color(70, 90, 140), new Color(90, 120, 180));
     }
-
+    public void drawKandangButton(Graphics2D g2, Rectangle button, String text, Color baseColor, Color hoverColor) {
+        // Check if mouse is hovering over button
+        Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+        SwingUtilities.convertPointFromScreen(mousePosition, gp);
+        boolean isHovering = button.contains(mousePosition);
+        
+        // Button shadow
+        g2.setColor(new Color(0, 0, 0, 80));
+        g2.fillRoundRect(button.x + 3, button.y + 3, button.width, button.height, 10, 10);
+        
+        // Button background
+        g2.setColor(isHovering ? hoverColor : baseColor);
+        g2.fillRoundRect(button.x, button.y, button.width, button.height, 10, 10);
+        
+        // Button border
+        g2.setColor(new Color(255, 255, 255, 180));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRoundRect(button.x, button.y, button.width, button.height, 10, 10);
+        
+        // Button text
+        g2.setFont(new Font("Arial", Font.BOLD, 18));
+        g2.setColor(Color.WHITE);
+        int textX = button.x + (button.width - g2.getFontMetrics().stringWidth(text))/2;
+        int textY = button.y + (button.height + g2.getFontMetrics().getHeight()/2)/2;
+        g2.drawString(text, textX, textY);
+        
+        // Subtle glow effect when hovering
+        if(isHovering) {
+            g2.setColor(new Color(255, 255, 200, 60));
+            g2.setStroke(new BasicStroke(3));
+            g2.drawRoundRect(button.x-2, button.y-2, button.width+4, button.height+4, 12, 12);
+        }
+    }
     public void handleKandangScroll(int notches) {
         if(inBreedingMenu) {
             breedingScrollPosition = Math.max(0, breedingScrollPosition - notches);
@@ -1134,35 +1470,125 @@ public class UI {
             }
         }
     }
+    
     public void drawNameInputWindow(Graphics2D g2) {
-        int windowWidth = 400;
-        int windowHeight = 200;
+        int windowWidth = gp.TILE_SIZE * 10;
+        int windowHeight = gp.TILE_SIZE * 7;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
         int windowY = gp.SCREEN_HEIGHT/2 - windowHeight/2;
 
-       
+        // Draw shadow background overlay
+        g2.setColor(new Color(0, 0, 0, 180));
+        g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
+        
+        // Draw wooden background with border shadow
+        g2.setColor(new Color(0, 0, 0, 160));
+        g2.fillRoundRect(windowX-5, windowY-5, windowWidth+10, windowHeight+10, 20, 20);
         g2.drawImage(woodBg, windowX, windowY, windowWidth, windowHeight, null);
-
-        g2.setFont(new Font("Arial", Font.BOLD, 20));
+        
+        // Decorative hay frame
+        g2.setColor(new Color(218, 165, 32, 180));
+        g2.fillRoundRect(windowX+10, windowY+10, windowWidth-20, windowHeight-20, 15, 15);
+        
+        // Title banner
+        g2.setColor(new Color(120, 60, 30));
+        g2.fillRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
         g2.setColor(Color.WHITE);
-        String title = "Name your " + animalToName.getClass().getSimpleName();
-        int titleX = getXCenteredText(title);
-        g2.drawString(title, titleX, windowY + 50);
+        g2.setStroke(new BasicStroke(3));
+        g2.drawRoundRect(windowX + 20, windowY + 20, windowWidth - 40, 60, 10, 10);
 
+        g2.setFont(new Font("Arial", Font.BOLD, 28));
+        String title = "Name Your Animal";
+        int titleX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(title))/2;
+        g2.drawString(title, titleX, windowY + 60);
+
+        // Input field background
+        g2.setColor(new Color(30, 15, 0, 160));
+        int fieldX = windowX + 50;
+        int fieldY = windowY + windowHeight/2 - 20;
+        int fieldWidth = windowWidth - 100;
+        int fieldHeight = 50;
+        g2.fillRoundRect(fieldX, fieldY, fieldWidth, fieldHeight, 10, 10);
+        
+        // Input field border
         g2.setColor(Color.WHITE);
-        g2.fillRect(textField.x, textField.y, textField.width, textField.height);
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRoundRect(fieldX, fieldY, fieldWidth, fieldHeight, 10, 10);
 
-        g2.setColor(Color.BLACK);
-        g2.setFont(new Font("Arial", Font.PLAIN, 16));
-        g2.drawString(currentInput, textField.x + 5, textField.y + 20);
-
-        if(System.currentTimeMillis() % 1000 < 500) {
-            g2.drawString("|", textField.x + 5 + g2.getFontMetrics().stringWidth(currentInput), textField.y + 20);
+        // Draw the current input text
+        g2.setFont(new Font("Arial", Font.PLAIN, 24));
+        g2.setColor(Color.WHITE);
+        String displayText = currentInput;
+        if(System.currentTimeMillis() / 500 % 2 == 0) { // Blinking cursor effect
+            displayText += "_";
         }
+        
+        int textX = fieldX + 10;
+        int textY = fieldY + 35;
+        g2.drawString(displayText, textX, textY);
 
-        g2.setFont(new Font("Arial", Font.ITALIC, 14));
+        // Instruction text
+        g2.setFont(new Font("Arial", Font.ITALIC, 16));
+        g2.setColor(new Color(255, 255, 200));
+        String instructions = "Type a name and press Enter";
+        int instructionsX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(instructions))/2;
+        g2.drawString(instructions, instructionsX, fieldY + fieldHeight + 30);
+        
+        // Character limit indicator
+        g2.setFont(new Font("Arial", Font.PLAIN, 14));
+        if(currentInput.length() > 12) {
+            g2.setColor(new Color(255, 100, 100));
+        } else {
+            g2.setColor(new Color(200, 200, 200));
+        }
+        String charLimit = currentInput.length() + "/15";
+        g2.drawString(charLimit, fieldX + fieldWidth - 40, fieldY + fieldHeight + 20);
+
+        // Buttons
+        int buttonWidth = 120;
+        int buttonHeight = 40;
+        int buttonY = windowY + windowHeight - buttonHeight - 30;
+        
+        // Confirm button
+        Rectangle confirmButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, buttonY, buttonWidth, buttonHeight);
+        drawButton(g2, confirmButton, "Confirm", 
+                currentInput.trim().isEmpty() ? new Color(100, 100, 100) : new Color(90, 130, 70));
+        
+        // Cancel button
+        Rectangle cancelButton = new Rectangle(windowX + 30, buttonY, buttonWidth, buttonHeight);
+        drawButton(g2, cancelButton, "Cancel", new Color(170, 70, 70));
+        
+        // Add warning if name is too long
+        if(currentInput.length() > 15) {
+            g2.setFont(new Font("Arial", Font.BOLD, 14));
+            g2.setColor(new Color(255, 100, 100));
+            String warning = "Name too long (15 chars max)";
+            int warningX = windowX + (windowWidth - g2.getFontMetrics().stringWidth(warning))/2;
+            g2.drawString(warning, warningX, fieldY - 10);
+        }
+    }
+
+    // Helper method for drawing nice buttons
+    public void drawButton(Graphics2D g2, Rectangle button, String text, Color baseColor) {
+        // Button shadow
+        g2.setColor(new Color(0, 0, 0, 80));
+        g2.fillRoundRect(button.x + 3, button.y + 3, button.width, button.height, 10, 10);
+        
+        // Button background
+        g2.setColor(baseColor);
+        g2.fillRoundRect(button.x, button.y, button.width, button.height, 10, 10);
+        
+        // Button border
+        g2.setColor(new Color(255, 255, 255, 180));
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRoundRect(button.x, button.y, button.width, button.height, 10, 10);
+        
+        // Button text
+        g2.setFont(new Font("Arial", Font.BOLD, 18));
         g2.setColor(Color.WHITE);
-        g2.drawString("Press ENTER to confirm", windowX + windowWidth/2 - 70, windowY + windowHeight - 30);
+        int textX = button.x + (button.width - g2.getFontMetrics().stringWidth(text))/2;
+        int textY = button.y + (button.height + g2.getFontMetrics().getHeight()/2)/2;
+        g2.drawString(text, textX, textY);
     }
 
     public void handleNameInput(char c) {
@@ -1174,6 +1600,7 @@ public class UI {
             }
         }
     }
+
     public void handleNameInputKey(int keyCode) {
         if(showNameInput) {
             if(keyCode == KeyEvent.VK_BACK_SPACE && currentInput.length() > 0) {

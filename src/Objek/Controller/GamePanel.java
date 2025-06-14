@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    public Player player = new Player("Player", 1, this, keyH);
+    public Player player = new Player("Player", 15, this, keyH);
     Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
