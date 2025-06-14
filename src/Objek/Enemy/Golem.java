@@ -312,40 +312,6 @@ public class Golem extends Monster {
     }
 
     public boolean isPreyNearby(Player player) {
-        int entityLeftX = player.worldX + player.solidArea.x;
-        int entityRightX = player.worldX + player.solidArea.x + player.solidArea.width;
-        int entityTopY = player.worldY + player.solidArea.y;
-        int entityBottomY = player.worldY + player.solidArea.y + player.solidArea.height;
-
-        int nextLeftX = entityLeftX;
-        int nextRightX = entityRightX;
-        int nextTopY = entityTopY;
-        int nextBottomY = entityBottomY;
-
-        switch(direction) {
-            case "up": nextTopY -= speed; break;
-            case "down": nextBottomY += speed; break;
-            case "left": nextLeftX -= speed; break;
-            case "right": nextRightX += speed; break;
-        }
-
-        int nextLeftCol = nextLeftX / gp.TILE_SIZE;
-        int nextRightCol = nextRightX / gp.TILE_SIZE;
-        int nextTopRow = nextTopY / gp.TILE_SIZE;
-        int nextBottomRow = nextBottomY / gp.TILE_SIZE; 
-
-        int validTile = 21;
-        
-        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];     // Top left
-        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];    // Top right
-        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];  // Bottom left
-        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow]; // Bottom right
-        
-        if(tileNum1 != validTile || tileNum2 != validTile || 
-        tileNum3 != validTile || tileNum4 != validTile) {
-            return false; // Tidak bisa bergerak jika ada tile yang bukan air
-        }
-
         if (player.health <= 0) {
             return false; // Tidak mengejar jika player sudah mati
         }
