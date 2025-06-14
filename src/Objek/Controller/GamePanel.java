@@ -107,6 +107,8 @@ public class GamePanel extends JPanel implements Runnable {
     public ArrayList<ItemDrop> droppedItems = new ArrayList<>();
     public ArrayList<Buildings> buildings = new ArrayList<>();
     public ArrayList<Ore> ores = new ArrayList<>();
+
+    public ArrayList<Plant> removedPlants = new ArrayList<>();
     
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -354,6 +356,10 @@ public class GamePanel extends JPanel implements Runnable {
                 animals.get(i).update();
             }
         }
+        for (Plant p : removedPlants){
+            plants.remove(p);
+        }
+        removedPlants.clear();
         if (currentMap == 1) {
             for (int i = 0; i < fish.size(); i++) {
                 fish.get(i).update();

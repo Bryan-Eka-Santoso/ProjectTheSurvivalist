@@ -275,7 +275,7 @@ public class UseItem {
                 player.cutting();
                 
                 if (player.plantIndex != -1 && gp.currentMap == 0) {
-                    Plant plant = player.gp.plants.get(player.plantIndex);
+                    Plant plant = gp.plants.get(player.plantIndex);
 
                     plant.hp -= arsenal.damage;
                     if (selectedItem instanceof Axe){
@@ -318,7 +318,7 @@ public class UseItem {
                             }
                             player.totalBushesCut++;
                         }
-                        player.gp.plants.remove(player.plantIndex);
+                        gp.removedPlants.add(plant);
                         player.plantIndex = -1; 
                     }
                     playSE(6);
@@ -662,7 +662,7 @@ public class UseItem {
             // Punching with bare hands
             int fistDamage = 4;
             if (player.plantIndex != -1) {
-                Plant plant = player.gp.plants.get(player.plantIndex);
+                Plant plant = gp.plants.get(player.plantIndex);
                 plant.hp -= fistDamage;
                 System.out.println("Punching plant with bare hands! Plant HP: " + plant.hp);
                 if (plant.hp <= 0) {
@@ -686,7 +686,7 @@ public class UseItem {
                         }
                         player.totalBushesCut++;
                     }
-                    player.gp.plants.remove(player.plantIndex);
+                    gp.plants.remove(player.plantIndex);
                     player.plantIndex = -1; 
                 }
                 playSE(6);
