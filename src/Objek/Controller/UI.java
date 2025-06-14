@@ -126,6 +126,7 @@ public class UI {
     public ArrayList<ShopItem> shopItems = new ArrayList<>();
     public ArrayList<Rectangle> shopItemRects = new ArrayList<>();
     public Rectangle shopExitButton;
+    public Rectangle pauseQuitButton;
     public ArrayList<ShopEffect> effectItems = new ArrayList<>();
     public ArrayList<Rectangle> effectItemRects = new ArrayList<>();
     public Rectangle effectExitButton;
@@ -133,6 +134,7 @@ public class UI {
     public boolean showPurchaseSuccess = false;
     public boolean showInsufficientFunds = false;
     public boolean showUnfulfilledRequirements = false;
+    public boolean showLevelUpMessage = false;
     public long messageTimer = 0;
     public final long MESSAGE_DURATION = 2000;
     public boolean showNeedBucketMessage = false;
@@ -304,9 +306,15 @@ public class UI {
             }
         }
         if (showUnfulfilledRequirements) {
-            drawText("You don't meet the requirements!", Color.RED);
+            drawText("No items detected for repairment!", Color.RED);
             if(System.currentTimeMillis() - messageTimer > MESSAGE_DURATION) {
                 showUnfulfilledRequirements = false;
+            }
+        }
+        if (showLevelUpMessage) {
+            drawText("You've leveled up to " + gp.player.level + "!", Color.GREEN);
+            if(System.currentTimeMillis() - messageTimer > MESSAGE_DURATION) {
+                showLevelUpMessage = false;
             }
         }
 
@@ -1958,12 +1966,12 @@ public class UI {
 
                 // Create a GlyphVector for the text
                 java.awt.font.GlyphVector gv = font.createGlyphVector(g2.getFontRenderContext(), text);
-                Shape textShape = gv.getOutline(getXForCenteredText(text) - text.length()+ 50, cursorY - 50);
+                Shape textShape = gv.getOutline(getXForCenteredText(text) - text.length()+ 55, cursorY - 50);
 
                 // Create gradient paint
                 GradientPaint gradient = new GradientPaint(
-                    getXForCenteredText(text) - text.length() + 50, cursorY - 100 - (float)bounds.getHeight(), new Color(103, 238, 255),
-                    getXForCenteredText(text) - text.length() + 50 + (float)bounds.getWidth(), cursorY - (float)bounds.getHeight(), Color.WHITE
+                    getXForCenteredText(text) - text.length() + 55, cursorY - 100 - (float)bounds.getHeight(), new Color(103, 238, 255),
+                    getXForCenteredText(text) - text.length() + 55 + (float)bounds.getWidth(), cursorY - (float)bounds.getHeight(), new Color(255, 239, 94)
                 );
                 Paint oldPaint = g2.getPaint();
                 g2.setPaint(gradient);
@@ -2395,13 +2403,33 @@ public class UI {
     }
 
     public void drawPauseScreen() {
-        String text = "PAUSED";
+        g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
+        g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
 
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 28));
+        String text = "PAUSED";
         int textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         int x = gp.SCREEN_WIDTH / 2 - textLength / 2;
         int y = gp.SCREEN_HEIGHT / 2;
+        g2.drawString(text, x, y - 50);
 
-        g2.drawString(text, x, y);
+        // Draw "Quit" button
+        int buttonWidth = 140;
+        int buttonHeight = 40;
+        int buttonX = gp.SCREEN_WIDTH / 2 - buttonWidth / 2;
+        int buttonY = y - 10;
+        pauseQuitButton = new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight);
+
+        g2.setColor(Color.RED);
+        g2.drawRoundRect(buttonX, buttonY, buttonWidth, buttonHeight, 15, 15);
+        g2.fillRoundRect(buttonX, buttonY, buttonWidth, buttonHeight, 15, 15);
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 24));
+        String quitText = "Quit";
+        int quitTextX = buttonX + (buttonWidth - g2.getFontMetrics().stringWidth(quitText)) / 2;
+        int quitTextY = buttonY + (buttonHeight + g2.getFontMetrics().getHeight()) / 2 - 4;
+        g2.drawString(quitText, quitTextX, quitTextY);
     }
 
     public int getXCenteredText(String text) {
@@ -2415,7 +2443,6 @@ public class UI {
         Color c = new Color(0, 0, 0, 210);
         g2.setColor(c);
         g2.fillRoundRect(x, y, width, height, 35, 35);
-
         c = new Color(255, 255, 255);
         g2.setColor(c);
         g2.setStroke(new BasicStroke(5));
@@ -2830,7 +2857,7 @@ public class UI {
             try {
                 lock = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/lock.png"));
             } catch (Exception e) {
-                // TODO: handle exception
+                e.printStackTrace();
             }
 
             // Buy button - centered
@@ -2990,6 +3017,7 @@ public class UI {
                 gp.player.hasLegendaryItem = true;
             }
             gp.player.coins -= item.price;
+            item.item.currentStack++;
             gp.player.inventory.addItems(item.item);
             
             // Add item to inventory
@@ -3037,6 +3065,10 @@ public class UI {
         }
     }
     private boolean isEffectUsable(ShopEffect effect) {
+        if (effect.category == 0) {
+            // For selling items, always usable
+            return true;
+        }
         if (effect.name.equals("Repair Arsenal")) {
             for (Item item : gp.player.inventory.slots) {
                 if (item instanceof Arsenal && ((Arsenal)item).durability < ((Arsenal)item).maxDurability) {

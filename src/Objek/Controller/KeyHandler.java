@@ -56,6 +56,13 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if (gp.gameState == gp.PAUSE_STATE && gp.ui.pauseQuitButton != null && gp.ui.pauseQuitButton.contains(e.getX(), e.getY())) {
+            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(gp);
+            topFrame.setContentPane(new MenuPanel(topFrame));
+            topFrame.revalidate();
+            topFrame.repaint();
+            gp.sound.stop();
+        }
         if(gp.gameState == gp.KANDANG_STATE) {
             gp.ui.handleKandangClick(e.getX(), e.getY(), gp.currentKandang, gp.player);
         }
@@ -503,7 +510,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.gameState = gp.PLAY_STATE;
             gp.player.inventory.removeItem(new Immortality(), 1);
             gp.player.health = 40;
-        } else if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) {
+        } else if ((gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) || gp.gameState == gp.PLAY_STATE) {
             gp.player.useItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
         }
     }
@@ -684,6 +691,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             } 
             if (gp.ui.slotCol > 0) {
                 gp.ui.slotCol--;
+                gp.ui.selectedIndex = gp.ui.slotCol;
                 playSE(2);
             } else {
                 playSE(2);
@@ -736,6 +744,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.ui.slotCol++;
             } else {
                 gp.ui.slotCol = 0;
+                gp.ui.selectedIndex = gp.ui.slotCol;
+
             }
             gp.ui.selectedIndex = gp.ui.slotCol;
             playSE(2);

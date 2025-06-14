@@ -231,7 +231,7 @@ public class InteractBuild {
             gp.ui.shopItems.add(new ShopItem(new Strings(1), 6, 3));
             gp.ui.shopItems.add(new ShopItem(new Wheat(1), 6, 3));
 
-            // Legendary Items (category 4) - keep at 100
+            // Legendary Items (category 4)
             gp.ui.shopItems.add(new ShopItem(new RapidBoots(), 100, 4));
             gp.ui.shopItems.add(new ShopItem(new HaasClaws(), 100, 4));
             gp.ui.shopItems.add(new ShopItem(new Immortality(), 100, 4));
