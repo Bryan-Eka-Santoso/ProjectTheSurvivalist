@@ -237,6 +237,7 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new RapidBoots());
         player.inventory.addItems(new Immortality());
         player.inventory.addItems(new CursedHelmet());
+        player.inventory.addItems(new KandangAyam(this, 1));
 
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
