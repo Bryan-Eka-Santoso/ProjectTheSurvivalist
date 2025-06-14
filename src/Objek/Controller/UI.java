@@ -715,20 +715,22 @@ public class UI {
             if(selectedRemoveIndex < animals.size() - 1) selectedRemoveIndex++;
         }
         else if(keyCode == KeyEvent.VK_ENTER && !animals.isEmpty()) {
-            TameAnimal animal = animals.get(selectedRemoveIndex);
-            if(kandang instanceof KandangAyam) {
-                ((KandangAyam)kandang).chickensInCage.remove(animal);
-            } else if(kandang instanceof CowCage) {
-                ((CowCage)kandang).cowsInCage.remove(animal);
-            } else if(kandang instanceof SheepCage) {
-                ((SheepCage)kandang).sheepsInCage.remove(animal);
-            } else if(kandang instanceof PigCage) {
-                ((PigCage)kandang).pigsInCage.remove(animal);
+            if(player.grabbedAnimal == null){
+                TameAnimal animal = animals.get(selectedRemoveIndex);
+                if(kandang instanceof KandangAyam) {
+                    ((KandangAyam)kandang).chickensInCage.remove(animal);
+                } else if(kandang instanceof CowCage) {
+                    ((CowCage)kandang).cowsInCage.remove(animal);
+                } else if(kandang instanceof SheepCage) {
+                    ((SheepCage)kandang).sheepsInCage.remove(animal);
+                } else if(kandang instanceof PigCage) {
+                    ((PigCage)kandang).pigsInCage.remove(animal);
+                }
+                player.grabbedAnimal = animal;
+                gp.gameState = gp.PLAY_STATE;
+                inRemoveMenu = false;
+                selectedRemoveIndex = 0;
             }
-            player.grabbedAnimal = animal;
-            gp.gameState = gp.PLAY_STATE;
-            inRemoveMenu = false;
-            selectedRemoveIndex = 0;
         }
     }
     public void handleGetItemKeyPress(int keyCode, Kandang kandang, Player player) {
