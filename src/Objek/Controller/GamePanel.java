@@ -20,6 +20,7 @@ import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
 import Objek.Items.Unstackable.Armor.Helmet.CursedHelmet;
 import Objek.Items.Unstackable.Armor.Helmet.GuardianHelmet;
 import Objek.Items.Unstackable.Arsenals.HaasClaws;
+import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -50,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    public Player player = new Player("Player", 1, this, keyH);
+    public Player player = new Player("Player", 15, this, keyH);
     Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
@@ -237,6 +238,8 @@ public class GamePanel extends JPanel implements Runnable {
         player.inventory.addItems(new RapidBoots());
         player.inventory.addItems(new Immortality());
         player.inventory.addItems(new CursedHelmet());
+        player.inventory.addItems(new KandangAyam(this, 0)); 
+        player.inventory.addItems(new WindAxe()); 
 
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;

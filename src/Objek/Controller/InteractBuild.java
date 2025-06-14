@@ -159,6 +159,9 @@ public class InteractBuild {
                 initEffectItems();
             }
         }
+        else if(building instanceof KandangAyam){
+            
+        }
     }
 
     public void initShopItems() {
