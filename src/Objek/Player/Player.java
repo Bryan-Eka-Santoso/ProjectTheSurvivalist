@@ -68,6 +68,7 @@ public class Player {
     public Rectangle solidArea;
     public boolean collisionOn = false;
     public boolean isBuild = false; 
+    public boolean autoPickupItems = false;
     public UseItem interactObj;
     public final int SCREEN_Y;
     public final int SCREEN_X;
@@ -447,6 +448,16 @@ public class Player {
 
                 if (health > maxHealth) {
                     health = maxHealth; // Ensure health does not exceed maxHealth
+                }
+            }
+        }
+
+        if (autoPickupItems){
+           if (gp.player.droppedItem != -1) {
+                if (!gp.droppedItems.isEmpty() && gp.currentMap == gp.droppedItems.get(gp.player.droppedItem).mapIndex) {
+                    gp.player.pickUpItem(gp.droppedItems.get(gp.player.droppedItem).droppedItem);
+                    playSE(22);
+                    gp.player.droppedItem = -1;
                 }
             }
         }

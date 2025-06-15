@@ -131,6 +131,7 @@ public class UI {
     public ArrayList<Rectangle> shopItemRects = new ArrayList<>();
     public Rectangle shopExitButton;
     public Rectangle pauseQuitButton;
+    public Rectangle autoPickUpDropsButton;
     public ArrayList<ShopEffect> effectItems = new ArrayList<>();
     public ArrayList<Rectangle> effectItemRects = new ArrayList<>();
     public Rectangle effectExitButton;
@@ -2845,7 +2846,7 @@ public class UI {
         int buttonWidth = 140;
         int buttonHeight = 40;
         int buttonX = gp.SCREEN_WIDTH / 2 - buttonWidth / 2;
-        int buttonY = y - 10;
+        int buttonY = y - 20;
         pauseQuitButton = new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight);
 
         g2.setColor(Color.RED);
@@ -2857,6 +2858,23 @@ public class UI {
         int quitTextX = buttonX + (buttonWidth - g2.getFontMetrics().stringWidth(quitText)) / 2;
         int quitTextY = buttonY + (buttonHeight + g2.getFontMetrics().getHeight()) / 2 - 4;
         g2.drawString(quitText, quitTextX, quitTextY);
+
+        // Draw "Auto Pickup Items" toggle
+        int toggleWidth = 190;
+        int toggleHeight = 40;
+        int toggleX = gp.SCREEN_WIDTH / 2 - toggleWidth / 2;
+        int toggleY = y + 40;
+
+        autoPickUpDropsButton = new Rectangle(toggleX, toggleY, toggleWidth, toggleHeight);
+        g2.setColor(gp.player.autoPickupItems ? Color.GREEN : Color.GRAY); // Green if ON, Red if OFF
+        g2.drawRoundRect(toggleX, toggleY, toggleWidth, toggleHeight, 15, 15);
+        g2.fillRoundRect(toggleX, toggleY, toggleWidth, toggleHeight, 15, 15);
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 24));
+        String toggleText = "Auto-Pickup";
+        int toggleTextX = toggleX + (toggleWidth - g2.getFontMetrics().stringWidth(toggleText)) / 2;
+        int toggleTextY = toggleY + (toggleHeight + g2.getFontMetrics().getHeight()) / 2 - 4;
+        g2.drawString(toggleText, toggleTextX, toggleTextY);
     }
 
     public int getXCenteredText(String text) {

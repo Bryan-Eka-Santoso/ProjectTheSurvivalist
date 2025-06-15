@@ -56,12 +56,16 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (gp.gameState == gp.PAUSE_STATE && gp.ui.pauseQuitButton != null && gp.ui.pauseQuitButton.contains(e.getX(), e.getY())) {
-            JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(gp);
-            topFrame.setContentPane(new MenuPanel(topFrame));
-            topFrame.revalidate();
-            topFrame.repaint();
-            gp.sound.stop();
+        if (gp.gameState == gp.PAUSE_STATE) {
+            if (gp.ui.pauseQuitButton != null && gp.ui.pauseQuitButton.contains(e.getX(), e.getY())){
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(gp);
+                topFrame.setContentPane(new MenuPanel(topFrame));
+                topFrame.revalidate();
+                topFrame.repaint();
+                gp.sound.stop();
+            } else if (gp.ui.autoPickUpDropsButton != null && gp.ui.autoPickUpDropsButton.contains(e.getX(), e.getY())) {
+                gp.player.autoPickupItems = !gp.player.autoPickupItems;
+            } 
         }
         if(gp.gameState == gp.KANDANG_STATE) {
             gp.ui.handleKandangClick(e.getX(), e.getY(), gp.currentKandang, gp.player);
@@ -849,7 +853,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
                     gp.player.inventory.slots[gp.ui.selectedIndex] = null;
                 }
-                gp.fish.remove(gp.ui.fishIndex);
+                gp.removedFish.add(gp.fish.get(gp.ui.fishIndex));
                 gp.player.totalFishCaught++;
                 
                 gp.gameState = gp.PLAY_STATE;
@@ -861,7 +865,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
                     gp.player.inventory.slots[gp.ui.selectedIndex] = null;
                 }
-                gp.fish.remove(gp.ui.fishIndex);
+                gp.removedFish.add(gp.fish.get(gp.ui.fishIndex));
                 
                 gp.gameState = gp.PLAY_STATE;
             }
