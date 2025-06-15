@@ -472,7 +472,7 @@ public class CollisonChecker {
                             if (rand.nextInt(10) < 2) {
                                 gp.player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
-                            gp.player.gp.animals.remove(animal);
+                            gp.removedAnimals.add(animal);
                             gp.player.gainExp(rand.nextInt(10) + 9);
                             gp.player.animalIndex = -1;
                         }
@@ -801,7 +801,7 @@ public class CollisonChecker {
                         if (monster instanceof Golem) {
                             gp.player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
                         }
-                        gp.player.gp.monsters.remove(monster);
+                        gp.removedMonsters.add(monster);
                         gp.player.gainExp(rand.nextInt(10) + 9);
                         gp.player.monsterIndex = -1;
                     }

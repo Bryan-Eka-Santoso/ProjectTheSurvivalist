@@ -68,7 +68,25 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             } 
         }
         if(gp.gameState == gp.KANDANG_STATE) {
-            gp.ui.handleKandangClick(e.getX(), e.getY(), gp.currentKandang, gp.player);
+            if (gp.ui.inGetItemMenu && gp.ui.getItemCollectButton != null && gp.ui.removeConfirmButton.contains(e.getX(), e.getY())){
+                gp.ui.handleGetItemKeyPress(KeyEvent.VK_ENTER, gp.currentKandang, gp.player);
+            } else if (gp.ui.inBreedingMenu && gp.ui.breedConfirmButton != null && gp.ui.breedConfirmButton.contains(e.getX(), e.getY())) {
+                System.out.println("Breed confirm button clicked");
+                gp.ui.handleBreedingKeyPress(KeyEvent.VK_ENTER, gp.currentKandang);
+            } else if (gp.ui.inRemoveMenu && gp.ui.removeConfirmButton != null && gp.ui.removeConfirmButton.contains(e.getX(), e.getY())) {
+                System.out.println("Remove confirm button clicked");
+                gp.ui.handleRemoveKeyPress(KeyEvent.VK_ENTER, gp.currentKandang, gp.player);
+            } 
+            else gp.ui.handleKandangClick(e.getX(), e.getY(), gp.currentKandang, gp.player);
+        }
+        if (gp.ui.showNameInput){
+            if (gp.ui.confirmButton != null && gp.ui.confirmButton.contains(e.getX(), e.getY())) {
+                System.out.println("Confirm button clicked");
+                gp.ui.handleNameInputKey(KeyEvent.VK_ENTER);
+            } else if (gp.ui.cancelButton != null && gp.ui.cancelButton.contains(e.getX(), e.getY())) {
+                System.out.println("Cancel button clicked");
+                gp.ui.showNameInput = false;
+            }
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE) {
             gp.ui.mouseX = e.getX();

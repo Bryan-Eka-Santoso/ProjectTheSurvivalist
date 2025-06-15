@@ -132,6 +132,8 @@ public class UI {
     public Rectangle shopExitButton;
     public Rectangle pauseQuitButton;
     public Rectangle autoPickUpDropsButton;
+    public Rectangle confirmButton;
+    public Rectangle cancelButton;
     public ArrayList<ShopEffect> effectItems = new ArrayList<>();
     public ArrayList<Rectangle> effectItemRects = new ArrayList<>();
     public Rectangle effectExitButton;
@@ -1559,12 +1561,12 @@ public class UI {
         int buttonY = windowY + windowHeight - buttonHeight - 30;
         
         // Confirm button
-        Rectangle confirmButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, buttonY, buttonWidth, buttonHeight);
+        confirmButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, buttonY, buttonWidth, buttonHeight);
         drawButton(g2, confirmButton, "Confirm", 
                 currentInput.trim().isEmpty() ? new Color(100, 100, 100) : new Color(90, 130, 70));
         
         // Cancel button
-        Rectangle cancelButton = new Rectangle(windowX + 30, buttonY, buttonWidth, buttonHeight);
+        cancelButton = new Rectangle(windowX + 30, buttonY, buttonWidth, buttonHeight);
         drawButton(g2, cancelButton, "Cancel", new Color(170, 70, 70));
         
         // Add warning if name is too long

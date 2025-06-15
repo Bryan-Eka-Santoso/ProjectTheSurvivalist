@@ -252,7 +252,11 @@ public class Player {
     private void handlePoisonEffect() {
         if(isPoisoned) {
             poisonCounter++;
-            playSE(24);
+            if (soundCounter == 0) {
+                playSE(24); // Play poison sound effect
+            }
+            soundCounter++;
+            if (soundCounter > 120) soundCounter = 0; // Reset sound counter after 2 seconds
             
             // Damage setiap 60 frames (1 detik)
             if(poisonCounter % 60 == 0) {
@@ -362,7 +366,7 @@ public class Player {
                                 }
                                 this.gainExp(rand.nextInt(10) + 9);
                             }
-                            gp.animals.remove(animal);
+                            gp.removedAnimals.add(animal);
                         }
                     }
                 }
@@ -380,7 +384,7 @@ public class Player {
                                 this.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
                                 this.gainExp(rand.nextInt(20) + 35);
                             }
-                            gp.monsters.remove(monster);
+                            gp.removedMonsters.add(monster);
                         }
                     }
                 }
@@ -698,7 +702,7 @@ public class Player {
 
         grabbedAnimal = animal;
 
-        gp.animals.remove(animal);
+        gp.removedAnimals.add(grabbedAnimal);
         updateGrabbedAnimalPosition();
         grabbedAnimal.grab();
         System.out.println("Grabbed " + animal.getName());

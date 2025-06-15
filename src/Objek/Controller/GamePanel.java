@@ -13,14 +13,6 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
-import Objek.Items.Unstackable.Immortality;
-import Objek.Items.Unstackable.Lantern;
-import Objek.Items.Unstackable.WinterCrown;
-import Objek.Items.Unstackable.Armor.Boots.RapidBoots;
-import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
-import Objek.Items.Unstackable.Armor.Helmet.CursedHelmet;
-import Objek.Items.Unstackable.Armor.Helmet.GuardianHelmet;
-import Objek.Items.Unstackable.Arsenals.HaasClaws;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -51,7 +43,7 @@ public class GamePanel extends JPanel implements Runnable {
     
     KeyHandler keyH = new KeyHandler(this);
     MouseHandler mouseHandler = new MouseHandler(this);
-    public Player player = new Player("Player", 15, this, keyH);
+    public Player player = new Player("Player", 1, this, keyH);
     Crafting recipe = new Crafting(this);
     public TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
@@ -236,16 +228,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new Chest(this, 1, 0));
-        player.inventory.addItems(new Lantern(this));
-        player.inventory.addItems(new WinterCrown());
-        player.inventory.addItems(new HaasClaws());
-        player.inventory.addItems(new GuardianHelmet());
-        player.inventory.addItems(new BladeArmor());
-        player.inventory.addItems(new RapidBoots());
-        player.inventory.addItems(new Immortality());
-        player.inventory.addItems(new CursedHelmet());
-        player.inventory.addItems(new KandangAyam(this, 1));
 
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
