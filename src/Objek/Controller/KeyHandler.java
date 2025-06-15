@@ -580,7 +580,9 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.daysAlive = 0;
                 gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
+            Boolean restore = gp.player.autoPickupItems;
             gp.player = new Player("Player", gp.player.level, gp, gp.keyH);
+            gp.player.autoPickupItems = restore; // Restore auto pickup state
             gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
             gp.currentMap = 0;
             gp.fish.clear();
@@ -867,7 +869,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 } 
                 
                 ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength = ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).maxStr;
-                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability -= 20;
+                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability -= 7;
                 if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
                     gp.player.inventory.slots[gp.ui.selectedIndex] = null;
                 }
