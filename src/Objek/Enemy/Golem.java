@@ -94,6 +94,7 @@ public class Golem extends Monster {
         soundCounter++;
         if (soundCounter >= 140) {
             soundCounter = 0;
+            gp.playMusic(7);
         }
         if(actionLockCounter < actionLockEnemyNearby) {
             return; 
