@@ -154,13 +154,7 @@ public class InteractBuild {
         }
         else if(building instanceof EffectTable){
             gp.gameState = gp.EFFECT_STATE;
-
-            if (gp.ui.effectItems.isEmpty()) {
-                initEffectItems();
-            }
-        }
-        else if(building instanceof KandangAyam){
-            
+            initEffectItems();
         }
     }
 

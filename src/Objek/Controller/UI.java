@@ -147,18 +147,7 @@ public class UI {
     public boolean showNeedBucketMessage = false;
     public long needBucketMessageTimer = 0;
     public final long NEED_BUCKET_MESSAGE_DURATION = 2000;
-    public ArrayList<ShopItem> getShopItemsByCategory(int category) {
 
-    ArrayList<ShopItem> result = new ArrayList<>();
-    
-    for (ShopItem item : shopItems) {
-        if (item.category == category) {
-            result.add(item);
-        }
-    }
-    
-    return result;
-}
     
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -171,13 +160,13 @@ public class UI {
             e.printStackTrace();
         }
     }
-
+    
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-
+        
         g2.setFont(new Font("Arial", Font.PLAIN, 40));
         g2.setColor(Color.white);
-
+        
         if(gp.gameState == gp.SHOP_STATE) {
             drawShopMenu();
         }
@@ -231,8 +220,8 @@ public class UI {
             }
         }
         if (gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE 
-            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE 
-            && gp.gameState != gp.EFFECT_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
+        && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE 
+        && gp.gameState != gp.EFFECT_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
             drawStats();
         }
         if (showNameInput) {
@@ -324,7 +313,7 @@ public class UI {
                 showLevelUpMessage = false;
             }
         }
-
+        
         if (achievementToShow != null) {
             if (System.currentTimeMillis() - achievementNotificationTime < 3000) { // 3 seconds
                 g2.setColor(new Color(0,0,0,180));
@@ -344,19 +333,34 @@ public class UI {
             }
         }
     }
-
+    
     // In UI.java
     private long achievementNotificationTime = 0;
     private Achievement achievementToShow = null;
+    
+    public ArrayList<ShopItem> getShopItemsByCategory(int category) {
+
+        ArrayList<ShopItem> result = new ArrayList<>();
+        
+        for (ShopItem item : shopItems) {
+            if (item.category == category) {
+                result.add(item);
+            }
+        }
+        
+        return result;
+    }
 
     public void showAchievementNotification(Achievement a) {
         achievementToShow = a;
         achievementNotificationTime = System.currentTimeMillis();
     }
+
     public void showNeedBucketMessage() {
         showNeedBucketMessage = true;
         needBucketMessageTimer = System.currentTimeMillis();
     }
+
     public void drawNeedBucketMessage(Graphics2D g2) {
         if(System.currentTimeMillis() - needBucketMessageTimer >= NEED_BUCKET_MESSAGE_DURATION) {
             showNeedBucketMessage = false;
@@ -3464,15 +3468,14 @@ public class UI {
                 gp.player.hasLegendaryItem = true;
             }
             gp.player.coins -= item.price;
-            item.item.currentStack++;
-            gp.player.inventory.addItems(item.item);
+            gp.player.inventory.addItems(item.item.clone());
             
             // Add item to inventory
             // boolean added = gp.player.inventory.addItems(item.item);
             
             // if(added) {
-                showPurchaseSuccess = true;
-                messageTimer = System.currentTimeMillis();
+            showPurchaseSuccess = true;
+            messageTimer = System.currentTimeMillis();
             // } else {
                 // Refund if inventory is full
                 // gp.player.coins += item.price;

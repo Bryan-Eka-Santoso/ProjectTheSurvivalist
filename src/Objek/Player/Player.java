@@ -95,7 +95,7 @@ public class Player {
     private static final int GUARDIAN_HELMET_DURATION = 60; // 1 detik diitung dari frame
     int hungerCounter = 0;
     int thirstCounter = 0;
-    public int coins = 999;
+    public int coins = 0;
     int healthCounter = 0;
     private int poisonCounter = 0;
     int soundCounter = 0;
