@@ -68,7 +68,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             } 
         }
         if(gp.gameState == gp.KANDANG_STATE) {
-            if (gp.ui.inGetItemMenu && gp.ui.getItemCollectButton != null && gp.ui.removeConfirmButton.contains(e.getX(), e.getY())){
+            if (gp.ui.inGetItemMenu && gp.ui.getItemCollectButton != null && gp.ui.getItemCollectButton.contains(e.getX(), e.getY())){
                 gp.ui.handleGetItemKeyPress(KeyEvent.VK_ENTER, gp.currentKandang, gp.player);
             } else if (gp.ui.inBreedingMenu && gp.ui.breedConfirmButton != null && gp.ui.breedConfirmButton.contains(e.getX(), e.getY())) {
                 System.out.println("Breed confirm button clicked");

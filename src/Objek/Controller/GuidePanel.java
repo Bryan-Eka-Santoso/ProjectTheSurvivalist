@@ -25,27 +25,27 @@ public class GuidePanel extends JPanel {
 
         JPanel containerPanel = new JPanel();
         containerPanel.setLayout(null);
-        containerPanel.setPreferredSize(new Dimension(1100, 1280)); // Tambah tinggi untuk tombol back
+        containerPanel.setPreferredSize(new Dimension(1100, 1400)); // Tambah tinggi untuk tombol back
         containerPanel.setBackground(Color.BLACK);
 
         // Container gerak (lebih kecil)
-        movementContainer = createGuideContainer("Petunjuk Bergerak", 30, 200);
+        movementContainer = createGuideContainer("Petunjuk Bergerak", 590, 220);
         containerPanel.add(movementContainer);
         isiPetunjukGerak();
 
         // Container interaksi (lebih tinggi karena banyak baris)
-        interactionContainer = createGuideContainer("Petunjuk Interaksi", 250, 520);
+        interactionContainer = createGuideContainer("Petunjuk Interaksi", 830, 520);
         containerPanel.add(interactionContainer);
         isiPetunjukInteraksi();
 
         // Mekanisme Game Container
-        mekanismeContainer = createGuideContainer("Mekanisme Game", 790, 370);
+        mekanismeContainer = createGuideContainer("Mekanisme Game", 100, 470);
         containerPanel.add(mekanismeContainer);
         isiMekanismeGame();
 
         // Tambahkan tombol back
         JButton backButton = createBackButton();
-        backButton.setBounds(475, 1200, 150, 50); // Posisi di bawah semua container
+        backButton.setBounds(700, 30, 350, 50);
         containerPanel.add(backButton);
 
         JScrollPane scrollPane = new JScrollPane(containerPanel);
@@ -63,9 +63,9 @@ public class GuidePanel extends JPanel {
     private JButton createBackButton() {
         JButton backButton = new JButton("BACK TO MENU");
         backButton.setFont(pixelFont.deriveFont(Font.BOLD, 18f));
-        backButton.setForeground(Color.WHITE);
+        backButton.setForeground(Color.RED);
         backButton.setBackground(new Color(60, 60, 60));
-        backButton.setBorder(new LineBorder(Color.WHITE, 2));
+        backButton.setBorder(new LineBorder(Color.RED, 2));
         backButton.setFocusPainted(false);
         
         // Hover effect
@@ -143,10 +143,10 @@ public class GuidePanel extends JPanel {
         movementContainer.add(titleLabel);
 
         String[] petunjuk = {
-            "W → Berjalan ke atas",
-            "A → Berjalan ke kiri",
-            "S → Berjalan ke bawah",
-            "D → Berjalan ke kanan"
+            "W - Berjalan ke atas",
+            "A - Berjalan ke kiri",
+            "S - Berjalan ke bawah",
+            "D - Berjalan ke kanan"
         };
 
         for (int i = 0; i < petunjuk.length; i++) {
@@ -172,19 +172,20 @@ public class GuidePanel extends JPanel {
         interactionContainer.add(titleLabel);
 
         String[] petunjuk = {
-            "F → Berpindah antara wilayah daratan dan lautan",
-            "C → Membuka menu crafting untuk membuat item dan peralatan",
-            "I → Membuka inventory untuk melihat dan mengelola barang",
-            "1 - 9 → Memilih item sesuai slot",
-            "S → Memindahkan item saat membuka chest/inventory",
-            "E → Menyerang, menebang pohon, menghancurkan bangunan",
-            "T → Masuk dan keluar kandang",
-            "G → Mengangkat dan memindahkan hewan",
-            "Q → Menjatuhkan item ke world (stackable bisa pilih jumlah)",
-            "Shift + C → Membuka menu achievement",
-            "Arrow Down → Memilih aksi saat mode kandang: hapus, kawin, panen",
-            "Enter → Konfirmasi aksi saat mode kandang",
-            "Spasi (Spacebar) → Masuk/keluar toko dan gua"
+            "F - Berpindah antara wilayah daratan dan lautan",
+            "C - Membuka menu crafting untuk membuat item dan peralatan",
+            "I - Membuka inventory untuk melihat dan mengelola barang",
+            "1 Sampai 9 - Memilih item sesuai slot",
+            "S - Saat chest atauinventory - Memindahkan item",
+            "E - Menyerang, menebang pohon, menghancurkan bangunan",
+            "T - Masuk dan keluar kandang",
+            "G - Mengangkat dan memindahkan hewan",
+            "Q - Menjatuhkan item ke world dan dapat memilih jumlah",
+            "Shift C - Membuka menu achievement",
+            "Arrow Down di mode kandang - Memilih aksi hapus, kawin,",
+            "dan panen",
+            "Enter di mode kandang - Konfirmasi aksi",
+            "Spasi - Masuk atau keluar toko dan gua"
         };
 
         for (int i = 0; i < petunjuk.length; i++) {
@@ -218,28 +219,64 @@ public class GuidePanel extends JPanel {
         JLabel titleLabel = new JLabel("Mekanisme Game");
         titleLabel.setFont(pixelFont.deriveFont(20f));
         titleLabel.setForeground(Color.WHITE);
-        titleLabel.setBounds(30, 15, 600, 30);
+        titleLabel.setBounds(30, 15, 600, 50);
         mekanismeContainer.add(titleLabel);
 
-        String[] sinopsis = {
-            "Dalam game ini, Anda akan memulai petualangan dengan sebuah kapak sederhana di tangan.",
-            "Tujuan utama Anda adalah bertahan hidup selama mungkin sambil meningkatkan level karakter",
-            "dengan membunuh makhluk hidup yang tersebar di dunia.",
-            "",
-            "Dunia tidak hanya dihuni oleh makhluk jinak, tetapi juga oleh predator buas seperti serigala",
-            "yang aktif memburu Anda. Di kedalaman gua, monster-monster berbahaya menanti",
-            "untuk menguji kemampuan bertahan hidup Anda.",
-            "",
-            "Manfaatkan kekayaan alam seperti kayu, batu, dan tumbuhan untuk menciptakan alat, senjata,",
-            "dan struktur yang mendukung kelangsungan hidup. Bangun, bertarung, dan jelajahi dunia untuk",
-            "mencapai tujuan utama: menjadi penyintas terkuat di antara yang hidup."
+        // Panel untuk gambar kecil berjejer
+        JPanel gambarPanel = new JPanel();
+        gambarPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0)); // Jejer dan tengah
+        gambarPanel.setOpaque(false); // transparan
+
+
+        String[] gambarPaths = {
+            "ProjectTheSurvivalist/img/menu.png",
+            "ProjectTheSurvivalist/img/gameplay.png"
         };
+
+        int maxHeight = 0; // untuk mengukur tinggi gambar tertinggi
+        for (String path : gambarPaths) {
+            ImageIcon icon = new ImageIcon(path);
+
+            // Resize gambar (misal 150x150)
+            Image scaledImage = icon.getImage().getScaledInstance(250, 150, Image.SCALE_SMOOTH);
+            JLabel label = new JLabel(new ImageIcon(scaledImage));
+
+            gambarPanel.add(label);
+
+            if (150 > maxHeight) {
+                maxHeight = 150;
+            }
+        }
+
+        // Set posisi gambarPanel manual agar center
+        gambarPanel.setBounds(200, 60, 600, maxHeight); // posisinya tergantung container (width = 1000)
+
+        mekanismeContainer.add(gambarPanel);
+
+        String[] sinopsis = {
+            "Dalam game ini, Anda akan memulai petualangan dengan sebuah kapak",
+            "sederhana di tangan. Tujuan utama Anda adalah bertahan hidup",
+            "selama mungkin sambil meningkatkan level karakterdengan membunuh",
+            "makhluk hidup yang tersebar di dunia.",
+            "",
+            "Dunia tidak hanya dihuni oleh makhluk jinak, tetapi juga",
+            "oleh predator buas seperti serigala yang aktif memburu Anda.",
+            "Di kedalaman gua, monster-monster berbahaya menanti untuk menguji",
+            "kemampuan bertahan hidup Anda.",
+            "",
+            "Manfaatkan kekayaan alam seperti kayu, batu, dan tumbuhan untuk",
+            "menciptakan alat, senjata, dan struktur yang mendukung kelangsungan",
+            "hidup. Bangun, bertarung, dan jelajahi dunia untuk mencapai tujuan",
+            "utama menjadi penyintas terkuat di antara yang hidup."
+        };
+
+        int sinopsisY = 60 + maxHeight + 20;
 
         for (int i = 0; i < sinopsis.length; i++) {
             JLabel baris = new JLabel(sinopsis[i]);
             baris.setFont(pixelFont.deriveFont(14f));
             baris.setForeground(Color.WHITE);
-            baris.setBounds(30, 60 + (i * 25), 940, 25);
+            baris.setBounds(30, sinopsisY + (i * 25), 940, 25);
             mekanismeContainer.add(baris);
         }
 
