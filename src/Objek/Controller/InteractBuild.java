@@ -144,20 +144,11 @@ public class InteractBuild {
         }
         else if (building instanceof ItemTable) {
             gp.gameState = gp.SHOP_STATE;
-            
-            if (gp.ui.shopItems == null) {
-                gp.ui.shopItems = new ArrayList<>();
-            }
-            if (gp.ui.shopItems.isEmpty()) {
-                initShopItems();
-            }
+            initShopItems();
         }
         else if(building instanceof EffectTable){
             gp.gameState = gp.EFFECT_STATE;
-
-            if (gp.ui.effectItems.isEmpty()) {
-                initEffectItems();
-            }
+            initEffectItems();
         }
         else if(building instanceof KandangAyam){
             
@@ -259,12 +250,12 @@ public class InteractBuild {
             gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate2.png", 10, 1));
             gp.ui.effectItems.add(new ShopEffect("Repair Fishing Rod", "ProjectTheSurvivalist/res/Items/Equipments/fishingrod.png", 10, 1));
             
-            gp.ui.effectItems.add(new ShopEffect("Upgrade Level", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
-            gp.ui.effectItems.add(new ShopEffect("Coins +999", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+            gp.ui.effectItems.add(new ShopEffect("Upgrade Level", "ProjectTheSurvivalist/res/Items/Effect/uplevel.png", 0, 2));
+            gp.ui.effectItems.add(new ShopEffect("Coins +999", "ProjectTheSurvivalist/res/Items/Effect/addgold.png", 0, 2));
             if(!gp.isStrong){
-                gp.ui.effectItems.add(new ShopEffect("God Mode", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+                gp.ui.effectItems.add(new ShopEffect("God Mode", "ProjectTheSurvivalist/res/Items/Effect/godmode.png", 0, 2));
             } else {
-                gp.ui.effectItems.add(new ShopEffect("Normal Mode", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 0, 2));
+                gp.ui.effectItems.add(new ShopEffect("Normal Mode", "ProjectTheSurvivalist/res/Items/Effect/normalmode.png", 0, 2));
             }
             // gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
             // gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));
