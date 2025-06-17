@@ -121,6 +121,45 @@ public class CollisonChecker {
         if(!isValid1 && !isValid2 && !isValid3 && !isValid4) {
             animal.collisionOn = true;
         }
+        int spawnTileX = gp.SpawnX;
+        int spawnTileY = gp.SpawnY;
+        int animalTileX = animal.worldX / gp.TILE_SIZE;
+        int animalTileY = animal.worldY / gp.TILE_SIZE;
+        
+        boolean movingTowardsSpawn = false;
+        switch(animal.direction) {
+            case "up":
+                if(animalTileY > spawnTileY && Math.abs(animalTileX - spawnTileX) <= 1) {
+                    movingTowardsSpawn = true;
+                }
+                break;
+            case "down":
+                if(animalTileY < spawnTileY && Math.abs(animalTileX - spawnTileX) <= 1) {
+                    movingTowardsSpawn = true;
+                }
+                break;
+            case "left":
+                if(animalTileX > spawnTileX && Math.abs(animalTileY - spawnTileY) <= 1) {
+                    movingTowardsSpawn = true;
+                }
+                break;
+            case "right":
+                if(animalTileX < spawnTileX && Math.abs(animalTileY - spawnTileY) <= 1) {
+                    movingTowardsSpawn = true;
+                }
+                break;
+        }
+
+        if(movingTowardsSpawn) {
+            animal.collisionOn = true;
+            // Force direction change away from spawn
+            switch(animal.direction) {
+                case "up": animal.direction = "down"; break;
+                case "down": animal.direction = "up"; break;
+                case "left": animal.direction = "right"; break;
+                case "right": animal.direction = "left"; break;
+            }
+        }
     }
     
     public void animalCheckObject(Animal animal) {

@@ -17,12 +17,10 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Rock;
 import Objek.Enemy.Bat;
 import Objek.Enemy.Golem;
-import Objek.Plant.Plant;
 import Objek.Plant.Bushes.BerryBush;
 import Objek.Plant.Bushes.Bush;
 import Objek.Plant.Trees.GuavaTree;
 import Objek.Plant.Trees.MangoTree;
-import Objek.Plant.Trees.Tree;
 
 public class Spawn {
     public GamePanel gp;
@@ -30,6 +28,19 @@ public class Spawn {
     public Spawn(GamePanel gp) {
         this.gp = gp;
     }
+    public Point[] ANIMAL_SPAWN_POINTS = {
+        new Point(29,27), new Point(28,71), new Point(73,73),
+        new Point(69,29), new Point(35,31), new Point(43,28),
+        new Point(50,28), new Point(50,43), new Point(36,52),
+        new Point(44,46), new Point(56,57), new Point(49,58),
+        new Point(49,68), new Point(55,69), new Point(65,69),
+        new Point(68,73), new Point(62,62), new Point(60,53),
+        new Point(69,43), new Point(60,37), new Point(64,30),
+        new Point(42,34), new Point(50,28), new Point(63,31),
+        new Point(36,57), new Point(32,53), new Point(44,41),
+        new Point(49,32), new Point(57,29)
+    };
+
     public void spawnOre(String oreType, int count, ArrayList<Point> usedPositions){
         int attempts = 0;
         int maxAttempts = 1000; // Prevent infinite loop
@@ -88,45 +99,50 @@ public class Spawn {
             attempts = 0;           
         }
     }
-    public void spawnPlant(String plantType, int count, ArrayList<Point> usedPositions) {
+     public void spawnPlant(String plantType, int count, ArrayList<Point> usedPositions) {
         int attempts = 0;
-        int maxAttempts = 1000; // Prevent infinite loop
+        int maxAttempts = 1000;
         int spawnedCount = 0;
-        int validTiles = 18; // Assuming grass tile number is 18
-        int playerSpawnX = 40; 
-        int playerSpawnY = 44; 
+        int validTiles = 18;
         
-        while (spawnedCount < count && attempts < maxAttempts) {
-        
-            int x = (int)(Math.random() * (gp.MAX_WORLD_COL ));
-            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW ));
+        while(spawnedCount < count && attempts < maxAttempts) {
+            int x = (int)(Math.random() * gp.MAX_WORLD_COL);
+            int y = (int)(Math.random() * gp.MAX_WORLD_ROW);
             Point pos = new Point(x, y);
             
-            if (Math.abs(x - playerSpawnX) < 3 && Math.abs(y - playerSpawnY) < 3) {
-                attempts++;
-                continue;
-            }
             // Check if position is already used
-            if (usedPositions.contains(pos)) {
+            if(usedPositions.contains(pos)) {
                 attempts++;
                 continue;
             }
-            // Check if tile is grass
+
+            // Check minimum distance from animal spawn points
+            boolean tooCloseToSpawnPoint = false;
+            for(Point spawnPoint : ANIMAL_SPAWN_POINTS) {
+                if(Math.abs(x - spawnPoint.x) <= 2 && Math.abs(y - spawnPoint.y) <= 2) {
+                    tooCloseToSpawnPoint = true;
+                    break;
+                }
+            }
+            
+            if(tooCloseToSpawnPoint) {
+                attempts++;
+                continue;
+            }
+            if(Math.abs(x - gp.SpawnX) < 3 && Math.abs(y - gp.SpawnY) < 3) {
+                attempts++;
+                continue;
+            }
+            // Check tile validity
             int tileNum = gp.tileM.mapTile[gp.currentMap][x][y];
-            boolean isValidTile = false;
-            
-            if (tileNum == validTiles) {
-                isValidTile = true;
-            }
-            
-            if (!isValidTile) {
+            if(tileNum != validTiles) {
                 attempts++;
                 continue;
             }
-            
-            // Spawn the plant based on type
-            switch (plantType.toLowerCase()) {
-                case "guava":
+
+            // Spawn plant based on type
+            switch(plantType.toLowerCase()) {
+                case "guava": 
                     gp.plants.add(new GuavaTree(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
                     break;
                 case "mango":
@@ -139,116 +155,50 @@ public class Spawn {
                     gp.plants.add(new Bush(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
                     break;
             }
-            // Mark position as used
+            
             usedPositions.add(pos);
             spawnedCount++;
-            attempts = 0;           
+            attempts = 0;
         }
     }
 
     public void spawnAnimal(String animalType, int count, ArrayList<Point> usedPositions) {
-        int attempts = 0;
-        int maxAttempts = 1000; // Prevent infinite loop
         int spawnedCount = 0;
-        int validTiles = 18;
         
-        int playerSpawnX = 40;
-        int playerSpawnY = 44;
-        
-        while (spawnedCount < count && attempts < maxAttempts) {
+        // Create list of available spawn points
+        ArrayList<Point> availablePoints = new ArrayList<>();
+        for(Point p : ANIMAL_SPAWN_POINTS) {
+            if(!usedPositions.contains(p)) {
+                availablePoints.add(p);
+            }
+        }
 
-            int x = (int)(Math.random() * (gp.MAX_WORLD_COL));
-            int y = (int)(Math.random() * (gp.MAX_WORLD_ROW));
-            Point pos = new Point(x, y);
-
-            if (Math.abs(x - playerSpawnX) < 3 && Math.abs(y - playerSpawnY) < 3) {
-                attempts++;
-                continue;
-            }
-            Boolean isCloseAnimal = false;
-            for (Point usedPos : usedPositions) {
-                if (Math.abs(usedPos.x - x) < 3 && Math.abs(usedPos.y - y) < 3) {
-                    isCloseAnimal = true;
-                    break;
-                }
-            }
-            if (isCloseAnimal) {
-                attempts++;
-                continue;
-            }
-            boolean overBuilding = false;
-            for (int i = 0; i < gp.buildings.size(); i++) {
-                int buildingX = gp.buildings.get(i).worldX / gp.TILE_SIZE;
-                int buildingY = gp.buildings.get(i).worldY / gp.TILE_SIZE;
-                if (Math.abs(x - buildingX) < 3 && Math.abs(y - buildingY) < 3) { 
-                    overBuilding = true;
-                    break;
-                }
-            }
-            if (overBuilding) {
-                attempts++;
-                continue;
-            }
-            boolean overPlant = false;
-            for (Plant plant : gp.plants) {
-                if (plant instanceof Tree) {
-                    int plantX = plant.worldX / gp.TILE_SIZE;
-                    int plantY = plant.worldY / gp.TILE_SIZE;
-                    if (Math.abs(x - plantX) < 3 && Math.abs(y - plantY) < 3) { 
-                        overPlant = true;
-                        break;
-                    }
-                }
-            }
+        // Randomly select from available points until count is reached
+        while(spawnedCount < count && !availablePoints.isEmpty()) {
+            int index = (int)(Math.random() * availablePoints.size());
+            Point spawnPoint = availablePoints.get(index);
             
-            if (overPlant) {
-                attempts++;
-                continue;
-            }
-            
-            // Check if tile is grass
-            boolean nearInvalidTile = false;
-            for(int checkX = x-2; checkX <= x+2; checkX++) {
-                for(int checkY = y-2; checkY <= y+2; checkY++) {
-                    if(checkX >= 0 && checkX < gp.MAX_WORLD_COL && 
-                    checkY >= 0 && checkY < gp.MAX_WORLD_ROW) {
-                        int tileNum = gp.tileM.mapTile[gp.currentMap][checkX][checkY];
-                        if(tileNum != validTiles) {
-                            nearInvalidTile = true;
-                            break;
-                        }
-                    }
-                }
-                if(nearInvalidTile) break;
-            }
-            if(nearInvalidTile) {
-                attempts++;
-                continue;
-            }
-            
-            // Spawn the animal based on type
-            switch (animalType.toLowerCase()) {
+            switch(animalType.toLowerCase()) {
                 case "chicken":
-                    gp.animals.add(new Chicken("Chicken", x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    gp.animals.add(new Chicken("Chicken", spawnPoint.x * gp.TILE_SIZE, spawnPoint.y * gp.TILE_SIZE, gp));
                     break;
                 case "cow":
-                    gp.animals.add(new Cow("Cow", x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    gp.animals.add(new Cow("Cow", spawnPoint.x * gp.TILE_SIZE, spawnPoint.y * gp.TILE_SIZE, gp));
                     break;
                 case "sheep":
-                    gp.animals.add(new Sheep("Sheep", x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    gp.animals.add(new Sheep("Sheep", spawnPoint.x * gp.TILE_SIZE, spawnPoint.y * gp.TILE_SIZE, gp));
                     break;
                 case "pig":
-                    gp.animals.add(new Pig("Pig", x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    gp.animals.add(new Pig("Pig", spawnPoint.x * gp.TILE_SIZE, spawnPoint.y * gp.TILE_SIZE, gp));
                     break;
                 case "wolf":
-                    gp.animals.add(new Wolf("Wolf", x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    gp.animals.add(new Wolf("Wolf", spawnPoint.x * gp.TILE_SIZE, spawnPoint.y * gp.TILE_SIZE, gp));
                     break;
             }
             
-            // Mark position as used
-            usedPositions.add(pos);
+            usedPositions.add(spawnPoint);
+            availablePoints.remove(index);
             spawnedCount++;
-            attempts = 0;
         }
     }
 
