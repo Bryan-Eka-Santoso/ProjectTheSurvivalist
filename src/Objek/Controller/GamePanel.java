@@ -13,7 +13,6 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
-import Objek.Items.Unstackable.WateringCan;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -105,6 +104,8 @@ public class GamePanel extends JPanel implements Runnable {
     public ArrayList<Animal> removedAnimals = new ArrayList<>();
     public ArrayList<Fish> removedFish = new ArrayList<>();
     public ArrayList<Monster> removedMonsters = new ArrayList<>();
+    public ArrayList<Buildings> removedBuildings = new ArrayList<>();
+    public ArrayList<Ore> removedOres = new ArrayList<>();
     
     public GamePanel() {
         this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -229,11 +230,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new KandangAyam(this, 0));
-        player.inventory.addItems(new Orchard(this, 1, 0));
-        player.inventory.addItems(new GardenPatch(this, 1, 0));
-        player.inventory.addItems(new WateringCan());
-
 
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
@@ -363,6 +359,10 @@ public class GamePanel extends JPanel implements Runnable {
             monsters.remove(m);
         }
         removedMonsters.clear();
+        for (Buildings b : removedBuildings){
+            buildings.remove(b);
+        }
+        removedBuildings.clear();
         if (currentMap == 1) {
             for (int i = 0; i < fish.size(); i++) {
                 fish.get(i).update();
