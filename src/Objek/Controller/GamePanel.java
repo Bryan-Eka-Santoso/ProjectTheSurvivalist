@@ -13,7 +13,6 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
-import Objek.Items.Unstackable.WateringCan;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -229,10 +228,6 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-
-        player.inventory.addItems(new KandangAyam(this, 0));
-        player.inventory.addItems(new GardenPatch(this, 0, 1));
-        player.inventory.addItems(new WateringCan());
 
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
