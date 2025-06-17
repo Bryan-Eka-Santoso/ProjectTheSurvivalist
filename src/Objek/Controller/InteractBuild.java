@@ -180,7 +180,7 @@ public class InteractBuild {
             gp.ui.shopItems.add(new ShopItem(new MetalChestplate(), 80, 1));
             gp.ui.shopItems.add(new ShopItem(new GoldHelmet(), 70, 1));
             gp.ui.shopItems.add(new ShopItem(new MetalHelmet(), 60, 1));
-            gp.ui.shopItems.add(new ShopItem(new WolfCloak(), 90, 1));
+            gp.ui.shopItems.add(new ShopItem(new WolfCloak(), 150, 1));
             
             // Food (category 2)
             gp.ui.shopItems.add(new ShopItem(new Bacon(1), 12, 2));
@@ -221,13 +221,13 @@ public class InteractBuild {
             gp.ui.shopItems.add(new ShopItem(new Wheat(1), 6, 3));
 
             // Legendary Items (category 4)
-            gp.ui.shopItems.add(new ShopItem(new RapidBoots(), 100, 4));
-            gp.ui.shopItems.add(new ShopItem(new HaasClaws(), 100, 4));
-            gp.ui.shopItems.add(new ShopItem(new Immortality(), 100, 4));
-            gp.ui.shopItems.add(new ShopItem(new GuardianHelmet(), 100, 4));
-            gp.ui.shopItems.add(new ShopItem(new WinterCrown(), 100, 4));
-            gp.ui.shopItems.add(new ShopItem(new BladeArmor(), 100, 4));
-            gp.ui.shopItems.add(new ShopItem(new CursedHelmet(), 100, 4));
+            gp.ui.shopItems.add(new ShopItem(new RapidBoots(), 200, 4));
+            gp.ui.shopItems.add(new ShopItem(new HaasClaws(), 200, 4));
+            gp.ui.shopItems.add(new ShopItem(new Immortality(), 200, 4));
+            gp.ui.shopItems.add(new ShopItem(new GuardianHelmet(), 200, 4));
+            gp.ui.shopItems.add(new ShopItem(new WinterCrown(), 200, 4));
+            gp.ui.shopItems.add(new ShopItem(new BladeArmor(), 200, 4));
+            gp.ui.shopItems.add(new ShopItem(new CursedHelmet(), 200, 4));
             
         } catch (Exception e) {
             System.err.println("Error initializing shop items: " + e.getMessage());

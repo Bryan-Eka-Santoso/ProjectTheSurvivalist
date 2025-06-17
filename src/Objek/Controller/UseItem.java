@@ -227,7 +227,7 @@ public class UseItem {
                     System.out.println("Orchard already has a seed planted!");
                     return;
                 }
-                if (seed instanceof Seeds){
+                if (!(seed instanceof GuavaSeeds || seed instanceof CoconutSeeds || seed instanceof MangoSeeds)) {
                     System.out.println("You cannot plant seeds in an orchard! Please use a fruit seed.");
                     return;
                 }
@@ -357,10 +357,9 @@ public class UseItem {
                             gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
-                            player.gp.animals.remove(player.animalIndex);
+                            gp.removedAnimals.add(animal);
                             player.gainExp(rand.nextInt(10) + 5);
                             player.animalIndex = -1;
-                            player.gp.checkAndRespawnAnimals();
                         }
                     } else if (animal instanceof Pig) {
                         Pig pig = (Pig)animal;
@@ -369,7 +368,7 @@ public class UseItem {
                         if(pig.hp <= 0) {
                             gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawPork(1), gp));
-                            player.gp.animals.remove(player.animalIndex);
+                            gp.removedAnimals.add(animal);
                             player.gainExp(rand.nextInt(10) + 7);
                             player.animalIndex = -1;
                         }
@@ -381,7 +380,7 @@ public class UseItem {
                             gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) - 15, animal.worldY + 64, new RawMutton(1), gp));
                             player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) + 15, animal.worldY + 64, new Wool(rand.nextInt(2) + 1), gp));
-                            player.gp.animals.remove(player.animalIndex);
+                            gp.removedAnimals.add(animal);
                             player.gainExp(rand.nextInt(10) + 8);
                             player.animalIndex = -1;
                         }
@@ -392,7 +391,7 @@ public class UseItem {
                         if(cow.hp <= 0) {
                             gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawMeat(1), gp));
-                            player.gp.animals.remove(player.animalIndex);
+                            gp.removedAnimals.add(animal);
                             player.gainExp(rand.nextInt(10) + 9);
                             player.animalIndex = -1;
                         }
@@ -405,7 +404,7 @@ public class UseItem {
                             if (rand.nextInt(10) < 2) {
                                 player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
-                            player.gp.animals.remove(player.animalIndex);
+                            gp.removedAnimals.add(animal);
                             player.gainExp(rand.nextInt(10) + 30);
                             player.animalIndex = -1;
                         }
@@ -441,8 +440,8 @@ public class UseItem {
                         if(bat.hp <= 0) {
                             // player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new RawMeat(1), gp));
                             gp.player.totalMonstersKilled++;
-                            player.gp.monsters.remove(player.monsterIndex);
                             player.gainExp(rand.nextInt(10) + 9);
+                            gp.removedMonsters.add(monster);
                             player.monsterIndex = -1;
                         }
                     } else if (monster instanceof Golem){
@@ -452,8 +451,8 @@ public class UseItem {
                         if(golem.hp <= 0) {
                             gp.player.totalMonstersKilled++;
                             player.gp.droppedItems.add(new ItemDrop(monster.worldX + 64, monster.worldY + 64, new MetalIngot(rand.nextInt(2) + 1), gp));
-                            player.gp.monsters.remove(player.monsterIndex);
                             player.gainExp(rand.nextInt(20) + 35);
+                            gp.removedMonsters.add(monster);
                             player.monsterIndex = -1;
                         }
                     }
@@ -606,7 +605,7 @@ public class UseItem {
                                 player.gp.droppedItems.add(new ItemDrop(building.worldX + (rand.nextInt(40) - 20), building.worldY, furnace.cookedMaterial[0], gp));
                             }
                         }
-                        player.gp.buildings.remove(player.buildingIndex);
+                        gp.removedBuildings.add(building);
                         player.buildingIndex = -1; 
                     } 
                     playSE(6);
@@ -645,7 +644,7 @@ public class UseItem {
                                 gp.droppedItems.add(new ItemDrop(ore.worldX + 10, ore.worldY, new Stone(rand.nextInt(2) + 1), gp));
                             }
                             player.totalOresMined++;
-                            gp.ores.remove(player.oreIndex);
+                            gp.removedOres.add(ore);
                             player.oreIndex = -1;
                         }
                     }
@@ -700,7 +699,6 @@ public class UseItem {
                         player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
-                        player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 5);
                         player.animalIndex = -1;
                     }
@@ -711,7 +709,6 @@ public class UseItem {
                     if(pig.hp <= 0) {
                         player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawPork(1), gp));
-                        player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 7);
                         player.animalIndex = -1;
                     }
@@ -723,7 +720,6 @@ public class UseItem {
                         player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) - 15, animal.worldY + 64, new RawMutton(1), gp));
                         player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) + 15, animal.worldY + 64, new Wool(rand.nextInt(2) + 1), gp));
-                        player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 8);
                         player.animalIndex = -1;
                     }
@@ -734,7 +730,6 @@ public class UseItem {
                     if(cow.hp <= 0) {
                         player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawMeat(1), gp));
-                        player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 9);
                         player.animalIndex = -1;
                     }
@@ -747,12 +742,103 @@ public class UseItem {
                         if (rand.nextInt(10) < 2) {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                         }
-                        player.gp.animals.remove(player.animalIndex);
                         player.gainExp(rand.nextInt(10) + 9);
                         player.animalIndex = -1;
                     }
                 }
+                gp.removedAnimals.add(animal);
+                player.animalIndex = -1;
                 playSE(4);
+            } else if (player.buildingIndex != -1){
+                Buildings building = player.gp.buildings.get(player.buildingIndex);
+                if (building.isBreakable) {
+                    building.hp -= fistDamage;
+                    System.out.println("Punching building: " + building.name);
+                    System.out.println("Building HP: " + building.hp);
+
+                    if (building.hp <= 0) {
+                        if (building instanceof Chest) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Chest(gp, 1, 0), gp));
+                            Chest chest = (Chest) building;
+                            for (int i = 0; i < chest.inventory.slots.length; i++) {
+                                int scatterX = rand.nextInt(75) - 30;
+                                int scatterY = rand.nextInt(30) - 30;
+                                if (chest.inventory.slots[i] != null) {
+                                    player.gp.droppedItems.add(new ItemDrop(building.worldX + scatterX, building.worldY + scatterY, chest.inventory.slots[i], gp));
+                                    chest.inventory.slots[i] = null;
+                                }
+                            }
+                        } else if (building instanceof Kandang){
+                            if (building instanceof KandangAyam) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new KandangAyam(gp, 0), gp));
+                            } else if (building instanceof PigCage) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new PigCage(gp, 0), gp));
+                            } else if (building instanceof SheepCage) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new SheepCage(gp, 0), gp));
+                            } else if (building instanceof CowCage) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new CowCage(gp, 0), gp));
+                            }
+                        } else if (building instanceof CraftingTable) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new CraftingTable(gp, 1, 0), gp));
+                        } else if (building instanceof Orchard) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Orchard(gp, 1, 0), gp));
+                            Orchard orchard = (Orchard) building;
+                            if (orchard.seed != null) {
+                                if (orchard.seed instanceof GuavaSeeds){
+                                    if (orchard.phase.equals("tree")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Guava(rand.nextInt(1) + 1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new GuavaSeeds(rand.nextInt(1) + 1), gp));
+                                    }
+                                } else if (orchard.seed instanceof CoconutSeeds){
+                                    if (orchard.phase.equals("tree")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Coconut(rand.nextInt(1) + 1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new CoconutSeeds(rand.nextInt(1) + 1), gp));
+                                    }
+                                } else if (orchard.seed instanceof MangoSeeds){
+                                    if (orchard.phase.equals("tree")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Mango(rand.nextInt(1) + 1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Wood(rand.nextInt(4) + 4), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new MangoSeeds(rand.nextInt(1) + 1), gp));
+                                    }
+                                }
+                            }
+                        } else if (building instanceof GardenPatch){
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new GardenPatch(gp, 1, 0), gp));
+                            GardenPatch gardenPatch = (GardenPatch) building;
+                            if (gardenPatch.seed != null) {
+                                if (gardenPatch.seed instanceof Seeds){
+                                    if (gardenPatch.phase.equals("crops")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Wheat(1), gp));
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(rand.nextInt(2) + 1), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Seeds(1), gp));
+                                    }
+                                } else if (gardenPatch.seed instanceof Potato){
+                                    if (gardenPatch.phase.equals("crops")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Potato(rand.nextInt(2) + 2), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Potato(1), gp));
+                                    }
+                                } else if (gardenPatch.seed instanceof Carrot){
+                                    if (gardenPatch.phase.equals("crops")) {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX - 20, building.worldY, new Carrot(rand.nextInt(2) + 2), gp));
+                                    } else {
+                                        player.gp.droppedItems.add(new ItemDrop(building.worldX + 20, building.worldY, new Carrot(1), gp));
+                                    }
+                                }
+                            }
+                        } else if (building instanceof Bed) {
+                            player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new Bed(gp, 1, 0), gp));
+                        }
+                        gp.removedBuildings.add(building);
+                        player.buildingIndex = -1;
+                    }
+                }
             }
         } else {
             System.out.println("No item selected!"); 
