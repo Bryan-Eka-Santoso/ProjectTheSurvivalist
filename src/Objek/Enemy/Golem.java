@@ -18,27 +18,19 @@ public class Golem extends Monster {
     private int actionLockCounter = 0;
     private int actionMoveCounter = 0;
     public int soundCounter = 0;
-    private Rectangle upHitbox;
-    private Rectangle downHitbox;
-    private Rectangle leftHitbox;
-    private Rectangle rightHitbox;
     private int actionMoveDelay;
     int spriteDisplaySize = gp.TILE_SIZE * 2;
     int originalSpriteSize = 64;
     double scaleFactor = (double)spriteDisplaySize / originalSpriteSize;
 
     Random random = new Random();
-    public Golem(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
-        super(name, worldX, worldY, speed, direction, gp);
+    public Golem(String name, int worldX, int worldY, String direction, GamePanel gp) {
+        super(name, worldX, worldY, 8, direction, gp);
         setRandomDirection();
         this.hp = 300; // Set Golem's HP
         this.attack = 15;
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor) );   
-        downHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor) );   
-        leftHitbox =  new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));     
-        rightHitbox = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));  
-        this.solidArea = downHitbox;
+        this.solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor));;
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
         try {
@@ -82,11 +74,13 @@ public class Golem extends Monster {
     }
 
     @Override
-    public void update() {  
-       if (isPreyNearby(gp.player)) {
+    public void update() {
+        if (isPreyNearby(gp.player)) {
             actionLockEnemyNearby = 10;
+            if (soundCounter == 0) {
+                playSE(13);
+            }
             chasePlayer(gp.player);
-            if (soundCounter == 0) playSE(13);
         } else {
             actionLockEnemyNearby = 15;
         }
@@ -99,103 +93,111 @@ public class Golem extends Monster {
             return; 
         }
         actionLockCounter = 0;
+
         if(direction == null) {
             direction = "down"; 
         }
+
         switch(direction) {
             case "up": 
-                solidArea = upHitbox;
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor));
                 break;
             case "down": 
-                solidArea = downHitbox;
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor)); 
                 break;
             case "left": 
-                solidArea = leftHitbox;
+                solidArea = new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
                 break;
             case "right": 
-                solidArea = rightHitbox;
+                solidArea = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
                 break;
         }
+
         collisionOn = false;
         isCollision(this);
-        
+
         // Jika tidak ada collision, boleh bergerak
         if (!isPreyNearby(gp.player) || gp.player.isFrozen) {
             moveNormally();
         } else {
             moveTowardsPlayer();
         }
-        
     }
+
     public void moveTowardsPlayer() {
         String nextDirection = chasePlayer(gp.player);
         direction = nextDirection;
-        switch(nextDirection) {
+         switch(direction) {
             case "up": 
-                solidArea = upHitbox;
-            break;
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor));
+                break;
             case "down": 
-                solidArea = downHitbox;
-            break;
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor)); 
+                break;
             case "left": 
-                solidArea = leftHitbox;
-            break;
+                solidArea = new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
+                break;
             case "right": 
-                solidArea = rightHitbox;
-            break;
+                solidArea = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
+                break;
         }
         collisionOn = false;
         isCollision(this);
-        if (!collisionOn) {
-            this.direction = nextDirection;
-            switch(this.direction) {
-                case "up": worldY -= speed; break;
-                case "down": worldY += speed; break;
-                case "left": worldX -= speed; break;
-                case "right": worldX += speed; break;
+        if (!isCollidePlayer) {
+            if (!collisionOn) {
+                this.direction = nextDirection;
+                switch(this.direction) {
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
+            } else {
+                if (nextDirection.equals("up")) {
+                    if (gp.player.worldX < this.worldX) {
+                        nextDirection = "left";
+                    } else {
+                        nextDirection = "right";
+                    }
+                } else if (nextDirection.equals("down")) {
+                    if (gp.player.worldX < this.worldX) {
+                        nextDirection = "left";
+                    } else {
+                        nextDirection = "right";
+                    }
+                } else if (nextDirection.equals("left")) {
+                    if (gp.player.worldY < this.worldY) {
+                        nextDirection = "up";
+                    } else {
+                        nextDirection = "down";
+                    }
+                } else if (nextDirection.equals("right")) {
+                    if (gp.player.worldY < this.worldY) {
+                        nextDirection = "up";
+                    } else {
+                        nextDirection = "down";
+                    }
+                }
+                this.direction = nextDirection;
+                switch (direction) {
+                    case "up":
+                        worldY -= speed;
+                    break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
             }
         } else {
-            if (nextDirection.equals("up")) {
-                if (gp.player.worldX < this.worldX) {
-                    nextDirection = "left";
-                } else {
-                    nextDirection = "right";
-                }
-            } else if (nextDirection.equals("down")) {
-                if (gp.player.worldX < this.worldX) {
-                    nextDirection = "left";
-                } else {
-                    nextDirection = "right";
-                }
-            } else if (nextDirection.equals("left")) {
-                if (gp.player.worldY < this.worldY) {
-                    nextDirection = "up";
-                } else {
-                    nextDirection = "down";
-                }
-            } else if (nextDirection.equals("right")) {
-                if (gp.player.worldY < this.worldY) {
-                    nextDirection = "up";
-                } else {
-                    nextDirection = "down";
-                }
-            }
-            this.direction = nextDirection;
-            switch (direction) {
-                case "up":
-                worldY -= speed;
-                break;
-                case "down":
-                worldY += speed;
-                    break;
-                case "left":
-                    worldX -= speed;
-                    break;
-                case "right":
-                    worldX += speed;
-                    break;
-            }
+            moveNormally();
         }
+        isCollidePlayer = false;
         actionMoveCounter++;
         spriteCounter++;
         if(spriteCounter > 0) {
@@ -205,7 +207,23 @@ public class Golem extends Monster {
             }
             spriteCounter = 0;
         }
+        switch(direction) {
+            case "up": 
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor));
+                break;
+            case "down": 
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor)); 
+                break;
+            case "left": 
+                solidArea = new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
+                break;
+            case "right": 
+                solidArea = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
+                break;
+        }
+
     }
+
     public void moveNormally() {
         if(!collisionOn) {
             switch(direction) {
@@ -252,6 +270,7 @@ public class Golem extends Monster {
             spriteCounter = 0;
         }
     }
+
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
@@ -289,6 +308,7 @@ public class Golem extends Monster {
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
+
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE*2, gp.TILE_SIZE*2, null);
 
             if(hp < 200) {

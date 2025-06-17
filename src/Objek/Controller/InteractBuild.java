@@ -144,6 +144,7 @@ public class InteractBuild {
         }
         else if (building instanceof ItemTable) {
             gp.gameState = gp.SHOP_STATE;
+            gp.ui.shopItems.clear();
             initShopItems();
         }
         else if(building instanceof EffectTable){

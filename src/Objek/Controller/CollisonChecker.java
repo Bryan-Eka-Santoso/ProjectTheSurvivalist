@@ -452,7 +452,7 @@ public class CollisonChecker {
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
     
         // Check collision
-        if(animal.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen) {
+        if(animal.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen && gp.player.health > 0) {
             animal.collisionOn = true;
             int def = gp.player.getDefense();
             if (animal instanceof Wolf) {
@@ -782,8 +782,9 @@ public class CollisonChecker {
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
     
         // Check collision
-        if(monster.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen) {
+        if(monster.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen && gp.player.health > 0) {
             monster.collisionOn = true;
+            monster.isCollidePlayer = true; // Set flag to true when colliding with player
             int def = gp.player.getDefense();
 
             if (gp.player.helmet != null) {
@@ -832,7 +833,6 @@ public class CollisonChecker {
             if (gp.player.health <= 0) {
                 gp.player.health = 0; // Prevent negative health
             }
-            
         }
     
         // Reset hitbox positions

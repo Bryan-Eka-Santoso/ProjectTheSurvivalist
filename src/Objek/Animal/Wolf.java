@@ -92,7 +92,6 @@ public class Wolf extends WildAnimal {
 
     @Override
     public void update() {
-        
         if (isPreyNearby(gp.player) && !(gp.player.helmet instanceof WolfCloak)) {
             actionLockEnemyNearby = 10;
             if (soundCounter == 0) {
@@ -147,10 +146,10 @@ public class Wolf extends WildAnimal {
         direction = nextDirection;
         switch(direction) {
             case "up": 
-                solidArea =  new Rectangle(30, 1, 34, 62);
+                solidArea = new Rectangle(30, 1, 34, 62);
                 break;
             case "down": 
-                solidArea =  new Rectangle(30, 1, 34, 62);
+                solidArea = new Rectangle(30, 1, 34, 62);
                 break;
             case "left": 
                 solidArea = new Rectangle(1, 30, 62, 34);   
@@ -234,7 +233,6 @@ public class Wolf extends WildAnimal {
                 solidArea = new Rectangle(1, 30, 62, 34);
                 break;
         }
-
     }
 
     public void moveNormally() {

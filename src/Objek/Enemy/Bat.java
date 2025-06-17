@@ -19,10 +19,6 @@ public class Bat extends Monster {
     private int actionLockCounter = 0;
     private int actionMoveCounter = 0;
     public int soundCounter = 0;
-    private Rectangle upHitbox;
-    private Rectangle downHitbox;
-    private Rectangle leftHitbox;
-    private Rectangle rightHitbox;
     private int actionMoveDelay;
     int spriteDisplaySize = gp.TILE_SIZE * 2;
     int originalSpriteSize = 32;
@@ -32,17 +28,13 @@ public class Bat extends Monster {
 
     Random random = new Random();
 
-    public Bat(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
-        super(name, worldX, worldY, speed, direction, gp);
+    public Bat(String name, int worldX, int worldY, String direction, GamePanel gp) {
+        super(name, worldX, worldY, 6, direction, gp);
         setRandomDirection();
         this.hp = 100;
         this.attack = 5;
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle((int)(1*scaleFactor), (int)(4*scaleFactor), (int)(16*scaleFactor),(int)(16*scaleFactor) );   
-        downHitbox = new Rectangle((int)(1*scaleFactor), (int)(2*scaleFactor), (int)(18*scaleFactor),(int)(15*scaleFactor) );   
-        leftHitbox = new Rectangle((int)(3*scaleFactor) ,(int)(1*scaleFactor), (int)(17*scaleFactor), (int)(16*scaleFactor));   
-        rightHitbox = new Rectangle((int)(2*scaleFactor), (int)(1*scaleFactor), (int)(18*scaleFactor), (int)(8*scaleFactor));  
-        this.solidArea = downHitbox;
+        this.solidArea = new Rectangle((int)(1*scaleFactor), (int)(2*scaleFactor), (int)(18*scaleFactor),(int)(15*scaleFactor)); 
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
         try {
@@ -86,12 +78,13 @@ public class Bat extends Monster {
     }
 
     @Override
-    public void update() {  
-      
-       if (isPreyNearby(gp.player)) {
+    public void update() {
+        if (isPreyNearby(gp.player)) {
             actionLockEnemyNearby = 10;
+            if (soundCounter == 0) {
+                playSE(13);
+            }
             chasePlayer(gp.player);
-            if (soundCounter == 0) playSE(13);
         } else {
             actionLockEnemyNearby = 15;
         }
@@ -104,25 +97,28 @@ public class Bat extends Monster {
             return; 
         }
         actionLockCounter = 0;
+
         if(direction == null) {
             direction = "down"; 
         }
+
         switch(direction) {
             case "up": 
-                solidArea = upHitbox;
+                solidArea = new Rectangle((int)(1*scaleFactor), (int)(4*scaleFactor), (int)(16*scaleFactor),(int)(16*scaleFactor));
                 break;
             case "down": 
-                solidArea = downHitbox;
+                solidArea =  new Rectangle((int)(1*scaleFactor), (int)(2*scaleFactor), (int)(18*scaleFactor),(int)(15*scaleFactor));
                 break;
             case "left": 
-                solidArea = leftHitbox;
+                solidArea = new Rectangle((int)(3*scaleFactor) ,(int)(1*scaleFactor), (int)(17*scaleFactor), (int)(16*scaleFactor));   
                 break;
             case "right": 
-                solidArea = rightHitbox;
+                solidArea = new Rectangle((int)(2*scaleFactor), (int)(1*scaleFactor), (int)(18*scaleFactor), (int)(8*scaleFactor));  
                 break;
         }
+
         collisionOn = false;
-        isCollision(this); // Cek collision dengan player dan tile
+        isCollision(this);
 
         // Jika tidak ada collision, boleh bergerak
         if (!isPreyNearby(gp.player) || gp.player.isFrozen) {
@@ -131,76 +127,81 @@ public class Bat extends Monster {
             moveTowardsPlayer();
         }
     }
-    public void moveTowardsPlayer() {
 
+    public void moveTowardsPlayer() {
         String nextDirection = chasePlayer(gp.player);
         direction = nextDirection;
-        switch(nextDirection) {
+        switch(direction) {
             case "up": 
-                solidArea = upHitbox;
-            break;
+                solidArea = new Rectangle((int)(1*scaleFactor), (int)(4*scaleFactor), (int)(16*scaleFactor),(int)(16*scaleFactor));
+                break;
             case "down": 
-                solidArea = downHitbox;
-            break;
+                solidArea =  new Rectangle((int)(1*scaleFactor), (int)(2*scaleFactor), (int)(18*scaleFactor),(int)(15*scaleFactor));
+                break;
             case "left": 
-                solidArea = leftHitbox;
-            break;
+                solidArea = new Rectangle((int)(3*scaleFactor) ,(int)(1*scaleFactor), (int)(17*scaleFactor), (int)(16*scaleFactor));   
+                break;
             case "right": 
-                solidArea = rightHitbox;
-            break;
+                solidArea = new Rectangle((int)(2*scaleFactor), (int)(1*scaleFactor), (int)(18*scaleFactor), (int)(8*scaleFactor));  
+                break;
         }
         collisionOn = false;
         isCollision(this);
-        if (!collisionOn) {
-            this.direction = nextDirection;
-            switch(this.direction) {
-                case "up": worldY -= speed; break;
-                case "down": worldY += speed; break;
-                case "left": worldX -= speed; break;
-                case "right": worldX += speed; break;
+        if (!isCollidePlayer) {
+            if (!collisionOn) {
+                this.direction = nextDirection;
+                switch(this.direction) {
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
+            } else {
+                if (nextDirection.equals("up")) {
+                    if (gp.player.worldX < this.worldX) {
+                        nextDirection = "left";
+                    } else {
+                        nextDirection = "right";
+                    }
+                } else if (nextDirection.equals("down")) {
+                    if (gp.player.worldX < this.worldX) {
+                        nextDirection = "left";
+                    } else {
+                        nextDirection = "right";
+                    }
+                } else if (nextDirection.equals("left")) {
+                    if (gp.player.worldY < this.worldY) {
+                        nextDirection = "up";
+                    } else {
+                        nextDirection = "down";
+                    }
+                } else if (nextDirection.equals("right")) {
+                    if (gp.player.worldY < this.worldY) {
+                        nextDirection = "up";
+                    } else {
+                        nextDirection = "down";
+                    }
+                }
+                this.direction = nextDirection;
+                switch (direction) {
+                    case "up":
+                        worldY -= speed;
+                    break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
             }
         } else {
-            if (nextDirection.equals("up")) {
-                if (gp.player.worldX < this.worldX) {
-                    nextDirection = "left";
-                } else {
-                    nextDirection = "right";
-                }
-            } else if (nextDirection.equals("down")) {
-                if (gp.player.worldX < this.worldX) {
-                    nextDirection = "left";
-                } else {
-                    nextDirection = "right";
-                }
-            } else if (nextDirection.equals("left")) {
-                if (gp.player.worldY < this.worldY) {
-                    nextDirection = "up";
-                } else {
-                    nextDirection = "down";
-                }
-            } else if (nextDirection.equals("right")) {
-                if (gp.player.worldY < this.worldY) {
-                    nextDirection = "up";
-                } else {
-                    nextDirection = "down";
-                }
-            }
-            this.direction = nextDirection;
-            switch (direction) {
-                case "up":
-                worldY -= speed;
-                break;
-                case "down":
-                worldY += speed;
-                    break;
-                case "left":
-                    worldX -= speed;
-                    break;
-                case "right":
-                    worldX += speed;
-                    break;
-            }
+            moveNormally();
         }
+        isCollidePlayer = false;
         actionMoveCounter++;
         spriteCounter++;
         if(spriteCounter > 0) {
@@ -210,7 +211,22 @@ public class Bat extends Monster {
             }
             spriteCounter = 0;
         }
+        switch(direction) {
+            case "up": 
+                solidArea = new Rectangle((int)(1*scaleFactor), (int)(4*scaleFactor), (int)(16*scaleFactor),(int)(16*scaleFactor));
+                break;
+            case "down": 
+                solidArea =  new Rectangle((int)(1*scaleFactor), (int)(2*scaleFactor), (int)(18*scaleFactor),(int)(15*scaleFactor));
+                break;
+            case "left": 
+                solidArea = new Rectangle((int)(3*scaleFactor) ,(int)(1*scaleFactor), (int)(17*scaleFactor), (int)(16*scaleFactor));   
+                break;
+            case "right": 
+                solidArea = new Rectangle((int)(2*scaleFactor), (int)(1*scaleFactor), (int)(18*scaleFactor), (int)(8*scaleFactor));  
+                break;
+        }
     }
+
     public void moveNormally() {
         if(!collisionOn) {
             switch(direction) {
@@ -257,6 +273,7 @@ public class Bat extends Monster {
             spriteCounter = 0;
         }
     }
+
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
@@ -295,7 +312,8 @@ public class Bat extends Monster {
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
-            g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
+
+               g2.drawImage(image, screenX, screenY, gp.TILE_SIZE, gp.TILE_SIZE, null);
             
             if(hp < 100) {
                 double oneScale = (double)gp.TILE_SIZE/100;
@@ -310,6 +328,7 @@ public class Bat extends Monster {
             }
         }
     }
+
     public void isCollision(Monster monster) { 
         gp.cCheck.checkMonsterPlayer(monster);        // Check collision dengan player
         gp.cCheck.checkMonstersCollision(monster);

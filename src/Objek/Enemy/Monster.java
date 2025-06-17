@@ -17,10 +17,12 @@ public abstract class Monster {
     public boolean collisionOn;
     public GamePanel gp;
     public int hp, attack;
+    public boolean isCollidePlayer;
 
     public Monster(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
         this.gp = gp;
         this.name = name;
+        this.isCollidePlayer = false;
         this.worldX = worldX;
         this.worldY = worldY;
         this.speed = speed;

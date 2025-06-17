@@ -297,10 +297,10 @@ public class Spawn {
 
             switch (animalType.toLowerCase()) {
                 case "bat":
-                    gp.monsters.add(new Bat("Bat", x * gp.TILE_SIZE, y * gp.TILE_SIZE, 8, "down", gp));
+                    gp.monsters.add(new Bat("Bat", x * gp.TILE_SIZE, y * gp.TILE_SIZE, "down", gp));
                     break;
                 case "golem":
-                    gp.monsters.add(new Golem("Golem", x * gp.TILE_SIZE, y * gp.TILE_SIZE, 6, "down", gp));
+                    gp.monsters.add(new Golem("Golem", x * gp.TILE_SIZE, y * gp.TILE_SIZE, "down", gp));
                     break;
             }
             
