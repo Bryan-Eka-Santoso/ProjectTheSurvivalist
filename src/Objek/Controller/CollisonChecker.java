@@ -164,8 +164,29 @@ public class CollisonChecker {
     
     public void animalCheckObject(Animal animal) {
         for (int i = 0; i < gp.plants.size(); i++) {
-            animal.solidArea.x = animal.worldX + animal.solidArea.x;
-            animal.solidArea.y = animal.worldY + animal.solidArea.y;
+            
+            
+            switch(animal.direction) {
+                case "up": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y - animal.speed;
+                
+                    break;
+                case "down": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x ;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y + animal.speed;
+                    break;
+                case "left": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x - animal.speed;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y ;
+
+                    break;
+                case "right": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x + animal.speed;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y ;
+                
+                    break;
+            }
             gp.plants.get(i).solidArea.x = gp.plants.get(i).worldX + gp.plants.get(i).solidArea.x;
             gp.plants.get(i).solidArea.y = gp.plants.get(i).worldY + gp.plants.get(i).solidArea.y;
             if (animal.solidArea.intersects(gp.plants.get(i).solidArea)) {
@@ -224,8 +245,27 @@ public class CollisonChecker {
     
     public void animalCheckBuildings(Animal animal) {
         for (int i = 0; i < gp.buildings.size(); i++) {
-            animal.solidArea.x = animal.worldX + animal.solidArea.x;
-            animal.solidArea.y = animal.worldY + animal.solidArea.y;
+             switch(animal.direction) {
+                case "up": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y - animal.speed;
+                
+                    break;
+                case "down": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x ;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y + animal.speed;
+                    break;
+                case "left": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x - animal.speed;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y ;
+
+                    break;
+                case "right": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x + animal.speed;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y ;
+                
+                    break;
+            }
             gp.buildings.get(i).solidArea.x = gp.buildings.get(i).worldX + gp.buildings.get(i).solidArea.x;
             gp.buildings.get(i).solidArea.y = gp.buildings.get(i).worldY + gp.buildings.get(i).solidArea.y;
 

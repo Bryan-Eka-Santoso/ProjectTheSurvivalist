@@ -14,10 +14,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 
 public class Cow extends TameAnimal {
-    private Rectangle upHitbox;
-    private Rectangle downHitbox;
-    private Rectangle leftHitbox;
-    private Rectangle rightHitbox;
+    
     private int actionMoveCounter = 0;
     private  int actionMoveDelay;
     private int speed = 8; 
@@ -31,11 +28,8 @@ public class Cow extends TameAnimal {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(50, 45, 33, 58);    // Lebih sempit di atas
-        downHitbox = new Rectangle(50, 45, 33, 58); // Lebih sempit di bawah
-        leftHitbox = new Rectangle(33, 45, 60,41 );  // Lebih sempit di kiri
-        rightHitbox = new Rectangle(33, 45, 60,41 );
-        this.solidArea = downHitbox;
+       
+        this.solidArea = new Rectangle(0,0,32,32); 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
@@ -43,22 +37,22 @@ public class Cow extends TameAnimal {
         this.grabOffsetY = -40;
         this.hp = 100;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/left4.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/right4.png"));
+            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up1.png"));
+            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up2.png"));
+            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up3.png"));
+            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up4.png"));
+            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down1.png"));
+            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down2.png"));
+            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down3.png"));
+            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down4.png"));
+            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left1.png"));
+            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left2.png"));
+            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left3.png"));
+            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left4.png"));
+            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right1.png"));
+            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right2.png"));
+            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right3.png"));
+            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -99,20 +93,7 @@ public class Cow extends TameAnimal {
         if(direction == null) {
             direction = "down"; 
         }
-        switch(direction) {
-            case "up": 
-                solidArea = upHitbox;
-                break;
-            case "down": 
-                solidArea = downHitbox;
-                break;
-            case "left": 
-                solidArea = leftHitbox;
-                break;
-            case "right": 
-                solidArea = rightHitbox;
-                break;
-        }
+        
        
         collisionOn = false;
         gp.cCheck.animalCheckTile(this);     // Check collision dengan tile
@@ -198,18 +179,23 @@ public class Cow extends TameAnimal {
 
         int screenX = worldX - gp.player.worldX + gp.player.SCREEN_X;
         int screenY = worldY - gp.player.worldY + gp.player.SCREEN_Y;
-
+        g2.drawRect(
+            screenX + solidArea.x,
+            screenY + solidArea.y,
+            solidArea.width,
+            solidArea.height
+        );
         if(worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X && 
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
-            g2.drawImage(image, screenX, screenY, gp.TILE_SIZE * 3, gp.TILE_SIZE *3, null);
+            g2.drawImage(image, screenX, screenY, gp.TILE_SIZE , gp.TILE_SIZE , null);
             if(hp < 100) {
-                double oneScale = (double)gp.TILE_SIZE*3/100;
+                double oneScale = (double)gp.TILE_SIZE/100;
                 double hpBarValue = oneScale * hp;
 
                 g2.setColor(new Color(35,35,35));
-                g2.fillRect(screenX, screenY-16, gp.TILE_SIZE*3+2, 12);
+                g2.fillRect(screenX, screenY-16, gp.TILE_SIZE+2, 12);
 
                 g2.setColor(new Color(255,0,30));
                 g2.fillRect(screenX+1 , screenY-15, (int)hpBarValue, 10);

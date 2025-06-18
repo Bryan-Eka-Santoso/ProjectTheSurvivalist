@@ -16,10 +16,7 @@ import java.awt.Color;
 
 public class Chicken extends TameAnimal {
     Random random = new Random();
-    private Rectangle upHitbox;
-    private Rectangle downHitbox;
-    private Rectangle leftHitbox;
-    private Rectangle rightHitbox;
+    
     private int actionMoveCounter = 0;
     private int actionMoveDelay;
     private int speed = 8; 
@@ -32,11 +29,8 @@ public class Chicken extends TameAnimal {
         setRandomDirection();
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(2, 1, 26, 40);   
-        downHitbox = new Rectangle(2, 1, 26, 40);   
-        leftHitbox = new Rectangle(4, 4, 30, 25);   
-        rightHitbox = new Rectangle(4, 4, 30, 25);   // Lebih lebar di kanan
-        this.solidArea = downHitbox; 
+       
+        this.solidArea = new Rectangle(0,0,32,32); 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         this.grabOffsetX = 0;
@@ -100,20 +94,7 @@ public class Chicken extends TameAnimal {
         if(direction == null) {
             direction = "down"; 
         }
-        switch(direction) {
-            case "up": 
-                solidArea = upHitbox;
-                break;
-            case "down": 
-                solidArea = downHitbox;
-                break;
-            case "left": 
-                solidArea = leftHitbox;
-                break;
-            case "right": 
-                solidArea = rightHitbox;
-                break;
-        }
+        
         collisionOn = false;
         
         gp.cCheck.animalCheckTile(this);    
@@ -199,7 +180,12 @@ public class Chicken extends TameAnimal {
 
         int screenX = worldX - gp.player.worldX + gp.player.SCREEN_X;
         int screenY = worldY - gp.player.worldY + gp.player.SCREEN_Y;
-
+        g2.drawRect(
+            screenX + solidArea.x,
+            screenY + solidArea.y,
+            solidArea.width,
+            solidArea.height
+        );
         if(worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X && 
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 

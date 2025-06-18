@@ -13,6 +13,7 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
+import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -74,10 +75,10 @@ public class GamePanel extends JPanel implements Runnable {
     public final int EFFECT_STATE = 15;
     public final int ACHIEVEMENT_STATE = 16;
 
-    private static final int MAX_CHICKENS = 12 ;
-    private static final int MAX_COWS = 8;
-    private static final int MAX_SHEEP = 8;
-    private static final int MAX_PIGS = 8;
+    private static final int MAX_CHICKENS = 10 ;
+    private static final int MAX_COWS = 5;
+    private static final int MAX_SHEEP = 5;
+    private static final int MAX_PIGS = 5;
     private static final int MAX_WOLF = 3;
     private static final int MAX_GOLD = 15;
     private static final int MAX_CRYSTAL = 8;
@@ -194,6 +195,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         if(chickenCount < MAX_CHICKENS) {
             sp.spawnAnimal("chicken", MAX_CHICKENS - chickenCount, usedPositions);
+           
         }
         if(cowCount < MAX_COWS) {
             sp.spawnAnimal("cow", MAX_COWS - cowCount, usedPositions);
@@ -203,9 +205,11 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if(pigCount < MAX_PIGS) {
             sp.spawnAnimal("pig", MAX_PIGS - pigCount, usedPositions);
+
         }
         if (wolfCount < MAX_WOLF) {
             sp.spawnAnimal("wolf", MAX_WOLF - wolfCount, usedPositions);
+            
         }
     }
 
@@ -230,7 +234,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-
+        player.inventory.addItems(new WindAxe());
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;

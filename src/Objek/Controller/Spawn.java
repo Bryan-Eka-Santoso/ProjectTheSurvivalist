@@ -193,6 +193,7 @@ public class Spawn {
                     break;
                 case "wolf":
                     gp.animals.add(new Wolf("Wolf", spawnPoint.x * gp.TILE_SIZE, spawnPoint.y * gp.TILE_SIZE, gp));
+                    
                     break;
             }
             
