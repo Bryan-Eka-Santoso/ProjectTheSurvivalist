@@ -84,8 +84,8 @@ public class MenuPanel extends JPanel {
         gamePanel.setFocusable(true);
         gamePanel.requestFocusInWindow();
         
-        gamePanel.setupGame();
         gamePanel.startgameThread();
+        gamePanel.setupGame();
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
