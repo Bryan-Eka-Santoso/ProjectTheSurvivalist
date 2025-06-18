@@ -2,12 +2,9 @@ package Objek.Controller;
 
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -23,9 +20,6 @@ public class TileManager {
         mapTile = new int[gp.maxMap][gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
         loadMap("/res/world/map.txt", 0);
-        loadMap("/res/world/seamap.txt", 1);
-        loadMap("/res/world/cave.txt", 2);
-        loadMap("/res/world/shop.txt", 3);
         getTileImage();
     }
 
@@ -96,16 +90,12 @@ public class TileManager {
 
     public void loadMap(String path, int map) {
         try {
-            URL url = getClass().getResource(path);
-            File file = new File(url.toURI());
-
-            if (!file.exists()) {
+            InputStream is = getClass().getResourceAsStream(path);
+            if (is == null) {
                 System.err.println("File tidak ditemukan: " + path);
                 return;
             }
-
-            InputStream is = new FileInputStream(file);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             List<Integer> numbers = new ArrayList<>();
 
@@ -113,7 +103,7 @@ public class TileManager {
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.trim().split(" ");
                 for (String token : tokens) {
-                    if (!token.trim().isEmpty()) { // Pastikan token tidak kosong
+                    if (!token.trim().isEmpty()) {
                         numbers.add(Integer.parseInt(token.trim()));
                     }
                 }

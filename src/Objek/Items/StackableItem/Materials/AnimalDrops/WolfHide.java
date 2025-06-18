@@ -9,7 +9,7 @@ public class WolfHide extends Material {
         this.isCanSell = true;
         this.price = 50;
         try {
-            this.img = javax.imageio.ImageIO.read(getClass().getResource("/res/Items/Material/wolfHide.png"));
+            this.img = javax.imageio.ImageIO.read(getClass().getResource("/res/Items/Material/wolfhide.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

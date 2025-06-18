@@ -168,7 +168,7 @@ public class AchievementManager {
             img17));
         BufferedImage img19 = null;
         try {
-            img19 = ImageIO.read(getClass().getResource("/res/Items/Equipments/fishingrod.png"));
+            img19 = ImageIO.read(getClass().getResource("/res/Items/Equipments/fishingRod.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
