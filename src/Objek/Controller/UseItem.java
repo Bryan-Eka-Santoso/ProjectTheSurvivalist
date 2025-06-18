@@ -357,7 +357,7 @@ public class UseItem {
                             gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
-                            gp.removedAnimals.add(animal);
+                            gp.removedAnimals.add(chicken);
                             player.gainExp(rand.nextInt(10) + 5);
                             player.animalIndex = -1;
                         }
@@ -368,7 +368,7 @@ public class UseItem {
                         if(pig.hp <= 0) {
                             gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawPork(1), gp));
-                            gp.removedAnimals.add(animal);
+                            gp.removedAnimals.add(pig);
                             player.gainExp(rand.nextInt(10) + 7);
                             player.animalIndex = -1;
                         }
@@ -380,7 +380,7 @@ public class UseItem {
                             gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) - 15, animal.worldY + 64, new RawMutton(1), gp));
                             player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) + 15, animal.worldY + 64, new Wool(rand.nextInt(2) + 1), gp));
-                            gp.removedAnimals.add(animal);
+                            gp.removedAnimals.add(sheep);
                             player.gainExp(rand.nextInt(10) + 8);
                             player.animalIndex = -1;
                         }
@@ -391,7 +391,7 @@ public class UseItem {
                         if(cow.hp <= 0) {
                             gp.player.totalAnimalsKilled++;
                             player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawMeat(1), gp));
-                            gp.removedAnimals.add(animal);
+                            gp.removedAnimals.add(cow);
                             player.gainExp(rand.nextInt(10) + 9);
                             player.animalIndex = -1;
                         }
@@ -404,7 +404,7 @@ public class UseItem {
                             if (rand.nextInt(10) < 2) {
                                 player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
-                            gp.removedAnimals.add(animal);
+                            gp.removedAnimals.add(wolf);
                             player.gainExp(rand.nextInt(10) + 30);
                             player.animalIndex = -1;
                         }
@@ -700,6 +700,7 @@ public class UseItem {
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX + 20, animal.worldY, new RawChicken(1), gp));
                         player.gp.droppedItems.add(new ItemDrop(animal.worldX - 20, animal.worldY, new Feather(rand.nextInt(3) + 1), gp));
                         player.gainExp(rand.nextInt(10) + 5);
+                        gp.removedAnimals.add(chicken);
                         player.animalIndex = -1;
                     }
                 } else if (animal instanceof Pig) {
@@ -710,6 +711,7 @@ public class UseItem {
                         player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawPork(1), gp));
                         player.gainExp(rand.nextInt(10) + 7);
+                        gp.removedAnimals.add(pig);
                         player.animalIndex = -1;
                     }
                 } else if(animal instanceof Sheep) {
@@ -721,6 +723,7 @@ public class UseItem {
                         player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) - 15, animal.worldY + 64, new RawMutton(1), gp));
                         player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60) + 15, animal.worldY + 64, new Wool(rand.nextInt(2) + 1), gp));
                         player.gainExp(rand.nextInt(10) + 8);
+                        gp.removedAnimals.add(sheep);
                         player.animalIndex = -1;
                     }
                 } else if(animal instanceof Cow) {
@@ -731,6 +734,7 @@ public class UseItem {
                         player.totalAnimalsKilled++;
                         player.gp.droppedItems.add(new ItemDrop((animal.worldX + 60), animal.worldY + 64, new RawMeat(1), gp));
                         player.gainExp(rand.nextInt(10) + 9);
+                        gp.removedAnimals.add(cow);
                         player.animalIndex = -1;
                     }
                 } else if (animal instanceof Wolf) {
@@ -743,11 +747,10 @@ public class UseItem {
                             player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                         }
                         player.gainExp(rand.nextInt(10) + 9);
+                        gp.removedAnimals.add(wolf);
                         player.animalIndex = -1;
                     }
                 }
-                gp.removedAnimals.add(animal);
-                player.animalIndex = -1;
                 playSE(4);
             } else if (player.buildingIndex != -1){
                 Buildings building = player.gp.buildings.get(player.buildingIndex);

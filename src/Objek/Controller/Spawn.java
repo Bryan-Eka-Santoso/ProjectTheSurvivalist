@@ -21,6 +21,7 @@ import Objek.Plant.Bushes.BerryBush;
 import Objek.Plant.Bushes.Bush;
 import Objek.Plant.Trees.GuavaTree;
 import Objek.Plant.Trees.MangoTree;
+import Objek.Plant.Trees.PalmTree;
 
 public class Spawn {
     public GamePanel gp;
@@ -147,6 +148,9 @@ public class Spawn {
                     break;
                 case "mango":
                     gp.plants.add(new MangoTree(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
+                    break;
+                case "palm":
+                    gp.plants.add(new PalmTree(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));
                     break;
                 case "berrybush":
                     gp.plants.add(new BerryBush(x * gp.TILE_SIZE, y * gp.TILE_SIZE, gp));

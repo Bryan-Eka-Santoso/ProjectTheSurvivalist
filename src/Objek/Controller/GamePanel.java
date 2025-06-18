@@ -13,7 +13,6 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
-import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -33,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 45;
+    final int FPS = 30;
 
     public final int MAX_WORLD_COL = 98;
     public final int MAX_WORLD_ROW = 98;
@@ -205,7 +204,6 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if(pigCount < MAX_PIGS) {
             sp.spawnAnimal("pig", MAX_PIGS - pigCount, usedPositions);
-
         }
         if (wolfCount < MAX_WOLF) {
             sp.spawnAnimal("wolf", MAX_WOLF - wolfCount, usedPositions);
@@ -217,6 +215,7 @@ public class GamePanel extends JPanel implements Runnable {
         ArrayList<Point> usedPositions = new ArrayList<>();
         sp.spawnPlant("guava", 50, usedPositions);
         sp.spawnPlant("mango", 40, usedPositions);
+        sp.spawnPlant("palm", 40, usedPositions);
         sp.spawnPlant("bush", 280, usedPositions);
         sp.spawnPlant("berrybush", 40, usedPositions);
     }
@@ -234,7 +233,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new WindAxe());
+
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
