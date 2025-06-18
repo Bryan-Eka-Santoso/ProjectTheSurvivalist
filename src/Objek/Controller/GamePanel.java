@@ -32,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable {
     final int MAX_SCREEN_ROW = 17;
     public final int SCREEN_WIDTH = TILE_SIZE * MAX_SCREEN_COL;
     public final int SCREEN_HEIGHT = TILE_SIZE * MAX_SCREEN_ROW;
-    final int FPS = 45;
+    final int FPS = 30;
 
     public final int MAX_WORLD_COL = 98;
     public final int MAX_WORLD_ROW = 98;
