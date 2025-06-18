@@ -596,7 +596,11 @@ public class Player {
             int animalDrawX = SCREEN_X + grabbedAnimal.getGrabOffsetX();
             int animalDrawY = SCREEN_Y + grabbedAnimal.getGrabOffsetY();
             
-            g2.drawImage(animalImg, animalDrawX, animalDrawY,grabbedAnimal.getWidth(), grabbedAnimal.getHeight(), null);
+            if(grabbedAnimal instanceof Chicken){
+                g2.drawImage(animalImg, animalDrawX, animalDrawY,grabbedAnimal.getWidth(), grabbedAnimal.getHeight(), null);
+            }else{
+                g2.drawImage(animalImg, animalDrawX, animalDrawY, grabbedAnimal.getWidth()/2, grabbedAnimal.getHeight()/2, null);
+            }
             
         }
     }
