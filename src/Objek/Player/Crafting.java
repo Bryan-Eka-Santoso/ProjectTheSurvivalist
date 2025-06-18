@@ -176,7 +176,7 @@ public class Crafting {
         r.put(recipe26, new WateringCan());
 
         List<Item> recipe27 = Arrays.asList(new Wood(8), new Wool(3), new MetalNails(4), new Feather(3));
-        r.put(recipe27, new KandangAyam(gp, 0));
+        r.put(recipe27, new ChickenCage(gp, 0));
 
         List<Item> recipe28 = Arrays.asList(new Wood(10), new Stone(6), new MetalNails(4), new Feather(3));
         r.put(recipe28, new PigCage(gp, 0));

@@ -583,7 +583,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             Boolean restore = gp.player.autoPickupItems;
             gp.player = new Player("Player", gp.player.level, gp, gp.keyH);
             gp.player.autoPickupItems = restore; // Restore auto pickup state
-            gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+            gp.tileM.loadMap("/res/world/map.txt", 0);
             gp.currentMap = 0;
             gp.fish.clear();
             gp.player.getPlayerImg();
@@ -603,7 +603,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         if(gp.currentMap == 0){
             if((col == 27 || col == 28) && row == 17) {
                 int randGetGolden = rand.nextInt(2);
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.tileM.loadMap("/res/world/map.txt", 0);
                 gp.currentMap = 1;
                 gp.animals.clear();
                 gp.player.getPlayerImg();
@@ -620,7 +620,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             }
         } else if (gp.currentMap == 1){
             if(col == 60 && row == 25) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
+                gp.tileM.loadMap("/res/world/seamap.txt", 1);
                 gp.currentMap = 0;
                 gp.fish.clear();
                 gp.stopMusic();
@@ -637,10 +637,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     public void TPressed() {
         if (gp.gameState == gp.PLAY_STATE) {
             for(Buildings building : gp.buildings) {
-                if(building instanceof Kandang) {
+                if(building instanceof Cage) {
                     if(Math.abs(gp.player.worldX - building.worldX) <= gp.TILE_SIZE && 
                     Math.abs(gp.player.worldY - building.worldY) <= gp.TILE_SIZE) {
-                        gp.currentKandang = (Kandang)building;
+                        gp.currentKandang = (Cage)building;
                         gp.gameState = gp.KANDANG_STATE;
                         return;
                     }
@@ -993,7 +993,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
 
         if(gp.currentMap == 2){
             if ((col == 22 || col == 23) && row == 23) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.tileM.loadMap("/res/world/map.txt", 0);
                 gp.currentMap = 0;
                 gp.monsters.clear();
                 gp.checkAndRespawnAnimals();
@@ -1009,7 +1009,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         }
         if(gp.currentMap == 3){
             if(col == 52 && row == 53) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.tileM.loadMap("/res/world/map.txt", 0);
                 gp.currentMap = 0;
                 gp.checkAndRespawnAnimals();
                 gp.stopMusic();

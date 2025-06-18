@@ -1,6 +1,5 @@
 package Objek.Animal;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -14,6 +13,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class Wolf extends WildAnimal {
+
     Sound sound = new Sound();
     Random random = new Random();
     String gender;
@@ -41,22 +41,22 @@ public class Wolf extends WildAnimal {
         readyBreeding = true;
         this.hp = 100;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/up1.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/up2.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/down1.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/down2.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/left1.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/left2.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/right1.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/wolf/right2.png"));
+            up1 = ImageIO.read(getClass().getResource("/res/animal/wolf/up1.png"));
+            up2 = ImageIO.read(getClass().getResource("/res/animal/wolf/up2.png"));
+            up3 = ImageIO.read(getClass().getResource("/res/animal/wolf/up1.png"));
+            up4 = ImageIO.read(getClass().getResource("/res/animal/wolf/up2.png"));
+            down1 = ImageIO.read(getClass().getResource("/res/animal/wolf/down1.png"));
+            down2 = ImageIO.read(getClass().getResource("/res/animal/wolf/down2.png"));
+            down3 = ImageIO.read(getClass().getResource("/res/animal/wolf/down1.png"));
+            down4 = ImageIO.read(getClass().getResource("/res/animal/wolf/down2.png"));
+            left1 = ImageIO.read(getClass().getResource("/res/animal/wolf/left1.png"));
+            left2 = ImageIO.read(getClass().getResource("/res/animal/wolf/left2.png"));
+            left3 = ImageIO.read(getClass().getResource("/res/animal/wolf/left1.png"));
+            left4 = ImageIO.read(getClass().getResource("/res/animal/wolf/left2.png"));
+            right1 = ImageIO.read(getClass().getResource("/res/animal/wolf/right1.png"));
+            right2 = ImageIO.read(getClass().getResource("/res/animal/wolf/right2.png"));
+            right3 = ImageIO.read(getClass().getResource("/res/animal/wolf/right1.png"));
+            right4 = ImageIO.read(getClass().getResource("/res/animal/wolf/right2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,9 +65,11 @@ public class Wolf extends WildAnimal {
     public String getGender() {
         return gender;
     }
+
     public boolean isReadyGetItem() {
         return readyGetItem;
     }
+
     public void setReadyGetItem(boolean ready) {
         this.readyGetItem = ready;
     }

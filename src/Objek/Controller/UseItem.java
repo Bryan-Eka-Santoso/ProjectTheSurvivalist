@@ -1,11 +1,8 @@
 package Objek.Controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
-
 import Objek.Animal.Animal;
 import Objek.Animal.Chicken;
 import Objek.Animal.Cow;
@@ -214,8 +211,8 @@ public class UseItem {
                 torch.isLit = !torch.isLit; // Toggle the torch state
                 try {
                     torch.img = torch.isLit 
-                        ? ImageIO.read(new File("ProjectTheSurvivalist/res/Items/lightItems/lanternon.png")) 
-                        : ImageIO.read(new File("ProjectTheSurvivalist/res/Items/lightItems/lanternoff.png"));
+                        ? ImageIO.read(getClass().getResource("/res/Items/lightItems/lanternon.png")) 
+                        : ImageIO.read(getClass().getResource("/res/Items/lightItems/lanternoff.png"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -460,8 +457,8 @@ public class UseItem {
                 } else if (player.buildingIndex != -1 && player.gp.buildings.get(player.buildingIndex).isBreakable) {
                     Buildings building = player.gp.buildings.get(player.buildingIndex);
 
-                    if (building instanceof KandangAyam){
-                        KandangAyam k = (KandangAyam) building;
+                    if (building instanceof ChickenCage){
+                        ChickenCage k = (ChickenCage) building;
 
                         if (k.chickensInCage.size() > 0){
                             System.out.println("Unable to use arsenal on Kandang Ayam with chickens inside!");
@@ -526,9 +523,9 @@ public class UseItem {
                                     chest.inventory.slots[i] = null;
                                 }
                             }
-                        } else if (building instanceof Kandang){
-                            if (building instanceof KandangAyam) {
-                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new KandangAyam(gp, 0), gp));
+                        } else if (building instanceof Cage){
+                            if (building instanceof ChickenCage) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new ChickenCage(gp, 0), gp));
                             } else if (building instanceof PigCage) {
                                 player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new PigCage(gp, 0), gp));
                             } else if (building instanceof SheepCage) {
@@ -771,9 +768,9 @@ public class UseItem {
                                     chest.inventory.slots[i] = null;
                                 }
                             }
-                        } else if (building instanceof Kandang){
-                            if (building instanceof KandangAyam) {
-                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new KandangAyam(gp, 0), gp));
+                        } else if (building instanceof Cage){
+                            if (building instanceof ChickenCage) {
+                                player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new ChickenCage(gp, 0), gp));
                             } else if (building instanceof PigCage) {
                                 player.gp.droppedItems.add(new ItemDrop(building.worldX, building.worldY, new PigCage(gp, 0), gp));
                             } else if (building instanceof SheepCage) {

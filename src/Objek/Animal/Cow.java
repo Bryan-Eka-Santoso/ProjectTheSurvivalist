@@ -1,14 +1,11 @@
 package Objek.Animal;
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-
 import Objek.Controller.GamePanel;
 import Objek.Items.StackableItem.Bucket;
 import Objek.Player.Player;
-
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
@@ -18,7 +15,6 @@ public class Cow extends TameAnimal {
     private int actionMoveCounter = 0;
     private  int actionMoveDelay;
     private int speed = 8; 
-
     Random random = new Random();
     public int actionLockCounter = 0;
     private static final int COW_WIDTH = 128;
@@ -28,7 +24,6 @@ public class Cow extends TameAnimal {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
         this.actionMoveDelay = random.nextInt(91) + 30;
-       
         this.solidArea = new Rectangle(20,20,44,44); 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
@@ -37,34 +32,37 @@ public class Cow extends TameAnimal {
         this.grabOffsetY = -40;
         this.hp = 100;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/left3.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/cow/right4.png"));
+            up1 = ImageIO.read(getClass().getResource("/res/animal/cow/up1.png"));
+            up2 = ImageIO.read(getClass().getResource("/res/animal/cow/up2.png"));
+            up3 = ImageIO.read(getClass().getResource("/res/animal/cow/up3.png"));
+            up4 = ImageIO.read(getClass().getResource("/res/animal/cow/up4.png"));
+            down1 = ImageIO.read(getClass().getResource("/res/animal/cow/down1.png"));
+            down2 = ImageIO.read(getClass().getResource("/res/animal/cow/down2.png"));
+            down3 = ImageIO.read(getClass().getResource("/res/animal/cow/down3.png"));
+            down4 = ImageIO.read(getClass().getResource("/res/animal/cow/down4.png"));
+            left1 = ImageIO.read(getClass().getResource("/res/animal/cow/left1.png"));
+            left2 = ImageIO.read(getClass().getResource("/res/animal/cow/left2.png"));
+            left3 = ImageIO.read(getClass().getResource("/res/animal/cow/left3.png"));
+            left4 = ImageIO.read(getClass().getResource("/res/animal/cow/left3.png"));
+            right1 = ImageIO.read(getClass().getResource("/res/animal/cow/right1.png"));
+            right2 = ImageIO.read(getClass().getResource("/res/animal/cow/right2.png"));
+            right3 = ImageIO.read(getClass().getResource("/res/animal/cow/right3.png"));
+            right4 = ImageIO.read(getClass().getResource("/res/animal/cow/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public int getWidth() {
         return COW_WIDTH;
     }
+
     @Override
     public int getHeight() {
         return COW_HEIGHT;
     }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;

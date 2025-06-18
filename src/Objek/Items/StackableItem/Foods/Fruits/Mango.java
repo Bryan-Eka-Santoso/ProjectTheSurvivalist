@@ -5,12 +5,13 @@ import Objek.Items.StackableItem.Foods.Hydrating;
 import Objek.Player.Player;
 
 public class Mango extends Food implements Hydrating {
+    
     public Mango(int currentStack) {
         super("Mango", currentStack);
         this.isCanSell = true;
         this.price = 5; // Set the price for Mango
         try {
-            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Foods/mango.png")); 
+            this.img = javax.imageio.ImageIO.read(getClass().getResource("/res/Items/Foods/mango.png")); 
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

@@ -1,22 +1,21 @@
 package Objek.Items.Buildings;
 
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
 import Objek.Animal.TameAnimal;
 import javax.imageio.ImageIO;
 
 import Objek.Controller.GamePanel;
 
-public abstract class Kandang extends Buildings {
+public abstract class Cage extends Buildings {
 
-    public Kandang(String name,GamePanel gp, int buildingMap) {
+    public Cage(String name,GamePanel gp, int buildingMap) {
         super(name, 3, 1, gp, new Rectangle(11,10,42,40),64,64, buildingMap);
         this.gp = gp;
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/coop.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/coop.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

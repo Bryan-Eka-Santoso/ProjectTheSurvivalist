@@ -85,7 +85,7 @@ public class GamePanel extends JPanel implements Runnable {
     private static final int MAX_METAL = 20;
     private static final int MAX_ROCK = 30;
 
-    public Kandang currentKandang;
+    public Cage currentKandang;
     public final int maxMap = 10;
     public int currentMap = 0;
     public boolean isCave = false;
@@ -238,8 +238,7 @@ public class GamePanel extends JPanel implements Runnable {
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
         buildings.add(shop);
-        player.inventory.addItems(new KandangAyam(this, 0));
-        player.inventory.addItems(new PigCage(this, 0));
+
         Buildings cave = new Cave(this, 1, 0);
         cave.worldX = 50 * TILE_SIZE;
         cave.worldY = 50 * TILE_SIZE;

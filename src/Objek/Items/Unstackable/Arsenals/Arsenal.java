@@ -3,6 +3,7 @@ package Objek.Items.Unstackable.Arsenals;
 import Objek.Items.Unstackable.Unstackable;
 
 public class Arsenal extends Unstackable {
+    
     public int damage;
     public int durability;
     public int maxDurability;

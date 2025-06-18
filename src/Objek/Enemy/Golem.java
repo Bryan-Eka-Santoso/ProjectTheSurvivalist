@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -34,22 +33,22 @@ public class Golem extends Monster {
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/left4.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/right4.png"));
+            up1 = ImageIO.read(getClass().getResource("/res/monsters/golem/up1.png"));
+            up2 = ImageIO.read(getClass().getResource("/res/monsters/golem/up2.png"));
+            up3 = ImageIO.read(getClass().getResource("/res/monsters/golem/up3.png"));
+            up4 = ImageIO.read(getClass().getResource("/res/monsters/golem/up4.png"));
+            down1 = ImageIO.read(getClass().getResource("/res/monsters/golem/down1.png"));
+            down2 = ImageIO.read(getClass().getResource("/res/monsters/golem/down2.png"));
+            down3 = ImageIO.read(getClass().getResource("/res/monsters/golem/down3.png"));
+            down4 = ImageIO.read(getClass().getResource("/res/monsters/golem/down4.png"));
+            left1 = ImageIO.read(getClass().getResource("/res/monsters/golem/left1.png"));
+            left2 = ImageIO.read(getClass().getResource("/res/monsters/golem/left2.png"));
+            left3 = ImageIO.read(getClass().getResource("/res/monsters/golem/left3.png"));
+            left4 = ImageIO.read(getClass().getResource("/res/monsters/golem/left4.png"));
+            right1 = ImageIO.read(getClass().getResource("/res/monsters/golem/right1.png"));
+            right2 = ImageIO.read(getClass().getResource("/res/monsters/golem/right2.png"));
+            right3 = ImageIO.read(getClass().getResource("/res/monsters/golem/right3.png"));
+            right4 = ImageIO.read(getClass().getResource("/res/monsters/golem/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

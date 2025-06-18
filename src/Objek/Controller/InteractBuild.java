@@ -1,6 +1,5 @@
 package Objek.Controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.Point;
@@ -101,7 +100,7 @@ public class InteractBuild {
                 gp.SpawnX = gp.player.worldX / gp.TILE_SIZE;
                 gp.SpawnY = gp.player.worldY / gp.TILE_SIZE;
                 try {
-                    gp.buildings.get(gp.player.buildingIndex).img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/SleepingPlayer.png"));
+                    gp.buildings.get(gp.player.buildingIndex).img = ImageIO.read(getClass().getResource("/res/Items/Buildings/SleepingPlayer.png"));
                     gp.player.isSleeping = true;
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -113,7 +112,7 @@ public class InteractBuild {
         }
         else if (building instanceof Cave) {
             ArrayList<Point> usedPositions = new ArrayList<>();
-            gp.tileM.loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
+            gp.tileM.loadMap("/res/world/cave.txt", 2);
             gp.currentMap = 2;
             gp.animals.clear();
             gp.stopMusic();
@@ -130,7 +129,7 @@ public class InteractBuild {
             gp.checkAndRespawnOres();
         }
         else if (building instanceof Shop) {
-            gp.tileM.loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);
+            gp.tileM.loadMap("/res/world/shop.txt", 3);
             gp.currentMap = 3;
             gp.animals.clear();
             gp.stopMusic();
@@ -244,16 +243,16 @@ public class InteractBuild {
                 }
             }
             
-            gp.ui.effectItems.add(new ShopEffect("Repair Arsenal", "ProjectTheSurvivalist/res/Items/Equipments/sword.png", 10, 1));
-            gp.ui.effectItems.add(new ShopEffect("Repair Armor", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate2.png", 10, 1));
-            gp.ui.effectItems.add(new ShopEffect("Repair Fishing Rod", "ProjectTheSurvivalist/res/Items/Equipments/fishingrod.png", 10, 1));
+            gp.ui.effectItems.add(new ShopEffect("Repair Arsenal", "/res/Items/Equipments/sword.png", 10, 1));
+            gp.ui.effectItems.add(new ShopEffect("Repair Armor", "/res/Items/Armor/metalchestplate2.png", 10, 1));
+            gp.ui.effectItems.add(new ShopEffect("Repair Fishing Rod", "/res/Items/Equipments/fishingrod.png", 10, 1));
             
-            gp.ui.effectItems.add(new ShopEffect("Upgrade Level", "ProjectTheSurvivalist/res/Items/Effect/uplevel.png", 0, 2));
-            gp.ui.effectItems.add(new ShopEffect("Coins +999", "ProjectTheSurvivalist/res/Items/Effect/addgold.png", 0, 2));
+            gp.ui.effectItems.add(new ShopEffect("Upgrade Level", "/res/Items/Effect/uplevel.png", 0, 2));
+            gp.ui.effectItems.add(new ShopEffect("Coins +999", "/res/Items/Effect/addgold.png", 0, 2));
             if(!gp.isStrong){
-                gp.ui.effectItems.add(new ShopEffect("God Mode", "ProjectTheSurvivalist/res/Items/Effect/godmode.png", 0, 2));
+                gp.ui.effectItems.add(new ShopEffect("God Mode", "/res/Items/Effect/godmode.png", 0, 2));
             } else {
-                gp.ui.effectItems.add(new ShopEffect("Normal Mode", "ProjectTheSurvivalist/res/Items/Effect/normalmode.png", 0, 2));
+                gp.ui.effectItems.add(new ShopEffect("Normal Mode", "/res/Items/Effect/normalmode.png", 0, 2));
             }
             // gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
             // gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -38,22 +37,22 @@ public class Bat extends Monster {
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/up1.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/up2.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/down1.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/down2.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/left1.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/left2.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/right1.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/bat/right2.png"));
+            up1 = ImageIO.read(getClass().getResource("/res/monsters/bat/up1.png"));
+            up2 = ImageIO.read(getClass().getResource("/res/monsters/bat/up2.png"));
+            up3 = ImageIO.read(getClass().getResource("/res/monsters/bat/up1.png"));
+            up4 = ImageIO.read(getClass().getResource("/res/monsters/bat/up2.png"));
+            down1 = ImageIO.read(getClass().getResource("/res/monsters/bat/down1.png"));
+            down2 = ImageIO.read(getClass().getResource("/res/monsters/bat/down2.png"));
+            down3 = ImageIO.read(getClass().getResource("/res/monsters/bat/down1.png"));
+            down4 = ImageIO.read(getClass().getResource("/res/monsters/bat/down2.png"));
+            left1 = ImageIO.read(getClass().getResource("/res/monsters/bat/left1.png"));
+            left2 = ImageIO.read(getClass().getResource("/res/monsters/bat/left2.png"));
+            left3 = ImageIO.read(getClass().getResource("/res/monsters/bat/left1.png"));
+            left4 = ImageIO.read(getClass().getResource("/res/monsters/bat/left2.png"));
+            right1 = ImageIO.read(getClass().getResource("/res/monsters/bat/right1.png"));
+            right2 = ImageIO.read(getClass().getResource("/res/monsters/bat/right2.png"));
+            right3 = ImageIO.read(getClass().getResource("/res/monsters/bat/right1.png"));
+            right4 = ImageIO.read(getClass().getResource("/res/monsters/bat/right2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

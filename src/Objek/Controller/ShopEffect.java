@@ -2,7 +2,6 @@ package Objek.Controller;
 
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import java.io.File;
 import java.io.IOException;
 
 public class ShopEffect {
@@ -17,9 +16,8 @@ public class ShopEffect {
         this.filePath = filePath;
         this.price = price;
         this.category = category;
-        
         try {
-            this.img = ImageIO.read(new File(filePath));
+            this.img = ImageIO.read(getClass().getResource(filePath));
         } catch (IOException e) {
             System.out.println("Error loading image: " + filePath);
             e.printStackTrace();

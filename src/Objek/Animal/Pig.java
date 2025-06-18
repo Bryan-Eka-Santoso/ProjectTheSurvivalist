@@ -1,27 +1,19 @@
 package Objek.Animal;
 
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-
 import Objek.Controller.GamePanel;
 import Objek.Items.StackableItem.Foods.CookedFoods.Bacon;
 import Objek.Player.Player;
-
-
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
 public class Pig extends TameAnimal{
+    
     Random random = new Random();
-
-    // private Rectangle upHitbox;
-    // private Rectangle downHitbox;
-    // private Rectangle leftHitbox;
-    // private Rectangle rightHitbox;
     private int actionMoveCounter = 0;
     private int actionMoveDelay;
     private int speed = 8; 
@@ -32,12 +24,7 @@ public class Pig extends TameAnimal{
     public Pig(String name, int x, int y, GamePanel gp) {
         super(name, x, y, 15, "down", gp);
         setRandomDirection();
-        this.actionMoveDelay = random.nextInt(91) + 30;
-        // upHitbox = new Rectangle(50, 45, 30, 63);    // Lebih sempit di atas
-        // downHitbox = new Rectangle(50, 45, 30, 63); // Lebih sempit di bawah
-        // leftHitbox = new Rectangle(33, 60, 57,28 );  // Lebih sempit di kiri
-        // rightHitbox = new Rectangle(33, 60, 57,28 );
-        // this.solidArea = downHitbox;
+        this.actionMoveDelay = random.nextInt(91);
         this.solidArea = new Rectangle(20,20,44,44); 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
@@ -46,22 +33,22 @@ public class Pig extends TameAnimal{
         this.grabOffsetY = -40;
         this.hp = 100;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/up1.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/left4.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/pig/right4.png"));
+            up1 = ImageIO.read(getClass().getResource("/res/animal/pig/up1.png"));
+            up2 = ImageIO.read(getClass().getResource("/res/animal/pig/up1.png"));
+            up3 = ImageIO.read(getClass().getResource("/res/animal/pig/up3.png"));
+            up4 = ImageIO.read(getClass().getResource("/res/animal/pig/up4.png"));
+            down1 = ImageIO.read(getClass().getResource("/res/animal/pig/down1.png"));
+            down2 = ImageIO.read(getClass().getResource("/res/animal/pig/down2.png"));
+            down3 = ImageIO.read(getClass().getResource("/res/animal/pig/down3.png"));
+            down4 = ImageIO.read(getClass().getResource("/res/animal/pig/down4.png"));
+            left1 = ImageIO.read(getClass().getResource("/res/animal/pig/left1.png"));
+            left2 = ImageIO.read(getClass().getResource("/res/animal/pig/left2.png"));
+            left3 = ImageIO.read(getClass().getResource("/res/animal/pig/left3.png"));
+            left4 = ImageIO.read(getClass().getResource("/res/animal/pig/left4.png"));
+            right1 = ImageIO.read(getClass().getResource("/res/animal/pig/right1.png"));
+            right2 = ImageIO.read(getClass().getResource("/res/animal/pig/right2.png"));
+            right3 = ImageIO.read(getClass().getResource("/res/animal/pig/right3.png"));
+            right4 = ImageIO.read(getClass().getResource("/res/animal/pig/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,10 +58,12 @@ public class Pig extends TameAnimal{
     public int getWidth() {
         return PIG_WIDTH;
     }
+
     @Override
     public int getHeight() {
         return PIG_HEIGHT;
     }
+
     private void setRandomDirection() {
         String newDirection= null;
         String oldDirection = this.direction;
@@ -104,21 +93,6 @@ public class Pig extends TameAnimal{
         if(direction == null) {
             direction = "down"; 
         }
-        // switch(direction) {
-        //     case "up": 
-        //         solidArea = upHitbox;
-        //         break;
-        //     case "down": 
-        //         solidArea = downHitbox;
-        //         break;
-        //     case "left": 
-        //         solidArea = leftHitbox;
-        //         break;
-        //     case "right": 
-        //         solidArea = rightHitbox;
-        //         break;
-        // }
-
         collisionOn = false;
         gp.cCheck.animalCheckTile(this);     // Check collision dengan tile
         gp.cCheck.animalCheckObject(this);   // Check collision dengan object/plant

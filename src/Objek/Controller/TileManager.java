@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -21,10 +22,10 @@ public class TileManager {
         tile = new Tile[30];
         mapTile = new int[gp.maxMap][gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
-        loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
-        loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
-        loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
-        loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);
+        loadMap("/res/world/map.txt", 0);
+        loadMap("/res/world/seamap.txt", 1);
+        loadMap("/res/world/cave.txt", 2);
+        loadMap("/res/world/shop.txt", 3);
         getTileImage();
     }
 
@@ -85,7 +86,7 @@ public class TileManager {
 
         try {
             tile[index] = new Tile();
-            tile[index].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/" + imagePath + ".png"));
+            tile[index].image = ImageIO.read(getClass().getResource("/res/world/" + imagePath + ".png"));
             tile[index].image = uTool.scaleImage(tile[index].image, gp.TILE_SIZE, gp.TILE_SIZE);
             tile[index].collison = collision;
         } catch (IOException e) {
@@ -95,7 +96,9 @@ public class TileManager {
 
     public void loadMap(String path, int map) {
         try {
-            File file = new File(path);
+            URL url = getClass().getResource(path);
+            File file = new File(url.toURI());
+
             if (!file.exists()) {
                 System.err.println("File tidak ditemukan: " + path);
                 return;
@@ -141,6 +144,8 @@ public class TileManager {
             System.err.println("Terjadi kesalahan saat membaca file: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

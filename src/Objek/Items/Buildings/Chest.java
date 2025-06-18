@@ -1,7 +1,6 @@
 package Objek.Items.Buildings;
 
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
@@ -16,7 +15,7 @@ public class Chest extends Buildings {
         this.inventory = new Inventory(32, gp);
 
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/chest.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/chest.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

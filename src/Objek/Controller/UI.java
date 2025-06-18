@@ -14,7 +14,6 @@ import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +25,8 @@ import Objek.Fish.Fish;
 import Objek.Items.Item;
 import Objek.Items.Buildings.Buildings;
 import Objek.Items.Buildings.Chest;
-import Objek.Items.Buildings.Kandang;
-import Objek.Items.Buildings.KandangAyam;
+import Objek.Items.Buildings.Cage;
+import Objek.Items.Buildings.ChickenCage;
 import Objek.Items.Buildings.PigCage;
 import Objek.Items.Buildings.SheepCage;
 import Objek.Items.Buildings.CowCage;
@@ -70,7 +69,7 @@ public class UI {
     public boolean showNameInput = false;
     private String currentInput = "";
     private TameAnimal animalToName;
-    private Kandang targetKandang;
+    private Cage targetKandang;
     Rectangle textField;
     private BufferedImage woodBg;
     private Rectangle backButton;
@@ -155,7 +154,7 @@ public class UI {
         selectedChestIndex = 0;
         isPointingChest = true;
         try {
-            woodBg = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));
+            woodBg = ImageIO.read(getClass().getResource("/res/ui/bg-wood.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -446,14 +445,14 @@ public class UI {
         g2.drawString(message, x, y);
     }
 
-    public void showAnimalNameInput(TameAnimal animal, Kandang kandang) {
+    public void showAnimalNameInput(TameAnimal animal, Cage kandang) {
          if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
             currentInput = "";
             animalToName = null;
             targetKandang = null;
             return;
         }
-        if(kandang instanceof KandangAyam && !(animal instanceof Chicken)) {
+        if(kandang instanceof ChickenCage && !(animal instanceof Chicken)) {
             gp.ui.showWrongKandangMessage(); 
             return;
         }
@@ -617,12 +616,12 @@ public class UI {
         return x;
     }
 
-    public void handleBreedingKeyPress(int keyCode, Kandang kandang) {
+    public void handleBreedingKeyPress(int keyCode, Cage kandang) {
         ArrayList<TameAnimal> males = new ArrayList<>();
         ArrayList<TameAnimal> females = new ArrayList<>();
         
-        if(kandang instanceof KandangAyam) {
-            for(TameAnimal animal : ((KandangAyam)kandang).chickensInCage) {
+        if(kandang instanceof ChickenCage) {
+            for(TameAnimal animal : ((ChickenCage)kandang).chickensInCage) {
                 if(animal.getGender().equals("Male") && animal.isReadyBreeding()) 
                     males.add(animal);
                 else if(animal.getGender().equals("Female") && animal.isReadyBreeding())
@@ -686,7 +685,7 @@ public class UI {
 
                 if(selectedMale != null && selectedFemale != null) {
                     TameAnimal baby = null;
-                    if(kandang instanceof KandangAyam) {
+                    if(kandang instanceof ChickenCage) {
                         baby = ((Chicken)selectedMale).breeding((Chicken)selectedFemale, gp);
                     }
                     else if(kandang instanceof CowCage) {
@@ -717,10 +716,10 @@ public class UI {
             }
         }
     }
-    public void handleRemoveKeyPress(int keyCode, Kandang kandang, Player player) {
+    public void handleRemoveKeyPress(int keyCode, Cage kandang, Player player) {
         ArrayList<TameAnimal> animals = new ArrayList<>();
-        if(kandang instanceof KandangAyam) {
-            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        if(kandang instanceof ChickenCage) {
+            animals.addAll(((ChickenCage)kandang).chickensInCage);
         } else if(kandang instanceof CowCage) {
             animals.addAll(((CowCage)kandang).cowsInCage);
         } else if(kandang instanceof SheepCage) {
@@ -738,8 +737,8 @@ public class UI {
         else if(keyCode == KeyEvent.VK_ENTER && !animals.isEmpty()) {
             if(player.grabbedAnimal == null){
                 TameAnimal animal = animals.get(selectedRemoveIndex);
-                if(kandang instanceof KandangAyam) {
-                    ((KandangAyam)kandang).chickensInCage.remove(animal);
+                if(kandang instanceof ChickenCage) {
+                    ((ChickenCage)kandang).chickensInCage.remove(animal);
                 } else if(kandang instanceof CowCage) {
                     ((CowCage)kandang).cowsInCage.remove(animal);
                 } else if(kandang instanceof SheepCage) {
@@ -754,10 +753,10 @@ public class UI {
             }
         }
     }
-    public void handleGetItemKeyPress(int keyCode, Kandang kandang, Player player) {
+    public void handleGetItemKeyPress(int keyCode, Cage kandang, Player player) {
         ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
-        if(kandang instanceof KandangAyam) {
-            for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+        if(kandang instanceof ChickenCage) {
+            for(Chicken chicken : ((ChickenCage)kandang).chickensInCage) {
                 if(chicken.isReadyGetItem()) {
                     readyAnimals.add(chicken);
                 }
@@ -809,7 +808,7 @@ public class UI {
         }
     }
     
-    public void drawGetItemMenu(Graphics2D g2, Kandang kandang) {
+    public void drawGetItemMenu(Graphics2D g2, Cage kandang) {
         int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
@@ -846,8 +845,8 @@ public class UI {
         // Get ready animals
         ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
         
-        if(kandang instanceof KandangAyam) {
-            for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+        if(kandang instanceof ChickenCage) {
+            for(Chicken chicken : ((ChickenCage)kandang).chickensInCage) {
                 if(chicken.isReadyGetItem()) {
                     readyAnimals.add(chicken);
                 }
@@ -956,7 +955,7 @@ public class UI {
         }
     }
 
-    public void drawBreedingMenu(Graphics2D g2, Kandang kandang) {
+    public void drawBreedingMenu(Graphics2D g2, Cage kandang) {
         int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
@@ -1010,8 +1009,8 @@ public class UI {
             ArrayList<TameAnimal> males = new ArrayList<>();
             ArrayList<TameAnimal> females = new ArrayList<>();
             
-            if(kandang instanceof KandangAyam) {
-                for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+            if(kandang instanceof ChickenCage) {
+                for(Chicken chicken : ((ChickenCage)kandang).chickensInCage) {
                     if(chicken.isReadyBreeding()) {
                         if(chicken.getGender().equalsIgnoreCase("Male")) males.add(chicken);
                         else females.add(chicken);
@@ -1134,7 +1133,7 @@ public class UI {
         }
     }
     
-    public void drawRemoveMenu(Graphics2D g2, Kandang kandang) {
+    public void drawRemoveMenu(Graphics2D g2, Cage kandang) {
         int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
@@ -1170,8 +1169,8 @@ public class UI {
 
         // Get all animals
         ArrayList<TameAnimal> animals = new ArrayList<>();
-        if(kandang instanceof KandangAyam) {
-            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        if(kandang instanceof ChickenCage) {
+            animals.addAll(((ChickenCage)kandang).chickensInCage);
         } else if(kandang instanceof CowCage) {
             animals.addAll(((CowCage)kandang).cowsInCage);
         } else if(kandang instanceof SheepCage) {
@@ -1265,7 +1264,7 @@ public class UI {
         }
     }
 
-    public void drawKandangMenu(Graphics2D g2, Kandang kandang) {
+    public void drawKandangMenu(Graphics2D g2, Cage kandang) {
         int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
@@ -1302,8 +1301,8 @@ public class UI {
         
         // Get animal list based on cage type
         ArrayList<TameAnimal> animals = new ArrayList<>();
-        if(kandang instanceof KandangAyam) {
-            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        if(kandang instanceof ChickenCage) {
+            animals.addAll(((ChickenCage)kandang).chickensInCage);
         } else if(kandang instanceof CowCage) {
             animals.addAll(((CowCage)kandang).cowsInCage);
         } else if(kandang instanceof SheepCage) {
@@ -1447,7 +1446,7 @@ public class UI {
         }
     }
 
-    public void handleKandangClick(int x, int y, Kandang kandang, Player player) {
+    public void handleKandangClick(int x, int y, Cage kandang, Player player) {
         if(inRemoveMenu) {
             if(removeBackButton != null && removeBackButton.contains(x, y)) {
                 inRemoveMenu = false;
@@ -2758,7 +2757,7 @@ public class UI {
         g2.setColor(c);
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));
+            img = ImageIO.read(getClass().getResource("/res/ui/bg-wood.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -3306,7 +3305,7 @@ public class UI {
             
             BufferedImage lock = null;
             try {
-                lock = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/lock.png"));
+                lock = ImageIO.read(getClass().getResource("/res/ui/lock.png"));
             } catch (Exception e) {
                 e.printStackTrace();
             }

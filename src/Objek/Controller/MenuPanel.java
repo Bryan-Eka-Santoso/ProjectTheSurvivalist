@@ -2,7 +2,6 @@ package Objek.Controller;
 
 import java.awt.Dimension;
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -19,15 +18,15 @@ public class MenuPanel extends JPanel {
     
     public MenuPanel(JFrame window) {
         try {
-            img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/play.png"));
+            img = ImageIO.read(getClass().getResource("/res/ui/play.png"));
             Image scaledImage = img.getScaledInstance(250, 50, Image.SCALE_SMOOTH);
             play = new ImageIcon(scaledImage);
 
-            img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/guide.png"));
+            img = ImageIO.read(getClass().getResource("/res/ui/guide.png"));
             scaledImage = img.getScaledInstance(250, 50, Image.SCALE_SMOOTH);
             guide = new ImageIcon(scaledImage);
 
-            img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/exit.png"));
+            img = ImageIO.read(getClass().getResource("/res/ui/exit.png"));
             scaledImage = img.getScaledInstance(250, 50, Image.SCALE_SMOOTH);
             exit = new ImageIcon(scaledImage);
         } catch (IOException e) {
@@ -40,14 +39,14 @@ public class MenuPanel extends JPanel {
         setLayout(null); // supaya bisa atur posisi elemen secara manual
 
         // === Tambahkan background GIF ===
-        ImageIcon rawIcon = new ImageIcon("ProjectTheSurvivalist/res/ui/bgMenu.gif");
+        ImageIcon rawIcon = new ImageIcon(getClass().getResource("/res/ui/bgMenu.gif"));
         Image image = rawIcon.getImage().getScaledInstance(1125, 765, Image.SCALE_DEFAULT);
         ImageIcon scaledIcon = new ImageIcon(image);
         JLabel backgroundLabel = new JLabel(scaledIcon);
         backgroundLabel.setBounds(0, 0, 1125, 765);
         add(backgroundLabel);
 
-        ImageIcon titleIcon = new ImageIcon("ProjectTheSurvivalist/res/ui/title.png");
+        ImageIcon titleIcon = new ImageIcon(getClass().getResource("/res/ui/title.png"));
         JLabel titleLabel = new JLabel(titleIcon);
         titleLabel.setBounds(200, 50, 750, 150);
         add(titleLabel);
@@ -84,16 +83,15 @@ public class MenuPanel extends JPanel {
         window.setContentPane(gamePanel);
         gamePanel.setFocusable(true);
         gamePanel.requestFocusInWindow();
+        
+        gamePanel.setupGame();
+        gamePanel.startgameThread();
 
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-
-        gamePanel.setupGame();
-        gamePanel.startgameThread();
     }
 
     public void showMenu() {
-        System.out.println("test");
         GuidePanel guidePanel = new GuidePanel();
         window.setContentPane(guidePanel);
         guidePanel.setFocusable(true);

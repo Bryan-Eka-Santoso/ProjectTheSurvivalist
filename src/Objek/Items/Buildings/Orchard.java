@@ -2,7 +2,6 @@ package Objek.Items.Buildings;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 import Objek.Items.StackableItem.Seeds.CoconutSeeds;
@@ -15,6 +14,7 @@ import Objek.Plant.Trees.PalmTree;
 import Objek.Plant.Trees.Tree;
 
 public class Orchard extends Buildings {
+    
     public Seeds seed;
     public Tree tree;
     public BufferedImage treeImg;
@@ -29,7 +29,7 @@ public class Orchard extends Buildings {
     public Orchard(GamePanel gp, int currentStack, int buildingMap) {
         super("Orchard", 15, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48, buildingMap);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/orchard.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/orchard.png"));
         } catch (Exception e) {
             System.err.println("Error loading orchard image: " + e.getMessage());
         }
@@ -39,12 +39,12 @@ public class Orchard extends Buildings {
         this.phase = "empty";
         this.phaseSprites = new BufferedImage[2];
         try {
-            phaseSprites[0] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/phase1.png"));
+            phaseSprites[0] = ImageIO.read(getClass().getResource("/res/Items/Buildings/phase1.png"));
         } catch (Exception e) {
             System.err.println("Error loading phase1 image: " + e.getMessage());
         }
         try {
-            phaseSprites[1] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/phase2.png"));
+            phaseSprites[1] = ImageIO.read(getClass().getResource("/res/Items/Buildings/phase2.png"));
         } catch (Exception e) {
             System.err.println("Error loading phase2 image: " + e.getMessage());
         }

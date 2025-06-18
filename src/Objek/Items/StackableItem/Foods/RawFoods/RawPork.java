@@ -1,21 +1,21 @@
 package Objek.Items.StackableItem.Foods.RawFoods;
 
-import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import Objek.Items.StackableItem.Foods.Food;
 import Objek.Player.Player;
 
 public class RawPork extends Food {
+
     public RawPork(int currentStack) {
         super("Raw Pork", currentStack);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Foods/rawpork.png")); 
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Foods/rawpork.png")); 
         } catch (IOException e) {
             e.printStackTrace();
         } 
     }
+    
     @Override
     public void eat(Player player) {
         // Implement the logic for eating food here

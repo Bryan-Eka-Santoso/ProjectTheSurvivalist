@@ -41,7 +41,6 @@ import Objek.Plant.Bushes.Bush;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -176,27 +175,27 @@ public class Player {
     public void getPlayerImg() {
         try {
             if(gp.currentMap == 1){
-                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater1.png"));
-                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleftwater2.png"));
-                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater1.png"));
-                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkrightwater2.png"));
-                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater1.png"));
-                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkupwater2.png"));
-                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater1.png"));
-                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdownwater2.png"));
+                left1 = ImageIO.read(getClass().getResource("/res/player/walkleftwater1.png"));
+                left2 = ImageIO.read(getClass().getResource("/res/player/walkleftwater2.png"));
+                right1 = ImageIO.read(getClass().getResource("/res/player/walkrightwater1.png"));
+                right2 = ImageIO.read(getClass().getResource("/res/player/walkrightwater2.png"));
+                up1 = ImageIO.read(getClass().getResource("/res/player/walkupwater1.png"));
+                up2 = ImageIO.read(getClass().getResource("/res/player/walkupwater2.png"));
+                down1 = ImageIO.read(getClass().getResource("/res/player/walkdownwater1.png"));
+                down2 = ImageIO.read(getClass().getResource("/res/player/walkdownwater2.png"));
             } else {
-                left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft1.png"));
-                left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkleft2.png"));
-                right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright1.png"));
-                right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkright2.png"));
-                up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup1.png"));
-                up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkup2.png"));
-                down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown1.png"));
-                down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/walkdown2.png"));
+                left1 = ImageIO.read(getClass().getResource("/res/player/walkleft1.png"));
+                left2 = ImageIO.read(getClass().getResource("/res/player/walkleft2.png"));
+                right1 = ImageIO.read(getClass().getResource("/res/player/walkright1.png"));
+                right2 = ImageIO.read(getClass().getResource("/res/player/walkright2.png"));
+                up1 = ImageIO.read(getClass().getResource("/res/player/walkup1.png"));
+                up2 = ImageIO.read(getClass().getResource("/res/player/walkup2.png"));
+                down1 = ImageIO.read(getClass().getResource("/res/player/walkdown1.png"));
+                down2 = ImageIO.read(getClass().getResource("/res/player/walkdown2.png"));
             }
-            sleep = ImageIO.read(new File("ProjectTheSurvivalist/res/player/none.png"));
-            stay = ImageIO.read(new File("ProjectTheSurvivalist/res/player/stay.png"));
-            frozenfront = ImageIO.read(new File("ProjectTheSurvivalist/res/player/frozenfront.png"));
+            sleep = ImageIO.read(getClass().getResource("/res/player/none.png"));
+            stay = ImageIO.read(getClass().getResource("/res/player/stay.png"));
+            frozenfront = ImageIO.read(getClass().getResource("/res/player/frozenfront.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -204,14 +203,14 @@ public class Player {
     
     public void getPlayerCutImg() {
         try {
-            cutup1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
-            cutup2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutup.png"));
-            cutdown1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutdown.png"));
-            cutdown2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutdown.png"));
-            cutleft1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutleft.png"));
-            cutleft2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutleft.png"));
-            cutright1 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutright.png"));
-            cutright2 = ImageIO.read(new File("ProjectTheSurvivalist/res/player/cutright.png"));
+            cutup1 = ImageIO.read(getClass().getResource("/res/player/cutup.png"));
+            cutup2 = ImageIO.read(getClass().getResource("/res/player/cutup.png"));
+            cutdown1 = ImageIO.read(getClass().getResource("/res/player/cutdown.png"));
+            cutdown2 = ImageIO.read(getClass().getResource("/res/player/cutdown.png"));
+            cutleft1 = ImageIO.read(getClass().getResource("/res/player/cutleft.png"));
+            cutleft2 = ImageIO.read(getClass().getResource("/res/player/cutleft.png"));
+            cutright1 = ImageIO.read(getClass().getResource("/res/player/cutright.png"));
+            cutright2 = ImageIO.read(getClass().getResource("/res/player/cutright.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -716,10 +715,10 @@ public class Player {
     public void unGrabAnimal() {
         if (grabbedAnimal != null){
             for(Buildings building : gp.buildings) {
-                if(building instanceof Kandang) {
+                if(building instanceof Cage) {
                     if(Math.abs(worldX - building.worldX) <= gp.TILE_SIZE && 
                     Math.abs(worldY - building.worldY) <= gp.TILE_SIZE) {   
-                        Kandang kandang = (Kandang)building;
+                        Cage kandang = (Cage)building;
                         if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
                             // Show kandang full message
                             gp.ui.showKandangFullMessage();

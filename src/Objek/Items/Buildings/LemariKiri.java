@@ -2,17 +2,17 @@ package Objek.Items.Buildings;
 
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 
 public class LemariKiri extends Buildings {
+    
     public LemariKiri(GamePanel gp, int currentStack, int buildingMap) {
         super("LemariKiri", 10, currentStack, gp, new Rectangle(0, 0, 50, 350), 50, 350, buildingMap);
         isBreakable = false;
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/lemarikiri.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/lemarikiri.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
