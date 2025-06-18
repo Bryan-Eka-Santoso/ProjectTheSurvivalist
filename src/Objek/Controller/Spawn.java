@@ -10,6 +10,7 @@ import Objek.Animal.Wolf;
 import Objek.Fish.Arwana;
 import Objek.Fish.Belida;
 import Objek.Fish.Golden;
+import Objek.Items.Buildings.Buildings;
 import Objek.Ore.CrystalOre;
 import Objek.Ore.GemOre;
 import Objek.Ore.GoldOre;
@@ -130,6 +131,20 @@ public class Spawn {
                 continue;
             }
             if(Math.abs(x - gp.SpawnX) < 3 && Math.abs(y - gp.SpawnY) < 3) {
+                attempts++;
+                continue;
+            }
+            boolean tooCloseToBuilding = false;
+            for(Buildings building : gp.buildings) {
+                int buildingTileX = building.worldX / gp.TILE_SIZE;
+                int buildingTileY = building.worldY / gp.TILE_SIZE;
+                
+                if(Math.abs(x - buildingTileX) <= 2 && Math.abs(y - buildingTileY) <= 2) {
+                    tooCloseToBuilding = true;
+                    break;
+                }
+            }   
+            if(tooCloseToBuilding) {
                 attempts++;
                 continue;
             }
