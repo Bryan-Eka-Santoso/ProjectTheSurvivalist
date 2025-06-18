@@ -179,12 +179,7 @@ public class Cow extends TameAnimal {
 
         int screenX = worldX - gp.player.worldX + gp.player.SCREEN_X;
         int screenY = worldY - gp.player.worldY + gp.player.SCREEN_Y;
-        g2.drawRect(
-            screenX + solidArea.x,
-            screenY + solidArea.y,
-            solidArea.width,
-            solidArea.height
-        );
+        
         if(worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X && 
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 

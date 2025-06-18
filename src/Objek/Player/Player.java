@@ -740,7 +740,7 @@ public class Player {
                     newY = worldY + gp.TILE_SIZE;
                     break;
                 case "left":
-                    newX = worldX - gp.TILE_SIZE;
+                    newX = worldX - gp.TILE_SIZE*2;
                     break;
                 case "right":
                     newX = worldX + gp.TILE_SIZE;
