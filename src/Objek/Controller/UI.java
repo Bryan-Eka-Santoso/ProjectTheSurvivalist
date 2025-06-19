@@ -14,7 +14,6 @@ import java.awt.Shape;
 import java.awt.image.BufferedImage;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +25,8 @@ import Objek.Fish.Fish;
 import Objek.Items.Item;
 import Objek.Items.Buildings.Buildings;
 import Objek.Items.Buildings.Chest;
-import Objek.Items.Buildings.Kandang;
-import Objek.Items.Buildings.KandangAyam;
+import Objek.Items.Buildings.Cage;
+import Objek.Items.Buildings.ChickenCage;
 import Objek.Items.Buildings.PigCage;
 import Objek.Items.Buildings.SheepCage;
 import Objek.Items.Buildings.CowCage;
@@ -70,8 +69,8 @@ public class UI {
     public boolean showNameInput = false;
     private String currentInput = "";
     private TameAnimal animalToName;
-    private Kandang targetKandang;
-    private Rectangle textField;
+    private Cage targetKandang;
+    Rectangle textField;
     private BufferedImage woodBg;
     private Rectangle backButton;
     private TameAnimal selectedMale;
@@ -130,6 +129,10 @@ public class UI {
     public ArrayList<ShopItem> shopItems = new ArrayList<>();
     public ArrayList<Rectangle> shopItemRects = new ArrayList<>();
     public Rectangle shopExitButton;
+    public Rectangle pauseQuitButton;
+    public Rectangle autoPickUpDropsButton;
+    public Rectangle confirmButton;
+    public Rectangle cancelButton;
     public ArrayList<ShopEffect> effectItems = new ArrayList<>();
     public ArrayList<Rectangle> effectItemRects = new ArrayList<>();
     public Rectangle effectExitButton;
@@ -137,23 +140,13 @@ public class UI {
     public boolean showPurchaseSuccess = false;
     public boolean showInsufficientFunds = false;
     public boolean showUnfulfilledRequirements = false;
+    public boolean showLevelUpMessage = false;
     public long messageTimer = 0;
     public final long MESSAGE_DURATION = 2000;
     public boolean showNeedBucketMessage = false;
     public long needBucketMessageTimer = 0;
     public final long NEED_BUCKET_MESSAGE_DURATION = 2000;
-    public ArrayList<ShopItem> getShopItemsByCategory(int category) {
 
-    ArrayList<ShopItem> result = new ArrayList<>();
-    
-    for (ShopItem item : shopItems) {
-        if (item.category == category) {
-            result.add(item);
-        }
-    }
-    
-    return result;
-}
     
     public UI (GamePanel gp) {
         this.gp = gp;
@@ -161,18 +154,18 @@ public class UI {
         selectedChestIndex = 0;
         isPointingChest = true;
         try {
-            woodBg = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));
+            woodBg = ImageIO.read(getClass().getResource("/res/ui/bg-wood.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
+    
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-
+        
         g2.setFont(new Font("Arial", Font.PLAIN, 40));
         g2.setColor(Color.white);
-
+        
         if(gp.gameState == gp.SHOP_STATE) {
             drawShopMenu();
         }
@@ -226,8 +219,8 @@ public class UI {
             }
         }
         if (gp.gameState != gp.OPEN_CHEST_STATE && gp.gameState != gp.OPEN_SMELTER_STATE 
-            && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE 
-            && gp.gameState != gp.EFFECT_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
+        && gp.gameState != gp.INVENTORY_STATE && gp.gameState != gp.KANDANG_STATE && gp.gameState != gp.SHOP_STATE 
+        && gp.gameState != gp.EFFECT_STATE && gp.gameState != gp.ACHIEVEMENT_STATE) {
             drawStats();
         }
         if (showNameInput) {
@@ -308,12 +301,18 @@ public class UI {
             }
         }
         if (showUnfulfilledRequirements) {
-            drawText("You don't meet the requirements!", Color.RED);
+            drawText("No items detected for repairment!", Color.RED);
             if(System.currentTimeMillis() - messageTimer > MESSAGE_DURATION) {
                 showUnfulfilledRequirements = false;
             }
         }
-
+        if (showLevelUpMessage) {
+            drawText("You've leveled up to " + gp.player.level + "!", Color.GREEN);
+            if(System.currentTimeMillis() - messageTimer > MESSAGE_DURATION) {
+                showLevelUpMessage = false;
+            }
+        }
+        
         if (achievementToShow != null) {
             if (System.currentTimeMillis() - achievementNotificationTime < 3000) { // 3 seconds
                 g2.setColor(new Color(0,0,0,180));
@@ -333,19 +332,34 @@ public class UI {
             }
         }
     }
-
+    
     // In UI.java
     private long achievementNotificationTime = 0;
     private Achievement achievementToShow = null;
+    
+    public ArrayList<ShopItem> getShopItemsByCategory(int category) {
+
+        ArrayList<ShopItem> result = new ArrayList<>();
+        
+        for (ShopItem item : shopItems) {
+            if (item.category == category) {
+                result.add(item);
+            }
+        }
+        
+        return result;
+    }
 
     public void showAchievementNotification(Achievement a) {
         achievementToShow = a;
         achievementNotificationTime = System.currentTimeMillis();
     }
+
     public void showNeedBucketMessage() {
         showNeedBucketMessage = true;
         needBucketMessageTimer = System.currentTimeMillis();
     }
+
     public void drawNeedBucketMessage(Graphics2D g2) {
         if(System.currentTimeMillis() - needBucketMessageTimer >= NEED_BUCKET_MESSAGE_DURATION) {
             showNeedBucketMessage = false;
@@ -431,14 +445,14 @@ public class UI {
         g2.drawString(message, x, y);
     }
 
-    public void showAnimalNameInput(TameAnimal animal, Kandang kandang) {
+    public void showAnimalNameInput(TameAnimal animal, Cage kandang) {
          if(kandang.getCurrentCapacity() >= kandang.getMaxCapacity()) {
             currentInput = "";
             animalToName = null;
             targetKandang = null;
             return;
         }
-        if(kandang instanceof KandangAyam && !(animal instanceof Chicken)) {
+        if(kandang instanceof ChickenCage && !(animal instanceof Chicken)) {
             gp.ui.showWrongKandangMessage(); 
             return;
         }
@@ -602,12 +616,12 @@ public class UI {
         return x;
     }
 
-    public void handleBreedingKeyPress(int keyCode, Kandang kandang) {
+    public void handleBreedingKeyPress(int keyCode, Cage kandang) {
         ArrayList<TameAnimal> males = new ArrayList<>();
         ArrayList<TameAnimal> females = new ArrayList<>();
         
-        if(kandang instanceof KandangAyam) {
-            for(TameAnimal animal : ((KandangAyam)kandang).chickensInCage) {
+        if(kandang instanceof ChickenCage) {
+            for(TameAnimal animal : ((ChickenCage)kandang).chickensInCage) {
                 if(animal.getGender().equals("Male") && animal.isReadyBreeding()) 
                     males.add(animal);
                 else if(animal.getGender().equals("Female") && animal.isReadyBreeding())
@@ -671,7 +685,7 @@ public class UI {
 
                 if(selectedMale != null && selectedFemale != null) {
                     TameAnimal baby = null;
-                    if(kandang instanceof KandangAyam) {
+                    if(kandang instanceof ChickenCage) {
                         baby = ((Chicken)selectedMale).breeding((Chicken)selectedFemale, gp);
                     }
                     else if(kandang instanceof CowCage) {
@@ -702,10 +716,10 @@ public class UI {
             }
         }
     }
-    public void handleRemoveKeyPress(int keyCode, Kandang kandang, Player player) {
+    public void handleRemoveKeyPress(int keyCode, Cage kandang, Player player) {
         ArrayList<TameAnimal> animals = new ArrayList<>();
-        if(kandang instanceof KandangAyam) {
-            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        if(kandang instanceof ChickenCage) {
+            animals.addAll(((ChickenCage)kandang).chickensInCage);
         } else if(kandang instanceof CowCage) {
             animals.addAll(((CowCage)kandang).cowsInCage);
         } else if(kandang instanceof SheepCage) {
@@ -721,26 +735,28 @@ public class UI {
             if(selectedRemoveIndex < animals.size() - 1) selectedRemoveIndex++;
         }
         else if(keyCode == KeyEvent.VK_ENTER && !animals.isEmpty()) {
-            TameAnimal animal = animals.get(selectedRemoveIndex);
-            if(kandang instanceof KandangAyam) {
-                ((KandangAyam)kandang).chickensInCage.remove(animal);
-            } else if(kandang instanceof CowCage) {
-                ((CowCage)kandang).cowsInCage.remove(animal);
-            } else if(kandang instanceof SheepCage) {
-                ((SheepCage)kandang).sheepsInCage.remove(animal);
-            } else if(kandang instanceof PigCage) {
-                ((PigCage)kandang).pigsInCage.remove(animal);
+            if(player.grabbedAnimal == null){
+                TameAnimal animal = animals.get(selectedRemoveIndex);
+                if(kandang instanceof ChickenCage) {
+                    ((ChickenCage)kandang).chickensInCage.remove(animal);
+                } else if(kandang instanceof CowCage) {
+                    ((CowCage)kandang).cowsInCage.remove(animal);
+                } else if(kandang instanceof SheepCage) {
+                    ((SheepCage)kandang).sheepsInCage.remove(animal);
+                } else if(kandang instanceof PigCage) {
+                    ((PigCage)kandang).pigsInCage.remove(animal);
+                }
+                player.grabbedAnimal = animal;
+                gp.gameState = gp.PLAY_STATE;
+                inRemoveMenu = false;
+                selectedRemoveIndex = 0;
             }
-            player.grabbedAnimal = animal;
-            gp.gameState = gp.PLAY_STATE;
-            inRemoveMenu = false;
-            selectedRemoveIndex = 0;
         }
     }
-    public void handleGetItemKeyPress(int keyCode, Kandang kandang, Player player) {
+    public void handleGetItemKeyPress(int keyCode, Cage kandang, Player player) {
         ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
-        if(kandang instanceof KandangAyam) {
-            for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+        if(kandang instanceof ChickenCage) {
+            for(Chicken chicken : ((ChickenCage)kandang).chickensInCage) {
                 if(chicken.isReadyGetItem()) {
                     readyAnimals.add(chicken);
                 }
@@ -792,7 +808,7 @@ public class UI {
         }
     }
     
-    public void drawGetItemMenu(Graphics2D g2, Kandang kandang) {
+    public void drawGetItemMenu(Graphics2D g2, Cage kandang) {
         int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
@@ -829,8 +845,8 @@ public class UI {
         // Get ready animals
         ArrayList<TameAnimal> readyAnimals = new ArrayList<>();
         
-        if(kandang instanceof KandangAyam) {
-            for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+        if(kandang instanceof ChickenCage) {
+            for(Chicken chicken : ((ChickenCage)kandang).chickensInCage) {
                 if(chicken.isReadyGetItem()) {
                     readyAnimals.add(chicken);
                 }
@@ -939,7 +955,7 @@ public class UI {
         }
     }
 
-    public void drawBreedingMenu(Graphics2D g2, Kandang kandang) {
+    public void drawBreedingMenu(Graphics2D g2, Cage kandang) {
         int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
@@ -993,8 +1009,8 @@ public class UI {
             ArrayList<TameAnimal> males = new ArrayList<>();
             ArrayList<TameAnimal> females = new ArrayList<>();
             
-            if(kandang instanceof KandangAyam) {
-                for(Chicken chicken : ((KandangAyam)kandang).chickensInCage) {
+            if(kandang instanceof ChickenCage) {
+                for(Chicken chicken : ((ChickenCage)kandang).chickensInCage) {
                     if(chicken.isReadyBreeding()) {
                         if(chicken.getGender().equalsIgnoreCase("Male")) males.add(chicken);
                         else females.add(chicken);
@@ -1117,7 +1133,7 @@ public class UI {
         }
     }
     
-    public void drawRemoveMenu(Graphics2D g2, Kandang kandang) {
+    public void drawRemoveMenu(Graphics2D g2, Cage kandang) {
         int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;
@@ -1153,8 +1169,8 @@ public class UI {
 
         // Get all animals
         ArrayList<TameAnimal> animals = new ArrayList<>();
-        if(kandang instanceof KandangAyam) {
-            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        if(kandang instanceof ChickenCage) {
+            animals.addAll(((ChickenCage)kandang).chickensInCage);
         } else if(kandang instanceof CowCage) {
             animals.addAll(((CowCage)kandang).cowsInCage);
         } else if(kandang instanceof SheepCage) {
@@ -1248,7 +1264,7 @@ public class UI {
         }
     }
 
-    public void drawKandangMenu(Graphics2D g2, Kandang kandang) {
+    public void drawKandangMenu(Graphics2D g2, Cage kandang) {
         int windowWidth = gp.TILE_SIZE * 14;
         int windowHeight = gp.TILE_SIZE * 10;
         int windowX = gp.SCREEN_WIDTH/2 - windowWidth/2;  
@@ -1285,8 +1301,8 @@ public class UI {
         
         // Get animal list based on cage type
         ArrayList<TameAnimal> animals = new ArrayList<>();
-        if(kandang instanceof KandangAyam) {
-            animals.addAll(((KandangAyam)kandang).chickensInCage);
+        if(kandang instanceof ChickenCage) {
+            animals.addAll(((ChickenCage)kandang).chickensInCage);
         } else if(kandang instanceof CowCage) {
             animals.addAll(((CowCage)kandang).cowsInCage);
         } else if(kandang instanceof SheepCage) {
@@ -1430,7 +1446,7 @@ public class UI {
         }
     }
 
-    public void handleKandangClick(int x, int y, Kandang kandang, Player player) {
+    public void handleKandangClick(int x, int y, Cage kandang, Player player) {
         if(inRemoveMenu) {
             if(removeBackButton != null && removeBackButton.contains(x, y)) {
                 inRemoveMenu = false;
@@ -1548,12 +1564,12 @@ public class UI {
         int buttonY = windowY + windowHeight - buttonHeight - 30;
         
         // Confirm button
-        Rectangle confirmButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, buttonY, buttonWidth, buttonHeight);
+        confirmButton = new Rectangle(windowX + windowWidth - buttonWidth - 30, buttonY, buttonWidth, buttonHeight);
         drawButton(g2, confirmButton, "Confirm", 
                 currentInput.trim().isEmpty() ? new Color(100, 100, 100) : new Color(90, 130, 70));
         
         // Cancel button
-        Rectangle cancelButton = new Rectangle(windowX + 30, buttonY, buttonWidth, buttonHeight);
+        cancelButton = new Rectangle(windowX + 30, buttonY, buttonWidth, buttonHeight);
         drawButton(g2, cancelButton, "Cancel", new Color(170, 70, 70));
         
         // Add warning if name is too long
@@ -2383,12 +2399,12 @@ public class UI {
 
                 // Create a GlyphVector for the text
                 java.awt.font.GlyphVector gv = font.createGlyphVector(g2.getFontRenderContext(), text);
-                Shape textShape = gv.getOutline(getXForCenteredText(text) - text.length()+ 50, cursorY - 50);
+                Shape textShape = gv.getOutline(getXForCenteredText(text) - text.length()+ 55, cursorY - 50);
 
                 // Create gradient paint
                 GradientPaint gradient = new GradientPaint(
-                    getXForCenteredText(text) - text.length() + 50, cursorY - 100 - (float)bounds.getHeight(), new Color(103, 238, 255),
-                    getXForCenteredText(text) - text.length() + 50 + (float)bounds.getWidth(), cursorY - (float)bounds.getHeight(), Color.WHITE
+                    getXForCenteredText(text) - text.length() + 55, cursorY - 100 - (float)bounds.getHeight(), new Color(103, 238, 255),
+                    getXForCenteredText(text) - text.length() + 55 + (float)bounds.getWidth(), cursorY - (float)bounds.getHeight(), new Color(255, 239, 94)
                 );
                 Paint oldPaint = g2.getPaint();
                 g2.setPaint(gradient);
@@ -2741,7 +2757,7 @@ public class UI {
         g2.setColor(c);
         BufferedImage img = null;
         try {
-            img = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/bg-wood.png"));
+            img = ImageIO.read(getClass().getResource("/res/ui/bg-wood.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -2820,13 +2836,50 @@ public class UI {
     }
 
     public void drawPauseScreen() {
-        String text = "PAUSED";
+        g2.setColor(new Color(0, 0, 0, 150)); // Semi-transparent black
+        g2.fillRect(0, 0, gp.SCREEN_WIDTH, gp.SCREEN_HEIGHT);
 
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 28));
+        String text = "PAUSED";
         int textLength = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
         int x = gp.SCREEN_WIDTH / 2 - textLength / 2;
         int y = gp.SCREEN_HEIGHT / 2;
+        g2.drawString(text, x, y - 50);
 
-        g2.drawString(text, x, y);
+        // Draw "Quit" button
+        int buttonWidth = 140;
+        int buttonHeight = 40;
+        int buttonX = gp.SCREEN_WIDTH / 2 - buttonWidth / 2;
+        int buttonY = y - 20;
+        pauseQuitButton = new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight);
+
+        g2.setColor(Color.RED);
+        g2.drawRoundRect(buttonX, buttonY, buttonWidth, buttonHeight, 15, 15);
+        g2.fillRoundRect(buttonX, buttonY, buttonWidth, buttonHeight, 15, 15);
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 24));
+        String quitText = "Quit";
+        int quitTextX = buttonX + (buttonWidth - g2.getFontMetrics().stringWidth(quitText)) / 2;
+        int quitTextY = buttonY + (buttonHeight + g2.getFontMetrics().getHeight()) / 2 - 4;
+        g2.drawString(quitText, quitTextX, quitTextY);
+
+        // Draw "Auto Pickup Items" toggle
+        int toggleWidth = 190;
+        int toggleHeight = 40;
+        int toggleX = gp.SCREEN_WIDTH / 2 - toggleWidth / 2;
+        int toggleY = y + 40;
+
+        autoPickUpDropsButton = new Rectangle(toggleX, toggleY, toggleWidth, toggleHeight);
+        g2.setColor(gp.player.autoPickupItems ? Color.GREEN : Color.GRAY); // Green if ON, Red if OFF
+        g2.drawRoundRect(toggleX, toggleY, toggleWidth, toggleHeight, 15, 15);
+        g2.fillRoundRect(toggleX, toggleY, toggleWidth, toggleHeight, 15, 15);
+        g2.setColor(Color.WHITE);
+        g2.setFont(new Font("Arial", Font.BOLD, 24));
+        String toggleText = "Auto-Pickup";
+        int toggleTextX = toggleX + (toggleWidth - g2.getFontMetrics().stringWidth(toggleText)) / 2;
+        int toggleTextY = toggleY + (toggleHeight + g2.getFontMetrics().getHeight()) / 2 - 4;
+        g2.drawString(toggleText, toggleTextX, toggleTextY);
     }
 
     public int getXCenteredText(String text) {
@@ -2840,7 +2893,6 @@ public class UI {
         Color c = new Color(0, 0, 0, 210);
         g2.setColor(c);
         g2.fillRoundRect(x, y, width, height, 35, 35);
-
         c = new Color(255, 255, 255);
         g2.setColor(c);
         g2.setStroke(new BasicStroke(5));
@@ -3253,9 +3305,9 @@ public class UI {
             
             BufferedImage lock = null;
             try {
-                lock = ImageIO.read(new File("ProjectTheSurvivalist/res/ui/lock.png"));
+                lock = ImageIO.read(getClass().getResource("/res/ui/lock.png"));
             } catch (Exception e) {
-                // TODO: handle exception
+                e.printStackTrace();
             }
 
             // Buy button - centered
@@ -3415,14 +3467,14 @@ public class UI {
                 gp.player.hasLegendaryItem = true;
             }
             gp.player.coins -= item.price;
-            gp.player.inventory.addItems(item.item);
+            gp.player.inventory.addItems(item.item.clone());
             
             // Add item to inventory
             // boolean added = gp.player.inventory.addItems(item.item);
             
             // if(added) {
-                showPurchaseSuccess = true;
-                messageTimer = System.currentTimeMillis();
+            showPurchaseSuccess = true;
+            messageTimer = System.currentTimeMillis();
             // } else {
                 // Refund if inventory is full
                 // gp.player.coins += item.price;
@@ -3462,6 +3514,10 @@ public class UI {
         }
     }
     private boolean isEffectUsable(ShopEffect effect) {
+        if (effect.category == 0) {
+            // For selling items, always usable
+            return true;
+        }
         if (effect.name.equals("Repair Arsenal")) {
             for (Item item : gp.player.inventory.slots) {
                 if (item instanceof Arsenal && ((Arsenal)item).durability < ((Arsenal)item).maxDurability) {

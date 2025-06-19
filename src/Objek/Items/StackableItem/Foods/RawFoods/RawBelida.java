@@ -1,6 +1,5 @@
 package Objek.Items.StackableItem.Foods.RawFoods;
 
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Items.StackableItem.Foods.Food;
@@ -8,13 +7,14 @@ import Objek.Items.StackableItem.Foods.Poisonous;
 import Objek.Player.Player;
 
 public class RawBelida extends Food implements Poisonous {
+    
     final int HP_INCREASE = 5; // Health points increase
     final int HUNGER_INCREASE = 10; // Hunger points increase
 
     public RawBelida(int currentStack) {
         super("Raw Belida", currentStack);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right1.png")); 
+            this.img = ImageIO.read(getClass().getResource("/res/fish/belida/right1.png")); 
         } catch (IOException e) {
             e.printStackTrace();
         } 

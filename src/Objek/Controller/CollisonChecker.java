@@ -5,9 +5,11 @@ import java.util.Random;
 
 import Objek.Animal.Animal;
 import Objek.Animal.Wolf;
+import Objek.Enemy.Golem;
 import Objek.Enemy.Monster;
 import Objek.Fish.Fish;
 import Objek.Items.StackableItem.Materials.AnimalDrops.WolfHide;
+import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
 import Objek.Items.Unstackable.FishingRod;
 import Objek.Items.Unstackable.Armor.Chestplate.BladeArmor;
 import Objek.Ore.Ore;
@@ -119,12 +121,72 @@ public class CollisonChecker {
         if(!isValid1 && !isValid2 && !isValid3 && !isValid4) {
             animal.collisionOn = true;
         }
+        int spawnTileX = gp.SpawnX;
+        int spawnTileY = gp.SpawnY;
+        int animalTileX = animal.worldX / gp.TILE_SIZE;
+        int animalTileY = animal.worldY / gp.TILE_SIZE;
+        
+        boolean movingTowardsSpawn = false;
+        switch(animal.direction) {
+            case "up":
+                if(animalTileY > spawnTileY && Math.abs(animalTileX - spawnTileX) <= 1) {
+                    movingTowardsSpawn = true;
+                }
+                break;
+            case "down":
+                if(animalTileY < spawnTileY && Math.abs(animalTileX - spawnTileX) <= 1) {
+                    movingTowardsSpawn = true;
+                }
+                break;
+            case "left":
+                if(animalTileX > spawnTileX && Math.abs(animalTileY - spawnTileY) <= 1) {
+                    movingTowardsSpawn = true;
+                }
+                break;
+            case "right":
+                if(animalTileX < spawnTileX && Math.abs(animalTileY - spawnTileY) <= 1) {
+                    movingTowardsSpawn = true;
+                }
+                break;
+        }
+
+        if(movingTowardsSpawn) {
+            animal.collisionOn = true;
+            // Force direction change away from spawn
+            switch(animal.direction) {
+                case "up": animal.direction = "down"; break;
+                case "down": animal.direction = "up"; break;
+                case "left": animal.direction = "right"; break;
+                case "right": animal.direction = "left"; break;
+            }
+        }
     }
     
     public void animalCheckObject(Animal animal) {
         for (int i = 0; i < gp.plants.size(); i++) {
-            animal.solidArea.x = animal.worldX + animal.solidArea.x;
-            animal.solidArea.y = animal.worldY + animal.solidArea.y;
+            
+            
+            switch(animal.direction) {
+                case "up": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y - animal.speed;
+                
+                    break;
+                case "down": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x ;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y + animal.speed;
+                    break;
+                case "left": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x - animal.speed;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y ;
+
+                    break;
+                case "right": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x + animal.speed;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y ;
+                
+                    break;
+            }
             gp.plants.get(i).solidArea.x = gp.plants.get(i).worldX + gp.plants.get(i).solidArea.x;
             gp.plants.get(i).solidArea.y = gp.plants.get(i).worldY + gp.plants.get(i).solidArea.y;
             if (animal.solidArea.intersects(gp.plants.get(i).solidArea)) {
@@ -183,8 +245,27 @@ public class CollisonChecker {
     
     public void animalCheckBuildings(Animal animal) {
         for (int i = 0; i < gp.buildings.size(); i++) {
-            animal.solidArea.x = animal.worldX + animal.solidArea.x;
-            animal.solidArea.y = animal.worldY + animal.solidArea.y;
+             switch(animal.direction) {
+                case "up": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y - animal.speed;
+                
+                    break;
+                case "down": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x ;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y + animal.speed;
+                    break;
+                case "left": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x - animal.speed;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y ;
+
+                    break;
+                case "right": 
+                    animal.solidArea.x = animal.worldX + animal.solidArea.x + animal.speed;
+                    animal.solidArea.y = animal.worldY + animal.solidArea.y ;
+                
+                    break;
+            }
             gp.buildings.get(i).solidArea.x = gp.buildings.get(i).worldX + gp.buildings.get(i).solidArea.x;
             gp.buildings.get(i).solidArea.y = gp.buildings.get(i).worldY + gp.buildings.get(i).solidArea.y;
 
@@ -450,7 +531,7 @@ public class CollisonChecker {
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
     
         // Check collision
-        if(animal.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen) {
+        if(animal.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen && gp.player.health > 0) {
             animal.collisionOn = true;
             int def = gp.player.getDefense();
             if (animal instanceof Wolf) {
@@ -470,7 +551,7 @@ public class CollisonChecker {
                             if (rand.nextInt(10) < 2) {
                                 gp.player.gp.droppedItems.add(new ItemDrop(animal.worldX, animal.worldY, new WolfHide(1), gp));
                             }
-                            gp.player.gp.animals.remove(animal);
+                            gp.removedAnimals.add(animal);
                             gp.player.gainExp(rand.nextInt(10) + 9);
                             gp.player.animalIndex = -1;
                         }
@@ -780,8 +861,9 @@ public class CollisonChecker {
         gp.player.solidArea.y = gp.player.worldY + gp.player.solidArea.y;
     
         // Check collision
-        if(monster.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen) {
+        if(monster.solidArea.intersects(gp.player.solidArea) && !gp.player.isFrozen && gp.player.health > 0) {
             monster.collisionOn = true;
+            monster.isCollidePlayer = true; // Set flag to true when colliding with player
             int def = gp.player.getDefense();
 
             if (gp.player.helmet != null) {
@@ -796,10 +878,10 @@ public class CollisonChecker {
                     monster.hp -= 5;
                     if(monster.hp <= 0) {
                         gp.player.totalMonstersKilled++;
-                        if (rand.nextInt(10) < 2) {
-                            gp.player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new WolfHide(1), gp));
+                        if (monster instanceof Golem) {
+                            gp.player.gp.droppedItems.add(new ItemDrop(monster.worldX, monster.worldY, new MetalIngot(rand.nextInt(2) + 1), gp));
                         }
-                        gp.player.gp.monsters.remove(monster);
+                        gp.removedMonsters.add(monster);
                         gp.player.gainExp(rand.nextInt(10) + 9);
                         gp.player.monsterIndex = -1;
                     }
@@ -830,7 +912,6 @@ public class CollisonChecker {
             if (gp.player.health <= 0) {
                 gp.player.health = 0; // Prevent negative health
             }
-            
         }
     
         // Reset hitbox positions

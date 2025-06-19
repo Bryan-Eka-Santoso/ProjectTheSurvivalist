@@ -1,6 +1,5 @@
 package Objek.Items.StackableItem.Foods.RawFoods;
 
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Items.StackableItem.Foods.Food;
@@ -8,14 +7,16 @@ import Objek.Items.StackableItem.Foods.Poisonous;
 import Objek.Player.Player;
 
 public class RawMutton extends Food implements Poisonous {
+
     public RawMutton(int currentStack) {
         super("Raw Mutton", currentStack);
             try {
-                this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Foods/rawmutton.png")); 
+                this.img = ImageIO.read(getClass().getResource("/res/Items/Foods/rawmutton.png")); 
             } catch (IOException e) {
                 e.printStackTrace();
             } 
     }
+    
     @Override
     public void eat(Player player) {
         // Implement the logic for eating food here

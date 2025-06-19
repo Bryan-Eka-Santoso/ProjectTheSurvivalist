@@ -18,7 +18,7 @@ public abstract class Animal {
     public boolean collisionOn;
     public GamePanel gp;
     public int hp;
-
+    
     public Animal(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
         this.gp = gp;
         this.name = name;

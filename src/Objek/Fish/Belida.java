@@ -1,6 +1,5 @@
 package Objek.Fish;
 
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.Rectangle;
@@ -31,22 +30,22 @@ public class Belida extends Fish {
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/left4.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/belida/right4.png"));
+            up1 = ImageIO.read(getClass().getResource("/res/fish/belida/up1.png"));
+            up2 = ImageIO.read(getClass().getResource("/res/fish/belida/up2.png"));
+            up3 = ImageIO.read(getClass().getResource("/res/fish/belida/up3.png"));
+            up4 = ImageIO.read(getClass().getResource("/res/fish/belida/up4.png"));
+            down1 = ImageIO.read(getClass().getResource("/res/fish/belida/down1.png"));
+            down2 = ImageIO.read(getClass().getResource("/res/fish/belida/down2.png"));
+            down3 = ImageIO.read(getClass().getResource("/res/fish/belida/down3.png"));
+            down4 = ImageIO.read(getClass().getResource("/res/fish/belida/down4.png"));
+            left1 = ImageIO.read(getClass().getResource("/res/fish/belida/left1.png"));
+            left2 = ImageIO.read(getClass().getResource("/res/fish/belida/left2.png"));
+            left3 = ImageIO.read(getClass().getResource("/res/fish/belida/left3.png"));
+            left4 = ImageIO.read(getClass().getResource("/res/fish/belida/left4.png"));
+            right1 = ImageIO.read(getClass().getResource("/res/fish/belida/right1.png"));
+            right2 = ImageIO.read(getClass().getResource("/res/fish/belida/right2.png"));
+            right3 = ImageIO.read(getClass().getResource("/res/fish/belida/right3.png"));
+            right4 = ImageIO.read(getClass().getResource("/res/fish/belida/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

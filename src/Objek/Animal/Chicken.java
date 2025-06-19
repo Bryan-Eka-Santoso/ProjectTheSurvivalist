@@ -1,25 +1,19 @@
 package Objek.Animal;
 
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
-
 import Objek.Controller.GamePanel;
 import Objek.Items.StackableItem.Foods.Other.Egg;
 import Objek.Player.Player;
-
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 import java.awt.Color;
 
 public class Chicken extends TameAnimal {
+    
     Random random = new Random();
-    private Rectangle upHitbox;
-    private Rectangle downHitbox;
-    private Rectangle leftHitbox;
-    private Rectangle rightHitbox;
     private int actionMoveCounter = 0;
     private int actionMoveDelay;
     private int speed = 8; 
@@ -32,41 +26,39 @@ public class Chicken extends TameAnimal {
         setRandomDirection();
         this.gender = (Math.random() < 0.5) ? "Male" : "Female";
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle(2, 1, 26, 40);   
-        downHitbox = new Rectangle(2, 1, 26, 40);   
-        leftHitbox = new Rectangle(4, 4, 30, 25);   
-        rightHitbox = new Rectangle(4, 4, 30, 25);   // Lebih lebar di kanan
-        this.solidArea = downHitbox; 
+        this.solidArea = new Rectangle(0,0,32,32); 
         this.solidAreaDefaultX = solidArea.x;
         this.solidAreaDefaultY = solidArea.y;
         this.grabOffsetX = 0;
         this.grabOffsetY = -10;
         this.hp = 60;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/left4.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right4.png"));
+            up1 = ImageIO.read(getClass().getResource("/res/animal/chicken/up1.png"));
+            up2 = ImageIO.read(getClass().getResource("/res/animal/chicken/up2.png"));
+            up3 = ImageIO.read(getClass().getResource("/res/animal/chicken/up3.png"));
+            up4 = ImageIO.read(getClass().getResource("/res/animal/chicken/up4.png"));
+            down1 = ImageIO.read(getClass().getResource("/res/animal/chicken/down1.png"));
+            down2 = ImageIO.read(getClass().getResource("/res/animal/chicken/down2.png"));
+            down3 = ImageIO.read(getClass().getResource("/res/animal/chicken/down3.png"));
+            down4 = ImageIO.read(getClass().getResource("/res/animal/chicken/down4.png"));
+            left1 = ImageIO.read(getClass().getResource("/res/animal/chicken/left1.png"));
+            left2 = ImageIO.read(getClass().getResource("/res/animal/chicken/left2.png"));
+            left3 = ImageIO.read(getClass().getResource("/res/animal/chicken/left3.png"));
+            left4 = ImageIO.read(getClass().getResource("/res/animal/chicken/left4.png"));
+            right1 = ImageIO.read(getClass().getResource("/res/animal/chicken/right1.png"));
+            right2 = ImageIO.read(getClass().getResource("/res/animal/chicken/right2.png"));
+            right3 = ImageIO.read(getClass().getResource("/res/animal/chicken/right3.png"));
+            right4 = ImageIO.read(getClass().getResource("/res/animal/chicken/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public int getWidth() {
         return CHICKEN_WIDTH;
     }
+
     @Override
     public int getHeight() {
         return CHICKEN_HEIGHT;
@@ -100,20 +92,7 @@ public class Chicken extends TameAnimal {
         if(direction == null) {
             direction = "down"; 
         }
-        switch(direction) {
-            case "up": 
-                solidArea = upHitbox;
-                break;
-            case "down": 
-                solidArea = downHitbox;
-                break;
-            case "left": 
-                solidArea = leftHitbox;
-                break;
-            case "right": 
-                solidArea = rightHitbox;
-                break;
-        }
+        
         collisionOn = false;
         
         gp.cCheck.animalCheckTile(this);    
@@ -199,7 +178,7 @@ public class Chicken extends TameAnimal {
 
         int screenX = worldX - gp.player.worldX + gp.player.SCREEN_X;
         int screenY = worldY - gp.player.worldY + gp.player.SCREEN_Y;
-
+       
         if(worldX + gp.TILE_SIZE > gp.player.worldX - gp.player.SCREEN_X && 
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 

@@ -1,11 +1,11 @@
 package Objek.Items.StackableItem;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 
 public class Bucket extends Stackable {
+    
     public String status;
     GamePanel gp;
     BufferedImage empty, water, milk, cleansedWater;
@@ -15,11 +15,11 @@ public class Bucket extends Stackable {
         this.gp = gp;
         this.status = "empty"; // Default status is empty
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Bucket/empty.png"));
-            this.empty = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Bucket/empty.png"));
-            this.water = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/waterbucket.png"));
-            this.milk = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/milkbucket.png"));
-            this.cleansedWater = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/cleansedwaterbucket.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Bucket/empty.png"));
+            this.empty = ImageIO.read(getClass().getResource("/res/Items/Bucket/empty.png"));
+            this.water = ImageIO.read(getClass().getResource("/res/Items/Equipments/waterbucket.png"));
+            this.milk = ImageIO.read(getClass().getResource("/res/Items/Equipments/milkbucket.png"));
+            this.cleansedWater = ImageIO.read(getClass().getResource("/res/Items/Equipments/cleansedwaterbucket.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

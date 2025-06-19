@@ -5,12 +5,13 @@ import Objek.Items.StackableItem.Foods.Poisonous;
 import Objek.Player.Player;
 
 public class Potato extends Food implements Poisonous {
+    
     public Potato(int currentStack) {
         super("Potato", currentStack);
         this.isCanSell = true;
         this.price = 8; // Set the price for Potato
         try {
-            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Foods/potato.png")); 
+            this.img = javax.imageio.ImageIO.read(getClass().getResource("/res/Items/Foods/potato.png")); 
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

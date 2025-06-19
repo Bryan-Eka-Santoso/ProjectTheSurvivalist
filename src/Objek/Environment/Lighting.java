@@ -5,10 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RadialGradientPaint;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-
 import Objek.Animal.Chicken;
 import Objek.Animal.Cow;
 import Objek.Animal.Pig;
@@ -16,7 +14,7 @@ import Objek.Animal.Sheep;
 import Objek.Controller.GamePanel;
 import Objek.Items.Buildings.Buildings;
 import Objek.Items.Buildings.CowCage;
-import Objek.Items.Buildings.KandangAyam;
+import Objek.Items.Buildings.ChickenCage;
 import Objek.Items.Buildings.PigCage;
 import Objek.Items.Buildings.SheepCage;
 import Objek.Items.Unstackable.Lantern;
@@ -145,7 +143,7 @@ public class Lighting {
                 filterAlphaTemp = 0f;
                 if (gp.player.isSleeping) {
                     try {
-                        gp.buildings.get(gp.player.buildingIndex).img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/bed.png"));
+                        gp.buildings.get(gp.player.buildingIndex).img = ImageIO.read(getClass().getResource("/res/Items/Buildings/bed.png"));
                         gp.player.isSleeping = false;
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -180,8 +178,8 @@ public class Lighting {
     }
     public void resetAnimalStatus(){
        for(Buildings building : gp.buildings) {
-            if(building instanceof KandangAyam) {
-                KandangAyam kandang = (KandangAyam)building;
+            if(building instanceof ChickenCage) {
+                ChickenCage kandang = (ChickenCage)building;
                 for(Chicken chicken : kandang.chickensInCage) {
                     chicken.setReadyBreeding(true);
                     chicken.setReadyGetItem(true);

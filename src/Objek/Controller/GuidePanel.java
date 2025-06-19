@@ -2,11 +2,9 @@ package Objek.Controller;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 
 public class GuidePanel extends JPanel {
 
@@ -202,7 +200,9 @@ public class GuidePanel extends JPanel {
 
     private void loadPixelFont() {
         try {
-            Font baseFont = Font.createFont(Font.TRUETYPE_FONT, new File("ProjectTheSurvivalist/res/htp/pixel-font.ttf"));
+            // Use getClass().getResource() and openStream() for loading font from resources
+            java.net.URL fontUrl = getClass().getResource("/res/htp/pixel-font.ttf");
+            Font baseFont = Font.createFont(Font.TRUETYPE_FONT, fontUrl.openStream());
             pixelFont = baseFont.deriveFont(Font.PLAIN, 14);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(baseFont);
@@ -229,13 +229,13 @@ public class GuidePanel extends JPanel {
 
 
         String[] gambarPaths = {
-            "ProjectTheSurvivalist/img/menu.png",
-            "ProjectTheSurvivalist/img/gameplay.png"
+            "/res/ui/menu.png",
+            "/res/ui/gameplay.png"
         };
 
         int maxHeight = 0; // untuk mengukur tinggi gambar tertinggi
         for (String path : gambarPaths) {
-            ImageIcon icon = new ImageIcon(path);
+            ImageIcon icon = new ImageIcon(getClass().getResource(path));
 
             // Resize gambar (misal 150x150)
             Image scaledImage = icon.getImage().getScaledInstance(250, 150, Image.SCALE_SMOOTH);

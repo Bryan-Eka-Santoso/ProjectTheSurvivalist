@@ -1,6 +1,5 @@
 package Objek.Items.Buildings;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -8,7 +7,8 @@ import Objek.Controller.GamePanel;
 import Objek.Animal.Pig;
 import Objek.Animal.TameAnimal;
 
-public class PigCage extends Kandang {
+public class PigCage extends Cage {
+    
     private static final int MAX_CAPACITY = 10;
     public ArrayList<Pig> pigsInCage;
     
@@ -17,7 +17,7 @@ public class PigCage extends Kandang {
         this.gp = gp;
         this.pigsInCage = new ArrayList<>();
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/pigpen.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/pigpen.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -6,9 +6,11 @@ import Objek.Items.StackableItem.Foods.RawFoods.Blackberries;
 import Objek.Player.Player;
 
 public class Berries extends Food implements Hydrating {
+
     public Berries(String name, int currentStack) {
         super(name, currentStack);
     }
+    
     public static Berries createBerries(int type, int currentStack) {
         switch (type) {
             case 1:

@@ -56,8 +56,37 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if (gp.gameState == gp.PAUSE_STATE) {
+            if (gp.ui.pauseQuitButton != null && gp.ui.pauseQuitButton.contains(e.getX(), e.getY())){
+                JFrame topFrame = (JFrame) SwingUtilities.getWindowAncestor(gp);
+                topFrame.setContentPane(new MenuPanel(topFrame));
+                topFrame.revalidate();
+                topFrame.repaint();
+                gp.sound.stop();
+            } else if (gp.ui.autoPickUpDropsButton != null && gp.ui.autoPickUpDropsButton.contains(e.getX(), e.getY())) {
+                gp.player.autoPickupItems = !gp.player.autoPickupItems;
+            } 
+        }
         if(gp.gameState == gp.KANDANG_STATE) {
-            gp.ui.handleKandangClick(e.getX(), e.getY(), gp.currentKandang, gp.player);
+            if (gp.ui.inGetItemMenu && gp.ui.getItemCollectButton != null && gp.ui.getItemCollectButton.contains(e.getX(), e.getY())){
+                gp.ui.handleGetItemKeyPress(KeyEvent.VK_ENTER, gp.currentKandang, gp.player);
+            } else if (gp.ui.inBreedingMenu && gp.ui.breedConfirmButton != null && gp.ui.breedConfirmButton.contains(e.getX(), e.getY())) {
+                System.out.println("Breed confirm button clicked");
+                gp.ui.handleBreedingKeyPress(KeyEvent.VK_ENTER, gp.currentKandang);
+            } else if (gp.ui.inRemoveMenu && gp.ui.removeConfirmButton != null && gp.ui.removeConfirmButton.contains(e.getX(), e.getY())) {
+                System.out.println("Remove confirm button clicked");
+                gp.ui.handleRemoveKeyPress(KeyEvent.VK_ENTER, gp.currentKandang, gp.player);
+            } 
+            else gp.ui.handleKandangClick(e.getX(), e.getY(), gp.currentKandang, gp.player);
+        }
+        if (gp.ui.showNameInput){
+            if (gp.ui.confirmButton != null && gp.ui.confirmButton.contains(e.getX(), e.getY())) {
+                System.out.println("Confirm button clicked");
+                gp.ui.handleNameInputKey(KeyEvent.VK_ENTER);
+            } else if (gp.ui.cancelButton != null && gp.ui.cancelButton.contains(e.getX(), e.getY())) {
+                System.out.println("Cancel button clicked");
+                gp.ui.showNameInput = false;
+            }
         }
         if (gp.gameState == gp.DROPPED_ITEM_STATE) {
             gp.ui.mouseX = e.getX();
@@ -503,7 +532,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             gp.gameState = gp.PLAY_STATE;
             gp.player.inventory.removeItem(new Immortality(), 1);
             gp.player.health = 40;
-        } else if (gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) {
+        } else if ((gp.player.inventory.slots[gp.ui.selectedIndex] instanceof Armor || gp.gameState != gp.INVENTORY_STATE) || gp.gameState == gp.PLAY_STATE) {
             gp.player.useItem(gp.player.inventory.slots[gp.ui.selectedIndex]);
         }
     }
@@ -551,8 +580,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.player.daysAlive = 0;
                 gp.eManager.lighting.filterAlpha = gp.eManager.lighting.filterAlphaTemp;
             }
+            Boolean restore = gp.player.autoPickupItems;
             gp.player = new Player("Player", gp.player.level, gp, gp.keyH);
-            gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+            gp.player.autoPickupItems = restore; // Restore auto pickup state
+            gp.tileM.loadMap("/res/world/map.txt", 0);
             gp.currentMap = 0;
             gp.fish.clear();
             gp.player.getPlayerImg();
@@ -572,7 +603,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         if(gp.currentMap == 0){
             if((col == 27 || col == 28) && row == 17) {
                 int randGetGolden = rand.nextInt(2);
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.tileM.loadMap("/res/world/map.txt", 0);
                 gp.currentMap = 1;
                 gp.animals.clear();
                 gp.player.getPlayerImg();
@@ -589,7 +620,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             }
         } else if (gp.currentMap == 1){
             if(col == 60 && row == 25) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
+                gp.tileM.loadMap("/res/world/seamap.txt", 1);
                 gp.currentMap = 0;
                 gp.fish.clear();
                 gp.stopMusic();
@@ -606,10 +637,10 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
     public void TPressed() {
         if (gp.gameState == gp.PLAY_STATE) {
             for(Buildings building : gp.buildings) {
-                if(building instanceof Kandang) {
+                if(building instanceof Cage) {
                     if(Math.abs(gp.player.worldX - building.worldX) <= gp.TILE_SIZE && 
                     Math.abs(gp.player.worldY - building.worldY) <= gp.TILE_SIZE) {
-                        gp.currentKandang = (Kandang)building;
+                        gp.currentKandang = (Cage)building;
                         gp.gameState = gp.KANDANG_STATE;
                         return;
                     }
@@ -684,6 +715,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
             } 
             if (gp.ui.slotCol > 0) {
                 gp.ui.slotCol--;
+                gp.ui.selectedIndex = gp.ui.slotCol;
                 playSE(2);
             } else {
                 playSE(2);
@@ -736,6 +768,8 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 gp.ui.slotCol++;
             } else {
                 gp.ui.slotCol = 0;
+                gp.ui.selectedIndex = gp.ui.slotCol;
+
             }
             gp.ui.selectedIndex = gp.ui.slotCol;
             playSE(2);
@@ -835,11 +869,11 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 } 
                 
                 ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).strength = ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).maxStr;
-                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability -= 20;
+                ((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability -= 7;
                 if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
                     gp.player.inventory.slots[gp.ui.selectedIndex] = null;
                 }
-                gp.fish.remove(gp.ui.fishIndex);
+                gp.removedFish.add(gp.fish.get(gp.ui.fishIndex));
                 gp.player.totalFishCaught++;
                 
                 gp.gameState = gp.PLAY_STATE;
@@ -851,7 +885,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
                 if (((FishingRod) gp.player.inventory.slots[gp.ui.selectedIndex]).durability <= 0) {
                     gp.player.inventory.slots[gp.ui.selectedIndex] = null;
                 }
-                gp.fish.remove(gp.ui.fishIndex);
+                gp.removedFish.add(gp.fish.get(gp.ui.fishIndex));
                 
                 gp.gameState = gp.PLAY_STATE;
             }
@@ -959,7 +993,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
 
         if(gp.currentMap == 2){
             if ((col == 22 || col == 23) && row == 23) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.tileM.loadMap("/res/world/map.txt", 0);
                 gp.currentMap = 0;
                 gp.monsters.clear();
                 gp.checkAndRespawnAnimals();
@@ -975,7 +1009,7 @@ public class KeyHandler implements KeyListener, MouseListener, MouseWheelListene
         }
         if(gp.currentMap == 3){
             if(col == 52 && row == 53) {
-                gp.tileM.loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
+                gp.tileM.loadMap("/res/world/map.txt", 0);
                 gp.currentMap = 0;
                 gp.checkAndRespawnAnimals();
                 gp.stopMusic();

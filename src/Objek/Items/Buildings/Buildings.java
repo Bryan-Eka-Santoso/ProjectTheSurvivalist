@@ -41,7 +41,16 @@ public class Buildings extends Item {
             && worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y 
             && worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y && gp.currentMap == 0) {
 
-            g2.drawImage(img, screenX, screenY, width, height, null);
+            if (this instanceof Orchard) {
+                Orchard orchard = (Orchard) this;
+                if (orchard.phase.equals("tree")) {
+                    g2.drawImage(img, screenX - 20, screenY - gp.TILE_SIZE + 5, gp.TILE_SIZE * 2, gp.TILE_SIZE * 2, null);
+                } else {
+                    g2.drawImage(img, screenX, screenY, width, height, null);
+                }
+            } else {
+                g2.drawImage(img, screenX, screenY, width, height, null);
+            }
             
             if(hp < 100) {
                 double oneScale = (double)gp.TILE_SIZE/100;

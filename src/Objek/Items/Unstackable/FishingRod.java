@@ -1,6 +1,7 @@
 package Objek.Items.Unstackable;
 
 public class FishingRod extends Unstackable {
+    
     public int durability;
     public int strength;
     public int maxStr;
@@ -12,7 +13,7 @@ public class FishingRod extends Unstackable {
         this.strength = 50; // Default strength
         this.maxStr = 50; // Maximum strength
         try {
-            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Equipments/fishingRod.png"));
+            this.img = javax.imageio.ImageIO.read(getClass().getResource("/res/Items/Equipments/fishingRod.png"));
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

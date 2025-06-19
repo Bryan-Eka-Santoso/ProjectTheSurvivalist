@@ -2,17 +2,17 @@ package Objek.Items.Buildings;
 
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 
 public class LemariAtas extends Buildings {
+    
     public LemariAtas(GamePanel gp, int currentStack, int buildingMap) {
         super("LemariAtas", 10, currentStack, gp, new Rectangle(0, 0, 450, 50), 450, 50, buildingMap);
         isBreakable = false;
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/lemariatas.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/lemariatas.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

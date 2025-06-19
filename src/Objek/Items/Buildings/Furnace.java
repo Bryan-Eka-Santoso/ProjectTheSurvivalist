@@ -14,16 +14,14 @@ import Objek.Items.StackableItem.Foods.Other.BakedPotato;
 import Objek.Items.StackableItem.Materials.ForgedComponents.GoldIngot;
 import Objek.Items.StackableItem.Materials.ForgedComponents.MetalIngot;
 import Objek.Items.StackableItem.Materials.Fuels.Fuel;
-
 import java.awt.Rectangle;
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 
 public class Furnace extends Buildings {
+    
     public LinkedHashMap<String, Item> recipe = new LinkedHashMap<>();
     public Item[] rawMaterial;
     public Item[] fuelMaterial;
@@ -37,7 +35,7 @@ public class Furnace extends Buildings {
         fuelMaterial = new Item[1];
         cookedMaterial = new Item[1];
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/smelter.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/smelter.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

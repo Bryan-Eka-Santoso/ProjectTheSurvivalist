@@ -2,9 +2,7 @@ package Objek.Items.Buildings;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import javax.imageio.ImageIO;
-
 import Objek.Controller.GamePanel;
 import Objek.Items.Item;
 import Objek.Items.StackableItem.Foods.Other.Carrot;
@@ -12,6 +10,7 @@ import Objek.Items.StackableItem.Foods.RawFoods.Potato;
 import Objek.Items.StackableItem.Seeds.Seeds;
 
 public class GardenPatch extends Buildings {
+
     public Item seed;
     public BufferedImage cropImg;
     public String phase; // "empty", "gphase1", "gphase2", "gphase3"
@@ -25,7 +24,7 @@ public class GardenPatch extends Buildings {
     public GardenPatch(GamePanel gp, int currentStack, int buildingMap) {
         super("Garden Patch", 15, currentStack, gp, new Rectangle(9, 9, 30, 30), 48, 48, buildingMap);
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/gardenpatch.png")); 
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/gardenpatch.png")); 
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
@@ -33,7 +32,7 @@ public class GardenPatch extends Buildings {
         this.phase = "empty";
         this.phaseSprites = new BufferedImage[2];
         try {
-            phaseSprites[0] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/gphase1.png"));
+            phaseSprites[0] = ImageIO.read(getClass().getResource("/res/Items/Buildings/gphase1.png"));
         } catch (Exception e) {
             System.err.println("Error loading first phase image: " + e.getMessage());
         }
@@ -48,22 +47,22 @@ public class GardenPatch extends Buildings {
             this.seed = seed;
             if (seed instanceof Seeds){
                 try {
-                    this.phaseSprites[1] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/wheatcrop1.png"));
-                    this.cropImg = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/wheatcrop2.png"));
+                    this.phaseSprites[1] = ImageIO.read(getClass().getResource("/res/Items/Buildings/wheatcrop1.png"));
+                    this.cropImg = ImageIO.read(getClass().getResource("/res/Items/Buildings/wheatcrop2.png"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (seed instanceof Carrot) {
                 try {
-                    this.phaseSprites[1] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/carrotcrop1.png"));
-                    this.cropImg = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/carrotcrop2.png"));
+                    this.phaseSprites[1] = ImageIO.read(getClass().getResource("/res/Items/Buildings/carrotcrop1.png"));
+                    this.cropImg = ImageIO.read(getClass().getResource("/res/Items/Buildings/carrotcrop2.png"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (seed instanceof Potato) {
                 try {
-                    this.phaseSprites[1] = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/potatocrop1.png"));
-                    this.cropImg = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/potatocrop2.png"));
+                    this.phaseSprites[1] = ImageIO.read(getClass().getResource("/res/Items/Buildings/potatocrop1.png"));
+                    this.cropImg = ImageIO.read(getClass().getResource("/res/Items/Buildings/potatocrop2.png"));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

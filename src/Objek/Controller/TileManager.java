@@ -2,8 +2,6 @@ package Objek.Controller;
 
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,10 +19,10 @@ public class TileManager {
         tile = new Tile[30];
         mapTile = new int[gp.maxMap][gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
-        loadMap("ProjectTheSurvivalist/res/world/map.txt", 0);
-        loadMap("ProjectTheSurvivalist/res/world/seamap.txt", 1);
-        loadMap("ProjectTheSurvivalist/res/world/cave.txt", 2);
-        loadMap("ProjectTheSurvivalist/res/world/shop.txt", 3);
+        loadMap("/res/world/map.txt", 0);
+        loadMap("/res/world/seamap.txt", 1);
+        loadMap("/res/world/cave.txt", 2);
+        loadMap("/res/world/shop.txt", 3);
         getTileImage();
     }
 
@@ -85,7 +83,7 @@ public class TileManager {
 
         try {
             tile[index] = new Tile();
-            tile[index].image = ImageIO.read(new File("ProjectTheSurvivalist/res/world/" + imagePath + ".png"));
+            tile[index].image = ImageIO.read(getClass().getResource("/res/world/" + imagePath + ".png"));
             tile[index].image = uTool.scaleImage(tile[index].image, gp.TILE_SIZE, gp.TILE_SIZE);
             tile[index].collison = collision;
         } catch (IOException e) {
@@ -95,14 +93,12 @@ public class TileManager {
 
     public void loadMap(String path, int map) {
         try {
-            File file = new File(path);
-            if (!file.exists()) {
+            InputStream is = getClass().getResourceAsStream(path);
+            if (is == null) {
                 System.err.println("File tidak ditemukan: " + path);
                 return;
             }
-
-            InputStream is = new FileInputStream(file);
-            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
             List<Integer> numbers = new ArrayList<>();
 
@@ -110,7 +106,7 @@ public class TileManager {
             while ((line = br.readLine()) != null) {
                 String[] tokens = line.trim().split(" ");
                 for (String token : tokens) {
-                    if (!token.trim().isEmpty()) { // Pastikan token tidak kosong
+                    if (!token.trim().isEmpty()) {
                         numbers.add(Integer.parseInt(token.trim()));
                     }
                 }
@@ -141,6 +137,8 @@ public class TileManager {
             System.err.println("Terjadi kesalahan saat membaca file: " + e.getMessage());
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,7 +1,6 @@
 package Objek.Items.StackableItem.Foods.RawFoods;
 
 import java.util.Random;
-
 import Objek.Items.StackableItem.Foods.Poisonous;
 import Objek.Items.StackableItem.Foods.Fruits.Berries;
 import Objek.Player.Player;
@@ -15,7 +14,7 @@ public class Blackberries extends Berries implements Poisonous {
         this.isCanSell = true;
         this.price = 2; // Set the price for Blackberries
         try {
-            this.img = javax.imageio.ImageIO.read(new java.io.File("ProjectTheSurvivalist/res/Items/Foods/blackberry.png")); 
+            this.img = javax.imageio.ImageIO.read(getClass().getResource("/res/Items/Foods/blackberry.png")); 
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }

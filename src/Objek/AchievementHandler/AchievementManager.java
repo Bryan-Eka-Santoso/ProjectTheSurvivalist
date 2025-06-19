@@ -1,21 +1,19 @@
 package Objek.AchievementHandler;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.LinkedHashMap;
-
 import javax.imageio.ImageIO;
-
 import Objek.Controller.GamePanel;
 
 public class AchievementManager {
+    
     public LinkedHashMap<String, Achievement> achievements = new LinkedHashMap<>();
 
     public AchievementManager() {
         // Initialize achievements here
         BufferedImage img1 = null;
         try {
-            img1 = ImageIO.read(new File("ProjectTheSurvivalist/res/plant/guavatree.png"));
+            img1 = ImageIO.read(getClass().getResource("/res/plant/guavatree.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -27,7 +25,7 @@ public class AchievementManager {
             ));
         BufferedImage img4 = null;
         try {
-            img4 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/lightweightaxe.png"));
+            img4 = ImageIO.read(getClass().getResource("/res/Items/Equipments/lightweightaxe.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -38,7 +36,7 @@ public class AchievementManager {
             img4));
         BufferedImage img2 = null;
         try {
-            img2 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/craftingTable.png"));
+            img2 = ImageIO.read(getClass().getResource("/res/Items/Buildings/craftingTable.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,7 +47,7 @@ public class AchievementManager {
             img2));
         BufferedImage img3 = null;
         try {
-            img3 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/icepickaxe.png"));
+            img3 = ImageIO.read(getClass().getResource("/res/Items/Equipments/icepickaxe.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,7 +58,7 @@ public class AchievementManager {
             img3));
         BufferedImage img5 = null;
         try {
-            img5 = ImageIO.read(new File("ProjectTheSurvivalist/res/plant/bush2.png"));
+            img5 = ImageIO.read(getClass().getResource("/res/plant/bush2.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,7 +69,7 @@ public class AchievementManager {
             img5));
         BufferedImage img6 = null;
         try {
-            img6 = ImageIO.read(new File("ProjectTheSurvivalist/res/plant/bush4c.png"));
+            img6 = ImageIO.read(getClass().getResource("/res/plant/bush4c.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,7 +80,7 @@ public class AchievementManager {
             img6));
         BufferedImage img7 = null;
         try {
-            img7 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/stone.png"));
+            img7 = ImageIO.read(getClass().getResource("/res/Items/Material/stone.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,7 +91,7 @@ public class AchievementManager {
             img7));
         BufferedImage img8 = null;
         try {
-            img8 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Seeds/seeds.png"));
+            img8 = ImageIO.read(getClass().getResource("/res/Items/Seeds/seeds.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -104,7 +102,7 @@ public class AchievementManager {
             img8));
         BufferedImage img9 = null;
         try {
-            img9 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Seeds/guavaseeds.png"));
+            img9 = ImageIO.read(getClass().getResource("/res/Items/Seeds/guavaseeds.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -115,7 +113,7 @@ public class AchievementManager {
             img9));
         BufferedImage img10 = null;
         try {
-            img10 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/wateringcan.png"));
+            img10 = ImageIO.read(getClass().getResource("/res/Items/Equipments/wateringcan.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,7 +124,7 @@ public class AchievementManager {
             img10));
         BufferedImage img11 = null;
         try {
-            img11 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/metalchestplate2.png"));
+            img11 = ImageIO.read(getClass().getResource("/res/Items/Armor/metalchestplate2.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,7 +135,7 @@ public class AchievementManager {
             img11));
         BufferedImage img12 = null;
         try {
-            img12 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/metalsword.png"));
+            img12 = ImageIO.read(getClass().getResource("/res/Items/Equipments/metalsword.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,7 +146,7 @@ public class AchievementManager {
             img12));
         BufferedImage img13 = null;
         try {
-            img13 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/goldsword.png"));
+            img13 = ImageIO.read(getClass().getResource("/res/Items/Equipments/goldsword.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -159,7 +157,7 @@ public class AchievementManager {
             img13));
         BufferedImage img17 = null;
         try {
-            img17 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Material/gem.png"));
+            img17 = ImageIO.read(getClass().getResource("/res/Items/Material/gem.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -170,7 +168,7 @@ public class AchievementManager {
             img17));
         BufferedImage img19 = null;
         try {
-            img19 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/fishingrod.png"));
+            img19 = ImageIO.read(getClass().getResource("/res/Items/Equipments/fishingRod.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -181,7 +179,7 @@ public class AchievementManager {
             img19));
         BufferedImage img20 = null;
         try {
-            img20 = ImageIO.read(new File("ProjectTheSurvivalist/res/fish/golden/right1.png"));
+            img20 = ImageIO.read(getClass().getResource("/res/fish/golden/right1.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,7 +190,7 @@ public class AchievementManager {
             img20));
         BufferedImage img21 = null;
         try {
-            img21 = ImageIO.read(new File("ProjectTheSurvivalist/res/animal/chicken/right3.png"));
+            img21 = ImageIO.read(getClass().getResource("/res/animal/chicken/right3.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -203,7 +201,7 @@ public class AchievementManager {
             img21));
         BufferedImage img22 = null;
         try {
-            img22 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/smelter.png"));
+            img22 = ImageIO.read(getClass().getResource("/res/Items/Buildings/smelter.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -214,7 +212,7 @@ public class AchievementManager {
             img22));
         BufferedImage img23 = null;
         try {
-            img23 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Bucket/cleansedwater.png"));
+            img23 = ImageIO.read(getClass().getResource("/res/Items/Bucket/cleansedwater.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -225,7 +223,7 @@ public class AchievementManager {
             img23));
         BufferedImage img24 = null;
         try {
-            img24 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/wintercrown.png"));
+            img24 = ImageIO.read(getClass().getResource("/res/Items/Equipments/wintercrown.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,7 +234,7 @@ public class AchievementManager {
             img24));
         BufferedImage img18 = null;
         try {
-            img18 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/cursedhelmet.png"));
+            img18 = ImageIO.read(getClass().getResource("/res/Items/Armor/cursedhelmet.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,7 +245,7 @@ public class AchievementManager {
             img18));
         BufferedImage img14 = null;
         try {
-            img14 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/rapidboots.png"));
+            img14 = ImageIO.read(getClass().getResource("/res/Items/Armor/rapidboots.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -258,7 +256,7 @@ public class AchievementManager {
             img14));
         BufferedImage img15 = null;
         try {
-            img15 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Armor/guardianhelmet.png"));
+            img15 = ImageIO.read(getClass().getResource("/res/Items/Armor/guardianhelmet.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -269,7 +267,7 @@ public class AchievementManager {
             img15));
         BufferedImage img16 = null;
         try {
-            img16 = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Equipments/immortality.png"));
+            img16 = ImageIO.read(getClass().getResource("/res/Items/Equipments/immortality.png"));
         } catch (Exception e) {
             e.printStackTrace();
         }

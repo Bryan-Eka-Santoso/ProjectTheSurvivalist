@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -18,46 +17,38 @@ public class Golem extends Monster {
     private int actionLockCounter = 0;
     private int actionMoveCounter = 0;
     public int soundCounter = 0;
-    private Rectangle upHitbox;
-    private Rectangle downHitbox;
-    private Rectangle leftHitbox;
-    private Rectangle rightHitbox;
     private int actionMoveDelay;
     int spriteDisplaySize = gp.TILE_SIZE * 2;
     int originalSpriteSize = 64;
     double scaleFactor = (double)spriteDisplaySize / originalSpriteSize;
 
     Random random = new Random();
-    public Golem(String name, int worldX, int worldY, int speed, String direction, GamePanel gp) {
-        super(name, worldX, worldY, speed, direction, gp);
+    public Golem(String name, int worldX, int worldY, String direction, GamePanel gp) {
+        super(name, worldX, worldY, 8, direction, gp);
         setRandomDirection();
         this.hp = 300; // Set Golem's HP
         this.attack = 15;
         this.actionMoveDelay = random.nextInt(91) + 30;
-        upHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor) );   
-        downHitbox = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor) );   
-        leftHitbox =  new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));     
-        rightHitbox = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));  
-        this.solidArea = downHitbox;
+        this.solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor));;
         this.solidAreaDefaultX = this.solidArea.x;
         this.solidAreaDefaultY = this.solidArea.y;
         try {
-            up1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/up1.png"));
-            up2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/up2.png"));
-            up3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/up3.png"));
-            up4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/up4.png"));
-            down1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/down1.png"));
-            down2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/down2.png"));
-            down3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/down3.png"));
-            down4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/down4.png"));
-            left1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/left1.png"));
-            left2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/left2.png"));
-            left3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/left3.png"));
-            left4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/left4.png"));
-            right1 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/right1.png"));
-            right2 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/right2.png"));
-            right3 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/right3.png"));
-            right4 = ImageIO.read(new File("ProjectTheSurvivalist/res/monsters/golem/right4.png"));
+            up1 = ImageIO.read(getClass().getResource("/res/monsters/golem/up1.png"));
+            up2 = ImageIO.read(getClass().getResource("/res/monsters/golem/up2.png"));
+            up3 = ImageIO.read(getClass().getResource("/res/monsters/golem/up3.png"));
+            up4 = ImageIO.read(getClass().getResource("/res/monsters/golem/up4.png"));
+            down1 = ImageIO.read(getClass().getResource("/res/monsters/golem/down1.png"));
+            down2 = ImageIO.read(getClass().getResource("/res/monsters/golem/down2.png"));
+            down3 = ImageIO.read(getClass().getResource("/res/monsters/golem/down3.png"));
+            down4 = ImageIO.read(getClass().getResource("/res/monsters/golem/down4.png"));
+            left1 = ImageIO.read(getClass().getResource("/res/monsters/golem/left1.png"));
+            left2 = ImageIO.read(getClass().getResource("/res/monsters/golem/left2.png"));
+            left3 = ImageIO.read(getClass().getResource("/res/monsters/golem/left3.png"));
+            left4 = ImageIO.read(getClass().getResource("/res/monsters/golem/left4.png"));
+            right1 = ImageIO.read(getClass().getResource("/res/monsters/golem/right1.png"));
+            right2 = ImageIO.read(getClass().getResource("/res/monsters/golem/right2.png"));
+            right3 = ImageIO.read(getClass().getResource("/res/monsters/golem/right3.png"));
+            right4 = ImageIO.read(getClass().getResource("/res/monsters/golem/right4.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,11 +73,13 @@ public class Golem extends Monster {
     }
 
     @Override
-    public void update() {  
-       if (isPreyNearby(gp.player)) {
+    public void update() {
+        if (isPreyNearby(gp.player)) {
             actionLockEnemyNearby = 10;
+            if (soundCounter == 0) {
+                playSE(13);
+            }
             chasePlayer(gp.player);
-            if (soundCounter == 0) playSE(13);
         } else {
             actionLockEnemyNearby = 15;
         }
@@ -99,103 +92,111 @@ public class Golem extends Monster {
             return; 
         }
         actionLockCounter = 0;
+
         if(direction == null) {
             direction = "down"; 
         }
+
         switch(direction) {
             case "up": 
-                solidArea = upHitbox;
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor));
                 break;
             case "down": 
-                solidArea = downHitbox;
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor)); 
                 break;
             case "left": 
-                solidArea = leftHitbox;
+                solidArea = new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
                 break;
             case "right": 
-                solidArea = rightHitbox;
+                solidArea = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
                 break;
         }
+
         collisionOn = false;
         isCollision(this);
-        
+
         // Jika tidak ada collision, boleh bergerak
         if (!isPreyNearby(gp.player) || gp.player.isFrozen) {
             moveNormally();
         } else {
             moveTowardsPlayer();
         }
-        
     }
+
     public void moveTowardsPlayer() {
         String nextDirection = chasePlayer(gp.player);
         direction = nextDirection;
-        switch(nextDirection) {
+         switch(direction) {
             case "up": 
-                solidArea = upHitbox;
-            break;
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor));
+                break;
             case "down": 
-                solidArea = downHitbox;
-            break;
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor)); 
+                break;
             case "left": 
-                solidArea = leftHitbox;
-            break;
+                solidArea = new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
+                break;
             case "right": 
-                solidArea = rightHitbox;
-            break;
+                solidArea = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
+                break;
         }
         collisionOn = false;
         isCollision(this);
-        if (!collisionOn) {
-            this.direction = nextDirection;
-            switch(this.direction) {
-                case "up": worldY -= speed; break;
-                case "down": worldY += speed; break;
-                case "left": worldX -= speed; break;
-                case "right": worldX += speed; break;
+        if (!isCollidePlayer) {
+            if (!collisionOn) {
+                this.direction = nextDirection;
+                switch(this.direction) {
+                    case "up": worldY -= speed; break;
+                    case "down": worldY += speed; break;
+                    case "left": worldX -= speed; break;
+                    case "right": worldX += speed; break;
+                }
+            } else {
+                if (nextDirection.equals("up")) {
+                    if (gp.player.worldX < this.worldX) {
+                        nextDirection = "left";
+                    } else {
+                        nextDirection = "right";
+                    }
+                } else if (nextDirection.equals("down")) {
+                    if (gp.player.worldX < this.worldX) {
+                        nextDirection = "left";
+                    } else {
+                        nextDirection = "right";
+                    }
+                } else if (nextDirection.equals("left")) {
+                    if (gp.player.worldY < this.worldY) {
+                        nextDirection = "up";
+                    } else {
+                        nextDirection = "down";
+                    }
+                } else if (nextDirection.equals("right")) {
+                    if (gp.player.worldY < this.worldY) {
+                        nextDirection = "up";
+                    } else {
+                        nextDirection = "down";
+                    }
+                }
+                this.direction = nextDirection;
+                switch (direction) {
+                    case "up":
+                        worldY -= speed;
+                    break;
+                    case "down":
+                        worldY += speed;
+                        break;
+                    case "left":
+                        worldX -= speed;
+                        break;
+                    case "right":
+                        worldX += speed;
+                        break;
+                }
             }
         } else {
-            if (nextDirection.equals("up")) {
-                if (gp.player.worldX < this.worldX) {
-                    nextDirection = "left";
-                } else {
-                    nextDirection = "right";
-                }
-            } else if (nextDirection.equals("down")) {
-                if (gp.player.worldX < this.worldX) {
-                    nextDirection = "left";
-                } else {
-                    nextDirection = "right";
-                }
-            } else if (nextDirection.equals("left")) {
-                if (gp.player.worldY < this.worldY) {
-                    nextDirection = "up";
-                } else {
-                    nextDirection = "down";
-                }
-            } else if (nextDirection.equals("right")) {
-                if (gp.player.worldY < this.worldY) {
-                    nextDirection = "up";
-                } else {
-                    nextDirection = "down";
-                }
-            }
-            this.direction = nextDirection;
-            switch (direction) {
-                case "up":
-                worldY -= speed;
-                break;
-                case "down":
-                worldY += speed;
-                    break;
-                case "left":
-                    worldX -= speed;
-                    break;
-                case "right":
-                    worldX += speed;
-                    break;
-            }
+            moveNormally();
         }
+        isCollidePlayer = false;
         actionMoveCounter++;
         spriteCounter++;
         if(spriteCounter > 0) {
@@ -205,7 +206,23 @@ public class Golem extends Monster {
             }
             spriteCounter = 0;
         }
+        switch(direction) {
+            case "up": 
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor));
+                break;
+            case "down": 
+                solidArea = new Rectangle((int)(10*scaleFactor), 0, (int)(44*scaleFactor),(int)(59*scaleFactor)); 
+                break;
+            case "left": 
+                solidArea = new Rectangle((int)(40*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
+                break;
+            case "right": 
+                solidArea = new Rectangle((int)(5*scaleFactor), (int)(2*scaleFactor), (int)(30*scaleFactor), (int)(59*scaleFactor));   
+                break;
+        }
+
     }
+
     public void moveNormally() {
         if(!collisionOn) {
             switch(direction) {
@@ -252,6 +269,7 @@ public class Golem extends Monster {
             spriteCounter = 0;
         }
     }
+
     @Override
     public void draw(Graphics2D g2) {
         BufferedImage image = null;
@@ -289,6 +307,7 @@ public class Golem extends Monster {
            worldX - gp.TILE_SIZE < gp.player.worldX + gp.player.SCREEN_X && 
            worldY + gp.TILE_SIZE > gp.player.worldY - gp.player.SCREEN_Y && 
            worldY - gp.TILE_SIZE < gp.player.worldY + gp.player.SCREEN_Y) {
+
             g2.drawImage(image, screenX, screenY, gp.TILE_SIZE*2, gp.TILE_SIZE*2, null);
 
             if(hp < 200) {
@@ -312,40 +331,6 @@ public class Golem extends Monster {
     }
 
     public boolean isPreyNearby(Player player) {
-        int entityLeftX = player.worldX + player.solidArea.x;
-        int entityRightX = player.worldX + player.solidArea.x + player.solidArea.width;
-        int entityTopY = player.worldY + player.solidArea.y;
-        int entityBottomY = player.worldY + player.solidArea.y + player.solidArea.height;
-
-        int nextLeftX = entityLeftX;
-        int nextRightX = entityRightX;
-        int nextTopY = entityTopY;
-        int nextBottomY = entityBottomY;
-
-        switch(direction) {
-            case "up": nextTopY -= speed; break;
-            case "down": nextBottomY += speed; break;
-            case "left": nextLeftX -= speed; break;
-            case "right": nextRightX += speed; break;
-        }
-
-        int nextLeftCol = nextLeftX / gp.TILE_SIZE;
-        int nextRightCol = nextRightX / gp.TILE_SIZE;
-        int nextTopRow = nextTopY / gp.TILE_SIZE;
-        int nextBottomRow = nextBottomY / gp.TILE_SIZE; 
-
-        int validTile = 21;
-        
-        int tileNum1 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextTopRow];     // Top left
-        int tileNum2 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextTopRow];    // Top right
-        int tileNum3 = gp.tileM.mapTile[gp.currentMap][nextLeftCol][nextBottomRow];  // Bottom left
-        int tileNum4 = gp.tileM.mapTile[gp.currentMap][nextRightCol][nextBottomRow]; // Bottom right
-        
-        if(tileNum1 != validTile || tileNum2 != validTile || 
-        tileNum3 != validTile || tileNum4 != validTile) {
-            return false; // Tidak bisa bergerak jika ada tile yang bukan air
-        }
-
         if (player.health <= 0) {
             return false; // Tidak mengejar jika player sudah mati
         }

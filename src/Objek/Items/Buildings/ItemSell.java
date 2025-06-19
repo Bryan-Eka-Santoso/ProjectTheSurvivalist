@@ -2,17 +2,17 @@ package Objek.Items.Buildings;
 
 import java.awt.Rectangle;
 import java.awt.Graphics2D;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import Objek.Controller.GamePanel;
 
 public class ItemSell extends Buildings {
+    
     public ItemSell(GamePanel gp, int currentStack, int buildingMap) {
         super("ItemSell", 10, currentStack, gp, new Rectangle(0, 0, 41, 44), 41, 44, buildingMap);
         isBreakable = false;
         try {
-            this.img = ImageIO.read(new File("ProjectTheSurvivalist/res/Items/Buildings/character.png"));
+            this.img = ImageIO.read(getClass().getResource("/res/Items/Buildings/character.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
