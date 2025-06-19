@@ -229,14 +229,11 @@ public class GamePanel extends JPanel implements Runnable {
         long currentTime;
         long timer = 0;
         
-        plants.sort(Comparator.comparingInt(p -> p.worldY));
-        buildings.sort(Comparator.comparingInt(p -> p.worldY));
-
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
         buildings.add(shop);
-
+        
         Buildings cave = new Cave(this, 1, 0);
         cave.worldX = 50 * TILE_SIZE;
         cave.worldY = 50 * TILE_SIZE;
@@ -266,7 +263,7 @@ public class GamePanel extends JPanel implements Runnable {
         itemSell.worldX = 46 * TILE_SIZE + 23;
         itemSell.worldY = 47 * TILE_SIZE;
         buildings.add(itemSell);
-
+        
         Buildings effectTable = new EffectTable(this, 1, 3);
         effectTable.worldX = 50 * TILE_SIZE;
         effectTable.worldY = 48 * TILE_SIZE;
@@ -284,6 +281,10 @@ public class GamePanel extends JPanel implements Runnable {
         
         checkAndRespawnAnimals();
         addPlant();
+
+        plants.sort(Comparator.comparingInt(p -> p.worldY));
+        buildings.sort(Comparator.comparingInt(p -> p.worldY));
+
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
         
