@@ -245,7 +245,7 @@ public class InteractBuild {
             
             gp.ui.effectItems.add(new ShopEffect("Repair Arsenal", "/res/Items/Equipments/sword.png", 10, 1));
             gp.ui.effectItems.add(new ShopEffect("Repair Armor", "/res/Items/Armor/metalchestplate2.png", 10, 1));
-            gp.ui.effectItems.add(new ShopEffect("Repair Fishing Rod", "/res/Items/Equipments/fishingrod.png", 10, 1));
+            gp.ui.effectItems.add(new ShopEffect("Repair Fishing Rod", "/res/Items/Equipments/fishingRod.png", 10, 1));
             
             gp.ui.effectItems.add(new ShopEffect("Upgrade Level", "/res/Items/Effect/uplevel.png", 0, 2));
             gp.ui.effectItems.add(new ShopEffect("Coins +999", "/res/Items/Effect/addgold.png", 0, 2));
