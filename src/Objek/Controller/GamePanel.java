@@ -127,7 +127,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void reloadTile(){
-        tileM = new TileManager(this);
+        tileM.getTileImage();
     }
     
     public void startgameThread() {
@@ -306,7 +306,6 @@ public class GamePanel extends JPanel implements Runnable {
             if (timer >= 1000000000) {
                 if(player.level == 15 && !isAfterUnlockShip) {
                     isAfterUnlockShip = true;
-                    reloadTile();
                     ui.showCongratsUnlockShip();
                 }
 

@@ -20,6 +20,9 @@ public class TileManager {
         mapTile = new int[gp.maxMap][gp.MAX_WORLD_COL][gp.MAX_WORLD_ROW];
 
         loadMap("/res/world/map.txt", 0);
+        loadMap("/res/world/seamap.txt", 1);
+        loadMap("/res/world/cave.txt", 2);
+        loadMap("/res/world/shop.txt", 3);
         getTileImage();
     }
 

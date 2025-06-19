@@ -256,8 +256,6 @@ public class InteractBuild {
             }
             // gp.ui.effectItems.add(new ShopEffect("Extra Coins", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 500, 4));
             // gp.ui.effectItems.add(new ShopEffect("Max Health", "ProjectTheSurvivalist/res/Items/Armor/metalchestplate.png", 1000, 4));
-            
-            System.out.println("Effect items initialized successfully");
         } catch (Exception e) {
             System.err.println("Error initializing effect items: " + e.getMessage());
             e.printStackTrace();
