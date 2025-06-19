@@ -13,11 +13,11 @@ public class Sound {
         try {
             soundURL[1] = getClass().getResource("/sound/eating_sound_effect.wav").toURI().toURL();
             soundURL[2] = getClass().getResource("/sound/inventory_move_effect.wav").toURI().toURL();
-            soundURL[3] = getClass().getResource("/sound/sand_step-87182.wav").toURI().toURL();
+            soundURL[3] = getClass().getResource("/sound/sand-step.wav").toURI().toURL();
             soundURL[4] = getClass().getResource("/sound/sword_slash_SE.wav").toURI().toURL();
             soundURL[5] = getClass().getResource("/sound/walk_grass_SE.wav").toURI().toURL();
             soundURL[6] = getClass().getResource("/sound/chop _sound_effect.wav").toURI().toURL();
-            soundURL[7] = getClass().getResource("/sound/happy-relaxing-loop-275487.wav").toURI().toURL();
+            soundURL[7] = getClass().getResource("/sound/backsound.wav").toURI().toURL();
             soundURL[8] = getClass().getResource("/sound/armor-equip.wav").toURI().toURL();
             soundURL[9] = getClass().getResource("/sound/attacked.wav").toURI().toURL();
             soundURL[10] = getClass().getResource("/sound/breath-out.wav").toURI().toURL();
