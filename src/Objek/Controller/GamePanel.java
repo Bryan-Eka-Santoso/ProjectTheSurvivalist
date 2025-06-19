@@ -13,6 +13,7 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
+import Objek.Items.StackableItem.Foods.RawFoods.RawPork;
 import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
@@ -229,43 +230,46 @@ public class GamePanel extends JPanel implements Runnable {
         long lastTime = System.nanoTime();
         long currentTime;
         long timer = 0;
-        checkAndRespawnAnimals();
-        addPlant();
-
+        
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new WindAxe());
+        player.inventory.addItems(new Chest(this, 1, 0));
+        player.inventory.addItems(new Furnace(this, 1, 0));
+        player.inventory.addItems(new Bed(this, 1, 0));
+        player.inventory.addItems(new RawPork(16) );
+        player.inventory.addItems(new KandangAyam(this, 0));
+        player.inventory.addItems(new Orchard(this, 1, 0));
+        player.inventory.addItems(new GardenPatch(this, 1, 0));
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
         buildings.add(shop);
-        player.inventory.addItems(new KandangAyam(this, 0));
-        player.inventory.addItems(new PigCage(this, 0));
+        
         Buildings cave = new Cave(this, 1, 0);
         cave.worldX = 50 * TILE_SIZE;
         cave.worldY = 50 * TILE_SIZE;
         buildings.add(cave);
-
+        
         Buildings lemariAtas = new LemariAtas(this, 1, 3);
         lemariAtas.worldX = 44 * TILE_SIZE;
         lemariAtas.worldY = 44 * TILE_SIZE;
         buildings.add(lemariAtas);
-
+        
         Buildings lemariKanan = new LemariKanan(this, 1, 3);
         lemariKanan.worldX = 53 * TILE_SIZE;
         lemariKanan.worldY = 45 * TILE_SIZE;
         buildings.add(lemariKanan);
-
+        
         Buildings lemariKiri = new LemariKiri(this, 1, 3);
         lemariKiri.worldX = 44 * TILE_SIZE;
         lemariKiri.worldY = 45 * TILE_SIZE;
         buildings.add(lemariKiri);
-
+        
         Buildings itemTable = new ItemTable(this, 1, 3);
         itemTable.worldX = 46 * TILE_SIZE;
         itemTable.worldY = 48 * TILE_SIZE;
         buildings.add(itemTable);
-
+        
         Buildings itemSell = new ItemSell(this, 1, 3);
         itemSell.worldX = 46 * TILE_SIZE + 23;
         itemSell.worldY = 47 * TILE_SIZE;
@@ -275,26 +279,28 @@ public class GamePanel extends JPanel implements Runnable {
         effectTable.worldX = 50 * TILE_SIZE;
         effectTable.worldY = 48 * TILE_SIZE;
         buildings.add(effectTable);
-
+        
         Buildings effectSell = new EffectSell(this, 1, 3);
         effectSell.worldX = 50 * TILE_SIZE + 23;
         effectSell.worldY = 47 * TILE_SIZE;
         buildings.add(effectSell);
-
+        
         Buildings pintuDalam = new PintuDalam(this, 1, 3);
         pintuDalam.worldX = 52 * TILE_SIZE + 10;
         pintuDalam.worldY = 52 * TILE_SIZE;
         buildings.add(pintuDalam);
-
+        
+        checkAndRespawnAnimals();
+        addPlant();
         long interval = 500_000_000L;
         long lastAnimalMoveTime = System.nanoTime();
-
+        
         while (gameThread != null) {
             currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / drawInterval;
             timer += (currentTime - lastTime);
             lastTime = currentTime;
-
+            
             if (delta >= 1) {
                 update();
                 repaint();

@@ -645,7 +645,9 @@ public class UseItem {
                             }
                             player.totalOresMined++;
                             gp.removedOres.add(ore);
+                            gp.ores.remove(player.oreIndex); 
                             player.oreIndex = -1;
+
                         }
                     }
                 } else {
