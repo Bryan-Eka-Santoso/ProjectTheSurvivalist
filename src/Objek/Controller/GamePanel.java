@@ -13,7 +13,6 @@ import Objek.Ore.MetalOre;
 import Objek.Ore.Ore;
 import Objek.Ore.Rock;
 import Objek.Items.Buildings.*;
-import Objek.Items.Unstackable.Arsenals.WindAxe;
 import Objek.Plant.*;
 import Objek.Player.*;
 import java.awt.Color;
@@ -232,13 +231,12 @@ public class GamePanel extends JPanel implements Runnable {
         
         plants.sort(Comparator.comparingInt(p -> p.worldY));
         buildings.sort(Comparator.comparingInt(p -> p.worldY));
-        player.inventory.addItems(new WindAxe());
+
         Buildings shop = new Shop(this, 1, 0);
         shop.worldX = 40 * TILE_SIZE;
         shop.worldY = 40 * TILE_SIZE;
         buildings.add(shop);
-        player.inventory.addItems(new ChickenCage(this, 0));
-        player.inventory.addItems(new PigCage(this, 0));
+
         Buildings cave = new Cave(this, 1, 0);
         cave.worldX = 50 * TILE_SIZE;
         cave.worldY = 50 * TILE_SIZE;
