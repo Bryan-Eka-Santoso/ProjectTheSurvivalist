@@ -19,7 +19,6 @@ public class ShopEffect {
         try {
             this.img = ImageIO.read(getClass().getResource(filePath));
         } catch (IOException e) {
-            System.out.println("Error loading image: " + filePath);
             e.printStackTrace();
         }
     }
